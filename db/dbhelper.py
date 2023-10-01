@@ -51,9 +51,9 @@ createDoctorTable = '''CREATE TABLE doctors (
 
 #Table Creation
 
-cursor.execute(createUserTable)
-cursor.execute(createPatientTable)
-cursor.execute(createClinicTable)
-cursor.execute(createDoctorTable)
+#cursor.execute(createUserTable)
+#cursor.execute(createPatientTable)
+#cursor.execute(createClinicTable)
+#cursor.execute(createDoctorTable)
 
 conn.close()
