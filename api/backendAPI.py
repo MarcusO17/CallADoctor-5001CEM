@@ -27,7 +27,7 @@ def dbConnect():
 
 @app.route('/patients',methods=['GET','POST'])
 def patients():
-    conn = dbConnect()
+    conn = dbConnect()  
     cursor = conn.cursor()
     if request.method == 'GET':
         cursor.execute("SELECT * FROM patients")
@@ -47,14 +47,15 @@ def patients():
         
 
     if request.method == 'POST':
-
-        patientID = request.form['patientID']
-        patientName = request.form['patientName']
-        address = request.form['address']
-        dateOfBirth = request.form['dateOfBirth'] # YYYY-MM-DD
-        bloodType = request.form['bloodType']
-        race = request.form['race']
-
+        contentJSON = request.get_json()
+      
+        patientID = contentJSON['patientID']
+        patientName = contentJSON['patientName']
+        address = contentJSON['address']
+        dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
+        bloodType = contentJSON['bloodType']
+        race = contentJSON['race']
+   
         insertQuery = """
                         INSERT INTO patients (patientID,patientName,address,
                                             dateOfBirth,bloodType,race)
@@ -67,7 +68,7 @@ def patients():
     
 
         
-
+#DELETE PATIENT BY ID
 
 if __name__ == "__main__":
     app.run()
