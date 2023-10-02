@@ -39,7 +39,7 @@ createPatientTable = '''CREATE TABLE patients (
                      )'''
 
 createClinicTable = '''CREATE TABLE clinics (
-                     clinicID INTEGER PRIMARY KEY,
+                     clinicID INTEGER PRIMARY KEY AUTO_INCREMENT,
                      clinicName TEXT NOT NULL,
                      address TEXT NOT NULL,
                      governmentApproved BOOLEAN NOT NULL
@@ -47,7 +47,7 @@ createClinicTable = '''CREATE TABLE clinics (
                     '''
 
 createDoctorTable = '''CREATE TABLE doctors (
-                     doctorID INTEGER PRIMARY KEY,
+                     doctorID INTEGER PRIMARY KEY AUTO_INCREMENT,
                      clinicID INTEGER NOT NULL,
                      doctorName TEXT NOT NULL,
                      status TEXT NOT NULL,
@@ -57,10 +57,14 @@ createDoctorTable = '''CREATE TABLE doctors (
 #Table Creation
 
 #cursor.execute(createUserTable)
-cursor.execute(createPatientTable)
+
+#cursor.execute(createPatientTable)
+#cursor.execute(addAutoIncrement('patients',1000))
+
 #cursor.execute(createClinicTable)
+#cursor.execute(addAutoIncrement('clinics',2000))
+
 #cursor.execute(createDoctorTable)
 
-cursor.execute(addAutoIncrement('patients',1000))
 
 conn.close()
