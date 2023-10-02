@@ -191,7 +191,33 @@ def clinics():
         #cursor.execute("SET FOREIGN_KEY_CHECKS=1")
         
         return 'Successful DELETE', 200
+
+@app.route('/clinics/<int:id>',methods=['GET','DELETE'])
+def clinicID(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM clinics where clinicID = %s",id)
+        clinic = [
+            dict(
+                clinicID = row['clinicID'],
+                clinicName = row['clinicName'],
+                address = row['address'],
+                governmentApproved = row['governmentApproved'],
+            )
+            for row in cursor.fetchall()
+        ]
+        if clinics is not None:
+            return jsonify(clinic),200
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DELETE FROM clinics WHERE clinicID = %s",id)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
     
+        conn.commit()
+        return 'Successful DELETE', 200
+      
     
         
 #DELETE PATIENT BY ID
