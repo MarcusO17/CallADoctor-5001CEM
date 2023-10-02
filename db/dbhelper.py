@@ -16,6 +16,11 @@ conn = pymysql.connect(
 
 cursor = conn.cursor()
 
+
+
+def addAutoIncrement(table,value):
+    return f"ALTER TABLE {table} AUTO_INCREMENT={value};"
+
 #SQL Statements for Table Creation
 createUserTable = '''CREATE TABLE users (
                      userID INTEGER PRIMARY KEY,
@@ -25,12 +30,12 @@ createUserTable = '''CREATE TABLE users (
                 )'''
 
 createPatientTable = '''CREATE TABLE patients (
-                     patientID INTEGER PRIMARY KEY,
+                     patientID INTEGER PRIMARY KEY AUTO_INCREMENT,
                      patientName TEXT NOT NULL,
                      address TEXT NOT NULL,
                      dateOfBirth DATE NOT NULL,
                      bloodType TEXT,
-                     race TEXT 
+                     race TEXT
                      )'''
 
 createClinicTable = '''CREATE TABLE clinics (
@@ -52,8 +57,10 @@ createDoctorTable = '''CREATE TABLE doctors (
 #Table Creation
 
 #cursor.execute(createUserTable)
-#cursor.execute(createPatientTable)
+cursor.execute(createPatientTable)
 #cursor.execute(createClinicTable)
 #cursor.execute(createDoctorTable)
+
+cursor.execute(addAutoIncrement('patients',1000))
 
 conn.close()
