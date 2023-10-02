@@ -27,7 +27,7 @@ def dbConnect():
 
 
 
-@app.route('/users',methods=['GET',])
+@app.route('/users',methods=['GET','POST'])
 def users():
     conn = dbConnect()
     cursor = conn.cursor()
@@ -44,6 +44,26 @@ def users():
         ]
         if users is not None:
             return jsonify(users), 200
+        
+    
+    if request.method == 'POST':
+        contentJSON = request.get_json()
+
+        userID = contentJSON['userID']
+        email = contentJSON['email']
+        password = contentJSON['password'] # YYYY-MM-DD
+        role = contentJSON['role']
+      
+   
+        insertQuery = """
+                        INSERT INTO patients (userID,email,
+                                           password,role)
+                        VALUES (%s,%s,%s,%s)
+                      """
+        cursor = cursor.execute(insertQuery,(userID,email,password,
+                                             role))
+        conn.commit() #Commit Changes to db, like git commit
+        return'Successful POST', 201
     
 
 @app.route('/patients',methods=['GET','POST','DELETE'])
@@ -96,8 +116,7 @@ def patients():
             return 'Error : ',e
         return 'Successful DELETE', 200
     
-
-    
+  
 @app.route('/patients/<int:id>',methods=['GET','DELETE'])
 def patientID(id):
     conn = dbConnect()  
@@ -125,7 +144,54 @@ def patientID(id):
     
         conn.commit()
         return 'Successful DELETE', 200
+    
 
+@app.route('/clinics',methods=['GET','POST','DELETE'])
+def clinics():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM clinics")
+    
+        clinics = [
+            dict(
+                clinicID = row['clinicID'],
+                clinicName = row['clinicName'],
+                address = row['address'],
+                governmentApproved = row['governmentApproved'],
+            )
+            for row in cursor.fetchall()
+        ]
+        if clinics is not None:
+            return jsonify(clinics),200
+        
+        
+
+    if request.method == 'POST':
+        contentJSON = request.get_json()
+
+        clinicName = contentJSON['clinicName'],
+        address = contentJSON['address'],
+        governmentApproved = contentJSON['governmentApproved'],
+   
+        insertQuery = """
+                        INSERT INTO clinics (clinicName,address,
+                                            governmentApproved)
+                        VALUES (%s,%s,%s)
+                      """
+        cursor = cursor.execute(insertQuery,(clinicName,address,
+                                            governmentApproved))
+        conn.commit() #Commit Changes to db, like git commit
+        return'Successful POST', 201
+    
+    if request.method == 'DELETE':
+        #cursor.execute("SET FOREIGN_KEY_CHECKS=0")
+        cursor.execute("DROP TABLE clinics")
+        #cursor.execute("SET FOREIGN_KEY_CHECKS=1")
+        
+        return 'Successful DELETE', 200
+    
     
         
 #DELETE PATIENT BY ID
