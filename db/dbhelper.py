@@ -22,16 +22,12 @@ def addAutoIncrement(table,value):
     return f"ALTER TABLE {table} AUTO_INCREMENT={value};"
 
 #SQL Statements for Table Creation
-createUserTable = '''CREATE TABLE users (
-                     userID INTEGER PRIMARY KEY,
-                     email TEXT NOT NULL,
-                     password TEXT NOT NULL,
-                     role TEXT NOT NULL
-                )'''
 
 createPatientTable = '''CREATE TABLE patients (
-                     patientID INTEGER PRIMARY KEY AUTO_INCREMENT,
+                     patientID VARCHAR(64) PRIMARY KEY,
                      patientName TEXT NOT NULL,
+                     patientEmail TEXT NOT NULL,
+                     patientPassword TEXT NOT NULL,
                      address TEXT NOT NULL,
                      dateOfBirth DATE NOT NULL,
                      bloodType TEXT,
@@ -39,32 +35,76 @@ createPatientTable = '''CREATE TABLE patients (
                      )'''
 
 createClinicTable = '''CREATE TABLE clinics (
-                     clinicID INTEGER PRIMARY KEY AUTO_INCREMENT,
+                     clinicID VARCHAR(64) PRIMARY KEY,
                      clinicName TEXT NOT NULL,
+                     clinicEmail  TEXT NOT NULL,
+                     clinicPassword TEXT NOT NULL,
                      address TEXT NOT NULL,
                      governmentApproved BOOLEAN NOT NULL
                      )
                     '''
 
 createDoctorTable = '''CREATE TABLE doctors (
-                     doctorID INTEGER PRIMARY KEY AUTO_INCREMENT,
-                     clinicID INTEGER NOT NULL,
+                     doctorID VARCHAR(64) PRIMARY KEY,
+                     clinicID VARCHAR(64) NOT NULL,
+                     doctorEmail  TEXT NOT NULL,
+                     doctorPassword TEXT NOT NULL,
                      doctorName TEXT NOT NULL,
                      status TEXT NOT NULL,
                      FOREIGN KEY (clinicID) REFERENCES clinics(clinicID)
                      )'''
 
+
+createAppointmentTable = '''CREATE TABLE appointments (
+                     appointmentID VARCHAR(64) PRIMARY KEY,
+                     doctorID VARCHAR(64),
+                     patientID VARCHAR(64),
+                     appointmentStatus TEXT NOT NULL,
+                     startTime TIME NOT NULL,
+                     endTime TIME NOT NULL,
+                     appointmentDate DATE NOT NULL,
+                     visitReasons TEXT,
+                     FOREIGN KEY (doctorID) REFERENCES doctors(doctorID),
+                     FOREIGN KEY (patientID) REFERENCES patients(patientID)
+                     )'''
+
+createPrescriptionTable = '''CREATE TABLE prescriptions (
+                     prescriptionID VARCHAR(64) PRIMARY KEY,
+                     appointmentID VARCHAR(64) NOT NULL,
+                     expiryDate DATE NOT NULL,
+                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID)
+                     )'''
+
+createPrescriptionDetailsTable = '''CREATE TABLE prescription_details (
+                     prescriptionID VARCHAR(64) NOT NULL,
+                     appointmentID VARCHAR(64) NOT NULL,
+                     medicationName TEXT NOT NULL,
+                     pillsPerDay DATE NOT NULL,
+                     food TEXT,
+                     dosage INT,
+                     FOREIGN KEY (prescriptionID) REFERENCES prescriptions(prescriptionID),
+                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID)
+                     )'''
+
 #Table Creation
 
-#cursor.execute(createUserTable)
 
 #cursor.execute(createPatientTable)
-#cursor.execute(addAutoIncrement('patients',1000))
-
 #cursor.execute(createClinicTable)
-#cursor.execute(addAutoIncrement('clinics',2000))
-
 #cursor.execute(createDoctorTable)
+#cursor.execute(createAppointmentTable)
+#cursor.execute(createPrescriptionTable)
+#cursor.execute(createPrescriptionDetailsTable)
 
+#CreateView
+userViewCreate = """ CREATE VIEW users AS 
+                     SELECT patientID as ID, patientEmail as email, patientPassword as password, 'patient' as role FROM patients
+                     UNION ALL
+                     SELECT doctorID as ID, doctorEmail as email, doctorPassword as password, 'doctor' as role FROM doctors
+                     UNION ALL
+                     SELECT clinicID as ID, clinicEmail as email, clinicPassword as password, 'clinic' as role FROM clinics
+                """
 
+#cursor.execute(userViewCreate)
+cursor.close()
 conn.close()

@@ -26,8 +26,7 @@ def dbConnect():
     return conn
 
 
-
-@app.route('/users',methods=['GET','POST'])
+@app.route('/users',methods=['GET'])
 def users():
     conn = dbConnect()
     cursor = conn.cursor()
@@ -35,36 +34,16 @@ def users():
         cursor.execute('SELECT * FROM users')
         users = [
             dict(
-            userID = row['userID'],
+            ID = row['ID'],
             email = row['email'],
             password = row['password'],
             role = row['role']
             )
             for row in cursor.fetchall()
         ]
-        if users is not None:
-            return jsonify(users), 200
-        
-    
-    if request.method == 'POST':
-        contentJSON = request.get_json()
-
-        userID = contentJSON['userID']
-        email = contentJSON['email']
-        password = contentJSON['password'] # YYYY-MM-DD
-        role = contentJSON['role']
-      
-   
-        insertQuery = """
-                        INSERT INTO patients (userID,email,
-                                           password,role)
-                        VALUES (%s,%s,%s,%s)
-                      """
-        cursor = cursor.execute(insertQuery,(userID,email,password,
-                                             role))
-        conn.commit() #Commit Changes to db, like git commit
-        return'Successful POST', 201
-    
+    if users is not None:
+        return jsonify(users), 200    
+          
 @app.route('/patients',methods=['GET','POST','DELETE'])
 def patients():
     conn = dbConnect()  
@@ -92,19 +71,22 @@ def patients():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
+        patientID = contentJSON['patientID']
         patientName = contentJSON['patientName']
+        patientEmail = contentJSON['patientEmail']
+        patientPassword = contentJSON['patientPassword']
         address = contentJSON['address']
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
         race = contentJSON['race']
    
         insertQuery = """
-                        INSERT INTO patients (patientName,address,
+                        INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
                                             dateOfBirth,bloodType,race)
-                        VALUES (%s,%s,%s,%s,%s)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
                       """
-        cursor = cursor.execute(insertQuery,(patientName,address,dateOfBirth,
-                                             bloodType,race))
+        cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
+                                             dateOfBirth,bloodType,race))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -115,7 +97,7 @@ def patients():
             return 'Error : ',e
         return 'Successful DELETE', 200
     
-@app.route('/patients/<int:id>',methods=['GET','DELETE'])
+@app.route('/patients/<string:id>',methods=['GET','DELETE'])
 def patientID(id):
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -143,7 +125,7 @@ def patientID(id):
         conn.commit()
         return 'Successful DELETE', 200
     
-@app.route('/clinics',methods=['GET','POST','DELETE'])
+@app.route('/clinics',methods=['GET','POST','DELETE'])  
 def clinics():
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -168,16 +150,18 @@ def clinics():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        clinicName = contentJSON['clinicName'],
-        address = contentJSON['address'],
-        governmentApproved = contentJSON['governmentApproved'],
+        clinicName = contentJSON['clinicName']
+        clinicEmail = contentJSON['clinicEmail']
+        clinicPassword = contentJSON['clinicPassword']
+        address = contentJSON['address']
+        governmentApproved = contentJSON['governmentApproved']
    
         insertQuery = """
-                        INSERT INTO clinics (clinicName,address,
+                        INSERT INTO clinics (clinicName,address,clinicEmail,clinicPassword,
                                             governmentApproved)
-                        VALUES (%s,%s,%s)
+                        VALUES (%s,%s,%s,%s,%s)
                       """
-        cursor = cursor.execute(insertQuery,(clinicName,address,
+        cursor = cursor.execute(insertQuery,(clinicName,address,clinicEmail,clinicPassword,
                                             governmentApproved))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
@@ -189,7 +173,7 @@ def clinics():
         
         return 'Successful DELETE', 200
 
-@app.route('/clinics/<int:id>',methods=['GET','DELETE'])
+@app.route('/clinics/<string:id>',methods=['GET','DELETE'])
 def clinicID(id):
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -242,18 +226,22 @@ def doctors():
 
         doctorID = contentJSON['doctorID'],
         doctorName = contentJSON['doctorName'],
+        doctorPassword = contentJSON['doctorPassword']
+        doctorEmail = contentJSON['doctorEmail']
         status = contentJSON['status'],
         clinicID = contentJSON['clinicID']
 
         insertQuery = """
-                        INSERT INTO doctors (doctorID,doctorName,
+                        INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,
                                             status,clinicID)
-                        VALUES (%s,%s,%s,%s)
+                        VALUES (%s,%s,%s,%s,%s,%s)
                         """
-        cursor = cursor.execute(insertQuery,(doctorID,doctorName,status,
+        cursor = cursor.execute(insertQuery,(doctorID,doctorName,status,doctorEmail,doctorPassword,
                                                 clinicID))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
+    
+
 
     if request.method == 'DELETE':
         try:
@@ -262,7 +250,7 @@ def doctors():
             return 'Error : ',e
         return 'Successful DELETE', 200
 
-@app.route('/doctors/<int:id>',methods=['GET','DELETE'])
+@app.route('/doctors/<string:id>',methods=['GET','DELETE'])
 def doctorID(id):
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -287,8 +275,164 @@ def doctorID(id):
     
         conn.commit()
         return 'Successful DELETE', 200  
+
+@app.route('/appointments', methods=['GET','POST','DELETE'])
+def appointments():
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM appointments")
+
+        appointments = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                patientID = row['patientID '],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = row['startTime '],
+                endTime = row['endTime'],
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointments is not None:
+            return jsonify(appointments),200
         
-#DELETE PATIENT BY ID
+    if request.method == 'POST':
+
+        contentJSON = request.get_json()
+
+        appointmentID = contentJSON['appointmentID']
+        doctorID  = contentJSON['doctorID']
+        patientID = contentJSON['patientID']
+        appointmentStatus = contentJSON['appointmentStatus']
+        startTime = contentJSON['startTime']
+        endTime = contentJSON['endTime']
+        appointmentDate = contentJSON['appointmentDate']
+        visitReasons= contentJSON['visitReasons']
+
+        insertQuery = """
+                        INSERT INTO doctors (appointmentID,doctorID,patientID,appointmentStatus,startTime,
+                                            endTime,appointmentDate,visitReasons)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                    """
+        cursor = cursor.execute(insertQuery,(appointmentID,doctorID,patientID,appointmentStatus,startTime,
+                                            endTime,appointmentDate,visitReasons))
+        conn.commit() #Commit Changes to db, like git commit
+        return'Successful POST', 201
+
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DROP TABLE appointments")
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+        return 'Successful DELETE', 200
+
+@app.route('/appointments/<string:id>',methods=['GET','DELETE'])
+def appointmentID(id):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM appointments where appointmentID = %s",id)
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                patientID = row['patientID '],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = row['startTime '],
+                endTime = row['endTime'],
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DELETE FROM appointments WHERE appointmentID = %s",id)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        return 'Successful DELETE', 200  
+    
+@app.route('/prescriptions', methods=['GET','POST','DELETE'])
+def prescriptions():
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM prescriptions")
+
+        appointments = [
+            dict(
+                prescriptionID = row['prescriptionID'],
+                appointmentID  = row['appointmentID'],
+                expiryDate = row['expiryDate']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointments is not None:
+            return jsonify(appointments),200
+        
+    if request.method == 'POST':
+
+        contentJSON = request.get_json()
+
+        prescriptionID = contentJSON['prescriptionID'],
+        appointmentID  = contentJSON['appointmentID'],
+        expiryDate = contentJSON['expiryDate']
+
+        insertQuery = """
+                        INSERT INTO doctors (prescriptionID,appointmentID,expiryDate
+                                            )
+                        VALUES (%s,%s,%s)
+                    """
+        cursor = cursor.execute(insertQuery,(prescriptionID,appointmentID,expiryDate
+                                            ))
+        conn.commit() #Commit Changes to db, like git commit
+        return'Successful POST', 201
+
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DROP TABLE prescriptions")
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+        return 'Successful DELETE', 200
+
+@app.route('/prescriptions/<string:id>',methods=['GET','DELETE'])
+def prescriptionID(id):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM prescriptions where prescriptionID = %s",id)
+        prescription = [
+            dict(
+                prescriptionID = row['prescriptionID'],
+                appointmentID  = row['appointmentID'],
+                expiryDate = row['expiryDate']
+            )
+            for row in cursor.fetchall()
+        ]
+        if prescription is not None:
+            return jsonify(prescription),200
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DELETE FROM prescriptions WHERE prescriptionID = %s",id)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        return 'Successful DELETE', 200
+
 
 if __name__ == "__main__":
     app.run()
