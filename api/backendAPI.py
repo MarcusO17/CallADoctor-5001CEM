@@ -65,7 +65,6 @@ def users():
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
-
 @app.route('/patients',methods=['GET','POST','DELETE'])
 def patients():
     conn = dbConnect()  
@@ -116,7 +115,6 @@ def patients():
             return 'Error : ',e
         return 'Successful DELETE', 200
     
-  
 @app.route('/patients/<int:id>',methods=['GET','DELETE'])
 def patientID(id):
     conn = dbConnect()  
@@ -145,7 +143,6 @@ def patientID(id):
         conn.commit()
         return 'Successful DELETE', 200
     
-
 @app.route('/clinics',methods=['GET','POST','DELETE'])
 def clinics():
     conn = dbConnect()  
@@ -218,7 +215,78 @@ def clinicID(id):
         conn.commit()
         return 'Successful DELETE', 200
       
+@app.route('/doctors', methods=['GET','POST','DELETE'])
+def doctors():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM doctors")
+
+        doctors = [
+            dict(
+                doctorID = row['doctorID'],
+                doctorName = row['doctorName'],
+                status = row['status'],
+                clinicID = row['clinicID']
+            )
+            for row in cursor.fetchall()
+        ]
+        if doctors is not None:
+            return jsonify(doctors),200
+        
+        
+
+    if request.method == 'POST':
+        contentJSON = request.get_json()
+
+        doctorID = contentJSON['doctorID'],
+        doctorName = contentJSON['doctorName'],
+        status = contentJSON['status'],
+        clinicID = contentJSON['clinicID']
+
+        insertQuery = """
+                        INSERT INTO doctors (doctorID,doctorName,
+                                            status,clinicID)
+                        VALUES (%s,%s,%s,%s)
+                        """
+        cursor = cursor.execute(insertQuery,(doctorID,doctorName,status,
+                                                clinicID))
+        conn.commit() #Commit Changes to db, like git commit
+        return'Successful POST', 201
+
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DROP TABLE doctors")
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+        return 'Successful DELETE', 200
+
+@app.route('/doctors/<int:id>',methods=['GET','DELETE'])
+def doctorID(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM doctors where doctorID = %s",id)
+        doctor = [
+            dict(
+                doctorID = row['doctorID'],
+                doctorName = row['doctorName'],
+                status = row['status'],
+                clinicID = row['clinicID']
+            )
+            for row in cursor.fetchall()
+        ]
+        if doctor is not None:
+            return jsonify(doctor),200
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DELETE FROM doctors WHERE doctorID = %s",id)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
     
+        conn.commit()
+        return 'Successful DELETE', 200  
         
 #DELETE PATIENT BY ID
 
