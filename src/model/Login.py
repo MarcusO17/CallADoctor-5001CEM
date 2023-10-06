@@ -6,7 +6,7 @@ class Login:
     baseURL = "http://127.0.0.1:5000/"
 
     def userValidLogin(self,email,password):
-        response = requests.get(f'{self.baseURL}users')
+        response = requests.get(f'{self.baseURL}users/auth')
         users = json.loads(response.text)
         if response.status_code == 200:
             for user in users:
@@ -16,16 +16,7 @@ class Login:
                     continue
         return False
     
-    def getInfofromEmail(self,email):
-        response = requests.get(f'{self.baseURL}users')
-        if response.status_code == 200:
-            users = json.loads(response.text)
-            for user in users:
-                if email == user['email']:
-                    return {'ID' : user['ID'], 'role': user['role']}
-                else:
-                    continue
-        return False
+
     
  
 
