@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt5 import QtCore
-from src.PatientHomepage import PatientHomepage
+from PatientHomepage import PatientHomepage
 
 
 class LoginWindow(QWidget):

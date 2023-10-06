@@ -28,6 +28,7 @@ class PatientHomepage(QMainWindow):
         central_widget = QWidget()
         central_widget.setLayout(patientHomepageLayout)
         self.setCentralWidget(central_widget)
+        
 
 
 
