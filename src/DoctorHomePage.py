@@ -1,4 +1,3 @@
-from DoctorHomePage import Ui_HomepageWindow  # Import the generated UI class
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
