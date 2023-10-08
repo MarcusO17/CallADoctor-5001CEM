@@ -3,6 +3,7 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt5 import QtCore
 from src.PatientHomepage import PatientHomepage
+import os
 
 
 class LoginWindow(QWidget):
@@ -11,7 +12,7 @@ class LoginWindow(QWidget):
 
         self.setWindowTitle("Login")
         self.setFixedWidth(350)
-        self.setFixedHeight(400)
+        self.setFixedHeight(500)
         self.initUI()
 
     def initUI(self):
@@ -19,11 +20,18 @@ class LoginWindow(QWidget):
         loginFormLayout.setSpacing(0)
         loginFormLayout.setContentsMargins(20, 20, 20, 20)
 
-        logoLabel = QLabel()
+        self.logoLabel = QLabel()
 
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+        filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+
+        print(filename)
         try:
-            logoPixmap = QPixmap("src/resources/logo-placeholder-image.png")  # Replace with the path to your logo image
-            logoLabel.setPixmap(logoPixmap)
+            logoPixmap = QPixmap(filename)
+            logoPixmap = logoPixmap.scaled(200,200)
+            self.logoLabel.setPixmap(logoPixmap)
+            self.logoLabel.setContentsMargins(45,0,0,0)
+
         except Exception as e:
             print(e)
 
@@ -55,7 +63,7 @@ class LoginWindow(QWidget):
 
         self.loginButton.clicked.connect(self.loginValidation)
 
-        loginFormLayout.addWidget(logoLabel)
+        loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
         loginFormLayout.addLayout(field2Layout)
         loginFormLayout.addWidget(self.loginButton)
