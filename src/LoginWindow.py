@@ -25,7 +25,6 @@ class LoginWindow(QWidget):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
 
-        print(filename)
         try:
             logoPixmap = QPixmap(filename)
             logoPixmap = logoPixmap.scaled(200,200)
@@ -86,7 +85,7 @@ class LoginWindow(QWidget):
         tempemail = ""
         temppassword = ""
 
-        if email == tempemail and temppassword == temppassword:
+        if email == tempemail and password == temppassword:
             print("login success")
             self.login()
         else:
