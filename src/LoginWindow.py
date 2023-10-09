@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 from PatientHomepage import PatientHomepage
 from DoctorHomePage import HomepageWindow
 from PatientRegister import PatientRegisterWindow
+from ClinicRegister import ClinicRegisterWindow
 
 
 class LoginWindow(QWidget):
@@ -50,7 +51,7 @@ class LoginWindow(QWidget):
 
 
     def login(self):
-        self.patientHomepage = PatientRegisterWindow()
+        self.patientHomepage = ClinicRegisterWindow()
         self.patientHomepage.show()
         self.close()
 
