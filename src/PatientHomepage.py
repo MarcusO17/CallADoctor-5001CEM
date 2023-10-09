@@ -108,10 +108,11 @@ class PatientHomepage(QMainWindow):
         self.setCentralWidget(central_widget)
 
 # for debugging please remove when done
+"""
 def runHomepage():
     app = QApplication(sys.argv)
     loginWindow = PatientHomepage()
     loginWindow.show()
     sys.exit(app.exec_())
 
-runHomepage()
+runHomepage()"""
