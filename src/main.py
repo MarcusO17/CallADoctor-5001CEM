@@ -1,8 +1,8 @@
 import sys
-
+import os
 from PyQt5.QtWidgets import QApplication
 from LoginWindow import LoginWindow
-
+from PatientRegister import PatientRegisterWindow
 
 def main():
     app = QApplication(sys.argv)
