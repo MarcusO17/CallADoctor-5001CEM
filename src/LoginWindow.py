@@ -72,7 +72,7 @@ class LoginWindow(QWidget):
 
 
     def login(self):
-        self.patientHomepage = HomepageWindow()
+        self.patientHomepage = PatientHomepage()
         self.patientHomepage.show()
         self.close()
 
