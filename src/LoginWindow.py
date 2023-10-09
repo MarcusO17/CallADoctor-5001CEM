@@ -6,6 +6,7 @@ from PatientHomepage import PatientHomepage
 from DoctorHomePage import HomepageWindow
 from PatientRegister import PatientRegisterWindow
 from ClinicRegister import ClinicRegisterWindow
+from DoctorRegister import DoctorRegisterWindow
 
 
 class LoginWindow(QWidget):
@@ -51,7 +52,7 @@ class LoginWindow(QWidget):
 
 
     def login(self):
-        self.patientHomepage = ClinicRegisterWindow()
+        self.patientHomepage = DoctorRegisterWindow()
         self.patientHomepage.show()
         self.close()
 
