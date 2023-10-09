@@ -106,5 +106,6 @@ userViewCreate = """ CREATE VIEW users AS
                 """
 
 #cursor.execute(userViewCreate)
+
 cursor.close()
 conn.close()

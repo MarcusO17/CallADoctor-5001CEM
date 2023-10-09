@@ -433,6 +433,34 @@ def prescriptionID(id):
         conn.commit()
         return 'Successful DELETE', 200
 
+@app.route('/users/auth')
+def userAuthentication():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    
+    contentJSON = request.get_json()
+
+    email = contentJSON['email']
+    password = contentJSON['password']
+
+    cursor.execute('SELECT ID,role from users where email = %s AND password = %s',(email,password))
+
+    try:
+        sessionInfo = cursor.fetchone()
+    except:
+        sessionInfo = None
+
+    cursor.close()
+    conn.close()
+
+    if sessionInfo != None:
+        return jsonify(sessionInfo), 200
+    else:
+        return {"error":"User Not Found!"}, 204
+
+   
+  
+
 
 if __name__ == "__main__":
     app.run()
