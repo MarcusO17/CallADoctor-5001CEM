@@ -37,7 +37,7 @@ def users():
             ID = row['ID'],
             email = row['email'],
             password = row['password'],
-            role = row['role']
+            role = row['role'],
             )
             for row in cursor.fetchall()
         ]
@@ -58,6 +58,7 @@ def patients():
                 patientName = row['patientName'],
                 address = row['address'],
                 dateOfBirth = row['dateOfBirth'],
+                patientICNumber = row['patientICNumber'],
                 bloodType = row['bloodType'],
                 race = row['race'],  
             )
@@ -75,6 +76,7 @@ def patients():
         patientName = contentJSON['patientName']
         patientEmail = contentJSON['patientEmail']
         patientPassword = contentJSON['patientPassword']
+        patientICNumber = contentJSON['patientICNumber']
         address = contentJSON['address']
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
@@ -82,17 +84,18 @@ def patients():
    
         insertQuery = """
                         INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
-                                            dateOfBirth,bloodType,race)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                                            patientICNumber,dateOfBirth,bloodType,race)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
-                                             dateOfBirth,bloodType,race))
+                                             patientICNumber,dateOfBirth,bloodType,race))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
     if request.method == 'DELETE':
         try:
-            cursor.execute("DROP TABLE patients")
+            pass
+            #cursor.execute("DELETE FROM patients")
         except pymysql.MySQLError as e:
             return 'Error : ',e
         return 'Successful DELETE', 200
@@ -109,6 +112,7 @@ def patientID(id):
                 patientName = row['patientName'],
                 address = row['address'],
                 dateOfBirth = row['dateOfBirth'],
+                patientICNumber = row['patientICNumber'],
                 bloodType = row['bloodType'],
                 race = row['race'],  
             )
@@ -168,7 +172,7 @@ def clinics():
     
     if request.method == 'DELETE':
         #cursor.execute("SET FOREIGN_KEY_CHECKS=0")
-        cursor.execute("DROP TABLE clinics")
+        #cursor.execute("DROP TABLE clinics")
         #cursor.execute("SET FOREIGN_KEY_CHECKS=1")
         
         return 'Successful DELETE', 200
@@ -210,7 +214,10 @@ def doctors():
         doctors = [
             dict(
                 doctorID = row['doctorID'],
-                doctorName = row['doctorName'],
+                doctorName = row['doctorName']
+                doctorType = row['doctorType']
+                doctorICNumber = row['doctorICNumber']
+                yearOfExperience = row['yearOfExperience']
                 status = row['status'],
                 clinicID = row['clinicID']
             )
@@ -227,17 +234,19 @@ def doctors():
         doctorID = contentJSON['doctorID'],
         doctorName = contentJSON['doctorName'],
         doctorPassword = contentJSON['doctorPassword']
+        doctorICNumber = contentJSON['doctorICNumber']
+        yearOfExperience = contentJSON['yearOfExperience']
         doctorEmail = contentJSON['doctorEmail']
         status = contentJSON['status'],
         clinicID = contentJSON['clinicID']
 
         insertQuery = """
                         INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,
-                                            status,clinicID)
-                        VALUES (%s,%s,%s,%s,%s,%s)
+                                            doctorICNumber,yearOfExperience,status,clinicID)
+                        VALUES (%s,%s,%s,%s,%s%s,%s,%s)
                         """
-        cursor = cursor.execute(insertQuery,(doctorID,doctorName,status,doctorEmail,doctorPassword,
-                                                clinicID))
+        cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,
+                                            doctorICNumber,yearOfExperience,status,clinicID))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -259,7 +268,10 @@ def doctorID(id):
         doctor = [
             dict(
                 doctorID = row['doctorID'],
-                doctorName = row['doctorName'],
+                doctorName = row['doctorName']
+                doctorType = row['doctorType']
+                doctorICNumber = row['doctorICNumber']
+                yearOfExperience = row['yearOfExperience']
                 status = row['status'],
                 clinicID = row['clinicID']
             )
