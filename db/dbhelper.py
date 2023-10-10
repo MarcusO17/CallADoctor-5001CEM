@@ -28,6 +28,7 @@ createPatientTable = '''CREATE TABLE patients (
                      patientName TEXT NOT NULL,
                      patientEmail TEXT NOT NULL,
                      patientPassword TEXT NOT NULL,
+                     patientICNumber INTEGER UNIQUE,
                      address TEXT NOT NULL,
                      dateOfBirth DATE NOT NULL,
                      bloodType TEXT,
@@ -39,6 +40,7 @@ createClinicTable = '''CREATE TABLE clinics (
                      clinicName TEXT NOT NULL,
                      clinicEmail  TEXT NOT NULL,
                      clinicPassword TEXT NOT NULL,
+                     verifiedDoc BLOB,
                      address TEXT NOT NULL,
                      governmentApproved BOOLEAN NOT NULL
                      )
@@ -50,6 +52,10 @@ createDoctorTable = '''CREATE TABLE doctors (
                      doctorEmail  TEXT NOT NULL,
                      doctorPassword TEXT NOT NULL,
                      doctorName TEXT NOT NULL,
+                     doctorType TEXT NOT NULL,
+                     doctorICNumber INTEGER UNIQUE,
+                     certifiedDoc BLOB,
+                     yearOfExperience INTEGER,
                      status TEXT NOT NULL,
                      FOREIGN KEY (clinicID) REFERENCES clinics(clinicID)
                      )'''
