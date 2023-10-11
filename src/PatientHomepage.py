@@ -1,10 +1,9 @@
 import os
 import sys
-
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QGridLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication
+from PyQt5 import QtWidgets
 
 
 class PatientHomepage(QMainWindow):
@@ -13,106 +12,108 @@ class PatientHomepage(QMainWindow):
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
-        self.init_ui()
+        self.ui = init_ui()
+        self.ui.setupUi(self)
 
-    def init_ui(self):
-        self.setWindowTitle("Homepage")
-        self.setGeometry(100, 100, 400, 300)
+class init_ui(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("Homepage")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-        headerFont = QFont()
-        headerFont.setFamily("Poppins")
-        headerFont.setBold(True)
-        headerFont.setPointSize(36)
+        self.centralwidget = QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
 
-        patientHomepageLayout = QVBoxLayout()
-        headerButtonLayout = QHBoxLayout()
-        headerLayout = QVBoxLayout()
-        buttonGridLayout = QGridLayout()
+        self.clinicNearbyButton = QPushButton(self.centralwidget)
+        self.clinicNearbyButton.setGeometry(QRect(150, 200, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.clinicNearbyButton.setFont(font)
+        self.clinicNearbyButton.setObjectName("schedule")
+        self.clinicNearbyButton.setText("Clinics Nearby")
 
-        headerLayout.setSpacing(0)
-
-        title = QLabel("Welcome!")
-        title.setFont(headerFont)
-        title.setFixedSize(500,50)
-        title.setContentsMargins(50,100,0,0)
-
-        logoButton = QPushButton()
-        filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        logoButton.setIcon(QIcon(filename))
-        logoButton.setFixedSize(70,70)
-
-        logoutButton = QPushButton()
-        logoutButton.setText("Log Out")
-        logoutButton.setFixedSize(70,70)
-
-        myAccountButton = QPushButton()
-        myAccountButton.setText("My Account")
-        myAccountButton.setFixedSize(70,70)
-
-        headerButtonLayout.addWidget(logoButton, alignment=Qt.AlignTop | Qt.AlignLeft)
-        headerButtonRightLayout = QHBoxLayout()
-        headerButtonRightLayout.addWidget(logoutButton, alignment=Qt.AlignTop)
-        headerButtonRightLayout.addWidget(myAccountButton, alignment=Qt.AlignTop)
-
-        headerButtonLayout.addLayout(headerButtonRightLayout)
-        headerButtonLayout.setSizeConstraint(QHBoxLayout.SetMinimumSize)
-
-        headerLayout.addLayout(headerButtonLayout)
-        headerLayout.addWidget(title, alignment=Qt.AlignTop | Qt.AlignHCenter)
-        headerLayout.setSizeConstraint(QVBoxLayout.SetMinimumSize)
-
-        clinicButton = QPushButton()
-        clinicButton.setStyleSheet("border: 1px solid #000000; border-radius: 5px; background-color: #f5f5f5;")
-
-        #get clinic icon
-        filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        clinicButton.setIcon(QIcon(filename))
-        clinicButton.setText("Clinics Nearby")
-        #implement the function
-        #clinicButton.clicked.connect(gotoClinicsNearby)
-
-        myPrescriptionButton = QPushButton()
-        myPrescriptionButton.setStyleSheet("border: 1px solid #000000; border-radius: 5px; background-color: #f5f5f5;")
-
-        # get clinic icon
-        filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        myPrescriptionButton.setIcon(QIcon(filename))
-        myPrescriptionButton.setText("My Prescription")
-        # implement the function
-        #myPrescriptionButton.clicked.connect(gotoMyPrescription)
-
-        myAppointmentsButton = QPushButton()
-        myAppointmentsButton.setStyleSheet("border: 1px solid #000000; border-radius: 5px; background-color: #f5f5f5;")
-
-        # get clinic icon
-        filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        myAppointmentsButton.setIcon(QIcon(filename))
-        myAppointmentsButton.setText("My Appointments")
-        # implement the function
-        # myAppointmentsButton.clicked.connect(gotoMyPrescription)
-
-        clinicButton.setFixedSize(300,100)
-        myPrescriptionButton.setFixedSize(300, 100)
-        myAppointmentsButton.setFixedSize(300, 100)
-
-        buttonGridLayout.addWidget(clinicButton, 0, 0)
-        buttonGridLayout.addWidget(myPrescriptionButton, 0, 1)
-        buttonGridLayout.addWidget(myAppointmentsButton, 1, 0)
+        self.clinicNearbyLabel = QLabel(self.centralwidget)
+        self.clinicNearbyLabel.setGeometry(QRect(170, 225, 50, 50))
+        self.clinicNearbyLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.clinicNearbyIcon = QPixmap(filepath)
+        self.clinicNearbyIcon = self.clinicNearbyIcon.scaled(50, 50)
+        self.clinicNearbyLabel.setPixmap(self.clinicNearbyIcon)
 
 
-        patientHomepageLayout.addLayout(headerLayout)
-        patientHomepageLayout.addLayout(buttonGridLayout)
-        central_widget = QWidget()
-        central_widget.setLayout(patientHomepageLayout)
-        self.setCentralWidget(central_widget)
-        
+        self.myPrescriptionButton = QPushButton(self.centralwidget)
+        self.myPrescriptionButton.setGeometry(QRect(700, 200, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(20)
+        self.myPrescriptionButton.setFont(font)
+        self.myPrescriptionButton.setLayoutDirection(Qt.LeftToRight)
+        self.myPrescriptionButton.setText("My Prescription")
 
-# for debugging please remove when done
-def runHomepage():
-    app = QApplication(sys.argv)
-    loginWindow = PatientHomepage()
-    loginWindow.show()
-    sys.exit(app.exec_())
+        self.myPrescriptionLabel = QLabel(self.centralwidget)
+        self.myPrescriptionLabel.setGeometry(QRect(720, 225, 50, 50))
+        self.myPrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myPrescriptionIcon = QPixmap(filepath)
+        self.myPrescriptionIcon = self.myPrescriptionIcon.scaled(50, 50)
+        self.myPrescriptionLabel.setPixmap(self.myPrescriptionIcon)
 
-runHomepage()
+
+        self.myAppointmentsButton = QPushButton(self.centralwidget)
+        self.myAppointmentsButton.setGeometry(QRect(150, 400, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(18)
+        self.myAppointmentsButton.setFont(font)
+        self.myAppointmentsButton.setText("My Appointments")
+
+        self.myAppointmentsLabel = QLabel(self.centralwidget)
+        self.myAppointmentsLabel.setGeometry(QRect(175, 425, 50, 50))
+        self.myAppointmentsLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myAppointmentsIcon = QPixmap(filepath)
+        self.myAppointmentsIcon = self.myAppointmentsIcon.scaled(50, 50)
+        self.myAppointmentsLabel.setPixmap(self.myAppointmentsIcon)
+
+
+        self.topLeftLogo = QLabel(self.centralwidget)
+        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
+        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogoIcon = QPixmap(filepath)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
+        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+
+        self.homepageTitle = QLabel(self.centralwidget)
+        self.homepageTitle.setGeometry(QRect(200, 40, 800, 70))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(28)
+        font.setBold(True)
+        font.setWeight(75)
+        self.homepageTitle.setFont(font)
+        self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
+        self.homepageTitle.setText("Welcome! [name]")
+        self.homepageTitle.setAlignment(Qt.AlignCenter)
+
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70,70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
+
+        # Push Button 5 (Log Out)
+        self.logoutButton = QPushButton(self.centralwidget)
+        self.logoutButton.setGeometry(QRect(1150, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.logoutIcon = QIcon(filepath)
+        self.logoutButton.setIconSize(QSize(70, 70))
+        self.logoutButton.setIcon(self.logoutIcon)
+
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        QMetaObject.connectSlotsByName(MainWindow)
+

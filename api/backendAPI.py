@@ -448,7 +448,7 @@ def userAuthentication():
     try:
         sessionInfo = cursor.fetchone()
     except:
-        sessionInfo = None
+        sessionInfo = None;
 
     cursor.close()
     conn.close()
@@ -456,7 +456,7 @@ def userAuthentication():
     if sessionInfo != None:
         return jsonify(sessionInfo), 200
     else:
-        return {"error":"User Not Found!"}, 204
+        return {'ID': 'DENIED', 'role':'DENIED'}, 401
 
    
   

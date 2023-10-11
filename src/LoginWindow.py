@@ -2,11 +2,13 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt5 import QtCore
+from model import Login
 from PatientHomepage import PatientHomepage
 from DoctorHomePage import HomepageWindow
 from PatientRegister import PatientRegisterWindow
 from ClinicRegister import ClinicRegisterWindow
 from DoctorRegister import DoctorRegisterWindow
+
 import os
 
 class LoginWindow(QWidget):
@@ -75,7 +77,7 @@ class LoginWindow(QWidget):
 
 
     def login(self):
-        self.patientHomepage = DoctorRegisterWindow()
+        self.patientHomepage = PatientHomepage()
         self.patientHomepage.show()
         self.close()
 
@@ -84,12 +86,15 @@ class LoginWindow(QWidget):
         email = self.emailInput.text()
         password = self.passwordInput.text()
 
-        #backend
-        tempemail = ""
-        temppassword = ""
+        loginJSON = {
+            "email" : email,
+            "password" : password
+        }
 
-        if email == tempemail and password == temppassword:
-            print("login success")
+        sessionInfo,isValid = Login.userValidLogin(credentials=loginJSON)
+
+        if isValid:
+            print(sessionInfo)
             self.login()
         else:
             print("login failed")
