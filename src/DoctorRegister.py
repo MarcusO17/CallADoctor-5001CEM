@@ -1,4 +1,5 @@
 import os
+import json
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
@@ -10,6 +11,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.RegisterPushButton.clicked.connect(self.save_data)
 
 
     def setupUi(self, MainWindow):
@@ -414,6 +416,23 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         MainWindow.setWindowTitle("Doctor Registration")
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+
+def save_data(self):
+        
+        doctor_data = {
+            "DocFirstName": self.DocFirstNameLineEdit.text(),
+            "DocLastName": self.DocLastNameLineEdit.text(),
+            "DocEmail": self.DocEmailLineEdit.text(),
+            "DocCon": self.DocContactLineEdit.text(),
+            "specialty": self.DocSpecialtyLineEdit.text(),
+            "date_of_birth": self.DocDOBDateEdit.date().toString(Qt.ISODate),
+            "ic_passport_number": self.DocPassportLineEdit.text(),
+            "years_of_experience": self.DocExpLineEdit.text(),
+            "password": self.DocPasswordLineEdit.text(),
+        }
+
+        
 
         
         
