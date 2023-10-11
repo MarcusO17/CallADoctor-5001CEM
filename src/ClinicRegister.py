@@ -381,7 +381,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
 def ClinicSaveData(self):
-        # Get data from input fields
+     
         data = {
             "ClinicIDLineEdit": self.ClinicIDLineEdit.text(),
             "ClinicAddressLineEdit": self.ClinicAddressLineEdit.text(),
@@ -391,5 +391,5 @@ def ClinicSaveData(self):
             "ClinicPostCodeLineEdit": self.ClinicPostCodeLineEdit.text(),
             "ClinicDocumentLineEdit": self.ClinicDocumentLineEdit.text(),
             "ClinicPasswordLineEdit": self.ClinicPasswordLineEdit.text()
-            # Add more fields as needed
+            
         }
