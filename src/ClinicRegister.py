@@ -10,6 +10,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.ClinicRegisterPushButton.clicked.connect(self.ClinicSaveData)
 
 
     def setupUi(self, MainWindow):
@@ -22,218 +23,239 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
 # Main Title for Clinic Register set as Label
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(20, 40, 551, 51))
+        self.ClinicRegMainTitle = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicRegMainTitle.setGeometry(20, 40, 551, 51)
+        self.ClinicRegMainTitle.setText("Registration for Call-A-Doctor!")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
         font.setBold(True)
         font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
+        self.ClinicRegMainTitle.setFont(font)
+        self.ClinicRegMainTitle.setObjectName("ClinicRegMainTitle")
 
 # Sub Title for Clinic Register set as Label 2
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(60, 90, 451, 41))
+        self.ClinicRegSubTitle = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicRegSubTitle.setGeometry(60, 90, 451, 41)
+        self.ClinicRegSubTitle.setText("Get your Clinic registered now!")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
+        self.ClinicRegSubTitle.setFont(font)
+        self.ClinicRegSubTitle.setObjectName("ClinicRegSubTitle")
 
 
 # Clinic ID Number - Set as Label 3
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(30, 150, 221, 21))
+        self.ClinicIDLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicIDLabel.setGeometry(30, 150, 221, 21)
+        self.ClinicIDLabel.setText("Clinic ID Number")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_3.setFont(font)
-        self.label_3.setObjectName("label_3")
+        self.ClinicIDLabel.setFont(font)
+        self.ClinicIDLabel.setObjectName("ClinicIDLabel")
 
 
 # Line Edit for Entering Clinic ID Number
-        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(30, 170, 221, 31))
+        self.ClinicIDLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicIDLineEdit.setGeometry(30, 170, 221, 31)
+        self.ClinicIDLineEdit.setText("example - P21002")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit.setFont(font)
-        self.lineEdit.setObjectName("Clinic ID Number")
+        self.ClinicIDLineEdit.setFont(font)
+        self.ClinicIDLineEdit.setObjectName("ClinicIDLineEdit")
 
 
 # Address of Clinic - Set as Label 4
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(30, 240, 221, 16))
+        self.ClinicAddressLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicAddressLabel.setGeometry(30, 240, 221, 16)
+        self.ClinicAddressLabel.setText("Address of Clinic")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_4.setFont(font)
-        self.label_4.setObjectName("label_4")
+        self.ClinicAddressLabel.setFont(font)
+        self.ClinicAddressLabel.setObjectName("ClinicAddressLabel")
 
 
 # Line Edit for Entering the Clinic Address
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_2.setGeometry(QtCore.QRect(30, 260, 221, 31))
+        self.ClinicAddressLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicAddressLineEdit.setGeometry(30, 260, 221, 31)
+        self.ClinicAddressLineEdit.setText("example - Bayan Lepas, Penang")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_2.setFont(font)
-        self.lineEdit_2.setObjectName("ClinicAddress")
+        self.ClinicAddressLineEdit.setFont(font)
+        self.ClinicAddressLineEdit.setObjectName("ClinicAddressLineEdit")
 
 
 # Name Of Clinic - Set As Label 5
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(30, 330, 221, 16))
+        self.ClinicNameLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicNameLabel.setGeometry(30, 330, 221, 16)
+        self.ClinicNameLabel.setText("Name of Clinic")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_5.setFont(font)
-        self.label_5.setObjectName("label_5")
+        self.ClinicNameLabel.setFont(font)
+        self.ClinicNameLabel.setObjectName("ClinicNameLabel")
 
 
 # Line Edit for Entering Clinic Name
-        self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_3.setGeometry(QtCore.QRect(30, 350, 221, 31))
+        self.ClinicNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicNameLineEdit.setGeometry(30, 350, 221, 31)
+        self.ClinicNameLineEdit.setText("example - ABCD Clinic")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_3.setFont(font)
-        self.lineEdit_3.setObjectName("ClinicName")
+        self.ClinicNameLineEdit.setFont(font)
+        self.ClinicNameLineEdit.setObjectName("ClinicNameLineEdit")
 
 
 # Clinic Contact Number - Set as Label 6
-        self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(30, 420, 221, 16))
+        self.ClinicContactLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicContactLabel.setGeometry(30, 420, 221, 16)
+        self.ClinicContactLabel.setText("Clinic Contact Number")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_6.setFont(font)
-        self.label_6.setObjectName("label_6")
+        self.ClinicContactLabel.setFont(font)
+        self.ClinicContactLabel.setObjectName("ClinicContactLabel")
 
 
 # Line Edit for Entering Clinic Contact Number 
-        self.lineEdit_4 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_4.setGeometry(QtCore.QRect(30, 440, 221, 31))
+        self.ClinicContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicContactLineEdit.setGeometry(30, 440, 221, 31)
+        self.ClinicContactLineEdit.setText("example - +60xxxxxxxx")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_3.setFont(font)
-        self.lineEdit_4.setObjectName("ClinicContact")
+        self.ClinicContactLineEdit.setFont(font)
+        self.ClinicContactLineEdit.setObjectName("ClinicContactLineEdit")
 
 
 # Clinic Email - Set as Label 7
-        self.label_7 = QtWidgets.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(280, 150, 221, 16))
+        self.ClinicEmailLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicEmailLabel.setGeometry(280, 150, 221, 16)
+        self.ClinicEmailLabel.setText("Clinic Email")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_7.setFont(font)
-        self.label_7.setObjectName("label_7")
+        self.ClinicEmailLabel.setFont(font)
+        self.ClinicEmailLabel.setObjectName("ClinicEmailLabel")
 
 
 # Line Edit for Entering Clinic Email
-        self.lineEdit_5 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_5.setGeometry(QtCore.QRect(280, 170, 221, 31))
+        self.ClinicEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicEmailLineEdit.setGeometry(280, 170, 221, 31)
+        self.ClinicEmailLineEdit.setText("example - abcklinik@new.com")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_5.setFont(font)
-        self.lineEdit_5.setObjectName("ClinicEmail")
+        self.ClinicEmailLineEdit.setFont(font)
+        self.ClinicEmailLineEdit.setObjectName("ClinicEmailLineEdit")
 
 
 # Clinic Post Code - Set as Label 8
-        self.label_8 = QtWidgets.QLabel(self.centralwidget)
-        self.label_8.setGeometry(QtCore.QRect(280, 240, 221, 16))
+        self.ClinicPostCodeLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicPostCodeLabel.setGeometry(280, 240, 221, 16)
+        self.ClinicPostCodeLabel.setText("Clinic Post Code")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_8.setFont(font)
-        self.label_8.setObjectName("label_8")
+        self.ClinicPostCodeLabel.setFont(font)
+        self.ClinicPostCodeLabel.setObjectName("ClinicPostCodeLabel")
 
 
 # Line Edit for Entering Clinic Postal Code
-        self.lineEdit_9 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_9.setGeometry(QtCore.QRect(280, 260, 221, 31))
+        self.ClinicPostCodeLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicPostCodeLineEdit.setGeometry(280, 260, 221, 31)
+        self.ClinicPostCodeLineEdit.setText("example - 19000")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_9.setFont(font)
-        self.lineEdit_9.setObjectName("ClinicPost")
+        self.ClinicPostCodeLineEdit.setFont(font)
+        self.ClinicPostCodeLineEdit.setObjectName("ClinicPostCodeLineEdit")
 
 
 # Verification Document - Set as Label 9
-        self.label_9 = QtWidgets.QLabel(self.centralwidget)
-        self.label_9.setGeometry(QtCore.QRect(280, 330, 221, 16))
+        self.ClinicDocumentLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicDocumentLabel.setGeometry(280, 330, 221, 16)
+        self.ClinicDocumentLabel.setText("Verification Document")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_9.setFont(font)
-        self.label_9.setObjectName("label_9")
+        self.ClinicDocumentLabel.setFont(font)
+        self.ClinicDocumentLabel.setObjectName("ClinicDocumentLabel")
 
 
 # Actually for Now I set this Line Edit to show Attachnent of Document
 # But need to change the functionality of this, probably into a push button
 # which would allow to open file explorer to attach Document 
-        self.lineEdit_6 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_6.setGeometry(QtCore.QRect(280, 350, 221, 31))
+        self.ClinicDocumentLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicDocumentLineEdit.setGeometry(280, 350, 221, 31)
+        self.ClinicDocumentLineEdit.setText("Attach Certification Document                    +")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_9.setFont(font)
-        self.lineEdit_6.setObjectName("AttachDocument")
+        self.ClinicDocumentLineEdit.setFont(font)
+        self.ClinicDocumentLineEdit.setObjectName("ClinicDocumentLineEdit")
 
 
 # Clinic Password - Set as Label 10 
-        self.label_10 = QtWidgets.QLabel(self.centralwidget)
-        self.label_10.setGeometry(QtCore.QRect(530, 150, 221, 16))
+        self.ClinicPasswordLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicPasswordLabel.setGeometry(530, 150, 221, 16)
+        self.ClinicPasswordLabel.setText("Password")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_10.setFont(font)
-        self.label_10.setObjectName("label_10")
+        self.ClinicPasswordLabel.setFont(font)
+        self.ClinicPasswordLabel.setObjectName("ClinicPasswordLabel")
 
 
 # Line Edit for Clinic to Enter the Password
 # (Validation needs constraints like passwords needs to have - 
 # Minimum 8 characters, upper case and lower case letters, numbers
 # and Special Characters)
-        self.lineEdit_7 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_7.setGeometry(QtCore.QRect(530, 170, 221, 31))
+        self.ClinicPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicPasswordLineEdit.setGeometry(530, 170, 221, 31)
+        self.ClinicPasswordLineEdit.setText("example - SoMeThiNg@123")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_7.setFont(font)
-        self.lineEdit_7.setObjectName("ClinicPassword")
+        self.ClinicPasswordLineEdit.setFont(font)
+        self.ClinicPasswordLineEdit.setObjectName("ClinicPasswordLineEdit")
 
 
 # Confirm Password for CLinic - Set as Label 11
-        self.label_11 = QtWidgets.QLabel(self.centralwidget)
-        self.label_11.setGeometry(QtCore.QRect(530, 240, 221, 16))
+        self.ClinicReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicReEnterPassLabel.setGeometry(530, 240, 221, 16)
+        self.ClinicReEnterPassLabel.setText("Confirm Password")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.label_11.setFont(font)
-        self.label_11.setObjectName("label_11")
+        self.ClinicReEnterPassLabel.setFont(font)
+        self.ClinicReEnterPassLabel.setObjectName("ClinicReEnterPassLabel")
 
 
 # Line Edit for Clinic to Enter Password again to confirm
 # need validation to check if previously written password and
 # re-entered password same or not, if not, error 404)
-        self.lineEdit_8 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_8.setGeometry(QtCore.QRect(530, 260, 221, 31))
+        self.ClinicReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.ClinicReEnterPassLineEdit.setGeometry(530, 260, 221, 31)
+        self.ClinicReEnterPassLineEdit.setText("Re-enter Password")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
-        self.lineEdit_8.setFont(font)
-        self.lineEdit_8.setObjectName("ClinicReEnterPass")
+        self.ClinicReEnterPassLineEdit.setFont(font)
+        self.ClinicReEnterPassLineEdit.setObjectName("ClinicReEnterPassLineEdit")
 
         
 # Register PushButton For Registering Account - Saves the Data
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(530, 400, 221, 41))
+        self.ClinicRegisterPushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.ClinicRegisterPushButton.setGeometry(530, 400, 221, 41)
+        self.ClinicRegisterPushButton.setText("Register")
 
 # DONT MIND THIS - This is just me editing the STYLE SHEET for
 # the button to have color, and the text being White
@@ -274,16 +296,16 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton.setPalette(palette)
+        self.ClinicRegisterPushButton.setPalette(palette)
 # StyleSheet customization ends here ^^^^^^^^^^^^^
     
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
-        self.pushButton.setFont(font)
-        self.pushButton.setAutoFillBackground(False)
-        self.pushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
-        self.pushButton.setObjectName("ClinicRegister")
+        self.ClinicRegisterPushButton.setFont(font)
+        self.ClinicRegisterPushButton.setAutoFillBackground(False)
+        self.ClinicRegisterPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
+        self.ClinicRegisterPushButton.setObjectName("ClinicRegisterPushButton")
         
         
 #  Push Button for "Going Back to Login page" - This needed a lot of
@@ -291,8 +313,9 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 # that it looks like a Link, so im sorry if the customization code 
 # Looks a mess, please bear with it :)
 
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(530, 450, 221, 41))
+        self.ClinicRegisterGoBackLogin = QtWidgets.QPushButton(self.centralwidget)
+        self.ClinicRegisterGoBackLogin.setGeometry(530, 450, 221, 41)
+        self.ClinicRegisterGoBackLogin.setText("Go Back To Login")
 
 # Style Sheet Code for the transparent button start here vvvvvvvv
         palette = QtGui.QPalette()
@@ -332,58 +355,41 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_2.setPalette(palette)
+        self.ClinicRegisterGoBackLogin.setPalette(palette)
 # Style Sheet code ends here ^^^^^^^^^^^^^^^
 
-        self.pushButton_2.setAutoFillBackground(False)
-        self.pushButton_2.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
-        self.pushButton_2.setObjectName("ClinicGoBackLogin")
+        self.ClinicRegisterGoBackLogin.setAutoFillBackground(False)
+        self.ClinicRegisterGoBackLogin.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
+        self.ClinicRegisterGoBackLogin.setObjectName("ClinicGoBackLogin")
         
         
 # Icon For LOGO - Set as Label 12 (Need to Add Image)
-        self.label_12 = QtWidgets.QLabel(self.centralwidget)
-        self.label_12.setGeometry(QtCore.QRect(650, 50, 91, 61))
-        self.label_12.setFrameShape(QtWidgets.QFrame.Box)
-        self.label_12.setObjectName("label_12")
+        self.ClinicRegisterLogo = QtWidgets.QLabel(self.centralwidget)
+        self.ClinicRegisterLogo.setGeometry(650, 50, 91, 61)
+        self.ClinicRegisterLogo.setText("LOGO Here")
+        self.ClinicRegisterLogo.setFrameShape(QtWidgets.QFrame.Box)
+        self.ClinicRegisterLogo.setObjectName("ClinicRegisterLogo")
         
 # Code for all Label, Buttons and even the Line Edits ends here ^^^^^^^^^^^^
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        MainWindow.setWindowTitle("ClinicRegister")
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-# After a thorough Research, i learnt that this below class is
-# importantn for Seting a text for the things we put up in the Application, 
-# Like for example - we made the label 1, put it up in the application, then 
-# to setup a visible text for user to see, we see the below functions
-# ( READ AND DELETE THE COMMENT, IT IS ONLY FOR US TO KNOW )
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label.setText(_translate("MainWindow", "Registration for Call-A-Doctor!"))
-        self.label_8.setText(_translate("MainWindow", "Clinic Post Code"))
-        self.label_10.setText(_translate("MainWindow", "Password"))
-        self.label_11.setText(_translate("MainWindow", "Confirm Password"))
-        self.label_6.setText(_translate("MainWindow", "Clinic Contact Number"))
-        self.pushButton.setText(_translate("MainWindow", "Register"))
-        self.label_4.setText(_translate("MainWindow", "Address of Clinic"))
-        self.lineEdit.setText(_translate("MainWindow", "example - P21002"))
-        self.lineEdit_5.setText(_translate("MainWindow", "example - abcklinik@new.com"))
-        self.lineEdit_3.setText(_translate("MainWindow", "example - ABCD Clinic"))
-        self.lineEdit_7.setText(_translate("MainWindow", "example - SoMeThiNg@123"))
-        self.lineEdit_8.setText(_translate("MainWindow", "Re-enter Password"))
-        self.label_7.setText(_translate("MainWindow", "Clinic Email"))
-        self.lineEdit_6.setText(_translate("MainWindow", "Attach Certification Document                    +"))
-        self.lineEdit_2.setText(_translate("MainWindow", "example - Bayan Lepas, Penang"))
-        self.label_3.setText(_translate("MainWindow", "Clinic ID Number"))
-        self.label_5.setText(_translate("MainWindow", "Name of Clinic"))
-        self.pushButton_2.setText(_translate("MainWindow", "Go Back To Login"))
-        self.lineEdit_4.setText(_translate("MainWindow", "example - +60xxxxxxxx"))
-        self.label_9.setText(_translate("MainWindow", "Verification Document"))
-        self.label_2.setText(_translate("MainWindow", "Get your Clinic registered now!"))
-        self.label_12.setText(_translate("MainWindow", "LOGO Here"))
-        self.lineEdit_9.setText(_translate("MainWindow", "example - 19000"))
+
+def ClinicSaveData(self):
+        # Get data from input fields
+        data = {
+            "ClinicIDLineEdit": self.ClinicIDLineEdit.text(),
+            "ClinicAddressLineEdit": self.ClinicAddressLineEdit.text(),
+            "ClinicNameLineEdit": self.ClinicNameLineEdit.text(),
+            "ClinicContactLineEdit": self.ClinicContactLineEdit.text(),
+            "ClinicEmailLineEdit": self.ClinicEmailLineEdit.text(),
+            "ClinicPostCodeLineEdit": self.ClinicPostCodeLineEdit.text(),
+            "ClinicDocumentLineEdit": self.ClinicDocumentLineEdit.text(),
+            "ClinicPasswordLineEdit": self.ClinicPasswordLineEdit.text()
+            # Add more fields as needed
+        }
