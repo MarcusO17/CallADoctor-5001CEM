@@ -214,10 +214,10 @@ def doctors():
         doctors = [
             dict(
                 doctorID = row['doctorID'],
-                doctorName = row['doctorName']
-                doctorType = row['doctorType']
-                doctorICNumber = row['doctorICNumber']
-                yearOfExperience = row['yearOfExperience']
+                doctorName = row['doctorName'],
+                doctorType = row['doctorType'],
+                doctorICNumber = row['doctorICNumber'],
+                yearOfExperience = row['yearOfExperience'],
                 status = row['status'],
                 clinicID = row['clinicID']
             )
@@ -268,10 +268,10 @@ def doctorID(id):
         doctor = [
             dict(
                 doctorID = row['doctorID'],
-                doctorName = row['doctorName']
-                doctorType = row['doctorType']
-                doctorICNumber = row['doctorICNumber']
-                yearOfExperience = row['yearOfExperience']
+                doctorName = row['doctorName'],
+                doctorType = row['doctorType'],
+                doctorICNumber = row['doctorICNumber'],
+                yearOfExperience = row['yearOfExperience'],
                 status = row['status'],
                 clinicID = row['clinicID']
             )
