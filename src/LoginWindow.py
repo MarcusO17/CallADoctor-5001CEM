@@ -5,6 +5,9 @@ from PyQt5 import QtCore
 from model import Login
 from PatientHomepage import PatientHomepage
 from DoctorHomePage import HomepageWindow
+from PatientRegister import PatientRegisterWindow
+from ClinicRegister import ClinicRegisterWindow
+from DoctorRegister import DoctorRegisterWindow
 
 import os
 
