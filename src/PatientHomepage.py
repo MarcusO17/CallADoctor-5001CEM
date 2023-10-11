@@ -116,3 +116,4 @@ class init_ui(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
+
