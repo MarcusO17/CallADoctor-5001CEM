@@ -1,9 +1,11 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication, QSize
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
+
+from src.PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
 
 
 class PatientHomepage(QMainWindow):
@@ -12,10 +14,14 @@ class PatientHomepage(QMainWindow):
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
-        self.ui = init_ui()
-        self.ui.setupUi(self)
 
-class init_ui(object):
+        self.setupUi(self)
+
+    def goToClinicsNearby(self):
+        self.nearbyClinicWindow = PatientClinicsNearbyWindow()
+        self.nearbyClinicWindow.show()
+        self.close()
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -33,6 +39,7 @@ class init_ui(object):
         self.clinicNearbyButton.setFont(font)
         self.clinicNearbyButton.setObjectName("schedule")
         self.clinicNearbyButton.setText("Clinics Nearby")
+        self.clinicNearbyButton.clicked.connect(self.goToClinicsNearby)
 
         self.clinicNearbyLabel = QLabel(self.centralwidget)
         self.clinicNearbyLabel.setGeometry(QRect(170, 225, 50, 50))
@@ -117,3 +124,12 @@ class init_ui(object):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+
+
+def runthiswindow():
+    app = QApplication(sys.argv)
+    window = PatientHomepage()
+    window.show()
+    sys.exit(app.exec_())
+
+runthiswindow()

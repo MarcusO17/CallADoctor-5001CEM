@@ -119,11 +119,3 @@ class init_ui(object):
         print(clinic.getClinicName())
         print(clinic.getClinicDescription())
         print(clinic.getClinicAddress())
-
-def runthiswindow():
-    app = QApplication(sys.argv)
-    window = PatientClinicsNearbyWindow()
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()
