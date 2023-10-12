@@ -141,6 +141,7 @@ def clinics():
             dict(
                 clinicID = row['clinicID'],
                 clinicName = row['clinicName'],
+                clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
             )
@@ -157,16 +158,17 @@ def clinics():
         clinicName = contentJSON['clinicName']
         clinicEmail = contentJSON['clinicEmail']
         clinicPassword = contentJSON['clinicPassword']
+        clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
         governmentApproved = contentJSON['governmentApproved']
    
         insertQuery = """
                         INSERT INTO clinics (clinicName,address,clinicEmail,clinicPassword,
-                                            governmentApproved)
-                        VALUES (%s,%s,%s,%s,%s)
+                                            clinicContact,governmentApproved)
+                        VALUES (%s,%s,%s,%s,,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(clinicName,address,clinicEmail,clinicPassword,
-                                            governmentApproved))
+                                            clinicContact,governmentApproved))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -187,6 +189,7 @@ def clinicID(id):
             dict(
                 clinicID = row['clinicID'],
                 clinicName = row['clinicName'],
+                 clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
             )
@@ -217,6 +220,7 @@ def doctors():
                 doctorName = row['doctorName'],
                 doctorType = row['doctorType'],
                 doctorICNumber = row['doctorICNumber'],
+                doctorContact = row['doctorContact'],
                 yearOfExperience = row['yearOfExperience'],
                 status = row['status'],
                 clinicID = row['clinicID']
@@ -235,6 +239,7 @@ def doctors():
         doctorName = contentJSON['doctorName'],
         doctorPassword = contentJSON['doctorPassword']
         doctorICNumber = contentJSON['doctorICNumber']
+        doctorContact = contentJSON['doctorContact']
         yearOfExperience = contentJSON['yearOfExperience']
         doctorEmail = contentJSON['doctorEmail']
         status = contentJSON['status'],
@@ -242,11 +247,11 @@ def doctors():
 
         insertQuery = """
                         INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,
-                                            doctorICNumber,yearOfExperience,status,clinicID)
-                        VALUES (%s,%s,%s,%s,%s%s,%s,%s)
+                                            doctorICNumber,doctorContact,yearOfExperience,status,clinicID)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
                         """
         cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,
-                                            doctorICNumber,yearOfExperience,status,clinicID))
+                                            doctorICNumber,doctorContact,yearOfExperience,status,clinicID))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -271,6 +276,7 @@ def doctorID(id):
                 doctorName = row['doctorName'],
                 doctorType = row['doctorType'],
                 doctorICNumber = row['doctorICNumber'],
+                doctorContact = row['doctorContact'],
                 yearOfExperience = row['yearOfExperience'],
                 status = row['status'],
                 clinicID = row['clinicID']

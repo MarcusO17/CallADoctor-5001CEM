@@ -419,7 +419,9 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
 def save_data(self):
-        
+        doctorName  = f'{self.DocFirstNameLineEdit.text()} {self.DocLastNameLineEdit.text()}'
+        doctorEmail = 
+    
         doctor_data = {
             "DocFirstName": self.DocFirstNameLineEdit.text(),
             "DocLastName": self.DocLastNameLineEdit.text(),

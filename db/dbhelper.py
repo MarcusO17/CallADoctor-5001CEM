@@ -40,6 +40,7 @@ createClinicTable = '''CREATE TABLE clinics (
                      clinicName TEXT NOT NULL,
                      clinicEmail  TEXT NOT NULL,
                      clinicPassword TEXT NOT NULL,
+                     clinicContact INTEGER NOT NULL,
                      verifiedDoc BLOB,
                      address TEXT NOT NULL,
                      governmentApproved BOOLEAN NOT NULL
@@ -51,6 +52,7 @@ createDoctorTable = '''CREATE TABLE doctors (
                      clinicID VARCHAR(64) NOT NULL,
                      doctorEmail  TEXT NOT NULL,
                      doctorPassword TEXT NOT NULL,
+                     doctorContact INTEGER NOT NULL,
                      doctorName TEXT NOT NULL,
                      doctorType TEXT NOT NULL,
                      doctorICNumber INTEGER UNIQUE,
