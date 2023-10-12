@@ -6,19 +6,22 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from model import Clinic
-from src.PatientClinicDetailsWindow import PatientClinicDetailsWindow
 
 
-class PatientClinicsNearbyWindow(QMainWindow):
-    def __init__(self):
+class PatientClinicDetailsWindow(QMainWindow):
+
+    def __init__(self, clinicTemp):
         super().__init__()
-        self.setWindowTitle("Clinics Nearby")
+        #set the information here
+        self.clinic = clinicTemp
+        print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicDescription(), self.clinic.getClinicDescription())
+        self.setWindowTitle("Clinics Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setupUi(self)
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("PatientClinicsNearby")
+        MainWindow.setObjectName("clinic_details")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
@@ -71,40 +74,9 @@ class PatientClinicsNearbyWindow(QMainWindow):
         headerLayout.addWidget(self.myAccountButton)
         headerLayout.addWidget(self.backButton)
 
-        buttonContainer = QVBoxLayout()
-        buttonContainer.setContentsMargins(60,5,5,5)
-        boxScrollArea = QScrollArea()
-        boxScrollArea.setWidgetResizable(True)
 
-        clinicList = list()
-
-        clinic1 = Clinic("c0001", "Clinic 1","clinic 1 description", "clinic 1 address")
-        clinic2 = Clinic("c0002", "Clinic 2", "clinic 2 description", "clinic 2 address")
-        clinic3 = Clinic("c0003", "Clinic 3", "clinic 3 description", "clinic 3 address")
-
-        clinicList.append(clinic1)
-        clinicList.append(clinic2)
-        clinicList.append(clinic3)
-        print("clinic list size" , len(clinicList))
-
-        buttonFont = QFont()
-        buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
-
-        for count, clinic in enumerate(clinicList):
-            self.clinicButton = QPushButton()
-            self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
-            self.clinicButton.setFont(buttonFont)
-            self.clinicButton.setFixedSize(QSize(800,150))
-            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic))
-            buttonContainer.addWidget(self.clinicButton)
-
-        boxScrollArea.setLayout(buttonContainer)
         mainLayout = QVBoxLayout()
         mainLayout.addLayout(headerLayout)
-        mainLayout.addWidget(boxScrollArea)
 
         self.centralwidget.setLayout(mainLayout)
 
@@ -112,16 +84,5 @@ class PatientClinicsNearbyWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def clinicButtonFunction(self, clinic):
-        # update the clinic details page here according to button click
-        self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic)
-        self.clinicDetailsWindow.show()
-        self.close()
 
-def runthiswindow():
-    app = QApplication(sys.argv)
-    window = PatientClinicsNearbyWindow()
-    window.show()
-    sys.exit(app.exec_())
 
-runthiswindow()
