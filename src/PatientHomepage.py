@@ -124,12 +124,3 @@ class PatientHomepage(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-
-
-def runthiswindow():
-    app = QApplication(sys.argv)
-    window = PatientHomepage()
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()
