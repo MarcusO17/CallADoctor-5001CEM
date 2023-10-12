@@ -419,20 +419,28 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
 def save_data(self):
+        doctorID = f'D'
         doctorName  = f'{self.DocFirstNameLineEdit.text()} {self.DocLastNameLineEdit.text()}'
-        doctorEmail = 
+        doctorEmail = self.DocEmailLineEdit.text()
+        doctorPassword = self.DocPasswordLineEdit.text()
+        doctorContact = self.DocContactLineEdit.text()
+        doctorType = self.DocSpecialtyLineEdit.text()
+        yearsOfExperience = self.DocExpLineEdit.text()
+        doctorICNumber = self.DocPassportLineEdit.text()
+        
     
-        doctor_data = {
-            "DocFirstName": self.DocFirstNameLineEdit.text(),
-            "DocLastName": self.DocLastNameLineEdit.text(),
-            "DocEmail": self.DocEmailLineEdit.text(),
-            "DocCon": self.DocContactLineEdit.text(),
-            "specialty": self.DocSpecialtyLineEdit.text(),
-            "date_of_birth": self.DocDOBDateEdit.date().toString(Qt.ISODate),
-            "ic_passport_number": self.DocPassportLineEdit.text(),
-            "years_of_experience": self.DocExpLineEdit.text(),
-            "password": self.DocPasswordLineEdit.text(),
+        doctorJSON = {
+            "doctorID" : "",
+            "doctorName" : "",
+            "doctorPassword" : "",   
+            "doctorEmail" : "", 
+            "doctorContact" : "", 
+            "doctorType" : "",  
+            "yearsOfExperience" : "",  
+            "doctorICNumber" : "",
         }
+
+        
 
         
 
