@@ -72,6 +72,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
 
         clinicList = list()
 
+
         clinic1 = Clinic("c0001", "Clinic 1","clinic 1 description", "clinic 1 address")
         clinic2 = Clinic("c0002", "Clinic 2", "clinic 2 description", "clinic 2 address")
         clinic3 = Clinic("c0003", "Clinic 3", "clinic 3 description", "clinic 3 address")
