@@ -420,33 +420,33 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         MainWindow.setStatusBar(self.statusbar)
 
 
-        def saveData(self):
-                doctorName  = f'{self.DocFirstNameLineEdit.text()} {self.DocLastNameLineEdit.text()}'
-                doctorEmail = self.DocEmailLineEdit.text()
-                doctorPassword = self.DocPasswordLineEdit.text()
-                doctorContact = self.DocContactLineEdit.text()
-                doctorType = self.DocSpecialtyLineEdit.text()
-                yearsOfExperience = self.DocExpLineEdit.text()
-                doctorICNumber = self.DocPassportLineEdit.text()
-                
+    def saveData(self):
+        doctorName  = f'{self.DocFirstNameLineEdit.text()} {self.DocLastNameLineEdit.text()}'
+        doctorEmail = self.DocEmailLineEdit.text()
+        doctorPassword = self.DocPasswordLineEdit.text()
+        doctorContact = self.DocContactLineEdit.text()
+        doctorType = self.DocSpecialtyLineEdit.text()
+        yearsOfExperience = self.DocExpLineEdit.text()
+        doctorICNumber = self.DocPassportLineEdit.text()
         
-                doctorJSON = {
-                        "doctorName": doctorName,
-                        "doctorPassword": doctorPassword,
-                        "doctorICNumber": doctorICNumber,
-                        "doctorContact": doctorContact,
-                        "doctorType": doctorType,
-                        "yearOfExperience": yearsOfExperience,
-                        "doctorEmail": doctorEmail,
-                        "status": "Inactive",
-                        "clinicID": 0
-                }
 
-                response,registerFlag = Registration.registerDoctor(doctorJSON)
-                if registerFlag:
-                   pass
-                else:
-                   print(response)
+        doctorJSON = {
+                "doctorName": doctorName,
+                "doctorPassword": doctorPassword,
+                "doctorICNumber": doctorICNumber,
+                "doctorContact": doctorContact,
+                "doctorType": doctorType,
+                "yearOfExperience": yearsOfExperience,
+                "doctorEmail": doctorEmail,
+                "status": "Inactive",
+                "clinicID": 0
+        }
+
+        response,registerFlag = Registration.registerDoctor(doctorJSON)
+        if registerFlag:
+                pass
+        else:
+                print(response)
 
         
 
