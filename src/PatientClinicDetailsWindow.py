@@ -45,7 +45,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Welcome! [name]")
+        self.headerTitle.setText(self.clinic.getClinicName())
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -68,6 +68,53 @@ class PatientClinicDetailsWindow(QMainWindow):
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
 
+        self.clinicPictureLabel = QLabel(self.centralwidget)
+        self.clinicPictureLabel.setGeometry(QRect(180, 220, 400, 200))
+        self.clinicPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.clinicPicture = QPixmap(filepath)
+        self.clinicPictureLabel.setPixmap(self.clinicPicture)
+
+        self.clinicDescriptionLabel = QLabel(self.centralwidget)
+        self.clinicDescriptionLabel.setGeometry(QRect(700, 220, 375, 200))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setWeight(75)
+        self.clinicDescriptionLabel.setFont(font)
+        self.clinicDescriptionLabel.setText(self.clinic.getClinicDescription())
+        self.clinicDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+
+        self.clinicAddressLabel = QLabel(self.centralwidget)
+        self.clinicAddressLabel.setGeometry(QRect(180, 450, 350, 200))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setWeight(75)
+        self.clinicAddressLabel.setFont(font)
+        self.clinicAddressLabel.setText(self.clinic.getClinicAddress())
+        self.clinicAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
+
+        self.sendRequestButton = QPushButton(self.centralwidget)
+        self.sendRequestButton.setGeometry(QRect(710, 545, 375, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(20)
+        self.sendRequestButton.setFont(font)
+        self.sendRequestButton.setLayoutDirection(Qt.LeftToRight)
+        self.sendRequestButton.setText("Send Request")
+        self.sendRequestButton.clicked.connect(self.sendRequestFunction)
+
+        self.sendRequestLabel = QLabel(self.centralwidget)
+        self.sendRequestLabel.setGeometry(QRect(730, 570, 50, 50))
+        self.sendRequestLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.sendRequestIcon = QPixmap(filepath)
+        self.sendRequestIcon = self.sendRequestIcon.scaled(50, 50)
+        self.sendRequestLabel.setPixmap(self.sendRequestIcon)
+
         self.clinicDetailsContainer = QLabel(self.centralwidget)
         self.clinicDetailsContainer.setFixedSize(1000,500)
         self.clinicDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
@@ -83,5 +130,7 @@ class PatientClinicDetailsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-
-
+    def sendRequestFunction(self):
+        pass
+        # go to send request window
+        # pass the clinic object to the window

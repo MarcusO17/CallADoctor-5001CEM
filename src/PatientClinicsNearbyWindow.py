@@ -98,7 +98,6 @@ class PatientClinicsNearbyWindow(QMainWindow):
 
         boxScrollArea.setLayout(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
-        #boxScrollArea.setStyleSheet("margin-left: 100px;")
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
@@ -117,11 +116,3 @@ class PatientClinicsNearbyWindow(QMainWindow):
         self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic)
         self.clinicDetailsWindow.show()
         self.close()
-
-def runthiswindow():
-    app = QApplication(sys.argv)
-    window = PatientClinicsNearbyWindow()
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()
