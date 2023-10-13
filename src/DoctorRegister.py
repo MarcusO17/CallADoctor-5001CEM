@@ -1,4 +1,5 @@
 import os
+import requests
 import json
 import sys
 from PyQt5.QtCore import Qt
@@ -6,12 +7,13 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
+from model import Registration
 
 class DoctorRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.RegisterPushButton.clicked.connect(self.save_data)
+        self.RegisterPushButton.clicked.connect(self.saveData)
 
 
     def setupUi(self, MainWindow):
@@ -418,29 +420,33 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         MainWindow.setStatusBar(self.statusbar)
 
 
-def save_data(self):
-        doctorID = f'D'
-        doctorName  = f'{self.DocFirstNameLineEdit.text()} {self.DocLastNameLineEdit.text()}'
-        doctorEmail = self.DocEmailLineEdit.text()
-        doctorPassword = self.DocPasswordLineEdit.text()
-        doctorContact = self.DocContactLineEdit.text()
-        doctorType = self.DocSpecialtyLineEdit.text()
-        yearsOfExperience = self.DocExpLineEdit.text()
-        doctorICNumber = self.DocPassportLineEdit.text()
+        def saveData(self):
+                doctorName  = f'{self.DocFirstNameLineEdit.text()} {self.DocLastNameLineEdit.text()}'
+                doctorEmail = self.DocEmailLineEdit.text()
+                doctorPassword = self.DocPasswordLineEdit.text()
+                doctorContact = self.DocContactLineEdit.text()
+                doctorType = self.DocSpecialtyLineEdit.text()
+                yearsOfExperience = self.DocExpLineEdit.text()
+                doctorICNumber = self.DocPassportLineEdit.text()
+                
         
-    
-        doctorJSON = {
-            "doctorID" : "",
-            "doctorName" : "",
-            "doctorPassword" : "",   
-            "doctorEmail" : "", 
-            "doctorContact" : "", 
-            "doctorType" : "",  
-            "yearsOfExperience" : "",  
-            "doctorICNumber" : "",
-        }
+                doctorJSON = {
+                        "doctorName": doctorName,
+                        "doctorPassword": doctorPassword,
+                        "doctorICNumber": doctorICNumber,
+                        "doctorContact": doctorContact,
+                        "doctorType": doctorType,
+                        "yearOfExperience": yearsOfExperience,
+                        "doctorEmail": doctorEmail,
+                        "status": "Inactive",
+                        "clinicID": 0
+                }
 
-        
+                response,registerFlag = Registration.registerDoctor(doctorJSON)
+                if registerFlag:
+                   pass
+                else:
+                   print(response)
 
         
 
