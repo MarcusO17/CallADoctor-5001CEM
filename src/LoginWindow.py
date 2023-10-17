@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt5 import QtCore
 from model import Login
 from PatientHomepage import PatientHomepage
-from DoctorHomePage import HomepageWindow
+from DoctorHomepage import DoctorHomepage
 from PatientRegister import PatientRegisterWindow
 from ClinicRegister import ClinicRegisterWindow
 from DoctorRegister import DoctorRegisterWindow
