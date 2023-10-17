@@ -30,11 +30,8 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest 
+          pip install pytest requests
         shell: bash 
-      
-      - name: Add 'src' to Python Path
-        run: echo "::add-path::${{ github.workspace }}/src"
-
+        
       - name: Run Tests
         run: pytest
