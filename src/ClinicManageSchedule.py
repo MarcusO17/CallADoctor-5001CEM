@@ -6,19 +6,19 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from model import Clinic
-from PatientClinicDetailsWindow import PatientClinicDetailsWindow
+from src.model import Doctor
 
 
-class PatientClinicsNearbyWindow(QMainWindow):
-    def __init__(self):
+class ClinicManageSchedule(QMainWindow):
+    def __init__(self, clinic):
         super().__init__()
-        self.setWindowTitle("Clinics Nearby")
+        self.setWindowTitle("Manage Schedule")
+        self.clinic = clinic
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setupUi(self)
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("PatientClinicsNearby")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
@@ -42,7 +42,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Welcome! [name]")
+        self.headerTitle.setText("Manage Schedule")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -70,17 +70,17 @@ class PatientClinicsNearbyWindow(QMainWindow):
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
 
-        clinicList = list()
+        doctorList = list()
 
+        # Query and get the doctor list here
+        doctor1 = Doctor("d0001", "Doctor 1",self.clinic.getClinicName(), True)
+        doctor2 = Doctor("d0002", "Doctor 2",self.clinic.getClinicName(), True)
+        doctor3 = Doctor("d0003", "Doctor 3",self.clinic.getClinicName(), True)
 
-        clinic1 = Clinic("c0001", "Clinic 1","clinic 1 description", "clinic 1 address")
-        clinic2 = Clinic("c0002", "Clinic 2", "clinic 2 description", "clinic 2 address")
-        clinic3 = Clinic("c0003", "Clinic 3", "clinic 3 description", "clinic 3 address")
-
-        clinicList.append(clinic1)
-        clinicList.append(clinic2)
-        clinicList.append(clinic3)
-        print("clinic list size" , len(clinicList))
+        doctorList.append(doctor1)
+        doctorList.append(doctor2)
+        doctorList.append(doctor3)
+        print("doctor list size" , len(doctorList))
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -88,14 +88,13 @@ class PatientClinicsNearbyWindow(QMainWindow):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
-        for count, clinic in enumerate(clinicList):
-            self.clinicButton = QPushButton()
-            self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
-            self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
-            self.clinicButton.setFont(buttonFont)
-            self.clinicButton.setFixedSize(QSize(950,150))
-            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic))
-            buttonContainer.addWidget(self.clinicButton)
+        for count, doctor in enumerate(doctorList):
+            doctorButton = QPushButton()
+            doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
+            doctorButton.setFont(buttonFont)
+            doctorButton.setFixedSize(QSize(950,150))
+            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.buttonButtonFunction(doctor))
+            buttonContainer.addWidget(doctorButton)
 
         boxScrollArea.setLayout(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
@@ -113,7 +112,5 @@ class PatientClinicsNearbyWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def clinicButtonFunction(self, clinic):
-        # update the clinic details page here according to button click
-        self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic)
-        self.clinicDetailsWindow.show()
-        self.close()
+        # update the doctor details page with button click self.close() then open the window
+        pass

@@ -5,6 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
 
+from ClinicManageSchedule import ClinicManageSchedule
+
 
 class ClinicHomepage(QMainWindow):
     def __init__(self, clinic):
@@ -17,7 +19,9 @@ class ClinicHomepage(QMainWindow):
         self.setupUi(self)
 
     def goToManageSchedule(self):
-        pass
+        self.clinicManageSchedule = ClinicManageSchedule(self.clinic)
+        self.clinicManageSchedule.show()
+        self.close()
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage")
