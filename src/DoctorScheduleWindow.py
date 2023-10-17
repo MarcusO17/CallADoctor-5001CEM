@@ -24,7 +24,7 @@ class DoctorScheduleWindow(QMainWindow):
         self.close()
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("Homepage")
+        MainWindow.setObjectName("Doctor Schedule")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         HEIGHT = 5
         WIDTH = 8
@@ -49,7 +49,7 @@ class DoctorScheduleWindow(QMainWindow):
         font.setWeight(75)
         self.homepageTitle.setFont(font)
         self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.homepageTitle.setText("Welcome! [name]")
+        self.homepageTitle.setText("Doctor Schedule")
         self.homepageTitle.setAlignment(Qt.AlignCenter)
 
         self.myAccountButton = QPushButton(self.centralwidget)
@@ -66,71 +66,58 @@ class DoctorScheduleWindow(QMainWindow):
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
 
-        self.scheduleGridBox = QGridLayout()
+        self.timeSlotButtonList = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         # header of the grid
-        tempTimeStart = 9
+        timeStart = 9
+        timeSlotLabelXStart = 300
         for i in range(WIDTH):
-            tempTimeStart = tempTimeStart + 1
-            tempTimeEnd = tempTimeStart + 1
-            cellLayout = QVBoxLayout()
-            timeSlotLabel = QLabel()
-            timeSlotLabel.setFixedSize(100,60)
-            timeSlotLabel.setText(str(tempTimeStart) + ":00 - " + str(tempTimeEnd)+ ":00")
-            cellLayout.addWidget(timeSlotLabel)
+            timeStart = timeStart + 1
+            timeEnd = timeStart + 1
+            timeSlotLabel = QLabel(self.centralwidget)
+            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,150,100,60))
+            timeSlotLabel.setStyleSheet("border: 1px solid black;")
+            timeSlotLabel.setText(str(timeStart) + ":00 - " + str(timeEnd)+ ":00")
+            timeSlotLabelXStart = timeSlotLabelXStart + 100
 
-            self.scheduleGridBox.addLayout(cellLayout, 0, i+1)
-
+        dayCellYStart = 210
         # side of the grid
         daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         for i in range(HEIGHT):
-            cellLayout = QVBoxLayout()
-            dayCell = QLabel()
-            dayCell.setFixedSize(100, 60)
+            dayCell = QLabel(self.centralwidget)
+            dayCell.setGeometry(QRect(200, dayCellYStart, 100, 60))
+            dayCell.setStyleSheet("border: 1px solid black;")
             dayCell.setText(daysOfTheWeek[i])
-            cellLayout.addWidget(dayCell)
+            dayCellYStart = dayCellYStart + 60
 
-            self.scheduleGridBox.addLayout(cellLayout, i+1, 0)
-
-
+        tempButtonYStart = 150
         for h in range(HEIGHT):
+            tempButtonXStart = 300
+            tempButtonYStart = tempButtonYStart + 60
             for w in range(WIDTH):
-                cellLayout = QVBoxLayout()
-                tempButton = QPushButton()
-                tempButton.setFixedSize(100,60)
-                tempButton.setStyleSheet("background-color: red;border: 10px solid black;")
-                tempButton.setText(str(h+1) + ", " + str(w+1))
-                tempButton.clicked.connect(lambda checked, h=h, w=w: self.gridLayoutCellButton(h+1, w+1))
-                cellLayout.addWidget(tempButton)
-
-                self.scheduleGridBox.addLayout(cellLayout, h+1, w+1)
+                timeSlotButton = QPushButton(self.centralwidget)
+                timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 100, 60))
+                timeSlotButton.setStyleSheet("border: 1px solid black;")
+                timeSlotButton.setText(str(h+1) + ", " + str(w+1))
+                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.timeSlotButtonFunction(h+1, w+1))
+                tempButtonXStart = tempButtonXStart + 100
+                self.timeSlotButtonList[h][w] = timeSlotButton
 
         self.clearButton = QPushButton(self.centralwidget)
         self.clearButton.setGeometry(QRect(1050, 600, 90, 90))
         self.clearButton.setText("Clear")
         self.clearButton.setStyleSheet("background-color: blue;")
-        self.clearButton.clicked.connect(self.clearButtonFunction)
-
-
-        mainLayout = QVBoxLayout()
-        mainLayout.addLayout(self.scheduleGridBox)
-
-        self.centralwidget.setLayout(mainLayout)
+        self.clearButton.clicked.connect(lambda: self.clearButtonFunction(row=1, col=3))
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def clearButtonFunction(self):
-        row = 2
-        col = 3
-        layoutTemp = self.scheduleGridBox.itemAtPosition(row, col)
-        if layoutTemp is not None:
-            widgetTemp = layoutTemp.itemAt(0).widget()
-            widgetTemp.setStyleSheet("background-color: green;")
-
-    def gridLayoutCellButton(self, row, col):
+    def timeSlotButtonFunction(self, row, col):
         print(row, col)
+
+    def clearButtonFunction(self, row, col):
+        self.timeSlotButtonList[row][col].setText("")
 
 def runthiswindow():
     app = QApplication(sys.argv)
