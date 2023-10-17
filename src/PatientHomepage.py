@@ -5,7 +5,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
 
-from src.PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
+from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
 
 
 class PatientHomepage(QMainWindow):
