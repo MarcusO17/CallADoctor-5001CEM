@@ -133,10 +133,3 @@ class DoctorHomepage(QtWidgets.QMainWindow):
         MainWindow.setStatusBar(self.statusbar)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-def runthiswindow():
-    app = QApplication(sys.argv)
-    window = DoctorHomepage()
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()
