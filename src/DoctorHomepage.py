@@ -6,16 +6,22 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLa
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 
-class HomepageWindow(QtWidgets.QMainWindow):
+from DoctorScheduleWindow import DoctorScheduleWindow
+
+
+class DoctorHomepage(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Doctor Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
-        self.ui = Ui_HomepageWindow()
-        self.ui.setupUi(self)
-    
-class Ui_HomepageWindow(object):
+        self.setupUi(self)
+
+    def gotoSchedule(self):
+        self.doctorScheduleWindow = DoctorScheduleWindow()
+        self.doctorScheduleWindow.show()
+        self.close()
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("DoctorHomepage")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -35,6 +41,7 @@ class Ui_HomepageWindow(object):
         self.ScheduleButton.setFont(font)
         self.ScheduleButton.setObjectName("schedule")
         self.ScheduleButton.setText("Schedule")
+        self.ScheduleButton.clicked.connect(self.gotoSchedule)
 
 
 #Push button_2 (Patient Record)
@@ -143,3 +150,10 @@ class Ui_HomepageWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+def runthiswindow():
+    app = QApplication(sys.argv)
+    window = DoctorHomepage()
+    window.show()
+    sys.exit(app.exec_())
+
+runthiswindow()

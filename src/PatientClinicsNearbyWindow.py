@@ -97,6 +97,7 @@ class init_ui(object):
         for count, clinic in enumerate(clinicList):
             self.clinicButton = QPushButton()
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
+            self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
             self.clinicButton.setFixedSize(QSize(800,150))
             self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic))
