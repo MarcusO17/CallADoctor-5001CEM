@@ -1,5 +1,7 @@
 from .Login import Login
 from .Clinic import Clinic
+from .Registration import Registration
 from .Appointment import Appointment
 
-__all__ = ['Login', 'Clinic','Appointment']
+__all__ = ['Login', 'Registration','Clinic','Appointment']
+

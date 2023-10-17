@@ -3,10 +3,11 @@ import os
 from PyQt5.QtWidgets import QApplication
 from LoginWindow import LoginWindow
 from PatientRegister import PatientRegisterWindow
+from DoctorRegister import DoctorRegisterWindow
 
 def main():
     app = QApplication(sys.argv)
-    loginWindow = LoginWindow()
+    loginWindow = DoctorRegisterWindow()
     loginWindow.show()
     sys.exit(app.exec_())
 

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 import os
+import requests
 import pymysql
 
 
@@ -141,6 +142,7 @@ def clinics():
             dict(
                 clinicID = row['clinicID'],
                 clinicName = row['clinicName'],
+                clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
             )
@@ -154,19 +156,21 @@ def clinics():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
+        clinicID = contentJSON['clinicID']
         clinicName = contentJSON['clinicName']
         clinicEmail = contentJSON['clinicEmail']
         clinicPassword = contentJSON['clinicPassword']
+        clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
         governmentApproved = contentJSON['governmentApproved']
    
         insertQuery = """
-                        INSERT INTO clinics (clinicName,address,clinicEmail,clinicPassword,
-                                            governmentApproved)
-                        VALUES (%s,%s,%s,%s,%s)
+                        INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
+                                            clinicContact,governmentApproved)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s)
                       """
-        cursor = cursor.execute(insertQuery,(clinicName,address,clinicEmail,clinicPassword,
-                                            governmentApproved))
+        cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
+                                            clinicContact,governmentApproved))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -187,6 +191,7 @@ def clinicID(id):
             dict(
                 clinicID = row['clinicID'],
                 clinicName = row['clinicName'],
+                 clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
             )
@@ -217,6 +222,7 @@ def doctors():
                 doctorName = row['doctorName'],
                 doctorType = row['doctorType'],
                 doctorICNumber = row['doctorICNumber'],
+                doctorContact = row['doctorContact'],
                 yearOfExperience = row['yearOfExperience'],
                 status = row['status'],
                 clinicID = row['clinicID']
@@ -231,22 +237,24 @@ def doctors():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        doctorID = contentJSON['doctorID'],
+        doctorID = requests.get('http://127.0.0.1:5000/doctors/idgen').text
         doctorName = contentJSON['doctorName'],
         doctorPassword = contentJSON['doctorPassword']
         doctorICNumber = contentJSON['doctorICNumber']
+        doctorContact = contentJSON['doctorContact']
+        doctorType = contentJSON['doctorType']
         yearOfExperience = contentJSON['yearOfExperience']
         doctorEmail = contentJSON['doctorEmail']
         status = contentJSON['status'],
         clinicID = contentJSON['clinicID']
 
         insertQuery = """
-                        INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,
-                                            doctorICNumber,yearOfExperience,status,clinicID)
-                        VALUES (%s,%s,%s,%s,%s%s,%s,%s)
+                        INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
+                                            doctorICNumber,doctorContact,yearOfExperience,status,clinicID)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                         """
-        cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,
-                                            doctorICNumber,yearOfExperience,status,clinicID))
+        cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
+                                            doctorICNumber,doctorContact,yearOfExperience,status,clinicID))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -254,10 +262,13 @@ def doctors():
 
     if request.method == 'DELETE':
         try:
-            cursor.execute("DROP TABLE doctors")
+            cursor.execute("DELETE FROM doctors")
+            return 'Successful DELETE', 200
         except pymysql.MySQLError as e:
             return 'Error : ',e
-        return 'Successful DELETE', 200
+    
+    cursor.close()
+    conn.close()
 
 @app.route('/doctors/<string:id>',methods=['GET','DELETE'])
 def doctorID(id):
@@ -271,6 +282,7 @@ def doctorID(id):
                 doctorName = row['doctorName'],
                 doctorType = row['doctorType'],
                 doctorICNumber = row['doctorICNumber'],
+                doctorContact = row['doctorContact'],
                 yearOfExperience = row['yearOfExperience'],
                 status = row['status'],
                 clinicID = row['clinicID']
@@ -470,6 +482,20 @@ def userAuthentication():
     else:
         return {'ID': 'DENIED', 'role':'DENIED'}, 401
 
+@app.route('/doctors/idgen')
+def getLastID():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    
+    #Add Error Handling
+    cursor.execute("SELECT COUNT(*) FROM doctors")
+    counter = cursor.fetchall()
+    id = str(counter[0]['COUNT(*)'])
+    id = f'D{id.zfill(3)}'
+        
+    if id is not None:
+            return id,200
+        
    
   
 
