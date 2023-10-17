@@ -117,6 +117,7 @@ class DoctorScheduleWindow(QMainWindow):
 
     def timeSlotButtonFunction(self, row, col):
         print(row, col)
+        #implement go to appointment details
 
     def setSchedule(self, appointmentList):
 
@@ -144,12 +145,3 @@ class DoctorScheduleWindow(QMainWindow):
 
 
 
-
-
-def runthiswindow():
-    app = QApplication(sys.argv)
-    window = DoctorScheduleWindow()
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()
