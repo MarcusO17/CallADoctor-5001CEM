@@ -80,6 +80,22 @@ class ClinicHomepage(QMainWindow):
         self.requestReviewIcon = self.requestReviewIcon.scaled(50, 50)
         self.requestReviewLabel.setPixmap(self.requestReviewIcon)
 
+        self.patientListButton = QPushButton(self.centralwidget)
+        self.patientListButton.setGeometry(QRect(700, 400, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(18)
+        self.patientListButton.setFont(font)
+        self.patientListButton.setText("Patient List")
+
+        self.patientListLabel = QLabel(self.centralwidget)
+        self.patientListLabel.setGeometry(QRect(725, 425, 50, 50))
+        self.patientListLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.patientListIcon = QPixmap(filepath)
+        self.patientListIcon = self.patientListIcon.scaled(50, 50)
+        self.patientListLabel.setPixmap(self.patientListIcon)
+
 
         self.topLeftLogo = QLabel(self.centralwidget)
         self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
