@@ -8,7 +8,8 @@ from DoctorHomePage import HomepageWindow
 from PatientRegister import PatientRegisterWindow
 from ClinicRegister import ClinicRegisterWindow
 from DoctorRegister import DoctorRegisterWindow
-
+from DocPatientDetails import DocPatientDetailsWindow
+from DocMyAppointment import DocMyAppointmentWindow
 import os
 
 class LoginWindow(QWidget):
@@ -65,7 +66,7 @@ class LoginWindow(QWidget):
         self.loginButton = QPushButton("Login")
         self.loginButton.setDefault(True)
 
-        self.loginButton.clicked.connect(self.loginValidation)
+        self.loginButton.clicked.connect(self.login)
 
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
@@ -77,7 +78,7 @@ class LoginWindow(QWidget):
 
 
     def login(self):
-        self.patientHomepage = PatientHomepage()
+        self.patientHomepage = DocMyAppointmentWindow()
         self.patientHomepage.show()
         self.close()
 
