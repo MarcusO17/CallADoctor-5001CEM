@@ -26,6 +26,9 @@ def dbConnect():
          print(e)
     return conn
 
+@app.route('/')
+def index():
+    return 'Welcome to Call a Doctor!'
 
 @app.route('/users',methods=['GET'])
 def users():
