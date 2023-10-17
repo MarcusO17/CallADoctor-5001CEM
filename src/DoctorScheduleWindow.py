@@ -72,11 +72,13 @@ class DoctorScheduleWindow(QMainWindow):
         for h in range(HEIGHT):
             for w in range(WIDTH):
                 cellLayout = QVBoxLayout()
-                temptext = QLabel()
-                temptext.setFixedSize(50,50)
-                temptext.setStyleSheet("background-color: red;")
-                temptext.setText(str(h) + ", " + str(w))
-                cellLayout.addWidget(temptext)
+                tempButton = QPushButton()
+                tempButton.setFixedSize(100,60)
+                tempButton.setStyleSheet("background-color: red;border: 10px solid black;")
+                tempButton.setText(str(h) + ", " + str(w))
+                tempButton.clicked.connect(lambda checked, h=h, w=w: self.gridLayoutCellButton(h, w))
+                cellLayout.addWidget(tempButton)
+
                 self.scheduleGridBox.addLayout(cellLayout, h, w)
 
         self.clearButton = QPushButton(self.centralwidget)
@@ -96,18 +98,15 @@ class DoctorScheduleWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def clearButtonFunction(self):
-        HEIGHT = 6
-        WIDTH = 8
         row = 2
         col = 3
+        layoutTemp = self.scheduleGridBox.itemAtPosition(row, col)
+        if layoutTemp is not None:
+            widgetTemp = layoutTemp.itemAt(0).widget()
+            widgetTemp.setStyleSheet("background-color: green;")
 
-        cell_layout = self.scheduleGridBox.itemAtPosition(row, col)
-
-        if cell_layout is not None:
-            widget = cell_layout.widget()
-            if widget is not None:
-                #cell_layout.removeItem(widget)
-                widget.deleteLater()
+    def gridLayoutCellButton(self, row, col):
+        print(row, col)
 
 def runthiswindow():
     app = QApplication(sys.argv)
