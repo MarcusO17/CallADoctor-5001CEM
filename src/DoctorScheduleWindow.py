@@ -1,12 +1,13 @@
 import os
 import sys
+from datetime import datetime
+
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout
 from PyQt5 import QtWidgets
 
-from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
-
+from src.model import Appointment
 
 
 class DoctorScheduleWindow(QMainWindow):
@@ -17,11 +18,6 @@ class DoctorScheduleWindow(QMainWindow):
         self.setFixedHeight(720)
 
         self.setupUi(self)
-
-    def goToClinicsNearby(self):
-        self.nearbyClinicWindow = PatientClinicsNearbyWindow()
-        self.nearbyClinicWindow.show()
-        self.close()
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Doctor Schedule")
@@ -69,16 +65,17 @@ class DoctorScheduleWindow(QMainWindow):
         self.timeSlotButtonList = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         # header of the grid
-        timeStart = 9
+        timeStart = 8
+        timeEnd = 9
         timeSlotLabelXStart = 300
         for i in range(WIDTH):
-            timeStart = timeStart + 1
-            timeEnd = timeStart + 1
             timeSlotLabel = QLabel(self.centralwidget)
             timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,150,100,60))
             timeSlotLabel.setStyleSheet("border: 1px solid black;")
             timeSlotLabel.setText(str(timeStart) + ":00 - " + str(timeEnd)+ ":00")
             timeSlotLabelXStart = timeSlotLabelXStart + 100
+            timeStart = timeStart + 1
+            timeEnd = timeStart + 1
 
         dayCellYStart = 210
         # side of the grid
@@ -102,12 +99,17 @@ class DoctorScheduleWindow(QMainWindow):
                 timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.timeSlotButtonFunction(h+1, w+1))
                 tempButtonXStart = tempButtonXStart + 100
                 self.timeSlotButtonList[h][w] = timeSlotButton
+                timeSlotButton.setEnabled(False)
 
-        self.clearButton = QPushButton(self.centralwidget)
-        self.clearButton.setGeometry(QRect(1050, 600, 90, 90))
-        self.clearButton.setText("Clear")
-        self.clearButton.setStyleSheet("background-color: blue;")
-        self.clearButton.clicked.connect(lambda: self.clearButtonFunction(row=1, col=3))
+        appointmentList = list()
+
+        # put query and create the appointment objects here
+        appointment1 = Appointment("appointment1", "doctor1", "patient1", "approved", 13, 15, "18-10-2023",
+                                   "light fever")
+
+        appointmentList.append(appointment1)
+
+        self.setSchedule(appointmentList)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -116,8 +118,33 @@ class DoctorScheduleWindow(QMainWindow):
     def timeSlotButtonFunction(self, row, col):
         print(row, col)
 
-    def clearButtonFunction(self, row, col):
-        self.timeSlotButtonList[row][col].setText("")
+    def setSchedule(self, appointmentList):
+
+        for appointment in appointmentList:
+            row = 0
+            col = 0
+            dateTemp = appointment.getAppointmentDate()
+            startTime = appointment.getStartTime()
+            endTime = appointment.getEndTime()
+
+            dateTemp = dateTemp.split("-")
+            print(dateTemp)
+
+            date = datetime(int(dateTemp[2]),int(dateTemp[1]),int(dateTemp[0]))
+
+            if date.weekday()>= 0 and date.weekday() <=4:
+                row = date.weekday()+1
+                if endTime - startTime >= 1:
+                    duration = endTime - startTime
+                    col = startTime - 7
+                    for i in range(duration):
+                        self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
+                        self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
+                        self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
+
+
+
+
 
 def runthiswindow():
     app = QApplication(sys.argv)
