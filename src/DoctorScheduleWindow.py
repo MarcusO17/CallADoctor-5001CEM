@@ -104,6 +104,7 @@ class DoctorScheduleWindow(QMainWindow):
         appointmentList = list()
 
         # put query and create the appointment objects here
+
         appointment1 = Appointment("appointment1", "doctor1", "patient1", "approved", 13, 15, "18-10-2023",
                                    "light fever")
 
@@ -116,6 +117,12 @@ class DoctorScheduleWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def timeSlotButtonFunction(self, row, col):
+        """
+
+        :param row:
+        :param col:
+        :return:
+        """
         print(row, col)
         #implement go to appointment details
 

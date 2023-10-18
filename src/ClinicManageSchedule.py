@@ -111,6 +111,6 @@ class ClinicManageSchedule(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def clinicButtonFunction(self, clinic):
+    def clinicButtonFunction(self, doctor):
         # update the doctor details page with button click self.close() then open the window
         pass
