@@ -41,6 +41,6 @@ class Patient:
         return self.patientRace
     
     def setPatientRace(self, patientRace):
-        self.patientRac = patientRace
+        self.patientRace = patientRace
 
     
