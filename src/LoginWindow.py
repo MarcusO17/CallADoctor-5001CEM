@@ -10,7 +10,8 @@ from ClinicHomepage import ClinicHomepage
 from PatientRegister import PatientRegisterWindow
 from ClinicRegister import ClinicRegisterWindow
 from DoctorRegister import DoctorRegisterWindow
-
+from DocPatientDetails import DocPatientDetailsWindow
+from DocMyAppointment import DocMyAppointmentWindow
 import os
 
 
