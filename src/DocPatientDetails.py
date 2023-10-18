@@ -103,27 +103,48 @@ class DocPatientDetailsWindow(QMainWindow):
         self.patientAddressLabel.setText(self.patient.getPatientAddress())
         self.patientAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
 
-        self.sendRequestButton = QPushButton(self.centralwidget)
-        self.sendRequestButton.setGeometry(QRect(710, 545, 375, 100))
+        self.generatePrescriptionButton = QPushButton(self.centralwidget)
+        self.generatePrescriptionButton.setGeometry(QRect(710, 545, 180, 100))
+        self.generatePrescriptionButton.setLayoutDirection(Qt.RightToLeft)
         font = QFont()
         font.setFamily("Arial")
-        font.setPointSize(20)
-        self.sendRequestButton.setFont(font)
-        self.sendRequestButton.setLayoutDirection(Qt.LeftToRight)
-        self.sendRequestButton.setText("Send Request")
-        self.sendRequestButton.clicked.connect(self.sendRequestFunction)
+        font.setPointSize(10)
+        self.generatePrescriptionButton.setFont(font)
+        self.generatePrescriptionButton.setText("generate prescription")
+        self.generatePrescriptionButton.clicked.connect(self.generatePrescriptionFunction)
 
-        self.sendRequestLabel = QLabel(self.centralwidget)
-        self.sendRequestLabel.setGeometry(QRect(730, 570, 50, 50))
-        self.sendRequestLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.generatePrescriptionLabel = QLabel(self.centralwidget)
+        self.generatePrescriptionLabel.setGeometry(QRect(730, 570, 50, 50))
+        self.generatePrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.sendRequestIcon = QPixmap(filepath)
-        self.sendRequestIcon = self.sendRequestIcon.scaled(50, 50)
-        self.sendRequestLabel.setPixmap(self.sendRequestIcon)
+        self.generatePrescriptionIcon = QPixmap(filepath)
+        self.generatePrescriptionIcon = self.generatePrescriptionIcon.scaled(50, 50)
+        self.generatePrescriptionLabel.setPixmap(self.generatePrescriptionIcon)
+
+
+        self.requestCancelButton = QPushButton(self.centralwidget)
+        self.requestCancelButton.setGeometry(QRect(890, 545, 180, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        self.requestCancelButton.setFont(font)
+        self.requestCancelButton.setLayoutDirection(Qt.RightToLeft)
+        self.requestCancelButton.setText("Cancel Request")
+        self.requestCancelButton.clicked.connect(self.requestCancelFunction)
+
+        self.requestCancelLabel = QLabel(self.centralwidget)
+        self.requestCancelLabel.setGeometry(QRect(910, 570, 50, 50))
+        self.requestCancelLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.requestCancelIcon = QPixmap(filepath)
+        self.requestCancelIcon = self.requestCancelIcon.scaled(50, 50)
+        self.requestCancelLabel.setPixmap(self.requestCancelIcon)
+
 
         self.patientDetailsContainer = QLabel(self.centralwidget)
         self.patientDetailsContainer.setFixedSize(1000,500)
         self.patientDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
+
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
@@ -136,7 +157,10 @@ class DocPatientDetailsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def sendRequestFunction(self):
+    def generatePrescriptionFunction(self):
         pass
         # go to send request window
         # pass the clinic object to the window
+    
+    def requestCancelFunction(self):
+        pass
