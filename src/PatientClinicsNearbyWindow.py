@@ -70,8 +70,8 @@ class PatientClinicsNearbyWindow(QMainWindow):
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
 
+        #Insert All the Clinics 
         clinicList = list()
-
 
         clinic1 = Clinic("c0001", "Clinic 1","clinic 1 description", "clinic 1 address")
         clinic2 = Clinic("c0002", "Clinic 2", "clinic 2 description", "clinic 2 address")
@@ -80,6 +80,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
         clinicList.append(clinic1)
         clinicList.append(clinic2)
         clinicList.append(clinic3)
+
         print("clinic list size" , len(clinicList))
 
         buttonFont = QFont()
@@ -88,6 +89,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
+        #Insert All the Clinics 
         for count, clinic in enumerate(clinicList):
             self.clinicButton = QPushButton()
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
