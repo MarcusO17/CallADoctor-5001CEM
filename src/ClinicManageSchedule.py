@@ -116,12 +116,3 @@ class ClinicManageSchedule(QMainWindow):
         self.doctorSchedule = ClinicDetailedSchedule(doctor)
         self.doctorSchedule.show()
         self.close()
-
-def runthiswindow():
-    clinicDetails = Clinic("clinic0001", "Big Boy Clinic", "Big Boy Clinic Description", "Big Boy Clinic Address")
-    app = QApplication(sys.argv)
-    window = ClinicManageSchedule(clinicDetails)
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()
