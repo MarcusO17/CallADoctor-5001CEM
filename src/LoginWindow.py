@@ -3,14 +3,17 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt5 import QtCore
 from model import Login
+from model import Clinic
 from PatientHomepage import PatientHomepage
-from DoctorHomePage import HomepageWindow
+from DoctorHomepage import DoctorHomepage
+from ClinicHomepage import ClinicHomepage
 from PatientRegister import PatientRegisterWindow
 from ClinicRegister import ClinicRegisterWindow
 from DoctorRegister import DoctorRegisterWindow
 from DocPatientDetails import DocPatientDetailsWindow
 from DocMyAppointment import DocMyAppointmentWindow
 import os
+
 
 class LoginWindow(QWidget):
     def __init__(self):
@@ -66,7 +69,7 @@ class LoginWindow(QWidget):
         self.loginButton = QPushButton("Login")
         self.loginButton.setDefault(True)
 
-        self.loginButton.clicked.connect(self.login)
+        self.loginButton.clicked.connect(self.clinicLogin)
 
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
@@ -76,12 +79,22 @@ class LoginWindow(QWidget):
 
         self.setLayout(loginFormLayout)
 
-
-    def login(self):
-        self.patientHomepage = DocMyAppointmentWindow()
+    # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
+    def patientLogin(self):
+        self.patientHomepage = PatientHomepage()
         self.patientHomepage.show()
         self.close()
 
+    def doctorLogin(self):
+        self.doctorHomepage = DoctorHomepage()
+        self.doctorHomepage.show()
+        self.close()
+
+    def clinicLogin(self):
+        clinicDetails = Clinic("clinic0001", "Big Boy Clinic", "Big Boy Clinic Description", "Big Boy Clinic Address")
+        self.clinicHomepage = ClinicHomepage(clinicDetails)
+        self.clinicHomepage.show()
+        self.close()
 
     def loginValidation(self):
         email = self.emailInput.text()
