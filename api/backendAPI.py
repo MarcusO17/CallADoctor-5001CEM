@@ -256,9 +256,13 @@ def doctors():
                                             doctorICNumber,doctorContact,yearOfExperience,status,clinicID)
                         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                         """
-        cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
+        try:
+            cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
                                             doctorICNumber,doctorContact,yearOfExperience,status,clinicID))
+        except Exception as e:
+            return {'error': e}
         conn.commit() #Commit Changes to db, like git commit
+
         return'Successful POST', 201
     
 
