@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from model import Clinic
-from src.model import Doctor
+from ClinicDetailedSchedule import ClinicDetailedSchedule
+from model import Doctor
 
 
 class ClinicManageSchedule(QMainWindow):
@@ -93,7 +94,7 @@ class ClinicManageSchedule(QMainWindow):
             doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
             doctorButton.setFont(buttonFont)
             doctorButton.setFixedSize(QSize(950,150))
-            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.buttonButtonFunction(doctor))
+            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.clinicButtonFunction(doctor))
             buttonContainer.addWidget(doctorButton)
 
         boxScrollArea.setLayout(buttonContainer)
@@ -112,5 +113,15 @@ class ClinicManageSchedule(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def clinicButtonFunction(self, doctor):
-        # update the doctor details page with button click self.close() then open the window
-        pass
+        self.doctorSchedule = ClinicDetailedSchedule(doctor)
+        self.doctorSchedule.show()
+        self.close()
+
+def runthiswindow():
+    clinicDetails = Clinic("clinic0001", "Big Boy Clinic", "Big Boy Clinic Description", "Big Boy Clinic Address")
+    app = QApplication(sys.argv)
+    window = ClinicManageSchedule(clinicDetails)
+    window.show()
+    sys.exit(app.exec_())
+
+runthiswindow()
