@@ -1,9 +1,12 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QScrollArea, QHBoxLayout
+from PyQt5.QtCore import Qt
 
 
 class AssignAppointmentDialog(QDialog):
     def __init__(self, requestList, doctor):
-        super().__init__()
+        super(AssignAppointmentDialog, self).__init__()
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)
+        self.setWindowFlag(Qt.FramelessWindowHint)
         self.setWindowTitle("")
         self.setFixedSize(600,600)
         self.layout = QVBoxLayout()
@@ -20,6 +23,7 @@ class AssignAppointmentDialog(QDialog):
         self.selectedButtonIndex = ""
 
         for count, appointment in enumerate(self.appointmentList):
+            print("Creating 1 button here")
             button = QPushButton()
             button.clicked.connect(lambda checked, index=count: self.buttonClicked(index))
             button.setCheckable(True)
@@ -32,12 +36,14 @@ class AssignAppointmentDialog(QDialog):
 
         self.confirmButton = QPushButton()
         self.confirmButton.setText("Confirm")
+        self.confirmButton.clicked.connect(self.confirmButtonFunction)
 
         self.cancelButton = QPushButton()
-        self.cancelButton.setText("Confirm")
+        self.cancelButton.setText("Cancel")
+        self.cancelButton.clicked.connect(self.cancelButtonFunction)
 
-        self.confirmationButtonLayout.addWidget(self.confirmButton)
         self.confirmationButtonLayout.addWidget(self.cancelButton)
+        self.confirmationButtonLayout.addWidget(self.confirmButton)
 
         self.layout.addWidget(boxScrollArea)
         self.layout.addLayout(self.confirmationButtonLayout)
@@ -64,7 +70,10 @@ class AssignAppointmentDialog(QDialog):
             self.selectedAppointment.setChecked(True)
 
     def confirmButtonFunction(self):
+        #make the changes here
         self.requestList[self.selectedButtonIndex].setDoctorID("")
+
+        self.close()
 
     def cancelButtonFunction(self):
         self.close()

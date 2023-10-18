@@ -108,7 +108,7 @@ class ClinicDetailedSchedule(QMainWindow):
                 timeSlotButton.setStyleSheet("border: 1px solid black;")
                 timeSlotButton.setText(str(h+1) + ", " + str(w+1))
                 timeSlotButton.setCheckable(True)
-                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.toggleDropDownFunction(h+1, w+1))
+                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.showAssignAppointmentDialog(h+1, w+1))
                 tempButtonXStart = tempButtonXStart + 100
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
@@ -136,6 +136,7 @@ class ClinicDetailedSchedule(QMainWindow):
 
         appointment1 = Appointment("appointment1", "", "patient1", "approved", 12, 13, "19-10-2023",
                                    "light fever")
+        unassignedAppointmentList.append(appointment1)
 
         self.dialog = AssignAppointmentDialog(unassignedAppointmentList, self.doctor)
         self.dialog.show()
@@ -144,17 +145,18 @@ class ClinicDetailedSchedule(QMainWindow):
     def editButtonFunction(self):
 
         if self.editButtonState == True:
+
             self.editButtonState = False
-            self.editButton.setText("Edit")
-            for row in self.timeSlotButtonList:
-                for button in row:
-                    button.setEnabled(False)
-        else:
-            self.editButtonState = True
             self.editButton.setText("Save")
             for row in self.timeSlotButtonList:
                 for button in row:
                     button.setEnabled(True)
+        else:
+            self.editButtonState = True
+            self.editButton.setText("Edit")
+            for row in self.timeSlotButtonList:
+                for button in row:
+                    button.setEnabled(False)
 
     def setSchedule(self, appointmentList):
 
