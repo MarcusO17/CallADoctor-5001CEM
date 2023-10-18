@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from model import Prescription
-from DocPatientDetails import DocPatientDetailsWindow
+from PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 
 class PatientPrescriptionWindow(QMainWindow):
     def __init__(self):
@@ -112,6 +112,6 @@ class PatientPrescriptionWindow(QMainWindow):
 
     def prescriptionButtonFunction(self, patient):
         # update the clinic details page here according to button click
-        self.patientDetailsWindow = DocPatientDetailsWindow(patient)
-        self.patientDetailsWindow.show()
+        self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(patient)
+        self.prescriptionDetailsWindow.show()
         self.close()
