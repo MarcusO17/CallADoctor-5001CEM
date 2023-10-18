@@ -70,6 +70,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
 
+        #Get Clinics
         clinicList = list()
 
 

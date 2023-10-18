@@ -27,4 +27,4 @@ class Clinic:
         return self.clinicAddress
 
     def setClinicAddress(self, clinicAddress):
-        self.clinicAddress = clinicAddress
+        self.clinicAddress = clinicAddress        
