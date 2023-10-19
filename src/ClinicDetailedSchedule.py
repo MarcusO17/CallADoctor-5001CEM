@@ -8,8 +8,6 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplicat
 from PyQt5 import QtWidgets
 
 from model import Appointment, Doctor
-from AssignAppointmentDialog import AssignAppointmentDialog
-
 
 class ClinicDetailedSchedule(QMainWindow):
     def __init__(self, doctor):
@@ -108,7 +106,7 @@ class ClinicDetailedSchedule(QMainWindow):
                 timeSlotButton.setStyleSheet("border: 1px solid black;")
                 timeSlotButton.setText(str(h+1) + ", " + str(w+1))
                 timeSlotButton.setCheckable(True)
-                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.showAssignAppointmentDialog(h+1, w+1))
+                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.gotoAppointment(h+1, w+1))
                 tempButtonXStart = tempButtonXStart + 100
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
@@ -128,19 +126,9 @@ class ClinicDetailedSchedule(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def showAssignAppointmentDialog(self, row, col):
+    def gotoAppointment(self, row, col):
         print(row, col)
-
-        # get the unassigned appointment list here
-        unassignedAppointmentList = list()
-
-        appointment1 = Appointment("appointment1", "", "patient1", "approved", 12, 13, "19-10-2023",
-                                   "light fever")
-        unassignedAppointmentList.append(appointment1)
-
-        dialog = AssignAppointmentDialog(self)
-        dialog.setDoctor(self.doctor)
-        dialog.exec_()
+        #implement go to appointment here
 
     def editButtonFunction(self):
 
