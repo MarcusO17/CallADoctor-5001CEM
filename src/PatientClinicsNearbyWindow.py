@@ -5,7 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Clinic, ClinicRepo
+from model.Clinic import Clinic
+from model.ClinicRepo import ClinicRepository
 from PatientClinicDetailsWindow import PatientClinicDetailsWindow
 
 
@@ -72,7 +73,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
         boxScrollArea.setWidgetResizable(True)
 
         #Get Clinics
-        clinicList = ClinicRepo.ClinicRepository.getClinicList()
+        clinicList = ClinicRepository.getClinicList()
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -109,3 +110,4 @@ class PatientClinicsNearbyWindow(QMainWindow):
         self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic)
         self.clinicDetailsWindow.show()
         self.close()
+
