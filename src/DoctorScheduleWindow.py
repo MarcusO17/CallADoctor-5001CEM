@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout
 from PyQt5 import QtWidgets
 
-from src.model import Appointment
+from model import Appointment
 
 
 class DoctorScheduleWindow(QMainWindow):

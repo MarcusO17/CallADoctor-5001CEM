@@ -80,23 +80,22 @@ class LoginWindow(QWidget):
         self.setLayout(loginFormLayout)
 
     # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
-    def patientLogin(self):
-        self.patientHomepage = PatientHomepage()
+    def patientLogin(self,sessionID):
+        self.patientHomepage = PatientHomepage(sessionID)
         self.patientHomepage.show()
         self.close()
 
-    def doctorLogin(self):
-        self.doctorHomepage = DoctorHomepage()
+    def doctorLogin(self,sessionID):
+        self.doctorHomepage = DoctorHomepage(sessionID)
         self.doctorHomepage.show()
         self.close()
 
-    def clinicLogin(self):
-        clinicDetails = Clinic("clinic0001", "Big Boy Clinic", "Big Boy Clinic Description", "Big Boy Clinic Address")
-        self.clinicHomepage = ClinicHomepage(clinicDetails)
+    def clinicLogin(self,sessionID):
+        self.clinicHomepage = ClinicHomepage(sessionID)
         self.clinicHomepage.show()
         self.close()
 
-    def loginValidation(self):
+    def loginAuthorization(self):
         email = self.emailInput.text()
         password = self.passwordInput.text()
 
@@ -108,8 +107,15 @@ class LoginWindow(QWidget):
         sessionInfo,isValid = Login.userValidLogin(credentials=loginJSON)
 
         if isValid:
-            print(sessionInfo)
-            self.login()
+            sessionID = sessionInfo['ID']
+            role = sessionInfo['role']
+            if role == "patient":
+                self.patientLogin(sessionID)
+            elif role == "doctor":
+                self.doctorLogin(sessionID)
+            elif role == "clinic":
+                self.clinicLogin(sessionID)
+
         else:
             print("login failed")
 

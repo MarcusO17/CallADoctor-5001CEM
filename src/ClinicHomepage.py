@@ -1,5 +1,6 @@
 import os
 import sys
+from model import Clinic
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
@@ -7,9 +8,9 @@ from PyQt5 import QtWidgets
 
 
 class ClinicHomepage(QMainWindow):
-    def __init__(self, clinic):
+    def __init__(self, clinicID):
         super().__init__()
-        self.clinic = clinic
+        self.clinic = Clinic.getClinicfromID(clinicID)
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
