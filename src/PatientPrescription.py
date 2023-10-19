@@ -87,12 +87,12 @@ class PatientPrescriptionWindow(QMainWindow):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
-        for count, Prescription in enumerate(prescriptionList):
+        for count, prescription in enumerate(prescriptionList):
             self.prescriptionButton = QPushButton()
-            self.prescriptionButton.setText(Prescription.getPrescriptionID() + " - " + Prescription.getMedicationName())
+            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getMedicationName())
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setFixedSize(QSize(950,150))
-            self.prescriptionButton.clicked.connect(lambda checked, prescription=Prescription: self.prescriptionButtonFunction(prescription))
+            self.prescriptionButton.clicked.connect(lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription))
             buttonContainer.addWidget(self.prescriptionButton)
 
         boxScrollArea.setLayout(buttonContainer)
@@ -110,8 +110,8 @@ class PatientPrescriptionWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def prescriptionButtonFunction(self, patient):
+    def prescriptionButtonFunction(self, prescription):
         # update the clinic details page here according to button click
-        self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(patient)
+        self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription)
         self.prescriptionDetailsWindow.show()
         self.close()

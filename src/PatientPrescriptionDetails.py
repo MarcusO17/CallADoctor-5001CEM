@@ -14,7 +14,7 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
 
         #set the information here
         self.prescription = prescriptionTemp
-        print(self.prescription.getPrescriptionID(), self.prescription.getAppointmentID(), self.prescription.getPillsPerDay(), self.prescription.getMedicationName(), self.prescription.getFood(), self.prescription.getDosage())
+        print(self.prescription.getPrescriptionID(), self.prescription.getAppointmentID(), self.prescription.getPillsPerDay(), self.prescription.getMedicationName, self.prescription.getFood, self.prescription.getDosage())
         self.setWindowTitle("Patient Prescription Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
