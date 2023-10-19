@@ -81,16 +81,19 @@ class LoginWindow(QWidget):
 
     # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
     def patientLogin(self):
+        #Pass SessionID
         self.patientHomepage = PatientHomepage()
         self.patientHomepage.show()
         self.close()
 
     def doctorLogin(self):
+        #Pass SessionID
         self.doctorHomepage = DoctorHomepage()
         self.doctorHomepage.show()
         self.close()
 
     def clinicLogin(self):
+        #Pass SessionID
         clinicDetails = Clinic("clinic0001", "Big Boy Clinic", "Big Boy Clinic Description", "Big Boy Clinic Address")
         self.clinicHomepage = ClinicHomepage(clinicDetails)
         self.clinicHomepage.show()
