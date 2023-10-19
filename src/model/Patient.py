@@ -1,3 +1,4 @@
+import requests
 class Patient:
     def __init__(self, patientID, patientName, patientAddress, patientDOB, patientBlood, patientRace):
         self.patientID = patientID
@@ -41,6 +42,24 @@ class Patient:
         return self.patientRace
     
     def setPatientRace(self, patientRace):
-        self.patientRac = patientRace
+        self.patientRace = patientRace
 
+    @classmethod
+    def getPatientfromID(self,patientID):
+        try:
+            response = requests.get(f'http://127.0.0.1:5000/patients/{patientID}')
+            patient = response.json()[0]
+        except Exception as e:
+            print(e)
+            return Patient("","","","","","")
+        
+        return Patient(
+            patient['patientID'],
+            patient['patientName'],
+            patient['address'],
+            patient['dateOfBirth'],
+            patient['bloodType'],
+            patient['race']
+        )
+        
     

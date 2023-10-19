@@ -45,7 +45,7 @@ class Clinic:
             clinic['clinicID'],
             clinic['clinicName'],
             clinic['clinicContact'],
-            clinic['clinicAddress'],
-            clinic['approvalStatus'],
+            clinic['address'],
+            clinic['governmentApproved'],
         )
         
