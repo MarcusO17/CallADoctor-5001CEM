@@ -69,7 +69,7 @@ class LoginWindow(QWidget):
         self.loginButton = QPushButton("Login")
         self.loginButton.setDefault(True)
 
-        self.loginButton.clicked.connect(self.clinicLogin)
+        self.loginButton.clicked.connect(self.patientLogin)
 
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
@@ -82,7 +82,8 @@ class LoginWindow(QWidget):
     # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
     def patientLogin(self):
         #Pass SessionID
-        self.patientHomepage = PatientHomepage()
+        sessionID = "00001"
+        self.patientHomepage = PatientHomepage(sessionID)
         self.patientHomepage.show()
         self.close()
 

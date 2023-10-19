@@ -20,7 +20,7 @@ class Clinic:
         self.clinicName = clinicName
 
     def getClinicContact (self):
-        return self.clinicDescription
+        return self.clinicContact
 
     def setClinicContact (self, clinicContact ):
         self.cliniContact  = clinicContact 
@@ -35,4 +35,4 @@ class Clinic:
         return self.approvalStatus
 
     def setClinicStatus(self, approvalStatus ):
-        self.approvalStatus = approvalStatus      
+        self.approvalStatus = approvalStatus

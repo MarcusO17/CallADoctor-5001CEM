@@ -9,8 +9,9 @@ from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
 
 
 class PatientHomepage(QMainWindow):
-    def __init__(self):
+    def __init__(self, sessionID):
         super().__init__()
+        self.patientID = sessionID
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -18,7 +19,7 @@ class PatientHomepage(QMainWindow):
         self.setupUi(self)
 
     def goToClinicsNearby(self):
-        self.nearbyClinicWindow = PatientClinicsNearbyWindow()
+        self.nearbyClinicWindow = PatientClinicsNearbyWindow(self.patientID)
         self.nearbyClinicWindow.show()
         self.close()
 
