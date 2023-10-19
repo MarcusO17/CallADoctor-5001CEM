@@ -81,6 +81,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
+        #Insert All the Clinics 
         for count, clinic in enumerate(clinicList):
             self.clinicButton = QPushButton()
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
