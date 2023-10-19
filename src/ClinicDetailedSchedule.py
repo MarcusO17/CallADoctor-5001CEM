@@ -7,8 +7,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
 
-from AssignAppointmentDialog import AssignAppointmentDialog
 from model import Appointment, Doctor
+from AssignAppointmentDialog import AssignAppointmentDialog
 
 
 class ClinicDetailedSchedule(QMainWindow):
@@ -138,9 +138,9 @@ class ClinicDetailedSchedule(QMainWindow):
                                    "light fever")
         unassignedAppointmentList.append(appointment1)
 
-        self.dialog = AssignAppointmentDialog(unassignedAppointmentList, self.doctor)
-        self.dialog.show()
-
+        dialog = AssignAppointmentDialog(self)
+        dialog.setDoctor(self.doctor)
+        dialog.exec_()
 
     def editButtonFunction(self):
 

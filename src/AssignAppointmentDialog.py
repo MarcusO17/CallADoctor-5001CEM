@@ -1,17 +1,25 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QScrollArea, QHBoxLayout
 from PyQt5.QtCore import Qt
 
+from model import Appointment
+
 
 class AssignAppointmentDialog(QDialog):
-    def __init__(self, requestList, doctor):
-        super(AssignAppointmentDialog, self).__init__()
-        self.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)
+    def __init__(self, parent=None):
+        super(AssignAppointmentDialog, self).__init__(parent)
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)  # Remove close button
         self.setWindowFlag(Qt.FramelessWindowHint)
-        self.setWindowTitle("")
-        self.setFixedSize(600,600)
+        self.setWindowTitle("Assign An Appointment")
+        self.doctor = None
+        print(self.doctor)
+
+        self.setFixedSize(600, 600)
         self.layout = QVBoxLayout()
-        self.appointmentList = requestList
-        self.doctor = doctor
+        appointment1 = Appointment("appointment1", "", "patient1", "approved", 12, 13, "19-10-2023",
+                                   "light fever")
+        self.unassignedAppointmentList = list()
+
+        self.unassignedAppointmentList.append(appointment1)
 
         self.requestButtonLayout = QVBoxLayout()
         self.confirmationButtonLayout = QHBoxLayout()
@@ -22,8 +30,7 @@ class AssignAppointmentDialog(QDialog):
         self.selectedAppointment = None
         self.selectedButtonIndex = ""
 
-        for count, appointment in enumerate(self.appointmentList):
-            print("Creating 1 button here")
+        for count, appointment in enumerate(self.unassignedAppointmentList):
             button = QPushButton()
             button.clicked.connect(lambda checked, index=count: self.buttonClicked(index))
             button.setCheckable(True)
@@ -50,6 +57,8 @@ class AssignAppointmentDialog(QDialog):
 
         self.setLayout(self.layout)
 
+        print("Finished creating assignAppointmentDialog")
+
     def buttonClicked(self, index):
         # logic so the user can only select one of the request
         if self.selectedAppointment == None:
@@ -70,10 +79,13 @@ class AssignAppointmentDialog(QDialog):
             self.selectedAppointment.setChecked(True)
 
     def confirmButtonFunction(self):
-        #make the changes here
-        self.requestList[self.selectedButtonIndex].setDoctorID("")
-
+        # make the changes here
         self.close()
 
     def cancelButtonFunction(self):
         self.close()
+
+    def setDoctor(self, doctor):
+        self.doctor = doctor
+
+        print(doctor)
