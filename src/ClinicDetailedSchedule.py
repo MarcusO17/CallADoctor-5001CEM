@@ -61,16 +61,6 @@ class ClinicDetailedSchedule(QMainWindow):
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
 
-        self.editButton = QPushButton(self.centralwidget)
-        self.editButton.setGeometry(QRect(1050, 600, 120, 70))
-        self.editButton.setText("Edit")
-        self.editButtonState = True
-        font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        font.setWeight(75)
-        self.editButton.clicked.connect(self.editButtonFunction)
-
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         # header of the grid
@@ -129,22 +119,6 @@ class ClinicDetailedSchedule(QMainWindow):
     def gotoAppointment(self, row, col):
         print(row, col)
         #implement go to appointment here
-
-    def editButtonFunction(self):
-
-        if self.editButtonState == True:
-
-            self.editButtonState = False
-            self.editButton.setText("Save")
-            for row in self.timeSlotButtonList:
-                for button in row:
-                    button.setEnabled(True)
-        else:
-            self.editButtonState = True
-            self.editButton.setText("Edit")
-            for row in self.timeSlotButtonList:
-                for button in row:
-                    button.setEnabled(False)
 
     def setSchedule(self, appointmentList):
 
