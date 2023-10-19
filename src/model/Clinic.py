@@ -39,7 +39,7 @@ class Clinic:
     def setClinicStatus(self, approvalStatus ):
         self.approvalStatus = approvalStatus
 
-            @classmethod
+    @classmethod
     def getClinicfromID(self,clinicID):
         try:
             response = requests.get(f'http://127.0.0.1:5000/clinics/{clinicID}')
