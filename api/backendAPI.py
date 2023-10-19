@@ -26,6 +26,9 @@ def dbConnect():
          print(e)
     return conn
 
+@app.route('/')
+def index():
+    return 'Welcome to Call a Doctor!'
 
 @app.route('/users',methods=['GET'])
 def users():
@@ -191,7 +194,7 @@ def clinicID(id):
             dict(
                 clinicID = row['clinicID'],
                 clinicName = row['clinicName'],
-                 clinicContact = row['clinicContact'],
+                clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
             )
@@ -253,9 +256,13 @@ def doctors():
                                             doctorICNumber,doctorContact,yearOfExperience,status,clinicID)
                         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                         """
-        cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
+        try:
+            cursor = cursor.execute(insertQuery,(doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
                                             doctorICNumber,doctorContact,yearOfExperience,status,clinicID))
+        except Exception as e:
+            return {'error': e}
         conn.commit() #Commit Changes to db, like git commit
+
         return'Successful POST', 201
     
 
