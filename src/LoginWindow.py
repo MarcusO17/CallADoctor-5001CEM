@@ -82,7 +82,8 @@ class LoginWindow(QWidget):
     # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
     def patientLogin(self):
         #Pass SessionID
-        self.patientHomepage = PatientHomepage()
+        sessionID = "00001"
+        self.patientHomepage = PatientHomepage(sessionID)
         self.patientHomepage.show()
         self.close()
 
