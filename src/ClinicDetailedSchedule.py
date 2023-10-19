@@ -96,7 +96,6 @@ class ClinicDetailedSchedule(QMainWindow):
                 timeSlotButton.setStyleSheet("border: 1px solid black;")
                 timeSlotButton.setText(str(h+1) + ", " + str(w+1))
                 timeSlotButton.setCheckable(True)
-                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.gotoAppointment(h+1, w+1))
                 tempButtonXStart = tempButtonXStart + 100
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
@@ -116,9 +115,12 @@ class ClinicDetailedSchedule(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def gotoAppointment(self, row, col):
-        print(row, col)
-        #implement go to appointment here
+    def gotoAppointment(self, appointment):
+
+        print(appointment)
+        print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus())
+        # open appointment details page here
+        pass
 
     def setSchedule(self, appointmentList):
 
@@ -143,13 +145,4 @@ class ClinicDetailedSchedule(QMainWindow):
                         self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
                         self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
                         self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
-
-
-def runthiswindow():
-    doctor1 = Doctor("d0001", "Doctor 1","clinic0001", True)
-    app = QApplication(sys.argv)
-    window = ClinicDetailedSchedule(doctor1)
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()
+                        self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked: self.gotoAppointment(appointment))
