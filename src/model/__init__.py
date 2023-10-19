@@ -3,6 +3,9 @@ from .Clinic import Clinic
 from .Patient import Patient
 from .Registration import Registration
 from .Appointment import Appointment
+from .Doctor import Doctor
 
-__all__ = ['Login', 'Registration','Clinic','Appointment', 'Patient']
+
+__all__ = ['Login', 'Registration','Clinic','Appointment', 'Patient','ClinicRepo','Doctor']
+
 

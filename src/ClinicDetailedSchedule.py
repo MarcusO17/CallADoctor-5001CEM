@@ -4,15 +4,15 @@ from datetime import datetime
 
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
 
-from model import Appointment
+from model import Appointment, Doctor
 
-
-class DoctorScheduleWindow(QMainWindow):
-    def __init__(self):
+class ClinicDetailedSchedule(QMainWindow):
+    def __init__(self, doctor):
         super().__init__()
+        self.doctor = doctor
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -20,7 +20,6 @@ class DoctorScheduleWindow(QMainWindow):
         self.setupUi(self)
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("Doctor Schedule")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         HEIGHT = 5
         WIDTH = 8
@@ -62,7 +61,7 @@ class DoctorScheduleWindow(QMainWindow):
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
 
-        self.timeSlotButtonList = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
+        self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         # header of the grid
         timeStart = 8
@@ -96,15 +95,15 @@ class DoctorScheduleWindow(QMainWindow):
                 timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 100, 60))
                 timeSlotButton.setStyleSheet("border: 1px solid black;")
                 timeSlotButton.setText(str(h+1) + ", " + str(w+1))
-                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.timeSlotButtonFunction(h+1, w+1))
+                timeSlotButton.setCheckable(True)
                 tempButtonXStart = tempButtonXStart + 100
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
-        appointmentList = list()
+        appointmentList = list() # this list is for appointments that is assigned to the doctor
 
         # put query and create the appointment objects here
-
+        # use doctor object to get appointments
         appointment1 = Appointment("appointment1", "doctor1", "patient1", "approved", 13, 15, "18-10-2023",
                                    "light fever")
 
@@ -116,15 +115,12 @@ class DoctorScheduleWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def timeSlotButtonFunction(self, row, col):
-        """
+    def gotoAppointment(self, appointment):
 
-        :param row:
-        :param col:
-        :return:
-        """
-        print(row, col)
-        #implement go to appointment details
+        print(appointment)
+        print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus())
+        # open appointment details page here
+        pass
 
     def setSchedule(self, appointmentList):
 
@@ -149,6 +145,4 @@ class DoctorScheduleWindow(QMainWindow):
                         self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
                         self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
                         self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
-
-
-
+                        self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked: self.gotoAppointment(appointment))

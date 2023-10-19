@@ -79,10 +79,12 @@ class LoginWindow(QWidget):
         self.setLayout(loginFormLayout)
 
     # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
+
     def patientLogin(self,sessionID):
         self.patientHomepage = PatientHomepage(sessionID)
         self.patientHomepage.show()
         self.close()
+
 
     def doctorLogin(self,sessionID):
         self.doctorHomepage = DoctorHomepage(sessionID)

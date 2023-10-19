@@ -194,7 +194,7 @@ def clinicID(id):
             dict(
                 clinicID = row['clinicID'],
                 clinicName = row['clinicName'],
-                 clinicContact = row['clinicContact'],
+                clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
             )

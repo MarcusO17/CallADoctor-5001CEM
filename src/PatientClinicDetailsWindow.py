@@ -6,15 +6,17 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from model import Clinic
+from PatientSendRequest import PatientSendRequest
 
 
 class PatientClinicDetailsWindow(QMainWindow):
 
-    def __init__(self, clinicTemp):
+    def __init__(self, clinicTemp, sessionID):
         super().__init__()
         #set the information here
         self.clinic = clinicTemp
-        print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicDescription(), self.clinic.getClinicDescription())
+        self.patientID = sessionID
+        print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
         self.setWindowTitle("Clinics Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -83,7 +85,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.clinicDescriptionLabel.setFont(font)
-        self.clinicDescriptionLabel.setText(self.clinic.getClinicDescription())
+        self.clinicDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + self.clinic.getClinicContact())
         self.clinicDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.clinicAddressLabel = QLabel(self.centralwidget)
@@ -131,6 +133,6 @@ class PatientClinicDetailsWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def sendRequestFunction(self):
-        pass
-        # go to send request window
-        # pass the clinic object to the window
+        self.patientSendRequest = PatientSendRequest(self.clinic, self.patientID)
+        self.patientSendRequest.show()
+        self.close()
