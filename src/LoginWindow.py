@@ -69,7 +69,7 @@ class LoginWindow(QWidget):
         self.loginButton = QPushButton("Login")
         self.loginButton.setDefault(True)
 
-        self.loginButton.clicked.connect(self.clinicLogin)
+        self.loginButton.clicked.connect(self.patientLogin)
 
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)

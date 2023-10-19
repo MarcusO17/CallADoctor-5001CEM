@@ -1,14 +1,14 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QDate, QTime
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QLineEdit, QComboBox, QDateEdit
 from PyQt5 import QtWidgets
 from model import Clinic
 
 
-class PatientClinicDetailsWindow(QMainWindow):
+class PatientSendRequest(QMainWindow):
 
     def __init__(self, clinicTemp):
         super().__init__()
@@ -23,6 +23,7 @@ class PatientClinicDetailsWindow(QMainWindow):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("clinic_details")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+        self.timeList = list()
 
         # this is the header (logo, title, my back button
         self.centralwidget = QWidget(MainWindow)
@@ -45,7 +46,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText(self.clinic.getClinicName())
+        self.headerTitle.setText(self.clinic.getClinicName() + " - Send Request")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -68,56 +69,53 @@ class PatientClinicDetailsWindow(QMainWindow):
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
 
-        self.clinicPictureLabel = QLabel(self.centralwidget)
-        self.clinicPictureLabel.setGeometry(QRect(180, 220, 400, 200))
-        self.clinicPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.clinicPicture = QPixmap(filepath)
-        self.clinicPictureLabel.setPixmap(self.clinicPicture)
+        self.requestPurpose = QLineEdit(self.centralwidget)
+        self.requestPurpose.setGeometry(QRect(180, 220, 400, 200))
+        self.requestPurpose.setAlignment(Qt.AlignTop)
+        self.requestPurpose.setPlaceholderText("Enter the Purpose of Request")
 
-        self.clinicDescriptionLabel = QLabel(self.centralwidget)
-        self.clinicDescriptionLabel.setGeometry(QRect(700, 220, 375, 200))
-        font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
-        self.clinicDescriptionLabel.setFont(font)
-        self.clinicDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + self.clinic.getClinicContact())
-        self.clinicDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.dateLabel = QLabel(self.centralwidget)
+        self.dateLabel.setText("Date: ")
+        self.dateLabel.setGeometry(QRect(180, 450, 150, 40))
+        self.preferredDate = QDateEdit(self.centralwidget)
+        self.preferredDate.setDate(QDate.currentDate())
+        self.preferredDate.setMinimumDate(QDate.currentDate())
+        self.preferredDate.setGeometry(QRect(180, 490, 150, 40))
+        self.preferredDate.dateChanged.connect(self.updateTimeslot)
+        self.updateTimeslot()
 
-        self.clinicAddressLabel = QLabel(self.centralwidget)
-        self.clinicAddressLabel.setGeometry(QRect(180, 450, 350, 200))
-        font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
-        self.clinicAddressLabel.setFont(font)
-        self.clinicAddressLabel.setText(self.clinic.getClinicAddress())
-        self.clinicAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.timeLabel = QLabel(self.centralwidget)
+        self.timeLabel.setText("Time: ")
+        self.timeLabel.setGeometry(QRect(400, 450, 150, 40))
+        self.preferredTimeComboBox = QComboBox(self.centralwidget)
 
-        self.sendRequestButton = QPushButton(self.centralwidget)
-        self.sendRequestButton.setGeometry(QRect(710, 545, 375, 100))
+        self.preferredTimeComboBox.addItems(self.timeList)
+        self.preferredTimeComboBox.setGeometry(QRect(400, 490, 150, 40))
+
+        self.submitButton = QPushButton(self.centralwidget)
+        self.submitButton.setGeometry(QRect(710, 545, 375, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
-        self.sendRequestButton.setFont(font)
-        self.sendRequestButton.setLayoutDirection(Qt.LeftToRight)
-        self.sendRequestButton.setText("Send Request")
-        self.sendRequestButton.clicked.connect(self.sendRequestFunction)
+        self.submitButton.setFont(font)
+        self.submitButton.setLayoutDirection(Qt.LeftToRight)
+        self.submitButton.setText("Submit")
+        self.submitButton.clicked.connect(self.sendRequestFunction)
 
-        self.sendRequestLabel = QLabel(self.centralwidget)
-        self.sendRequestLabel.setGeometry(QRect(730, 570, 50, 50))
-        self.sendRequestLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.submitButtonLabel = QLabel(self.centralwidget)
+        self.submitButtonLabel.setGeometry(QRect(730, 570, 50, 50))
+        self.submitButtonLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.sendRequestIcon = QPixmap(filepath)
-        self.sendRequestIcon = self.sendRequestIcon.scaled(50, 50)
-        self.sendRequestLabel.setPixmap(self.sendRequestIcon)
+        self.submitButtonIcon = QPixmap(filepath)
+        self.submitButtonIcon = self.submitButtonIcon.scaled(50, 50)
+        self.submitButtonLabel.setPixmap(self.submitButtonIcon)
 
         self.clinicDetailsContainer = QLabel(self.centralwidget)
         self.clinicDetailsContainer.setFixedSize(1000,500)
         self.clinicDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
+        self.requestPurpose.raise_()
+        self.preferredTimeComboBox.raise_()
+        self.preferredDate.raise_()
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
@@ -135,9 +133,33 @@ class PatientClinicDetailsWindow(QMainWindow):
         # go to send request window
         # pass the clinic object to the window
 
+    def updateTimeslot(self):
+        # rounding current time + adding 3 hours to current time
+        currentTime = QTime.currentTime()
+        roundedTime = QTime(currentTime.hour(), 0)
+        roundedTime = roundedTime.addSecs(10800)
+        timeDiff = roundedTime.secsTo(QTime(17, 0))
+        print(timeDiff)
+        hoursLeft = timeDiff / 3600
+        startTime = QTime(8, 0)
+
+        if self.preferredDate.date() == QDate.currentDate():
+            if timeDiff < 0:
+                self.preferredDate.setDate(QDate.currentDate().addDays(1))
+                self.preferredDate.setMinimumDate(QDate.currentDate().addDays(1))
+                for hour in range(9):
+                    self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+            else:
+                self.timeList.append(roundedTime.toString("hh:mm"))
+                for hour in range(hoursLeft):
+                    self.timeList.append(roundedTime.addSecs(3600 * hour).toString("hh:mm"))
+        else:
+            for hour in range(9):
+                self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+
 def runthiswindow():
     app = QApplication(sys.argv)
-    window = PatientClinicDetailsWindow(Clinic("c0001", "clinic 1","0123456789"
+    window = PatientSendRequest(Clinic("c0001", "clinic 1","0123456789"
                  ,"clinic1address","approved"))
     window.show()
     sys.exit(app.exec_())

@@ -9,7 +9,6 @@ from model import Clinic
 from PatientClinicDetailsWindow import PatientClinicDetailsWindow
 from model.Clinic import Clinic
 from model.ClinicRepo import ClinicRepository
-from PatientClinicDetailsWindow import PatientClinicDetailsWindo
 
 
 class PatientClinicsNearbyWindow(QMainWindow):
@@ -112,4 +111,3 @@ class PatientClinicsNearbyWindow(QMainWindow):
         self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic)
         self.clinicDetailsWindow.show()
         self.close()
-
