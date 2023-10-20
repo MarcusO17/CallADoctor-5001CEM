@@ -24,7 +24,6 @@ class DoctorHomepage(QMainWindow):
         self.pageManager.add(self.doctorScheduleWindow)
         print(self.pageManager.size())
 
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("DoctorHomepage")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -141,7 +140,8 @@ def runthiswindow():
     app = QApplication(sys.argv)
     pageManager = PageManager()
     window = DoctorHomepage(pageManager)
-    window.show()
+    pageManager.add(window)
+    #window.show()
     sys.exit(app.exec_())
 
 runthiswindow()
