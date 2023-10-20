@@ -33,8 +33,6 @@ class TestRegistration(unittest.TestCase):
     def test_registerDoctor_Failure(self, mock_get):
         response_data = {'error':Exception}
         mock_get.return_value = Mock(status_code=400, text=response_data)
-
-       
         expectedResult = {'error':Exception}
 
         jsonDetails = {

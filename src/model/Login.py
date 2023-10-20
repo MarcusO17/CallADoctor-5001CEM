@@ -6,8 +6,12 @@ class Login:
     baseURL = "http://127.0.0.1:5000/"
 
     def userValidLogin(credentials):
-        response = requests.get(f'http://127.0.0.1:5000/users/auth',json=credentials)
-        sessionInfo = json.loads(response.text)
+        try:
+            response = requests.get(f'http://127.0.0.1:5000/users/auth',json=credentials)
+            sessionInfo = json.loads(response.text)
+        except requests.RequestException as e:
+            print(f'Error : {e}')
+            return None,False
 
         if response.status_code == 200:
             return sessionInfo, True
