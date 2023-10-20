@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 from model import Clinic
 from PatientSendRequest import PatientSendRequest
+from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
 
 
 class PatientClinicDetailsWindow(QMainWindow):
@@ -65,10 +66,11 @@ class PatientClinicDetailsWindow(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         self.clinicPictureLabel = QLabel(self.centralwidget)
         self.clinicPictureLabel.setGeometry(QRect(180, 220, 400, 200))
@@ -131,6 +133,11 @@ class PatientClinicDetailsWindow(QMainWindow):
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
+
+    def backButtonFunction(self):
+        self.patientclinicnearby = PatientClinicsNearbyWindow(self.patientID)
+        self.patientclinicnearby.show()
+        self.close()
 
     def sendRequestFunction(self):
         self.patientSendRequest = PatientSendRequest(self.clinic, self.patientID)

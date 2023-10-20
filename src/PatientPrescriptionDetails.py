@@ -6,14 +6,17 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from model import Prescription
+from src.PatientPrescription import PatientPrescriptionWindow
+
 
 class PatientPrescriptionDetailsWindow(QMainWindow):
 
-    def __init__(self, prescriptionTemp):
+    def __init__(self, prescriptionTemp, sessionID):
         super().__init__()
 
         #set the information here
         self.prescription = prescriptionTemp
+        self.patientID = sessionID
         print(self.prescription.getPrescriptionID(), self.prescription.getAppointmentID(), self.prescription.getPillsPerDay(), self.prescription.getMedicationName, self.prescription.getFood, self.prescription.getDosage())
         self.setWindowTitle("Patient Prescription Details")
         self.setFixedWidth(1280)
@@ -63,10 +66,11 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         self.patientPrescriptionDetailLabel = QLabel(self.centralwidget)
         self.patientPrescriptionDetailLabel.setGeometry(QRect(180, 220, 400, 400))
@@ -108,3 +112,9 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
+
+    def backButtonFunction(self):
+        self.prescriptionWindow = PatientPrescriptionWindow(self.patientID)
+        self.prescriptionWindow.show()
+        self.close()
+

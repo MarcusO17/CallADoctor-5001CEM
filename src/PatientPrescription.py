@@ -7,11 +7,14 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 from model import Prescription
 from PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
+from PatientHomepage import PatientHomepage
+
 
 class PatientPrescriptionWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, sessionID):
         super().__init__()
         self.setWindowTitle("Prescription (Patient)")
+        self.patientID = sessionID
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setupUi(self)
@@ -59,10 +62,11 @@ class PatientPrescriptionWindow(QMainWindow):
         self.patientPrescriptionBackButton = QPushButton(self.centralwidget)
         self.patientPrescriptionBackButton.setFixedSize(70, 70)
         self.patientPrescriptionBackButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.patientPrescriptionBackIcon = QIcon(filepath)
         self.patientPrescriptionBackButton.setIconSize(QSize(70, 70))
         self.patientPrescriptionBackButton.setIcon(self.patientPrescriptionBackIcon)
+        self.patientPrescriptionBackButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -112,6 +116,11 @@ class PatientPrescriptionWindow(QMainWindow):
 
     def prescriptionButtonFunction(self, prescription):
         # update the clinic details page here according to button click
-        self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription)
+        self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription, self.patientID)
         self.prescriptionDetailsWindow.show()
+        self.close()
+
+    def backButtonFunction(self):
+        self.patientHomepage = PatientHomepage(self.patientID)
+        self.patientHomepage.show()
         self.close()

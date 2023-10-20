@@ -3,10 +3,11 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QDate, QTime
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QLineEdit, QComboBox, QDateEdit
+    QScrollArea, QLineEdit, QComboBox, QDateEdit, QMessageBox
 from PyQt5 import QtWidgets
 from model import Clinic
 from model import Appointment
+from PatientClinicDetailsWindow import PatientClinicDetailsWindow
 
 
 class PatientSendRequest(QMainWindow):
@@ -66,10 +67,11 @@ class PatientSendRequest(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         self.requestPurpose = QLineEdit(self.centralwidget)
         self.requestPurpose.setGeometry(QRect(180, 220, 400, 200))
@@ -174,3 +176,12 @@ class PatientSendRequest(QMainWindow):
         else:
             for hour in range(9):
                 self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+
+    def backButtonFunction(self):
+        logoutDialogBox = QMessageBox.question(self.centralwidget, "Back Confirmation",
+                                               "Do you want to discard this request",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if logoutDialogBox == QMessageBox.Yes:
+            self.clinicDetailsWindow = PatientClinicDetailsWindow(self.clinic, self.patientID)
+            self.clinicDetailsWindow.show()
+            self.close()

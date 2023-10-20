@@ -2,10 +2,11 @@ import os
 import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
 from model import Patient
 from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
+from LoginWindow import LoginWindow
 
 
 class PatientHomepage(QMainWindow):
@@ -19,8 +20,13 @@ class PatientHomepage(QMainWindow):
         self.setupUi(self)
 
     def goToClinicsNearby(self):
-        self.nearbyClinicWindow = PatientClinicsNearbyWindow(self.patientID)
+        self.nearbyClinicWindow = PatientClinicsNearbyWindow(self.patient.getPatientID())
         self.nearbyClinicWindow.show()
+        self.close()
+
+    def goToPrescription(self):
+        self.prescriptionWindow = PatientClinicsNearbyWindow(self.patient.getPatientID())
+        self.prescriptionWindow.show()
         self.close()
 
     def setupUi(self, MainWindow):
@@ -120,8 +126,17 @@ class PatientHomepage(QMainWindow):
         self.logoutIcon = QIcon(filepath)
         self.logoutButton.setIconSize(QSize(70, 70))
         self.logoutButton.setIcon(self.logoutIcon)
+        self.logoutButton.clicked.connect(self.logout)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    def logout(self):
+
+        logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation", "Are you sure you want to logout",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if logoutDialogBox == QMessageBox.Yes:
+            self.loginWindow = LoginWindow()
+            self.loginWindow.show()
+            self.close()

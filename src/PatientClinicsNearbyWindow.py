@@ -9,6 +9,7 @@ from model import Clinic
 from PatientClinicDetailsWindow import PatientClinicDetailsWindow
 from model.Clinic import Clinic
 from model.ClinicRepo import ClinicRepository
+from PatientHomepage import PatientHomepage
 
 
 class PatientClinicsNearbyWindow(QMainWindow):
@@ -63,10 +64,11 @@ class PatientClinicsNearbyWindow(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -107,6 +109,10 @@ class PatientClinicsNearbyWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    def backButtonFunction(self):
+        self.patientHomepage = PatientHomepage(self.patientID)
+        self.patientHomepage.show()
+        self.close()
     def clinicButtonFunction(self, clinic, sessionID):
         # update the clinic details page here according to button click
         self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic, sessionID)
