@@ -1,9 +1,11 @@
 class Clinic:
-    def __init__(self,clinicID, clinicName, clinicDescription, clinicAddress):
+    def __init__(self,clinicID, clinicName,clinicContact 
+                 ,clinicAddress,approvalStatus):
         self.clinicID = clinicID
         self.clinicName = clinicName
-        self.clinicDescription = clinicDescription
+        self.clinicContact = clinicContact
         self.clinicAddress = clinicAddress
+        self.approvalStatus = approvalStatus
 
     def getClinicID(self):
         return self.clinicID
@@ -17,14 +19,20 @@ class Clinic:
     def setClinicName(self, clinicName):
         self.clinicName = clinicName
 
-    def getClinicDescription(self):
-        return self.clinicDescription
+    def getClinicContact (self):
+        return self.clinicContact
 
-    def setClinicDescription(self, clinicDescription):
-        self.clinicDescription = clinicDescription
+    def setClinicContact (self, clinicContact ):
+        self.cliniContact  = clinicContact 
 
     def getClinicAddress(self):
         return self.clinicAddress
 
     def setClinicAddress(self, clinicAddress):
-        self.clinicAddress = clinicAddress
+        self.clinicAddress = clinicAddress    
+
+    def getClinicStatus(self):
+        return self.approvalStatus
+
+    def setClinicStatus(self, approvalStatus ):
+        self.approvalStatus = approvalStatus

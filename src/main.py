@@ -7,7 +7,7 @@ from DoctorRegister import DoctorRegisterWindow
 
 def main():
     app = QApplication(sys.argv)
-    loginWindow = DoctorRegisterWindow()
+    loginWindow = LoginWindow()
     loginWindow.show()
     sys.exit(app.exec_())
 
