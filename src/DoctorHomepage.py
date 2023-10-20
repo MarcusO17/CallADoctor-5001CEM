@@ -7,11 +7,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 
 from DoctorScheduleWindow import DoctorScheduleWindow
+from PageManager import PageManager
 
 
-class DoctorHomepage(QtWidgets.QMainWindow):
-    def __init__(self):
+class DoctorHomepage(QMainWindow):
+    def __init__(self, pageManager):
         super().__init__()
+        self.pageManager = pageManager
         self.setWindowTitle("Doctor Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -19,8 +21,9 @@ class DoctorHomepage(QtWidgets.QMainWindow):
 
     def gotoSchedule(self):
         self.doctorScheduleWindow = DoctorScheduleWindow()
-        self.doctorScheduleWindow.show()
-        self.close()
+        self.pageManager.add(self.doctorScheduleWindow)
+        print(self.pageManager.size())
+
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("DoctorHomepage")
@@ -133,3 +136,12 @@ class DoctorHomepage(QtWidgets.QMainWindow):
         MainWindow.setStatusBar(self.statusbar)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+def runthiswindow():
+    app = QApplication(sys.argv)
+    pageManager = PageManager()
+    window = DoctorHomepage(pageManager)
+    window.show()
+    sys.exit(app.exec_())
+
+runthiswindow()

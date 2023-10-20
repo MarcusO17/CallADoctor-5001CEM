@@ -10,7 +10,7 @@ from PyQt5 import QtWidgets
 from model import Appointment
 
 
-class DoctorScheduleWindow(QMainWindow):
+class DoctorScheduleWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Homepage")
@@ -112,7 +112,9 @@ class DoctorScheduleWindow(QMainWindow):
 
         self.setSchedule(appointmentList)
 
-        MainWindow.setCentralWidget(self.centralwidget)
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.centralwidget)
+        self.setLayout(mainLayout)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
