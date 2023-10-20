@@ -9,8 +9,12 @@ class ClinicRepository():
 
       def getClinicList():
             clinicList = []
-            response = requests.get('http://127.0.0.1:5000/clinics')
-            recordsList = response.json()
+            try:
+                  response = requests.get('http://127.0.0.1:5000/clinics')
+                  recordsList = response.json()
+            except requests.RequestException as e:
+                  print(f'Error : {e}')
+                  return Clinic("","","","","")
             for records in recordsList:
                   tempClinic = Clinic("","","","","")
 

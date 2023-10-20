@@ -33,6 +33,8 @@ def index():
 @app.route('/users',methods=['GET'])
 def users():
     conn = dbConnect()
+    if conn == None:
+        return None
     cursor = conn.cursor()
     if request.method == 'GET':
         cursor.execute('SELECT * FROM users')
