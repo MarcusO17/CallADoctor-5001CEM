@@ -4,14 +4,14 @@ from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
-
+from model import Patient
 from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
 
 
 class PatientHomepage(QMainWindow):
-    def __init__(self, sessionID):
+    def __init__(self, patientID):
         super().__init__()
-        self.patientID = sessionID
+        self.patient = Patient.getPatientfromID(patientID)
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
