@@ -12,9 +12,9 @@ from model.ClinicRepo import ClinicRepository
 
 
 class PatientClinicsNearbyWindow(QMainWindow):
-    def __init__(self, sessionID):
+    def __init__(self, patient):
         super().__init__()
-        self.patientID = sessionID
+        self.patient = patient
         self.setWindowTitle("Clinics Nearby")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -89,7 +89,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
             self.clinicButton.setFixedSize(QSize(950,150))
-            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.patientID))
+            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.patient))
             buttonContainer.addWidget(self.clinicButton)
 
         boxScrollArea.setLayout(buttonContainer)
@@ -107,8 +107,8 @@ class PatientClinicsNearbyWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def clinicButtonFunction(self, clinic, sessionID):
+    def clinicButtonFunction(self, clinic, patient):
         # update the clinic details page here according to button click
-        self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic, sessionID)
+        self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic, patient)
         self.clinicDetailsWindow.show()
         self.close()

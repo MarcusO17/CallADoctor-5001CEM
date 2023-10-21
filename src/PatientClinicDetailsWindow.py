@@ -11,11 +11,11 @@ from PatientSendRequest import PatientSendRequest
 
 class PatientClinicDetailsWindow(QMainWindow):
 
-    def __init__(self, clinicTemp, sessionID):
+    def __init__(self, clinicTemp, patient):
         super().__init__()
         #set the information here
         self.clinic = clinicTemp
-        self.patientID = sessionID
+        self.patient = patient
         print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
         self.setWindowTitle("Clinics Details")
         self.setFixedWidth(1280)
@@ -133,6 +133,6 @@ class PatientClinicDetailsWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def sendRequestFunction(self):
-        self.patientSendRequest = PatientSendRequest(self.clinic, self.patientID)
+        self.patientSendRequest = PatientSendRequest(self.clinic, self.patient)
         self.patientSendRequest.show()
         self.close()

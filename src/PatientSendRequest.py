@@ -158,7 +158,7 @@ class PatientSendRequest(QMainWindow):
         roundedTime = roundedTime.addSecs(10800)
         timeDiff = roundedTime.secsTo(QTime(17, 0))
         print(timeDiff)
-        hoursLeft = timeDiff / 3600
+        hoursLeft = timeDiff // 3600
         startTime = QTime(8, 0)
 
         if self.preferredDate.date() == QDate.currentDate():

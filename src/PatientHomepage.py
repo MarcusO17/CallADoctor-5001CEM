@@ -19,7 +19,7 @@ class PatientHomepage(QMainWindow):
         self.setupUi(self)
 
     def goToClinicsNearby(self):
-        self.nearbyClinicWindow = PatientClinicsNearbyWindow(self.patientID)
+        self.nearbyClinicWindow = PatientClinicsNearbyWindow(self.patient)
         self.nearbyClinicWindow.show()
         self.close()
 
