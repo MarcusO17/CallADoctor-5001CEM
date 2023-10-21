@@ -1,5 +1,7 @@
 import os
 import sys
+
+from .ClinicRequestReview import ClinicRequestReview
 from .model import Clinic
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
@@ -77,6 +79,7 @@ class ClinicHomepage(QMainWindow):
         font.setPointSize(18)
         self.requestReviewButton.setFont(font)
         self.requestReviewButton.setText("Request Review")
+        self.requestReviewButton.clicked.connect(self.gotoRequestReview)
 
         self.requestReviewLabel = QLabel(self.centralwidget)
         self.requestReviewLabel.setGeometry(QRect(175, 425, 50, 50))
@@ -147,3 +150,7 @@ class ClinicHomepage(QMainWindow):
                                                QMessageBox.Yes | QMessageBox.No)
         if logoutDialogBox == QMessageBox.Yes:
             self.pageManager.goBack()
+
+    def gotoRequestReview(self):
+        self.requestReview = ClinicRequestReview(self.clinic)
+        self.pageManager.add(self.requestReview)
