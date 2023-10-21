@@ -30,6 +30,30 @@ class Doctor:
     def setStatus(self, status):
         self.status = status
 
+    def setDoctorType(self):
+        return self.doctorType
+
+    def setDoctorType(self, doctorType):
+        self.doctorType = doctorType
+
+    def getDoctorICNumber(self):
+        return self._doctorICNumber
+   
+    def setDoctorICNumber(self, doctorICNumber):
+        self.doctorICNumber = doctorICNumber
+  
+    def getDoctorContact(self):
+        return self.doctorContact
+
+    def setDoctorContact(self, doctorContact):
+        self.doctorContact = doctorContact
+
+    def getYearOfExperience(self):
+        return self.yearOfExperience
+    
+    def setYearOfExperience(self, yearOfExperience):
+        self.yearOfExperience = yearOfExperience
+
     @classmethod
     def getDoctorfromID(self,doctorID):
         try:
