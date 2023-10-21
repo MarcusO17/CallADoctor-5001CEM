@@ -119,5 +119,6 @@ class DocMyAppointmentWindow(QMainWindow):
         self.patientDetailsWindow = DocPatientDetailsWindow(patient)
         self.pageManager.add(self.patientDetailsWindow)
         print(self.pageManager.size())
+
     def backButtonFunction(self):
         self.pageManager.goBack()

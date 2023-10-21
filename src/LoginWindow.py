@@ -71,7 +71,7 @@ class LoginWindow(QWidget):
 
         self.loginButton = QPushButton("Login")
         self.loginButton.setDefault(True)
-        self.loginButton.clicked.connect(lambda : self.doctorLogin("0001"))
+        self.loginButton.clicked.connect(lambda : self.patientLogin("0001"))
 
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
