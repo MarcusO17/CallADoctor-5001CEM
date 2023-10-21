@@ -1,3 +1,4 @@
+import requests
 class Doctor:
     def __init__(self,doctorID, doctorName, clinicID, status):
         self.doctorID = doctorID
@@ -28,3 +29,23 @@ class Doctor:
 
     def setStatus(self, status):
         self.status = status
+
+    @classmethod
+    def getDoctorfromID(self,doctorID):
+        try:
+            response = requests.get(f'http://127.0.0.1:5000/doctors/{doctorID}')
+            doctor = response.json()[0]
+        except Exception as e:
+            print(e)
+            return Doctor("","","","","","")
+        
+        return Doctor(
+                doctor['doctorName'],
+                doctor['doctorType'],
+                doctor['doctorICNumber'],
+                doctor['doctorContact'],
+                doctor['yearOfExperience'],
+                doctor['status'],
+                doctor['clinicID']
+        )
+        
