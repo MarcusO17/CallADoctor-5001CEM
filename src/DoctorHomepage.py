@@ -5,8 +5,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
-
-from DoctorScheduleWindow import DoctorScheduleWindow
+from .DoctorScheduleWindow import DoctorScheduleWindow
 
 
 class DoctorHomepage(QtWidgets.QMainWindow):

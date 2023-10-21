@@ -5,8 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Patient
-from DocPatientDetails import DocPatientDetailsWindow
+from .model import Patient
+from .DocPatientDetails import DocPatientDetailsWindow
 
 class DocMyAppointmentWindow(QMainWindow):
     def __init__(self):

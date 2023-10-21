@@ -1,12 +1,11 @@
 import os
 import sys
-from model import Clinic
+from .model import Clinic
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
-
-from ClinicManageSchedule import ClinicManageSchedule
+from .ClinicManageSchedule import ClinicManageSchedule
 
 
 class ClinicHomepage(QMainWindow):

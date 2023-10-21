@@ -107,10 +107,3 @@ class PatientPrescriptionWindow(QMainWindow):
         self.prescriptionDetailsWindow.show()
         self.close()
 
-def runthiswindow():
-    app = QApplication(sys.argv)
-    window = PatientPrescriptionWindow()
-    window.show()
-    sys.exit(app.exec_())
-
-runthiswindow()

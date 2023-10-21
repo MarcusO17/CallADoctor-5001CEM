@@ -5,8 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea, QLineEdit, QComboBox, QDateEdit
 from PyQt5 import QtWidgets
-from model import Clinic
-from model import Appointment
+from .model import Clinic
+from .model import Appointment
 
 
 class PatientSendRequest(QMainWindow):
