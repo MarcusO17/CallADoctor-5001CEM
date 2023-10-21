@@ -5,6 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
+
+from .AssignDoctorDialog import AssignDoctorDialog
 from .model import Appointment, Clinic
 from .PageManager import PageManager
 
@@ -96,7 +98,7 @@ class ClinicRequestDetails(QMainWindow):
         self.timeLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.assignDoctorButton = QPushButton(self.centralwidget)
-        self.assignDoctorButton.setGeometry(QRect(700, 400, 325, 100))
+        self.assignDoctorButton.setGeometry(QRect(710, 400, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -107,7 +109,7 @@ class ClinicRequestDetails(QMainWindow):
         self.assignDoctorButton.clicked.connect(self.assignDoctorFunction)
 
         self.assignDoctorLabel = QLabel(self.centralwidget)
-        self.assignDoctorLabel.setGeometry(QRect(720, 425, 50, 50))
+        self.assignDoctorLabel.setGeometry(QRect(730, 425, 50, 50))
         self.assignDoctorLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.assignDoctorIcon = QPixmap(filepath)
@@ -187,4 +189,7 @@ class ClinicRequestDetails(QMainWindow):
         pass
 
     def assignDoctorFunction(self):
-        pass
+        self.assignDoctorDialog = AssignDoctorDialog(self)
+        self.assignDoctorDialog.setData(self.request)
+        print("FINISHED SETTING REQUEST")
+        self.assignDoctorDialog.exec_()
