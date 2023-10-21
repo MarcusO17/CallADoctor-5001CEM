@@ -14,7 +14,7 @@ from .DocPatientDetails import DocPatientDetailsWindow
 from .DocMyAppointment import DocMyAppointmentWindow
 import os
 
-from PageManager import PageManager
+from .PageManager import PageManager
 
 
 class LoginWindow(QWidget):
