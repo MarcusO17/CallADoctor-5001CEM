@@ -5,7 +5,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Prescription
+from model import Prescription, PrescriptionRepo
 from PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from PageManager import PageManager
 
@@ -73,18 +73,9 @@ class PatientPrescriptionWindow(QMainWindow):
         buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
-
-        prescriptionList = list()
-
-
-        prescription1 = Prescription("pr0001", "ap1001", "Prescription 1 Name", "3 piils", "food 1", "Dosage 1")
-        prescription2 = Prescription("pr0002", "ap1002", "Prescription 2 Name", "2 piils", "food 2", "Dosage 2")
-        prescription3 = Prescription("pr0003", "ap1003", "Prescription 3 Name", "4 piils", "food 3", "Dosage 3")
-
-        prescriptionList.append(prescription1)
-        prescriptionList.append(prescription2)
-        prescriptionList.append(prescription3)
-        print("prescription list size" , len(prescriptionList))
+        
+        #INSERT HEREE
+        prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionList()
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -117,8 +108,11 @@ class PatientPrescriptionWindow(QMainWindow):
 
     def prescriptionButtonFunction(self, prescription, patient):
         # update the clinic details page here according to button click
+
         self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription, patient)
         self.pageManager.add(self.prescriptionDetailsWindow)
-
+        
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+
