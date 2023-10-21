@@ -5,12 +5,16 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Prescription, PrescriptionRepo
-from PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
+from .model import Prescription, PrescriptionRepo
+from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
+from .PageManager import PageManager
+
 
 class PatientPrescriptionWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, patient):
         super().__init__()
+        self.patient = patient
+        self.pageManager = PageManager()
         self.setWindowTitle("Prescription (Patient)")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -59,10 +63,11 @@ class PatientPrescriptionWindow(QMainWindow):
         self.patientPrescriptionBackButton = QPushButton(self.centralwidget)
         self.patientPrescriptionBackButton.setFixedSize(70, 70)
         self.patientPrescriptionBackButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.patientPrescriptionBackIcon = QIcon(filepath)
         self.patientPrescriptionBackButton.setIconSize(QSize(70, 70))
         self.patientPrescriptionBackButton.setIcon(self.patientPrescriptionBackIcon)
+        self.patientPrescriptionBackButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -83,7 +88,7 @@ class PatientPrescriptionWindow(QMainWindow):
             self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getMedicationName())
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setFixedSize(QSize(950,150))
-            self.prescriptionButton.clicked.connect(lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription))
+            self.prescriptionButton.clicked.connect(lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
             buttonContainer.addWidget(self.prescriptionButton)
 
         boxScrollArea.setLayout(buttonContainer)
@@ -101,9 +106,12 @@ class PatientPrescriptionWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def prescriptionButtonFunction(self, prescription):
+    def prescriptionButtonFunction(self, prescription, patient):
         # update the clinic details page here according to button click
-        self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription)
-        self.prescriptionDetailsWindow.show()
-        self.close()
+        self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription, patient)
+        self.pageManager.add(self.prescriptionDetailsWindow)
+        
+    def backButtonFunction(self):
+        self.pageManager.goBack()
+
 

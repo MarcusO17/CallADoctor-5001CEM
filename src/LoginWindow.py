@@ -14,15 +14,18 @@ from .DocPatientDetails import DocPatientDetailsWindow
 from .DocMyAppointment import DocMyAppointmentWindow
 import os
 
+from PageManager import PageManager
+
 
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
-
+        self.pageManager = PageManager()
         self.setWindowTitle("Login")
         self.setFixedWidth(350)
         self.setFixedHeight(500)
         self.initUI()
+        self.pageManager.add(self)
 
     def initUI(self):
         loginFormLayout = QVBoxLayout()
@@ -82,19 +85,16 @@ class LoginWindow(QWidget):
 
     def patientLogin(self,sessionID):
         self.patientHomepage = PatientHomepage(sessionID)
-        self.patientHomepage.show()
-        self.close()
+        self.pageManager.add(self.patientHomepage)
 
 
     def doctorLogin(self,sessionID):
         self.doctorHomepage = DoctorHomepage(sessionID)
-        self.doctorHomepage.show()
-        self.close()
+        self.pageManager.add(self.doctorHomepage)
 
     def clinicLogin(self,sessionID):
         self.clinicHomepage = ClinicHomepage(sessionID)
-        self.clinicHomepage.show()
-        self.close()
+        self.pageManager.add(self.clinicHomepage)
 
     def loginAuthorization(self):
         email = self.emailInput.text()

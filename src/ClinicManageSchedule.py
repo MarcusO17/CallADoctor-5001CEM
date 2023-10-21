@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 from .model import Clinic
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .model import Doctor
+from .PageManager import PageManager
 
 
 class ClinicManageSchedule(QMainWindow):
@@ -15,6 +16,7 @@ class ClinicManageSchedule(QMainWindow):
         super().__init__()
         self.setWindowTitle("Manage Schedule")
         self.clinic = clinic
+        self.pageManager = PageManager()
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setupUi(self)
@@ -61,10 +63,11 @@ class ClinicManageSchedule(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -94,7 +97,7 @@ class ClinicManageSchedule(QMainWindow):
             doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
             doctorButton.setFont(buttonFont)
             doctorButton.setFixedSize(QSize(950,150))
-            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.clinicButtonFunction(doctor))
+            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
             buttonContainer.addWidget(doctorButton)
 
         boxScrollArea.setLayout(buttonContainer)
@@ -112,7 +115,9 @@ class ClinicManageSchedule(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def clinicButtonFunction(self, doctor):
-        self.doctorSchedule = ClinicDetailedSchedule(doctor)
-        self.doctorSchedule.show()
-        self.close()
+    def doctorButtonFunction(self, doctor, clinic):
+        self.doctorSchedule = ClinicDetailedSchedule(doctor, clinic)
+        self.pageManager.add(self.doctorSchedule)
+
+    def backButtonFunction(self):
+        self.pageManager.goBack()

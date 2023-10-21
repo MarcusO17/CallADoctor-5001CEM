@@ -2,15 +2,24 @@ import os
 import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QApplication
+from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, \
+    QApplication, QMessageBox
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
+
 from .DoctorScheduleWindow import DoctorScheduleWindow
+from .PageManager import PageManager
+from .model import Doctor
+from .DocMyAppointment import DocMyAppointmentWindow
 
 
-class DoctorHomepage(QtWidgets.QMainWindow):
-    def __init__(self):
+
+class DoctorHomepage(QMainWindow):
+    def __init__(self, sessionID):
         super().__init__()
+        self.pageManager = PageManager()
+        # not implemented yet
+        #self.doctor = Doctor.getDoctorfromID(sessionID)
         self.setWindowTitle("Doctor Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -18,8 +27,13 @@ class DoctorHomepage(QtWidgets.QMainWindow):
 
     def gotoSchedule(self):
         self.doctorScheduleWindow = DoctorScheduleWindow()
-        self.doctorScheduleWindow.show()
-        self.close()
+        self.pageManager.add(self.doctorScheduleWindow)
+        print(self.pageManager.size())
+
+    def gotoMyAppointment(self):
+        self.docMyAppointments = DocMyAppointmentWindow()
+        self.pageManager.add(self.docMyAppointments)
+        print(self.pageManager.size())
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("DoctorHomepage")
@@ -80,6 +94,7 @@ class DoctorHomepage(QtWidgets.QMainWindow):
         self.docMyAppointmentsButton.setObjectName("DocMyAppointments")
         self.docMyAppointmentsButton.setLayoutDirection(Qt.LeftToRight)
         self.docMyAppointmentsButton.setText("My Appointments")
+        self.docMyAppointmentsButton.clicked.connect(self.gotoMyAppointment)
 
         self.docMyAppointmentsLabel = QtWidgets.QLabel(self.centralwidget)
         self.docMyAppointmentsLabel.setGeometry(QtCore.QRect(175, 425, 50, 50))
@@ -119,10 +134,9 @@ class DoctorHomepage(QtWidgets.QMainWindow):
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
         self.logoutButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.logoutIcon = QIcon(filepath)
         self.logoutButton.setIconSize(QSize(70, 70))
-        self.logoutButton.setIcon(self.logoutIcon)
+        self.logoutButton.setText("Log Out")
+        self.logoutButton.clicked.connect(self.logout)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -132,3 +146,10 @@ class DoctorHomepage(QtWidgets.QMainWindow):
         MainWindow.setStatusBar(self.statusbar)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def logout(self):
+
+        logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation", "Are you sure you want to logout",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if logoutDialogBox == QMessageBox.Yes:
+            self.pageManager.goBack()

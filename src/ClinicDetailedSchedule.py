@@ -6,13 +6,15 @@ from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
-
 from .model import Appointment, Doctor
+from .PageManager import PageManager
 
 class ClinicDetailedSchedule(QMainWindow):
-    def __init__(self, doctor):
+    def __init__(self, doctor, clinic):
         super().__init__()
         self.doctor = doctor
+        self.clinic = clinic
+        self.pageManager = PageManager()
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -56,10 +58,11 @@ class ClinicDetailedSchedule(QMainWindow):
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
@@ -146,3 +149,6 @@ class ClinicDetailedSchedule(QMainWindow):
                         self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
                         self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
                         self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked: self.gotoAppointment(appointment))
+
+    def backButtonFunction(self):
+        self.pageManager.goBack()

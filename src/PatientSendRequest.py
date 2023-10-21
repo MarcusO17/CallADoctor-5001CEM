@@ -3,10 +3,12 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QDate, QTime
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QLineEdit, QComboBox, QDateEdit
+    QScrollArea, QLineEdit, QComboBox, QDateEdit, QMessageBox
 from PyQt5 import QtWidgets
 from .model import Clinic
 from .model import Appointment
+from .PageManager import PageManager
+
 
 
 class PatientSendRequest(QMainWindow):
@@ -14,6 +16,7 @@ class PatientSendRequest(QMainWindow):
     def __init__(self, clinicTemp, sessionID):
         super().__init__()
         #set the information here
+        self.pageManager = PageManager()
         self.clinic = clinicTemp
         self.patientID = sessionID
         print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
@@ -66,10 +69,11 @@ class PatientSendRequest(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         self.requestPurpose = QLineEdit(self.centralwidget)
         self.requestPurpose.setGeometry(QRect(180, 220, 400, 200))
@@ -142,12 +146,19 @@ class PatientSendRequest(QMainWindow):
 
     def sendRequestFunction(self):
         # generate an appointmentID
-        timeTemp = self.preferredTimeComboBox.currentText().split(":")
-        endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(int(self.durationComboBox.currentText()) * 3600)
-        appointment = Appointment("appointmentID HERE", "", self.patientID,"pending",
-                                    self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm"),self.preferredDate.date().toString("yyyy-MM-dd"), self.requestPurpose.text())
-        print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus(),appointment.getStartTime(),
-              appointment.getEndTime(), appointment.getAppointmentDate(), appointment.getVisitReason())
+        backDialogBox = QMessageBox.question(self.centralwidget, "Submit Confirmation",
+                                             "Do you want to submit this request",
+                                             QMessageBox.Yes | QMessageBox.No)
+        if backDialogBox == QMessageBox.Yes:
+            timeTemp = self.preferredTimeComboBox.currentText().split(":")
+            endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(int(self.durationComboBox.currentText()) * 3600)
+            appointment = Appointment("appointmentID HERE", "", self.patientID,"pending",
+                                        self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm"),self.preferredDate.date().toString("yyyy-MM-dd"), self.requestPurpose.text())
+            print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus(),appointment.getStartTime(),
+                  appointment.getEndTime(), appointment.getAppointmentDate(), appointment.getVisitReason())
+
+            self.pageManager.goBack()
+
         # go to send request window
         # should come up with a dialog box, if send to database go back to homepage
 
@@ -174,3 +185,11 @@ class PatientSendRequest(QMainWindow):
         else:
             for hour in range(9):
                 self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+
+    def backButtonFunction(self):
+
+        backDialogBox = QMessageBox.question(self.centralwidget, "Discard Confirmation",
+                                               "Do you want to discard this request",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if backDialogBox == QMessageBox.Yes:
+            self.pageManager.goBack()
