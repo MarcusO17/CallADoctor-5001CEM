@@ -23,8 +23,7 @@ class ClinicHomepage(QMainWindow):
 
     def goToManageSchedule(self):
         self.clinicManageSchedule = ClinicManageSchedule(self.clinic)
-        self.clinicManageSchedule.show()
-        self.close()
+        self.pageManager.add(self.clinicManageSchedule)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage")
@@ -134,15 +133,13 @@ class ClinicHomepage(QMainWindow):
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
         self.logoutButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.logoutIcon = QIcon(filepath)
         self.logoutButton.setIconSize(QSize(70, 70))
-        self.logoutButton.setIcon(self.logoutIcon)
+        self.logoutButton.setText("Log out")
+        self.logoutButton.clicked.connect(self.logout)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
-
 
     def logout(self):
 
