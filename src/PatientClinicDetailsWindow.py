@@ -5,9 +5,10 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Clinic
-from PatientSendRequest import PatientSendRequest
-from PageManager import PageManager
+from .model import Clinic
+from .PatientSendRequest import PatientSendRequest
+from .PageManager import PageManager
+
 
 
 class PatientClinicDetailsWindow(QMainWindow):
@@ -129,6 +130,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(self.clinicDetailsContainer)
         mainLayout.setAlignment(Qt.AlignHCenter)
+        self.sendRequestButton.raise_()
 
         self.centralwidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralwidget)

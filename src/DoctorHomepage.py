@@ -7,10 +7,11 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLa
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 
-from DoctorScheduleWindow import DoctorScheduleWindow
-from PageManager import PageManager
-from model import Doctor
-from DocMyAppointment import DocMyAppointmentWindow
+from .DoctorScheduleWindow import DoctorScheduleWindow
+from .PageManager import PageManager
+from .model import Doctor
+from .DocMyAppointment import DocMyAppointmentWindow
+
 
 
 class DoctorHomepage(QMainWindow):

@@ -4,10 +4,11 @@ from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
-from model import Patient
-from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
-from PageManager import PageManager
-from PatientPrescription import PatientPrescriptionWindow
+from .model import Patient
+from .PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
+from .PageManager import PageManager
+from .PatientPrescription import PatientPrescriptionWindow
+
 
 
 class PatientHomepage(QMainWindow):
@@ -28,6 +29,7 @@ class PatientHomepage(QMainWindow):
     def gotoMyPrescription(self):
         self.myprescription = PatientPrescriptionWindow(self.patient)
         self.pageManager.add(self.myprescription)
+
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage")

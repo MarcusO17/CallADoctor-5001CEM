@@ -2,16 +2,16 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt5 import QtCore
-from model import Login
-from model import Clinic
-from PatientHomepage import PatientHomepage
-from DoctorHomepage import DoctorHomepage
-from ClinicHomepage import ClinicHomepage
-from PatientRegister import PatientRegisterWindow
-from ClinicRegister import ClinicRegisterWindow
-from DoctorRegister import DoctorRegisterWindow
-from DocPatientDetails import DocPatientDetailsWindow
-from DocMyAppointment import DocMyAppointmentWindow
+from .model import Login
+from .model import Clinic
+from .PatientHomepage import PatientHomepage
+from .DoctorHomepage import DoctorHomepage
+from .ClinicHomepage import ClinicHomepage
+from .PatientRegister import PatientRegisterWindow
+from .ClinicRegister import ClinicRegisterWindow
+from .DoctorRegister import DoctorRegisterWindow
+from .DocPatientDetails import DocPatientDetailsWindow
+from .DocMyAppointment import DocMyAppointmentWindow
 import os
 
 from PageManager import PageManager

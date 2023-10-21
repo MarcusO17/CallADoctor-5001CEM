@@ -5,9 +5,9 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Prescription, PrescriptionRepo
-from PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
-from PageManager import PageManager
+from .model import Prescription, PrescriptionRepo
+from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
+from .PageManager import PageManager
 
 
 class PatientPrescriptionWindow(QMainWindow):
@@ -108,7 +108,6 @@ class PatientPrescriptionWindow(QMainWindow):
 
     def prescriptionButtonFunction(self, prescription, patient):
         # update the clinic details page here according to button click
-
         self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription, patient)
         self.pageManager.add(self.prescriptionDetailsWindow)
         

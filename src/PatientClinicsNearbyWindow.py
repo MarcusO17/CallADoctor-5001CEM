@@ -5,11 +5,12 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Clinic
-from PatientClinicDetailsWindow import PatientClinicDetailsWindow
-from model.Clinic import Clinic
-from model.ClinicRepo import ClinicRepository
-from PageManager import PageManager
+from .PatientClinicDetailsWindow import PatientClinicDetailsWindow
+from .model.Clinic import Clinic
+from .model.ClinicRepo import ClinicRepository
+from .PatientClinicDetailsWindow import PatientClinicDetailsWindow
+from .PageManager import PageManager
+
 
 
 class PatientClinicsNearbyWindow(QMainWindow):

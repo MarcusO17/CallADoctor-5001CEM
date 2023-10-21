@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
-from model import Registration
+from .model import Registration
 
 class DoctorRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):

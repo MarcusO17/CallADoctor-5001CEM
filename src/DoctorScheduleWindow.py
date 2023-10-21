@@ -7,8 +7,9 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout
 from PyQt5 import QtWidgets
 
-from model import Appointment
-from PageManager import PageManager
+from .model import Appointment
+from .PageManager import PageManager
+
 
 
 class DoctorScheduleWindow(QMainWindow):
