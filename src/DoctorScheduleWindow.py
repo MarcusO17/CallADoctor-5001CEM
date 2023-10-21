@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplicat
 from PyQt5 import QtWidgets
 
 from model import Appointment
+from PageManager import PageManager
 
 
 class DoctorScheduleWindow(QMainWindow):
@@ -16,7 +17,7 @@ class DoctorScheduleWindow(QMainWindow):
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
-
+        self.pageManager = PageManager()
         self.setupUi(self)
 
     def setupUi(self, MainWindow):
@@ -57,10 +58,11 @@ class DoctorScheduleWindow(QMainWindow):
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         self.timeSlotButtonList = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
@@ -149,6 +151,9 @@ class DoctorScheduleWindow(QMainWindow):
                         self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
                         self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
                         self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
+
+    def backButtonFunction(self):
+        self.pageManager.goBack()
 
 
 

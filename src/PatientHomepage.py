@@ -2,16 +2,19 @@ import os
 import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
 from model import Patient
 from PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
+from PageManager import PageManager
+from PatientPrescription import PatientPrescriptionWindow
 
 
 class PatientHomepage(QMainWindow):
     def __init__(self, patientID):
         super().__init__()
         self.patient = Patient.getPatientfromID(patientID)
+        self.pageManager = PageManager()
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -19,9 +22,12 @@ class PatientHomepage(QMainWindow):
         self.setupUi(self)
 
     def goToClinicsNearby(self):
-        self.nearbyClinicWindow = PatientClinicsNearbyWindow(self.patientID)
-        self.nearbyClinicWindow.show()
-        self.close()
+        self.nearbyClinicWindow = PatientClinicsNearbyWindow(self.patient)
+        self.pageManager.add(self.nearbyClinicWindow)
+
+    def gotoMyPrescription(self):
+        self.myprescription = PatientPrescriptionWindow(self.patient)
+        self.pageManager.add(self.myprescription)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage")
@@ -59,6 +65,7 @@ class PatientHomepage(QMainWindow):
         self.myPrescriptionButton.setFont(font)
         self.myPrescriptionButton.setLayoutDirection(Qt.LeftToRight)
         self.myPrescriptionButton.setText("My Prescription")
+        self.myPrescriptionButton.clicked.connect(self.gotoMyPrescription)
 
         self.myPrescriptionLabel = QLabel(self.centralwidget)
         self.myPrescriptionLabel.setGeometry(QRect(720, 225, 50, 50))
@@ -116,12 +123,17 @@ class PatientHomepage(QMainWindow):
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
         self.logoutButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.logoutIcon = QIcon(filepath)
         self.logoutButton.setIconSize(QSize(70, 70))
-        self.logoutButton.setIcon(self.logoutIcon)
+        self.logoutButton.setText("Log out")
+        self.logoutButton.clicked.connect(self.logout)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    def logout(self):
+        logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation",
+                                               "Are you sure you want to logout",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if logoutDialogBox == QMessageBox.Yes:
+            self.pageManager.goBack()

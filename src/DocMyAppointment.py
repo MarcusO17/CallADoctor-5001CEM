@@ -7,11 +7,14 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 from model import Patient
 from DocPatientDetails import DocPatientDetailsWindow
+from PageManager import PageManager
+
 
 class DocMyAppointmentWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("My Appointment (Doctor)")
+        self.pageManager = PageManager()
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setupUi(self)
@@ -59,10 +62,11 @@ class DocMyAppointmentWindow(QMainWindow):
         self.docBackButton = QPushButton(self.centralwidget)
         self.docBackButton.setFixedSize(70, 70)
         self.docBackButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.docBackIcon = QIcon(filepath)
         self.docBackButton.setIconSize(QSize(70, 70))
         self.docBackButton.setIcon(self.docBackIcon)
+        self.docBackButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -113,5 +117,8 @@ class DocMyAppointmentWindow(QMainWindow):
     def patientButtonFunction(self, patient):
         # update the clinic details page here according to button click
         self.patientDetailsWindow = DocPatientDetailsWindow(patient)
-        self.patientDetailsWindow.show()
-        self.close()
+        self.pageManager.add(self.patientDetailsWindow)
+        print(self.pageManager.size())
+
+    def backButtonFunction(self):
+        self.pageManager.goBack()

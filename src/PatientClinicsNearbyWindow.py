@@ -9,12 +9,14 @@ from model import Clinic
 from PatientClinicDetailsWindow import PatientClinicDetailsWindow
 from model.Clinic import Clinic
 from model.ClinicRepo import ClinicRepository
+from PageManager import PageManager
 
 
 class PatientClinicsNearbyWindow(QMainWindow):
-    def __init__(self, sessionID):
+    def __init__(self, patient):
         super().__init__()
-        self.patientID = sessionID
+        self.patient = patient
+        self.pageManager = PageManager()
         self.setWindowTitle("Clinics Nearby")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -63,10 +65,11 @@ class PatientClinicsNearbyWindow(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -89,7 +92,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
             self.clinicButton.setFixedSize(QSize(950,150))
-            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.patientID))
+            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.patient))
             buttonContainer.addWidget(self.clinicButton)
 
         boxScrollArea.setLayout(buttonContainer)
@@ -107,8 +110,10 @@ class PatientClinicsNearbyWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def clinicButtonFunction(self, clinic, sessionID):
+    def clinicButtonFunction(self, clinic, patient):
         # update the clinic details page here according to button click
-        self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic, sessionID)
-        self.clinicDetailsWindow.show()
-        self.close()
+        self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic, patient)
+        self.pageManager.add(self.clinicDetailsWindow)
+
+    def backButtonFunction(self):
+        self.pageManager.goBack()
