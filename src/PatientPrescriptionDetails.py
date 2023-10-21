@@ -5,8 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from model import Prescription
-from PageManager import PageManager
+from .model import Prescription
+from .PageManager import PageManager
 
 
 class PatientPrescriptionDetailsWindow(QMainWindow):
