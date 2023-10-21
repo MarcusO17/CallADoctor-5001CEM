@@ -20,5 +20,6 @@ class PageManager():
         self.stack[len(self.stack)-1].show()
         toBeRemovedPage.close()
 
+
     def size(self):
         return len(self.stack)

@@ -3,16 +3,18 @@ import sys
 from model import Clinic
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
 
 from ClinicManageSchedule import ClinicManageSchedule
+from PageManager import PageManager
 
 
 class ClinicHomepage(QMainWindow):
     def __init__(self, clinicID):
         super().__init__()
         self.clinic = Clinic.getClinicfromID(clinicID)
+        self.pageManager = PageManager()
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -140,3 +142,11 @@ class ClinicHomepage(QMainWindow):
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
+
+
+    def logout(self):
+
+        logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation", "Are you sure you want to logout",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if logoutDialogBox == QMessageBox.Yes:
+            self.pageManager.goBack()

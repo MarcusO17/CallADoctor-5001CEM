@@ -11,7 +11,7 @@ from model import Appointment
 from PageManager import PageManager
 
 
-class DoctorScheduleWindow(QWidget):
+class DoctorScheduleWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Homepage")
@@ -58,7 +58,7 @@ class DoctorScheduleWindow(QWidget):
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
@@ -114,9 +114,7 @@ class DoctorScheduleWindow(QWidget):
 
         self.setSchedule(appointmentList)
 
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.centralwidget)
-        self.setLayout(mainLayout)
+        MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
