@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QMessageBox
 from PyQt5 import QtWidgets
 
 from .AssignDoctorDialog import AssignDoctorDialog
@@ -67,7 +67,7 @@ class ClinicRequestDetails(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
@@ -97,6 +97,10 @@ class ClinicRequestDetails(QMainWindow):
         self.timeLabel.setText(self.request.getStartTime())
         self.timeLabel.setFrameShape(QtWidgets.QFrame.Box)
 
+        self.assignedDoctorLabel = QLabel(self.centralwidget)
+        self.assignedDoctorLabel.setGeometry(QRect(700, 350, 150, 40))
+        self.assignedDoctorLabel.setText(self.request.getDoctorID())
+
         self.assignDoctorButton = QPushButton(self.centralwidget)
         self.assignDoctorButton.setGeometry(QRect(710, 400, 325, 100))
         font = QFont()
@@ -123,7 +127,7 @@ class ClinicRequestDetails(QMainWindow):
         font.setPointSize(20)
         self.cancelButton.setFont(font)
         self.cancelButton.setLayoutDirection(Qt.LeftToRight)
-        self.cancelButton.setText("Accept Request")
+        self.cancelButton.setText("Cancel Request")
         self.cancelButton.setStyleSheet("padding-left: 50px;")
         self.cancelButton.clicked.connect(self.cancelRequestFunction)
 
@@ -180,16 +184,42 @@ class ClinicRequestDetails(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def backButtonFunction(self):
-        self.pageManager.goBack()
+        backConfirmationDialogBox = QMessageBox.question(self.centralwidget, "Back Confirmation",
+                                                      "Are you sure you want to back from this request, you may continue later.",
+                                                      QMessageBox.Yes | QMessageBox.No)
+        if backConfirmationDialogBox == QMessageBox.Yes:
+            self.pageManager.goBack()
 
     def acceptRequestFunction(self):
-        pass
+        acceptRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Confirmation",
+                                                      "Are you sure you want to approve this request",
+                                                      QMessageBox.Yes | QMessageBox.No)
+        if acceptRequestDialogBox == QMessageBox.Yes:
+            print(self.request.getDoctorID())
+            if self.request.getDoctorID() == "":
+                print("NO DOCTOR ASSIGNED")
+                noDoctorValidationDialogBox = QMessageBox(self.centralwidget)
+                noDoctorValidationDialogBox.setIcon(QMessageBox.Critical)
+                noDoctorValidationDialogBox.setText("No Doctor Assigned")
+                noDoctorValidationDialogBox.setInformativeText("Please Assign a Doctor before Approving")
+                noDoctorValidationDialogBox.setWindowTitle("Validation Error")
+                noDoctorValidationDialogBox.exec_()
+            else:
+                self.request.setAppointmentStatus("approved")
+                self.pageManager.goBack()
 
     def cancelRequestFunction(self):
-        pass
+        cancelRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Cancel Confirmation",
+                                               "Are you sure you want to cancel this request",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if cancelRequestDialogBox == QMessageBox.Yes:
+            self.request.setAppointmentStatus("cancelled")
+            self.pageManager.goBack()
 
     def assignDoctorFunction(self):
         self.assignDoctorDialog = AssignDoctorDialog(self)
         self.assignDoctorDialog.setData(self.request)
         print("FINISHED SETTING REQUEST")
         self.assignDoctorDialog.exec_()
+
+        self.assignedDoctorLabel.setText(self.request.getDoctorID())
