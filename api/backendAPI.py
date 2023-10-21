@@ -91,7 +91,7 @@ def patients():
         insertQuery = """
                         INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
                                             patientICNumber,dateOfBirth,bloodType,race)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
                                              patientICNumber,dateOfBirth,bloodType,race))
