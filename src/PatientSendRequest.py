@@ -13,12 +13,12 @@ from .PageManager import PageManager
 
 class PatientSendRequest(QMainWindow):
 
-    def __init__(self, clinicTemp, sessionID):
+    def __init__(self, clinic, patient):
         super().__init__()
         #set the information here
         self.pageManager = PageManager()
-        self.clinic = clinicTemp
-        self.patientID = sessionID
+        self.clinic = clinic
+        self.patient = patient
         print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
         self.setWindowTitle("Clinics Details")
         self.setFixedWidth(1280)
@@ -147,15 +147,17 @@ class PatientSendRequest(QMainWindow):
         if backDialogBox == QMessageBox.Yes:
             timeTemp = self.preferredTimeComboBox.currentText().split(":")
             endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(3600)
-            appointment = Appointment("appointmentID HERE", "", self.patientID,"pending",
+
+            # back end magic here
+            appointment = Appointment("appointmentID HERE", "", self.patient.getPatientID(),"Pending",
                                         self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm"),self.preferredDate.date().toString("yyyy-MM-dd"), self.requestPurpose.text())
+
             print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus(),appointment.getStartTime(),
-                  appointment.getEndTime(), appointment.getAppointmentDate(), appointment.getVisitReason())
+                  appointment.getEndTime(), appointment.getVisitReason())
 
             self.pageManager.goBack()
 
-        # go to send request window
-        # should come up with a dialog box, if send to database go back to homepage
+
 
     def updateTimeslot(self):
         # rounding current time + adding 3 hours to current time
