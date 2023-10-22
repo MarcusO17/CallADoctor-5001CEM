@@ -11,6 +11,7 @@ from .DoctorScheduleWindow import DoctorScheduleWindow
 from .PageManager import PageManager
 from .model import Doctor
 from .DocMyAppointment import DocMyAppointmentWindow
+from .DocPatientRecord import DocPatientRecordWindow
 
 
 
@@ -30,9 +31,9 @@ class DoctorHomepage(QMainWindow):
         self.pageManager.add(self.doctorScheduleWindow)
         print(self.pageManager.size())
 
-    def gotoMyAppointment(self):
-        self.docMyAppointments = DocMyAppointmentWindow()
-        self.pageManager.add(self.docMyAppointments)
+    def gotoPatientRecord(self):
+        self.docPatientRecord = DocPatientRecordWindow()
+        self.pageManager.add(self.docPatientRecord)
         print(self.pageManager.size())
 
     def setupUi(self, MainWindow):
@@ -75,6 +76,8 @@ class DoctorHomepage(QMainWindow):
         self.patientRecordButton.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.patientRecordButton.setObjectName("PatientRecord")
         self.patientRecordButton.setText("Patient Record")
+        self.patientRecordButton.clicked.connect(self.gotoPatientRecord)
+
 
         self.patientRecordLabel = QtWidgets.QLabel(self.centralwidget)
         self.patientRecordLabel.setGeometry(QtCore.QRect(720, 225, 50, 50))
@@ -94,7 +97,6 @@ class DoctorHomepage(QMainWindow):
         self.docMyAppointmentsButton.setObjectName("DocMyAppointments")
         self.docMyAppointmentsButton.setLayoutDirection(Qt.LeftToRight)
         self.docMyAppointmentsButton.setText("My Appointments")
-        self.docMyAppointmentsButton.clicked.connect(self.gotoMyAppointment)
 
         self.docMyAppointmentsLabel = QtWidgets.QLabel(self.centralwidget)
         self.docMyAppointmentsLabel.setGeometry(QtCore.QRect(175, 425, 50, 50))
