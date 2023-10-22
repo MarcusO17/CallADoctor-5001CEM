@@ -1,10 +1,14 @@
 import requests
 class Doctor:
-    def __init__(self,doctorID, doctorName, clinicID, status):
+    def __init__(self,doctorID, doctorName, clinicID, status, doctorType, doctorContact, doctorICNumber, yearsOfExperience):
         self.doctorID = doctorID
         self.doctorName = doctorName
         self.clinicID = clinicID
         self.status = status
+        self.doctorType = doctorType
+        self.doctorContact = doctorContact
+        self.doctorICNumber = doctorICNumber
+        self.yearsOfExperience = yearsOfExperience
 
     def getDoctorID(self):
         return self.doctorID
@@ -30,14 +34,14 @@ class Doctor:
     def setStatus(self, status):
         self.status = status
 
-    def setDoctorType(self):
+    def getDoctorType(self):
         return self.doctorType
 
     def setDoctorType(self, doctorType):
         self.doctorType = doctorType
 
     def getDoctorICNumber(self):
-        return self._doctorICNumber
+        return self.doctorICNumber
    
     def setDoctorICNumber(self, doctorICNumber):
         self.doctorICNumber = doctorICNumber
