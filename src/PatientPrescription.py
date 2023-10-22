@@ -75,7 +75,7 @@ class PatientPrescriptionWindow(QMainWindow):
         boxScrollArea.setWidgetResizable(True)
         
         #INSERT HEREE
-        prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionList()
+        prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionDetailList()
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")

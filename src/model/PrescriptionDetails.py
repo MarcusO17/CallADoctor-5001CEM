@@ -1,4 +1,4 @@
-import Prescription
+from .Prescription import Prescription
 class PrescriptionDetails(Prescription):
     def __init__(self,prescriptionID, appointmentID,expiryDate,medicationName, pillsPerDay, food, dosage):
         super().__init__(prescriptionID, appointmentID,expiryDate)

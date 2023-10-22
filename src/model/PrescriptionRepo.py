@@ -1,27 +1,29 @@
 import requests
 from .Prescription import Prescription
+from .PrescriptionDetails import PrescriptionDetails
 
 class PrescriptionRepository():
         
       def __init__(self):
-            self.prescriptionList = []
+            self.prescriptionDetailList = []
 
 
       def getPrescriptionDetailList():
-            prescriptionList = []
+            prescriptionDetailList = []
             response = requests.get('http://127.0.0.1:5000/prescriptions')
             recordsList = response.json()
             for records in recordsList:
                   tempPrescription = Prescription("","","","","")
+                  tempPrescriptionDetail = PrescriptionDetails("","","","")
 
                   tempPrescription.setPrescriptionID(records['prescriptionID'])
                   tempPrescription.setAppointmentID(records['appointmentID'])
-                  tempPrescription.setMedicationName(records['medicationName'])
-                  tempPrescription.setPillsPerDay(records['pillsPerDay'])
-                  tempPrescription.setFood(records['food'])
-                  tempPrescription.setDosage(records['dosage'])
+                  tempPrescriptionDetail.setMedicationName(records['medicationName'])
+                  tempPrescriptionDetail.setPillsPerDay(records['pillsPerDay'])
+                  tempPrescriptionDetail.setFood(records['food'])
+                  tempPrescriptionDetail.setDosage(records['dosage'])
 
-                  prescriptionList.append(tempPrescription)
+                  prescriptionDetailList.append(tempPrescription, tempPrescriptionDetail)
                   
             return prescriptionDetailList      
       
