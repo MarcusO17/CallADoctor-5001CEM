@@ -5,20 +5,21 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
+from .model import PrescriptionDetails
 from .model import Prescription
 from .PageManager import PageManager
 
 
 class PatientPrescriptionDetailsWindow(QMainWindow):
 
-    def __init__(self, prescriptionTemp, patient):
+    def __init__(self, prescriptionDetailsTemp, patient):
         super().__init__()
 
         #set the information here
-        self.prescription = prescriptionTemp
+        self.prescriptionDetails = prescriptionDetailsTemp
         self.patient = patient
         self.pageManager = PageManager()
-        print(self.prescription.getPrescriptionID(), self.prescription.getAppointmentID(), self.prescription.getPillsPerDay(), self.prescription.getMedicationName, self.prescription.getFood, self.prescription.getDosage())
+        print(self.prescriptionDetails.getPrescriptionID(), self.prescriptionDetails.getAppointmentID(), self.prescriptionDetails.getPillsPerDay(), self.prescriptionDetails.getMedicationName, self.prescriptionDetails.getFood, self.prescriptionDetails.getDosage())
         self.setWindowTitle("Patient Prescription Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -49,7 +50,7 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText(self.prescription.getMedicationName())
+        self.headerTitle.setText(self.prescriptionDetails.getMedicationName())
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -82,7 +83,7 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.patientPrescriptionDetailLabel.setFont(font)
-        self.patientPrescriptionDetailLabel.setText(str(self.prescription.getMedicationName()) + " " + str(self.prescription.getPillsPerDay()) + " " + str(self.prescription.getFood()) + " " + str(self.prescription.getDosage()))
+        self.patientPrescriptionDetailLabel.setText(str(self.prescriptionDetails.getMedicationName()) + " " + str(self.prescriptionDetails.getPillsPerDay()) + " " + str(self.prescriptionDetails.getFood()) + " " + str(self.prescriptionDetails.getDosage()))
         self.patientPrescriptionDetailLabel.setFrameShape(QtWidgets.QFrame.Box)
         
 # Need to edit this code to recieve Doctor's details from doctor's Model
