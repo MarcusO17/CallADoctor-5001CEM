@@ -3,7 +3,7 @@ import sys
 import typing
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton,QMessageBox, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtCore, QtWidgets
 from .model import Appointment
@@ -123,13 +123,13 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         self.cancelAppointmentButton.setText("Cancel Request")
         self.cancelAppointmentButton.clicked.connect(self.cancelAppointmentFunction)
 
-        self.requestCancelLabel = QLabel(self.centralwidget)
-        self.requestCancelLabel.setGeometry(QRect(910, 570, 50, 50))
-        self.requestCancelLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.cancelAppointmentLabel = QLabel(self.centralwidget)
+        self.cancelAppointmentLabel.setGeometry(QRect(910, 570, 50, 50))
+        self.cancelAppointmentLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.requestCancelIcon = QPixmap(filepath)
-        self.requestCancelIcon = self.requestCancelIcon.scaled(50, 50)
-        self.requestCancelLabel.setPixmap(self.requestCancelIcon)
+        self.cancelAppointmentIcon = QPixmap(filepath)
+        self.cancelAppointmentIcon = self.cancelAppointmentIcon.scaled(50, 50)
+        self.cancelAppointmentLabel.setPixmap(self.cancelAppointmentIcon)
 
 
         self.patientDetailsContainer = QLabel(self.centralwidget)
@@ -151,7 +151,12 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         # Cancel Appointment With Doctor
     
     def cancelAppointmentFunction(self):
-        pass
+        cancelAppointmentDialogBox = QMessageBox.question(self.centralWidget, "Cancel Confirmation",
+                                                          "Are you sure you want to cancel Appointment?",
+                                                          QMessageBox.Yes | QMessageBox.No)
+        if cancelAppointmentDialogBox == QMessageBox.Yes:
+            self.appointment.setAppointmentStatus("Cancelled")
+            self.pageManager.goBack()
 
     def backButtonFunction(self):
         self.pageManager.goBack()
