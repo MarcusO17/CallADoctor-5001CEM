@@ -1,12 +1,9 @@
 class Prescription:
-    def __init__(self,prescriptionID, appointmentID, medicationName, pillsPerDay, food, dosage):
+    def __init__(self,prescriptionID, appointmentID,expiryDate):
         self.prescriptionID = prescriptionID
         self.appointmentID = appointmentID
-        self.medicationName = medicationName
-        self.pillsPerDay = pillsPerDay
-        self.food = food
-        self.dosage = dosage
-
+        self.expiryDate = expiryDate
+      
     def getPrescriptionID(self):
         return self.prescriptionID
 
@@ -19,27 +16,10 @@ class Prescription:
     def setAppointmentID(self, appointmentID):
         self.appointmentID = appointmentID
 
-    def getPillsPerDay(self):
-        return self.pillsPerDay
+    def getAppointmentID(self):
+        return self.expiryDate
 
-    def setPillsPerDay(self, pillsPerDay):
-        self.pillsPerDay = pillsPerDay
+    def setAppointmentID(self, expiryDate):
+        self.expiryDate = expiryDate
 
-    def getMedicationName(self):
-        return self.medicationName
-
-    def setMedicationName(self, medicationName):
-        self.medicationName = medicationName
-
-    def getFood(self):
-        return self.food
-
-    def setFood(self, food):
-        self.food = food
-
-    def getDosage(self):
-        return self.dosage
-
-    def setDosage(self, dosage):
-        self.dosage = dosage
-    
+  
