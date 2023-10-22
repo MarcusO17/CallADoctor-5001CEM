@@ -327,7 +327,7 @@ def doctorID(id):
             return jsonify(doctor),200
     if request.method == 'DELETE':
         try:
-            cursor.execute("DELETE FROM doctors WHERE doctorID = %s",id)
+            cursor.execute("DELETE FROM doctors WHERE doctorID = %s;",id)
         except pymysql.MySQLError as e:
             return 'Error : ',e
     
@@ -427,6 +427,32 @@ def appointmentsToday():
 
     if request.method == 'GET':
         cursor.execute("SELECT * FROM appointments where appointmentDate BETWEEN %s AND %s ",(dateToday,dateEnd))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200
+
+@app.route('/appointments/today/<string:id>',methods=['GET'])
+def appointmentsTodayID(doctorID):
+    dateToday = datetime.now().date()
+    dateEnd = dateToday + timedelta(days=6)
+    print(dateEnd)
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+    if request.method == 'GET':
+        cursor.execute("""SELECT * FROM appointments where doctorID = %s AND
+                       appointmentDate BETWEEN %s AND %s """,(doctorID,dateToday,dateEnd))
         appointment = [
             dict(
                 appointmentID = row['appointmentID'],
