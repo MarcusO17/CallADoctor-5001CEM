@@ -8,6 +8,7 @@ from .model import Patient
 from .PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
 from .PageManager import PageManager
 from .PatientPrescription import PatientPrescriptionWindow
+from .PatientMyAppointment import PatientMyAppointmentWindow
 
 
 
@@ -29,6 +30,10 @@ class PatientHomepage(QMainWindow):
     def gotoMyPrescription(self):
         self.myprescription = PatientPrescriptionWindow(self.patient)
         self.pageManager.add(self.myprescription)
+
+    def gotoPatientMyAppointment(self):
+        self.patientMyAppointment = PatientMyAppointmentWindow(self.patient)
+        self.pageManager.add(self.patientMyAppointment)
 
 
     def setupUi(self, MainWindow):
@@ -85,6 +90,7 @@ class PatientHomepage(QMainWindow):
         font.setPointSize(18)
         self.myAppointmentsButton.setFont(font)
         self.myAppointmentsButton.setText("My Appointments")
+        self.myAppointmentsButton.clicked.connect(self.gotoPatientMyAppointment)
 
         self.myAppointmentsLabel = QLabel(self.centralwidget)
         self.myAppointmentsLabel.setGeometry(QRect(175, 425, 50, 50))

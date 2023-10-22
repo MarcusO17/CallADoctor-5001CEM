@@ -125,10 +125,10 @@ class PatientMyAppointmentWindow(QMainWindow):
     def backButtonFunction(self):
         self.pageManager.goBack()
 
-    # def runthiswindow():
-    #     app = QApplication(sys.argv)
-    #     patientMyAppointmentWindow = PatientMyAppointmentWindow()
-    #     patientMyAppointmentWindow.show()
-    #     sys.exit(app.exec_())
+# def runthiswindow():
+#     app = QApplication(sys.argv)
+#     patientMyAppointmentWindow = PatientMyAppointmentWindow()
+#     patientMyAppointmentWindow.show()
+#     sys.exit(app.exec_())
 
-    # runthiswindow()
+# runthiswindow()
