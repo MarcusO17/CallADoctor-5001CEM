@@ -85,10 +85,12 @@ class PatientSendRequest(QMainWindow):
         self.dateLabel.setGeometry(QRect(180, 450, 150, 40))
         self.preferredDate = QDateEdit(self.centralwidget)
         self.preferredDate.setDate(QDate.currentDate())
+        self.preferredDate.setDisplayFormat("yyyy-MM-dd")
         self.preferredDate.setMinimumDate(QDate.currentDate())
         self.preferredDate.setGeometry(QRect(180, 490, 150, 40))
         self.preferredDate.dateChanged.connect(self.updateTimeslot)
-        self.updateTimeslot()
+        self.maxDate = QDate.currentDate().addMonths(1)
+        self.preferredDate.setMaximumDate(self.maxDate)
 
         self.timeLabel = QLabel(self.centralwidget)
         self.timeLabel.setText("Time: ")
@@ -97,6 +99,7 @@ class PatientSendRequest(QMainWindow):
 
         self.preferredTimeComboBox.addItems(self.timeList)
         self.preferredTimeComboBox.setGeometry(QRect(400, 490, 150, 40))
+        self.updateTimeslot()
 
         self.submitButton = QPushButton(self.centralwidget)
         self.submitButton.setGeometry(QRect(710, 545, 375, 100))
@@ -123,7 +126,6 @@ class PatientSendRequest(QMainWindow):
         self.preferredTimeComboBox.raise_()
         self.preferredDate.raise_()
         self.submitButton.raise_()
-        self.durationComboBox.raise_()
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
@@ -131,6 +133,7 @@ class PatientSendRequest(QMainWindow):
         mainLayout.addWidget(self.clinicDetailsContainer)
         mainLayout.setAlignment(Qt.AlignHCenter)
 
+        self.centralwidget.setLayout(mainLayout)
         self.centralwidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -156,27 +159,42 @@ class PatientSendRequest(QMainWindow):
 
     def updateTimeslot(self):
         # rounding current time + adding 3 hours to current time
+        print("running updatetimeslot")
+        self.timeList.clear()
         currentTime = QTime.currentTime()
         roundedTime = QTime(currentTime.hour(), 0)
         roundedTime = roundedTime.addSecs(10800)
         timeDiff = roundedTime.secsTo(QTime(17, 0))
-        print(timeDiff)
         hoursLeft = timeDiff // 3600
         startTime = QTime(8, 0)
+        print(timeDiff)
+        print(hoursLeft)
+        print(roundedTime)
 
         if self.preferredDate.date() == QDate.currentDate():
-            if timeDiff < 0:
+            if currentTime > QTime(17, 0):
                 self.preferredDate.setDate(QDate.currentDate().addDays(1))
                 self.preferredDate.setMinimumDate(QDate.currentDate().addDays(1))
+                self.timeList.clear()
                 for hour in range(9):
                     self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+                    print(self.timeList)
             else:
+                self.timeList.clear()
                 self.timeList.append(roundedTime.toString("hh:mm"))
                 for hour in range(hoursLeft):
                     self.timeList.append(roundedTime.addSecs(3600 * hour).toString("hh:mm"))
+                    print(self.timeList)
         else:
+            self.timeList.clear()
             for hour in range(9):
                 self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+
+
+        print("FINISHED", self.timeList)
+
+        self.preferredTimeComboBox.clear()
+        self.preferredTimeComboBox.addItems(self.timeList)
 
     def backButtonFunction(self):
 
