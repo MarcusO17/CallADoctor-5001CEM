@@ -71,6 +71,7 @@ createAppointmentTable = '''CREATE TABLE appointments (
                      startTime TIME NOT NULL,
                      endTime TIME NOT NULL,
                      appointmentDate DATE NOT NULL,
+                     status TEXT NOT NULL,
                      visitReasons TEXT,
                      FOREIGN KEY (doctorID) REFERENCES doctors(doctorID),
                      FOREIGN KEY (patientID) REFERENCES patients(patientID)
