@@ -350,7 +350,7 @@ def appointments():
                 appointmentStatus = row['appointmentStatus'],
                 startTime = row['startTime '],
                 appointmentDate = row['appointmentDate'],
-                visitReasons= row['visitReasons']
+                visitReasons= row['visitReasons'],
                 status = row['status']
             )
             for row in cursor.fetchall()
@@ -560,7 +560,7 @@ def getLastDoctorID():
 
 
 @app.route('/patients/idgen')
-def getLastDoctorID():
+def getLastPatientID():
     conn = dbConnect()  
     cursor = conn.cursor()
     
@@ -578,7 +578,7 @@ def getLastDoctorID():
     
 
 @app.route('/clinics/idgen')
-def getLastDoctorID():
+def getLastClinicID():
     conn = dbConnect()  
     cursor = conn.cursor()
     
