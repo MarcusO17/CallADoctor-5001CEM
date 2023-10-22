@@ -98,14 +98,6 @@ class PatientSendRequest(QMainWindow):
         self.preferredTimeComboBox.addItems(self.timeList)
         self.preferredTimeComboBox.setGeometry(QRect(400, 490, 150, 40))
 
-        self.durationLabel = QLabel(self.centralwidget)
-        self.durationLabel.setText("Duration: ")
-        self.durationLabel.setGeometry(QRect(180, 550, 150, 40))
-        self.durationComboBox = QComboBox(self.centralwidget)
-
-        self.durationComboBox.addItems(["1", "2"])
-        self.durationComboBox.setGeometry(QRect(180, 590, 150, 40))
-
         self.submitButton = QPushButton(self.centralwidget)
         self.submitButton.setGeometry(QRect(710, 545, 375, 100))
         font = QFont()
@@ -151,7 +143,7 @@ class PatientSendRequest(QMainWindow):
                                              QMessageBox.Yes | QMessageBox.No)
         if backDialogBox == QMessageBox.Yes:
             timeTemp = self.preferredTimeComboBox.currentText().split(":")
-            endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(int(self.durationComboBox.currentText()) * 3600)
+            endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(3600)
             appointment = Appointment("appointmentID HERE", "", self.patientID,"pending",
                                         self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm"),self.preferredDate.date().toString("yyyy-MM-dd"), self.requestPurpose.text())
             print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus(),appointment.getStartTime(),
