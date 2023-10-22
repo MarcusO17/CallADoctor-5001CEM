@@ -279,6 +279,30 @@ def doctors():
     cursor.close()
     conn.close()
 
+@app.route('/doctors/<string:clinicID>', methods=['GET'])
+def doctorsClinic(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM doctors where clinicID = %s",clinicID)
+
+        doctors = [
+            dict(
+                doctorID = row['doctorID'],
+                doctorName = row['doctorName'],
+                doctorType = row['doctorType'],
+                doctorICNumber = row['doctorICNumber'],
+                doctorContact = row['doctorContact'],
+                yearOfExperience = row['yearOfExperience'],
+                status = row['status'],
+                clinicID = row['clinicID']
+            )
+            for row in cursor.fetchall()
+        ]
+        if doctors is not None:
+            return jsonify(doctors),200
+
 @app.route('/doctors/<string:id>',methods=['GET','DELETE'])
 def doctorID(id):
     conn = dbConnect()  
