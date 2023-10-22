@@ -86,8 +86,8 @@ class AssignDoctorDialog(QDialog):
         self.request = request
 
         # SET THE AVAILABLE DOCTORS HERE
-        doctor1 = Doctor("D0001","Doctor 1", "C0001","AVAILABLE")
-        doctor2 = Doctor("D0002","Doctor 2", "C0002","AVAILABLE")
+        doctor1 = Doctor("D0001","Doctor 1", "C0001","AVAILABLE", "Junior", "0123456789", "030102091820", 2)
+        doctor2 = Doctor("D0002","Doctor 2", "C0001","AVAILABLE", "Senior", "0198765432", "090502873626", 5)
         self.doctorList.append(doctor1)
         self.doctorList.append(doctor2)
 
