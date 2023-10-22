@@ -349,9 +349,9 @@ def appointments():
                 patientID = row['patientID '],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = row['startTime '],
-                endTime = row['endTime'],
                 appointmentDate = row['appointmentDate'],
                 visitReasons= row['visitReasons']
+                status = row['status']
             )
             for row in cursor.fetchall()
         ]
@@ -367,23 +367,23 @@ def appointments():
         patientID = contentJSON['patientID']
         appointmentStatus = contentJSON['appointmentStatus']
         startTime = contentJSON['startTime']
-        endTime = contentJSON['endTime']
         appointmentDate = contentJSON['appointmentDate']
         visitReasons= contentJSON['visitReasons']
+        status = contentJSON['status']
 
         insertQuery = """
                         INSERT INTO doctors (appointmentID,doctorID,patientID,appointmentStatus,startTime,
-                                            endTime,appointmentDate,visitReasons)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                                            endTime,appointmentDate,visitReasons,status)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     """
         cursor = cursor.execute(insertQuery,(appointmentID,doctorID,patientID,appointmentStatus,startTime,
-                                            endTime,appointmentDate,visitReasons))
+                                            endTime,appointmentDate,visitReasons,status))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
 
     if request.method == 'DELETE':
         try:
-            cursor.execute("DROP TABLE appointments")
+            cursor.execute("DELETE FROM appointments")
         except pymysql.MySQLError as e:
             return 'Error : ',e
         return 'Successful DELETE', 200
@@ -402,9 +402,9 @@ def appointmentID(id):
                 patientID = row['patientID '],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = row['startTime '],
-                endTime = row['endTime'],
                 appointmentDate = row['appointmentDate'],
-                visitReasons= row['visitReasons']
+                visitReasons= row['visitReasons'],
+                status = row['status']
             )
             for row in cursor.fetchall()
         ]
@@ -489,6 +489,32 @@ def prescriptionID(id):
     
         conn.commit()
         return 'Successful DELETE', 200
+    
+@app.route('/prescriptionDetails/<string:id>',methods=['GET','DELETE'])
+def prescriptionDetailsID(id):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM prescriptionsDetails where prescriptionID = %s",id)
+        prescription = [
+            dict(
+                prescriptionID = row['prescriptionID'],
+                appointmentID  = row['appointmentID'],
+                expiryDate = row['expiryDate']
+            )
+            for row in cursor.fetchall()
+        ]
+        if prescription is not None:
+            return jsonify(prescription),200
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DELETE FROM prescriptionsDetails WHERE prescriptionID = %s",id)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        return 'Successful DELETE', 200
 
 @app.route('/users/auth')
 def userAuthentication():
@@ -516,7 +542,7 @@ def userAuthentication():
         return {'ID': 'DENIED', 'role':'DENIED'}, 401
 
 @app.route('/doctors/idgen')
-def getLastID():
+def getLastDoctorID():
     conn = dbConnect()  
     cursor = conn.cursor()
     
@@ -525,10 +551,48 @@ def getLastID():
     counter = cursor.fetchall()
     id = str(counter[0]['COUNT(*)'])
     id = f'D{id.zfill(3)}'
-        
+    
+    cursor.close()
+    conn.close()
+
     if id is not None:
             return id,200
-        
+
+
+@app.route('/patients/idgen')
+def getLastDoctorID():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    
+    #Add Error Handling
+    cursor.execute("SELECT COUNT(*) FROM patients")
+    counter = cursor.fetchall()
+    id = str(counter[0]['COUNT(*)'])
+    id = f'P{id.zfill(3)}'
+    
+    cursor.close()
+    conn.close()
+
+    if id is not None:
+            return id,200
+    
+
+@app.route('/clinics/idgen')
+def getLastDoctorID():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    
+    #Add Error Handling
+    cursor.execute("SELECT COUNT(*) FROM clinics")
+    counter = cursor.fetchall()
+    id = str(counter[0]['COUNT(*)'])
+    id = f'C{id.zfill(3)}'
+    
+    cursor.close()
+    conn.close()
+
+    if id is not None:
+            return id,200
    
   
 

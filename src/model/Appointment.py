@@ -1,3 +1,5 @@
+import requests
+
 class Appointment:
     def __init__(self,appointmentID, doctorID, patientID, appointmentStatus, startTime, endTime, appointmentDate, visitReason):
         self.appointmentID = appointmentID
@@ -56,3 +58,6 @@ class Appointment:
 
     def setVisitReason(self, visitReason):
         self.visitReason = visitReason
+
+    def getAppointments():
+        response = requests.get
