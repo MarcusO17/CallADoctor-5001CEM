@@ -91,7 +91,7 @@ class ClinicRequestReview(QMainWindow):
             self.requestButton.setFont(buttonFont)
             self.requestButton.setFixedSize(QSize(950, 150))
             self.requestButton.clicked.connect(
-                lambda checked, prescription=request: self.requestButtonFunction(request, self.clinic))
+                lambda checked, request=request: self.requestButtonFunction(request, self.clinic))
             buttonContainer.addWidget(self.requestButton)
 
         boxScrollArea.setLayout(buttonContainer)

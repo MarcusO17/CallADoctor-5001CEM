@@ -73,10 +73,12 @@ class AssignDoctorDialog(QDialog):
             self.selectedDoctor.setChecked(True)
 
     def confirmButtonFunction(self):
-        # make the changes here
-        print("CONFIRM BUTTON TRIGGERED")
-        print(self.request.getAppointmentID())
-        self.request.setDoctorID(self.doctorList[self.selectedButtonIndex-1].getDoctorID())
+        doctorID = self.doctorList[self.selectedButtonIndex-1].getDoctorID()
+        response, isSuccess = self.request.assignDoctorAppointment(doctorID) 
+        if isSuccess == True:
+            print(response)
+        else:
+            print('Failed!')
         self.close()
 
     def cancelButtonFunction(self):
@@ -84,10 +86,10 @@ class AssignDoctorDialog(QDialog):
         self.close()
 
     def setData(self, request):
+        self.request = request
+        self.doctorList = DoctorRepository.getAvailableDoctorList(DoctorRepository,request.getAppointmentID())
 
-        doctorList = DoctorRepository.getAvailableDoctorList(DoctorRepository,request.getAppointmentID())
-
-        for count, doctor in enumerate(doctorList):
+        for count, doctor in enumerate(self.doctorList):
             button = QPushButton()
             button.clicked.connect(lambda checked, index=count: self.buttonClicked(index))
             button.setCheckable(True)
@@ -98,5 +100,3 @@ class AssignDoctorDialog(QDialog):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.doctorButtonLayout.addWidget(spacer)
-
-        print(self.request)

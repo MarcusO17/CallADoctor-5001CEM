@@ -106,10 +106,21 @@ class Appointment:
         }
         
         response = requests.post(f'http://127.0.0.1:5000/appointments',json=newAppointment)
-        registerStatus = response.text
+        postStatus = response.text
 
         if response.status_code == 201:
-            return registerStatus, True
+            return postStatus, True
         else:
-            return registerStatus, False
+            return postStatus, False
+        
+    def assignDoctorAppointment(self,doctorID):
+        
+        response = requests.patch(f'http://127.0.0.1:5000/appointments/{self.getAppointmentID()}/assign/{doctorID}')
+        assignedStatus = response.text
+
+        if response.status_code == 200:
+            return assignedStatus, True
+        else:
+            return assignedStatus, False
+        
 
