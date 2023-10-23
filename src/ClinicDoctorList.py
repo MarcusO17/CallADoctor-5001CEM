@@ -91,6 +91,7 @@ class ClinicDoctorList(QMainWindow):
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(50)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)

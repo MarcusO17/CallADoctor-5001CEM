@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy
+    QScrollArea, QSizePolicy, QLineEdit
 from PyQt5 import QtWidgets
 
 from .ClinicDoctorDetails import ClinicDoctorDetails
@@ -69,9 +69,15 @@ class ClinicAddDoctor(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
+        self.searchBar = QLineEdit(self.centralwidget)
+        self.searchBar.setGeometry(QRect(200, 130, 800, 40))
+        self.searchBar.setPlaceholderText("Search Bar")
+        self.searchBar.textChanged.connect(self.filterButtons)
+
         self.buttonContainer = QWidget()
         self.buttonContainer.setContentsMargins(20,20,20,20)
-        button_layout = QVBoxLayout(self.buttonContainer)
+        self.buttonLayout = QVBoxLayout(self.buttonContainer)
+
         boxScrollArea = QScrollArea()
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
@@ -83,11 +89,14 @@ class ClinicAddDoctor(QMainWindow):
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
-        topSpacer.setFixedHeight(150)
+        topSpacer.setFixedHeight(180)
+        topSpacer.setFixedWidth(50)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
         mainLayout.setAlignment(Qt.AlignHCenter)
+
+        self.searchBar.raise_()
 
         self.centralwidget.setLayout(mainLayout)
 
@@ -104,6 +113,14 @@ class ClinicAddDoctor(QMainWindow):
         self.pageManager.getPreviousPage().generateDoctorButtons()
         self.pageManager.goBack()
 
+    def filterButtons(self):
+        searchedText = self.searchBar.text().strip().lower()
+
+        for i in range(self.buttonContainer.layout().count()):
+            button = self.buttonContainer.layout().itemAt(i).widget()
+            if button:
+                text = button.text().lower()
+                button.setVisible(searchedText in text)
 
     def generateDoctorButtons(self):
 
