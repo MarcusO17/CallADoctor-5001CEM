@@ -85,9 +85,9 @@ class AssignDoctorDialog(QDialog):
 
     def setData(self, request):
 
-        doctorList = DoctorRepository.getAvailableDoctorList(request.getAppointmentID())
+        doctorList = DoctorRepository.getAvailableDoctorList(DoctorRepository,request.getAppointmentID())
 
-        for count, doctor in enumerate(self.doctorList):
+        for count, doctor in enumerate(doctorList):
             button = QPushButton()
             button.clicked.connect(lambda checked, index=count: self.buttonClicked(index))
             button.setCheckable(True)

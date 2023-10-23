@@ -280,7 +280,7 @@ def doctors():
     cursor.close()
     conn.close()
 
-@app.route('/doctors/clinic/<string:clinicID>', methods=['GET'])
+@app.route('/doctors/clinics/<string:clinicID>', methods=['GET'])
 def doctorsClinic(clinicID):
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -304,12 +304,14 @@ def doctorsClinic(clinicID):
         if doctors is not None:
             return jsonify(doctors),200
 
-@app.route('/doctors/<string:id>',methods=['GET','DELETE'])
-def doctorID(id):
+@app.route('/doctors/<string:doctorID>',methods=['GET','DELETE'])
+def doctorsID(doctorID):
     conn = dbConnect()  
     cursor = conn.cursor()
+
     if request.method == 'GET':
-        cursor.execute("SELECT * FROM doctors where doctorID = %s",id)
+
+        cursor.execute("SELECT * FROM doctors where doctorID = %s;",doctorID)
         doctor = [
             dict(
                 doctorID = row['doctorID'],
@@ -325,6 +327,7 @@ def doctorID(id):
         ]
         if doctor is not None:
             return jsonify(doctor),200
+        
     if request.method == 'DELETE':
         try:
             cursor.execute("DELETE FROM doctors WHERE doctorID = %s;",id)
@@ -534,11 +537,12 @@ def appointmentsFind(id):
                             WHERE appointmentDate = %s AND startTime = %s
                           );
                         """,(date,appointment['startTime']))
-        appointment = []
-        for row in cursor.fetchall():
-            appointment.append(row)
-    
-  
+        appointment = [
+            dict(
+                doctorID  = row['doctorID']
+            )
+            for row in cursor.fetchall()
+        ]
         if appointment is not None:
             return jsonify(appointment),200    
 
