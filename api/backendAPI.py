@@ -439,6 +439,21 @@ def appointmentDoctorAssign(aid,did):
         
         return 'Successful PATCH', 200  
 
+@app.route('/appointments/<string:aid>/deny',methods=['PATCH'])
+def appointmentDeny(aid):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE appointments SET appointmentStatus = 'Denied' where appointmentID = %s",aid)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200  
+
     
 @app.route('/appointments/week',methods=['GET'])
 def appointmentsWeek():

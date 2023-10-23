@@ -216,7 +216,7 @@ class ClinicRequestDetails(QMainWindow):
                                                "Are you sure you want to cancel this request",
                                                QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
-            self.request.setAppointmentStatus("cancelled")
+            self.request.denyAppointment()
             self.pageManager.goBack()
 
     def assignDoctorFunction(self):
