@@ -341,7 +341,7 @@ def appointments():
     cursor = conn.cursor()
     if request.method == 'GET':
         #Add Error Handling
-        cursor.execute("SELECT * FROM appointments")
+        cursor.execute("SELECT * FROM appointments ORDER BY appointmentDate, startTime")
 
         appointments = [
             dict(
@@ -444,7 +444,8 @@ def appointmentsWeek():
     cursor = conn.cursor()
 
     if request.method == 'GET':
-        cursor.execute("SELECT * FROM appointments where appointmentDate BETWEEN %s AND %s ",(dateToday,dateEnd))
+        cursor.execute("SELECT * FROM appointments where appointmentDate BETWEEN %s AND %s ORDER BY appointmentDate, startTime"
+                        ,(dateToday,dateEnd))
         appointment = [
             dict(
                 appointmentID = row['appointmentID'],
@@ -460,7 +461,7 @@ def appointmentsWeek():
         if appointment is not None:
             return jsonify(appointment),200
 
-@app.route('/appointments/week/<string:id>',methods=['GET'])
+@app.route('/appointments/week/<string:doctorID>',methods=['GET'])
 def appointmentsWeekID(doctorID):
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
     dateEnd = dateToday + timedelta(days=4)
