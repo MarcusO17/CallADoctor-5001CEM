@@ -251,8 +251,8 @@ def doctors():
         doctorType = contentJSON['doctorType']
         yearOfExperience = contentJSON['yearOfExperience']
         doctorEmail = contentJSON['doctorEmail']
-        status = contentJSON['status'],
-        clinicID = contentJSON['clinicID']
+        status = 'Unassigned',
+        clinicID = "",
 
         insertQuery = """
                         INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
@@ -336,6 +336,31 @@ def doctorsID(doctorID):
     
         conn.commit()
         return 'Successful DELETE', 200  
+    
+
+@app.route('/doctors/add/<string:id>', methods=['GET'])
+def doctorsUnassigned(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM doctors where clinicID = %s",clinicID)
+
+        doctors = [
+            dict(
+                doctorID = row['doctorID'],
+                doctorName = row['doctorName'],
+                doctorType = row['doctorType'],
+                doctorICNumber = row['doctorICNumber'],
+                doctorContact = row['doctorContact'],
+                yearOfExperience = row['yearOfExperience'],
+                status = row['status'],
+                clinicID = row['clinicID']
+            )
+            for row in cursor.fetchall()
+        ]
+        if doctors is not None:
+            return jsonify(doctors),200
 
 @app.route('/appointments', methods=['GET','POST','DELETE'])
 def appointments():

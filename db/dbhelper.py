@@ -49,7 +49,7 @@ createClinicTable = '''CREATE TABLE clinics (
 
 createDoctorTable = '''CREATE TABLE doctors (
                      doctorID VARCHAR(64) PRIMARY KEY,
-                     clinicID VARCHAR(64) NOT NULL,
+                     clinicID VARCHAR(64),
                      doctorEmail  TEXT NOT NULL,
                      doctorPassword TEXT NOT NULL,
                      doctorContact INTEGER NOT NULL,
