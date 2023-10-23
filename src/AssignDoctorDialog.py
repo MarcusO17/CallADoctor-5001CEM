@@ -72,13 +72,9 @@ class AssignDoctorDialog(QDialog):
             self.selectedDoctor.setStyleSheet("border: 1px solid red;")
             self.selectedDoctor.setChecked(True)
 
-    def confirmButtonFunction(self):
-        doctorID = self.doctorList[self.selectedButtonIndex-1].getDoctorID()
-        response, isSuccess = self.request.assignDoctorAppointment(doctorID) 
-        if isSuccess == True:
-            print(response)
-        else:
-            print('Failed!')
+    def confirmButtonFunction(self,request):
+        # make the changes here
+        self.request.setDoctorID(self.doctorList[self.selectedButtonIndex-1].getDoctorID())
         self.close()
 
     def cancelButtonFunction(self):

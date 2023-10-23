@@ -195,7 +195,6 @@ class ClinicRequestDetails(QMainWindow):
                                                       "Are you sure you want to approve this request",
                                                       QMessageBox.Yes | QMessageBox.No)
         if acceptRequestDialogBox == QMessageBox.Yes:
-            print(self.request.getDoctorID())
             if self.request.getDoctorID() == "":
                 print("NO DOCTOR ASSIGNED")
                 noDoctorValidationDialogBox = QMessageBox(self.centralwidget)
@@ -205,7 +204,11 @@ class ClinicRequestDetails(QMainWindow):
                 noDoctorValidationDialogBox.setWindowTitle("Validation Error")
                 noDoctorValidationDialogBox.exec_()
             else:
-                self.request.setAppointmentStatus("approved")
+                response, isSuccess = self.request.assignDoctorAppointment(self.request.doctorID) 
+                if isSuccess == True:
+                    print(response)
+                else:
+                    print('Failed!')
                 self.pageManager.goBack()
 
     def cancelRequestFunction(self):
@@ -223,3 +226,4 @@ class ClinicRequestDetails(QMainWindow):
         self.assignDoctorDialog.exec_()
 
         self.assignedDoctorLabel.setText(self.request.getDoctorID())
+       

@@ -431,7 +431,7 @@ def appointmentDoctorAssign(aid,did):
     cursor = conn.cursor()
     if request.method == 'PATCH':
         try:
-            cursor.execute("UPDATE appointments SET doctorID = %s where appointmentID = %s",(did,aid))
+            cursor.execute("UPDATE appointments SET doctorID = %s, appointmentStatus = 'Approved' where appointmentID = %s",(did,aid))
         except pymysql.MySQLError as e:
             return 'Error : ',e
     
