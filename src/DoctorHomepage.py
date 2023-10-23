@@ -26,7 +26,8 @@ class DoctorHomepage(QMainWindow):
         self.setupUi(self)
 
     def gotoSchedule(self):
-        self.doctorScheduleWindow = DoctorScheduleWindow()
+        doctor1 = Doctor("D0001", "Doctor 1", "c0001", "AVAILABLE", "Junior", "0123456789", "030102091820", 2)
+        self.doctorScheduleWindow = DoctorScheduleWindow(doctor1)
         self.pageManager.add(self.doctorScheduleWindow)
         print(self.pageManager.size())
 
