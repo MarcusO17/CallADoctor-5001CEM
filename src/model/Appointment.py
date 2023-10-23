@@ -1,9 +1,10 @@
 import requests
 
 class Appointment:
-    def __init__(self,appointmentID, doctorID, patientID, appointmentStatus, startTime, endTime, appointmentDate, visitReason):
+    def __init__(self,appointmentID, doctorID, clinicID, patientID, appointmentStatus, startTime, endTime, appointmentDate, visitReason):
         self.appointmentID = appointmentID
         self.doctorID = doctorID
+        self.clinicID = clinicID
         self.patientID = patientID
         self.appointmentStatus = appointmentStatus
         self.startTime = startTime
@@ -22,6 +23,12 @@ class Appointment:
 
     def setDoctorID(self, doctorID):
         self.doctorID = doctorID
+    
+    def getClinicID(self):
+        return self.clinicID
+
+    def setClinicID(self, clinicID):
+        self.clinicID = clinicID
 
     def getPatientID(self):
         return self.patientID

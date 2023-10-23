@@ -347,6 +347,7 @@ def appointments():
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),
@@ -363,6 +364,7 @@ def appointments():
 
         appointmentID = contentJSON['appointmentID']
         doctorID  = contentJSON['doctorID']
+        clinicID = contentJSON['clinicID']
         patientID = contentJSON['patientID']
         appointmentStatus = "Pending"
         startTime = contentJSON['startTime']
@@ -397,6 +399,7 @@ def appointmentID(id):
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),
@@ -450,6 +453,7 @@ def appointmentsWeek():
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),
@@ -476,6 +480,7 @@ def appointmentsWeekID(doctorID):
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),
