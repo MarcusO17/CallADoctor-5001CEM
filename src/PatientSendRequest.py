@@ -13,12 +13,12 @@ from .PageManager import PageManager
 
 class PatientSendRequest(QMainWindow):
 
-    def __init__(self, clinicTemp, sessionID):
+    def __init__(self, clinic, patient):
         super().__init__()
         #set the information here
         self.pageManager = PageManager()
-        self.clinic = clinicTemp
-        self.patientID = sessionID
+        self.clinic = clinic
+        self.patient = patient
         print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
         self.setWindowTitle("Clinics Details")
         self.setFixedWidth(1280)
@@ -85,10 +85,12 @@ class PatientSendRequest(QMainWindow):
         self.dateLabel.setGeometry(QRect(180, 450, 150, 40))
         self.preferredDate = QDateEdit(self.centralwidget)
         self.preferredDate.setDate(QDate.currentDate())
+        self.preferredDate.setDisplayFormat("yyyy-MM-dd")
         self.preferredDate.setMinimumDate(QDate.currentDate())
         self.preferredDate.setGeometry(QRect(180, 490, 150, 40))
         self.preferredDate.dateChanged.connect(self.updateTimeslot)
-        self.updateTimeslot()
+        self.maxDate = QDate.currentDate().addMonths(1)
+        self.preferredDate.setMaximumDate(self.maxDate)
 
         self.timeLabel = QLabel(self.centralwidget)
         self.timeLabel.setText("Time: ")
@@ -97,14 +99,7 @@ class PatientSendRequest(QMainWindow):
 
         self.preferredTimeComboBox.addItems(self.timeList)
         self.preferredTimeComboBox.setGeometry(QRect(400, 490, 150, 40))
-
-        self.durationLabel = QLabel(self.centralwidget)
-        self.durationLabel.setText("Duration: ")
-        self.durationLabel.setGeometry(QRect(180, 550, 150, 40))
-        self.durationComboBox = QComboBox(self.centralwidget)
-
-        self.durationComboBox.addItems(["1", "2"])
-        self.durationComboBox.setGeometry(QRect(180, 590, 150, 40))
+        self.updateTimeslot()
 
         self.submitButton = QPushButton(self.centralwidget)
         self.submitButton.setGeometry(QRect(710, 545, 375, 100))
@@ -131,7 +126,6 @@ class PatientSendRequest(QMainWindow):
         self.preferredTimeComboBox.raise_()
         self.preferredDate.raise_()
         self.submitButton.raise_()
-        self.durationComboBox.raise_()
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
@@ -139,6 +133,7 @@ class PatientSendRequest(QMainWindow):
         mainLayout.addWidget(self.clinicDetailsContainer)
         mainLayout.setAlignment(Qt.AlignHCenter)
 
+        self.centralwidget.setLayout(mainLayout)
         self.centralwidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -151,40 +146,64 @@ class PatientSendRequest(QMainWindow):
                                              QMessageBox.Yes | QMessageBox.No)
         if backDialogBox == QMessageBox.Yes:
             timeTemp = self.preferredTimeComboBox.currentText().split(":")
-            endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(int(self.durationComboBox.currentText()) * 3600)
-            appointment = Appointment("appointmentID HERE", "", self.patientID,"pending",
-                                        self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm"),self.preferredDate.date().toString("yyyy-MM-dd"), self.requestPurpose.text())
-            print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus(),appointment.getStartTime(),
-                  appointment.getEndTime(), appointment.getAppointmentDate(), appointment.getVisitReason())
+            endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(3600)
+
+            # back end magic here
+            appointment = Appointment("0", 
+                                      "",
+                                      self.clinic.getClinicID(), 
+                                      self.patient.getPatientID(),
+                                      "Pending",
+                                       self.preferredTimeComboBox.currentText(),
+                                       endTime.toString("hh:mm:ss"),
+                                       self.preferredDate.date().toString("yyyy-MM-dd"), 
+                                       self.requestPurpose.text())
+            
+            result, isSuccess = Appointment.postAppointment(appointment)
+            if isSuccess:
+                print(result)
+            else:
+                print('failed!')
 
             self.pageManager.goBack()
 
-        # go to send request window
-        # should come up with a dialog box, if send to database go back to homepage
 
     def updateTimeslot(self):
         # rounding current time + adding 3 hours to current time
+        print("running updatetimeslot")
+        self.timeList.clear()
         currentTime = QTime.currentTime()
         roundedTime = QTime(currentTime.hour(), 0)
         roundedTime = roundedTime.addSecs(10800)
         timeDiff = roundedTime.secsTo(QTime(17, 0))
-        print(timeDiff)
         hoursLeft = timeDiff // 3600
         startTime = QTime(8, 0)
+       
 
         if self.preferredDate.date() == QDate.currentDate():
-            if timeDiff < 0:
+            if currentTime > QTime(17, 0):
                 self.preferredDate.setDate(QDate.currentDate().addDays(1))
                 self.preferredDate.setMinimumDate(QDate.currentDate().addDays(1))
+                self.timeList.clear()
                 for hour in range(9):
                     self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+                    print(self.timeList)
             else:
+                self.timeList.clear()
                 self.timeList.append(roundedTime.toString("hh:mm"))
                 for hour in range(hoursLeft):
                     self.timeList.append(roundedTime.addSecs(3600 * hour).toString("hh:mm"))
+                    print(self.timeList)
         else:
+            self.timeList.clear()
             for hour in range(9):
                 self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+
+
+        print("FINISHED", self.timeList)
+
+        self.preferredTimeComboBox.clear()
+        self.preferredTimeComboBox.addItems(self.timeList)
 
     def backButtonFunction(self):
 

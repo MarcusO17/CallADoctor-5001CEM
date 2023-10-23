@@ -13,9 +13,10 @@ from .PageManager import PageManager
 
 
 class DoctorScheduleWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, doctor):
         super().__init__()
         self.setWindowTitle("Homepage")
+        self.doctor = doctor
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.pageManager = PageManager()
@@ -24,7 +25,7 @@ class DoctorScheduleWindow(QMainWindow):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Doctor Schedule")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        HEIGHT = 5
+        HEIGHT = 7
         WIDTH = 8
 
         self.centralwidget = QWidget(MainWindow)
@@ -65,12 +66,12 @@ class DoctorScheduleWindow(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.timeSlotButtonList = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
+        self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         # header of the grid
         timeStart = 8
         timeEnd = 9
-        timeSlotLabelXStart = 300
+        timeSlotLabelXStart = 275
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
             timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,150,100,60))
@@ -82,24 +83,22 @@ class DoctorScheduleWindow(QMainWindow):
 
         dayCellYStart = 210
         # side of the grid
-        daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
-            dayCell.setGeometry(QRect(200, dayCellYStart, 100, 60))
+            dayCell.setGeometry(QRect(175, dayCellYStart, 100, 60))
             dayCell.setStyleSheet("border: 1px solid black;")
             dayCell.setText(daysOfTheWeek[i])
             dayCellYStart = dayCellYStart + 60
 
         tempButtonYStart = 150
         for h in range(HEIGHT):
-            tempButtonXStart = 300
+            tempButtonXStart = 275
             tempButtonYStart = tempButtonYStart + 60
             for w in range(WIDTH):
                 timeSlotButton = QPushButton(self.centralwidget)
                 timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 100, 60))
                 timeSlotButton.setStyleSheet("border: 1px solid black;")
-                timeSlotButton.setText(str(h+1) + ", " + str(w+1))
-                timeSlotButton.clicked.connect(lambda checked, h=h, w=w: self.timeSlotButtonFunction(h+1, w+1))
                 tempButtonXStart = tempButtonXStart + 100
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
@@ -108,10 +107,16 @@ class DoctorScheduleWindow(QMainWindow):
 
         # put query and create the appointment objects here
 
-        appointment1 = Appointment("appointment1", "doctor1", "patient1", "approved", 13, 15, "18-10-2023",
+        appointment1 = Appointment("appointment1", "doctor1", "clinicID", "patient1", "approved", "13:00", "14:00", "24-10-2023",
+                                   "light fever")
+        appointment2 = Appointment("appointment2", "doctor1", "clinicID", "patient2", "approved", "8:00", "9:00", "25-10-2023",
+                                   "light fever")
+        appointment3 = Appointment("appointment3", "doctor1", "clinicID", "patient3", "approved", "8:00", "9:00", "28-10-2023",
                                    "light fever")
 
         appointmentList.append(appointment1)
+        appointmentList.append(appointment2)
+        appointmentList.append(appointment3)
 
         self.setSchedule(appointmentList)
 
@@ -119,15 +124,12 @@ class DoctorScheduleWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def timeSlotButtonFunction(self, row, col):
-        """
+    def gotoAppointment(self, appointment, doctor):
 
-        :param row:
-        :param col:
-        :return:
-        """
-        print(row, col)
-        #implement go to appointment details
+        #self.clinicAppointmentDetails = ClinicAppointmentDetails(appointment, doctor)
+        #self.pageManager.add(self.clinicAppointmentDetails)
+        pass
+        #waiting for adnan
 
     def setSchedule(self, appointmentList):
 
@@ -138,20 +140,27 @@ class DoctorScheduleWindow(QMainWindow):
             startTime = appointment.getStartTime()
             endTime = appointment.getEndTime()
 
+            startTimeTemp = startTime.split(":")
+            startTime = int(startTimeTemp[0])
+
+            endTimeTemp = endTime.split(":")
+            endTime = int(endTimeTemp[0])
+
             dateTemp = dateTemp.split("-")
             print(dateTemp)
 
-            date = datetime(int(dateTemp[2]),int(dateTemp[1]),int(dateTemp[0]))
+            date = datetime(int(dateTemp[2]), int(dateTemp[1]), int(dateTemp[0]))
 
-            if date.weekday()>= 0 and date.weekday() <=4:
-                row = date.weekday()+1
-                if endTime - startTime >= 1:
-                    duration = endTime - startTime
-                    col = startTime - 7
-                    for i in range(duration):
-                        self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
-                        self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
-                        self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
+            row = date.weekday() + 1
+            if endTime - startTime >= 1:
+                duration = endTime - startTime
+                col = startTime - 7
+                for i in range(duration):
+                    self.timeSlotButtonList[row][col + (i - 1)].setText("Appointment")
+                    self.timeSlotButtonList[row][col + (i - 1)].setStyleSheet("background-color: green;")
+                    self.timeSlotButtonList[row][col + (i - 1)].setEnabled(True)
+                    self.timeSlotButtonList[row][col + (i - 1)].clicked.connect(
+                        lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
 
     def backButtonFunction(self):
         self.pageManager.goBack()

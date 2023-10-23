@@ -6,7 +6,10 @@ from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
+
+from .ClinicAppointmentDetails import ClinicAppointmentDetails
 from .model import Appointment, Doctor
+from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager
 
 class ClinicDetailedSchedule(QMainWindow):
@@ -23,7 +26,7 @@ class ClinicDetailedSchedule(QMainWindow):
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        HEIGHT = 5
+        HEIGHT = 7
         WIDTH = 8
 
         self.centralwidget = QWidget(MainWindow)
@@ -69,7 +72,7 @@ class ClinicDetailedSchedule(QMainWindow):
         # header of the grid
         timeStart = 8
         timeEnd = 9
-        timeSlotLabelXStart = 300
+        timeSlotLabelXStart = 275
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
             timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,150,100,60))
@@ -81,74 +84,66 @@ class ClinicDetailedSchedule(QMainWindow):
 
         dayCellYStart = 210
         # side of the grid
-        daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
-            dayCell.setGeometry(QRect(200, dayCellYStart, 100, 60))
+            dayCell.setGeometry(QRect(175, dayCellYStart, 100, 60))
             dayCell.setStyleSheet("border: 1px solid black;")
             dayCell.setText(daysOfTheWeek[i])
             dayCellYStart = dayCellYStart + 60
 
         tempButtonYStart = 150
         for h in range(HEIGHT):
-            tempButtonXStart = 300
+            tempButtonXStart = 275
             tempButtonYStart = tempButtonYStart + 60
             for w in range(WIDTH):
                 timeSlotButton = QPushButton(self.centralwidget)
                 timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 100, 60))
                 timeSlotButton.setStyleSheet("border: 1px solid black;")
-                timeSlotButton.setText(str(h+1) + ", " + str(w+1))
-                timeSlotButton.setCheckable(True)
                 tempButtonXStart = tempButtonXStart + 100
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
-        appointmentList = list() # this list is for appointments that is assigned to the doctor
-
-        # put query and create the appointment objects here
-        # use doctor object to get appointments
-        appointment1 = Appointment("appointment1", "doctor1", "patient1", "approved", 13, 15, "18-10-2023",
-                                   "light fever")
-
-        appointmentList.append(appointment1)
-
+        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
         self.setSchedule(appointmentList)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def gotoAppointment(self, appointment):
+    def gotoAppointment(self, appointment, doctor):
 
-        print(appointment)
-        print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus())
-        # open appointment details page here
-        pass
+        self.clinicAppointmentDetails = ClinicAppointmentDetails(appointment, doctor)
+        self.pageManager.add(self.clinicAppointmentDetails)
 
     def setSchedule(self, appointmentList):
 
         for appointment in appointmentList:
             row = 0
             col = 0
-            dateTemp = appointment.getAppointmentDate()
+            date = appointment.getAppointmentDate()
             startTime = appointment.getStartTime()
             endTime = appointment.getEndTime()
 
-            dateTemp = dateTemp.split("-")
-            print(dateTemp)
+            startTimeTemp = startTime.split(":") #HH:MM:SS
+            startTime = int(startTimeTemp[0])
 
-            date = datetime(int(dateTemp[2]),int(dateTemp[1]),int(dateTemp[0]))
+            print(endTime)
+            endTimeTemp = endTime.split(":") #HH:MM:SS
+            endTime = int(endTimeTemp[0])
 
-            if date.weekday()>= 0 and date.weekday() <=4:
-                row = date.weekday()+1
-                if endTime - startTime >= 1:
-                    duration = endTime - startTime
-                    col = startTime - 7
-                    for i in range(duration):
-                        self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
-                        self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
-                        self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
-                        self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked: self.gotoAppointment(appointment))
+            #print(date)
+            #dateTemp = dateTemp.split("-") #YYYY-MM-DD
+
+            row = date.weekday()+1
+            if endTime - startTime >= 1:
+                duration = endTime - startTime
+                col = startTime - 7
+                for i in range(duration):
+                    self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
+                    self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
+                    self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
+                    self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
 
     def backButtonFunction(self):
         self.pageManager.goBack()

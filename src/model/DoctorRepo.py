@@ -31,32 +31,67 @@ class DoctorRepository():
                   
             return doctorList      
       
-    
+      def getDoctor(doctorID):
+            try:
+                  response = requests.get(f'http://127.0.0.1:5000/doctors/{doctorID}')
+                  doctor = response.json()[0]
+            except requests.RequestException as e:
+                  print(f'Error : {e}')
+                  return Doctor("","","","","","","","")
+          
+            tempDoctor = Doctor("","","","","","","","")
+
+            tempDoctor.setClinicID(doctor['clinicID'])
+            tempDoctor.setDoctorID(doctor['doctorID'])
+            tempDoctor.setDoctorName(doctor['doctorName'])
+            tempDoctor.setStatus(doctor['status'])
+            tempDoctor.setDoctorType(doctor['doctorType'])
+            tempDoctor.setDoctorContact(doctor['doctorContact'])
+            tempDoctor.setDoctorICNumber(doctor['doctorICNumber'])
+            tempDoctor.setYearOfExperience(doctor['yearOfExperience'])
+
+            return tempDoctor   
+      
+
+      
       def getDoctorList(clinicID):
             doctorList = []
             try:
-                  response = requests.get(f'http://127.0.0.1:5000/doctors/{clinicID}')
+                  response = requests.get(f'http://127.0.0.1:5000/doctors/clinics/{clinicID}')
                   recordsList = response.json()
             except requests.RequestException as e:
                   print(f'Error : {e}')
-                  return Doctor("","","","","","","")
+                  return Doctor("","","","","","","","")
             for records in recordsList:
-                  tempDoctor = Doctor("","","","","","","")
+                  tempDoctor = Doctor("","","","","","","","")
 
-                  tempDoctor.setClinicID = records['clinicID']
-                  tempDoctor.setDoctorID = records['doctorID']
-                  tempDoctor.setDoctorName = records['doctorName']
-                  tempDoctor.setStatus = records['status']
-                  tempDoctor.setDoctorType = records['doctorType']
-                  tempDoctor.setDoctorContact = records['doctorContact']
-                  tempDoctor.setDoctorICNumber = records['doctorICNumber']
-                  tempDoctor.setYearOfExperience = records['yearOfExperience']
+                  tempDoctor.setClinicID(records['clinicID'])
+                  tempDoctor.setDoctorID(records['doctorID'])
+                  tempDoctor.setDoctorName(records['doctorName'])
+                  tempDoctor.setStatus(records['status'])
+                  tempDoctor.setDoctorType(records['doctorType'])
+                  tempDoctor.setDoctorContact(records['doctorContact'])
+                  tempDoctor.setDoctorICNumber(records['doctorICNumber'])
+                  tempDoctor.setYearOfExperience(records['yearOfExperience'])
 
                   doctorList.append(tempDoctor)
                   
-            return doctorList
+            return doctorList      
       
-     
+    
+      def getAvailableDoctorList(self,appointmentID):
+            doctorList = []
+            try:
+                  response = requests.get(f'http://127.0.0.1:5000/appointments/{appointmentID}/find')
+                  responseList = response.json()
+            except requests.RequestException as e:
+                  print(f'Error : {e}')
+                  return Doctor("","","","","","","","")
+            
 
+            for doctors in responseList:
+                 doctorList.append(self.getDoctor(doctors['doctorID']))
+            
+            return doctorList
       
 

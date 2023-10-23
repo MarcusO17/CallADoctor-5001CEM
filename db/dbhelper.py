@@ -49,7 +49,7 @@ createClinicTable = '''CREATE TABLE clinics (
 
 createDoctorTable = '''CREATE TABLE doctors (
                      doctorID VARCHAR(64) PRIMARY KEY,
-                     clinicID VARCHAR(64) NOT NULL,
+                     clinicID VARCHAR(64),
                      doctorEmail  TEXT NOT NULL,
                      doctorPassword TEXT NOT NULL,
                      doctorContact INTEGER NOT NULL,
@@ -66,6 +66,7 @@ createDoctorTable = '''CREATE TABLE doctors (
 createAppointmentTable = '''CREATE TABLE appointments (
                      appointmentID VARCHAR(64) PRIMARY KEY,
                      doctorID VARCHAR(64),
+                     clinicID VARCHAR(64),
                      patientID VARCHAR(64),
                      appointmentStatus TEXT NOT NULL,
                      startTime TIME NOT NULL,
@@ -73,7 +74,6 @@ createAppointmentTable = '''CREATE TABLE appointments (
                      appointmentDate DATE NOT NULL,
                      status TEXT NOT NULL,
                      visitReasons TEXT,
-                     FOREIGN KEY (doctorID) REFERENCES doctors(doctorID),
                      FOREIGN KEY (patientID) REFERENCES patients(patientID)
                      )'''
 

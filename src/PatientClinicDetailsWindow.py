@@ -140,6 +140,7 @@ class PatientClinicDetailsWindow(QMainWindow):
     def sendRequestFunction(self):
         self.patientSendRequest = PatientSendRequest(self.clinic, self.patient)
         self.pageManager.add(self.patientSendRequest)
+        print("pageManager Size", self.pageManager.size())
 
     def backButtonFunction(self):
         self.pageManager.goBack()

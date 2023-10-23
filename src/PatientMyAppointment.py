@@ -70,7 +70,7 @@ class PatientMyAppointmentWindow(QMainWindow):
         self.patientBackButton.setIcon(self.patientBackIcon)
         self.patientBackButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QVBoxLayout()
+        buttonContainer = QWidget()
         buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
