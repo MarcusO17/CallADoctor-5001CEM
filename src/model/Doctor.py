@@ -53,7 +53,7 @@ class Doctor:
         self.doctorContact = doctorContact
 
     def getYearOfExperience(self):
-        return self.yearOfExperience
+        return self.yearsOfExperience
     
     def setYearOfExperience(self, yearOfExperience):
         self.yearOfExperience = yearOfExperience
