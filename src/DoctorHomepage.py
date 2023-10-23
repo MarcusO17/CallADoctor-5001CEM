@@ -32,7 +32,8 @@ class DoctorHomepage(QMainWindow):
         print(self.pageManager.size())
 
     def gotoPatientRecord(self):
-        self.docPatientRecord = DocPatientRecordWindow()
+        self.doctor = Doctor("D0001", "Doctor 1", "C0001", "status", "doctortype", "doctorContact", "doctorICNUmber", 5)
+        self.docPatientRecord = DocPatientRecordWindow(self.doctor)
         self.pageManager.add(self.docPatientRecord)
         print(self.pageManager.size())
 
