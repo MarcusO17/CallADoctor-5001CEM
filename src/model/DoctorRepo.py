@@ -57,7 +57,7 @@ class DoctorRepository():
       def getDoctorList(clinicID):
             doctorList = []
             try:
-                  response = requests.get(f'http://127.0.0.1:5000/doctors/clinic/{clinicID}')
+                  response = requests.get(f'http://127.0.0.1:5000/doctors/clinics/{clinicID}')
                   recordsList = response.json()
             except requests.RequestException as e:
                   print(f'Error : {e}')

@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 
 from .ClinicAddDoctor import ClinicAddDoctor
@@ -76,16 +76,18 @@ class ClinicDoctorList(QMainWindow):
         self.addDoctorButton.setText("Add Doctor")
         self.addDoctorButton.clicked.connect(self.addDoctorFunction)
 
-        self.buttonContainer = QVBoxLayout()
+        self.buttonContainer = QWidget()
+        button_layout = QVBoxLayout(self.buttonContainer)
         self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         self.doctorList = list()
 
         self.generateDoctorButtons()
 
-        boxScrollArea.setLayout(self.buttonContainer)
+        boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
@@ -115,9 +117,9 @@ class ClinicDoctorList(QMainWindow):
     def generateDoctorButtons(self):
 
         # delete and clear the buttons, generating back later
-        for i in range(self.buttonContainer.count()):
-            widget = self.buttonContainer.itemAt(0).widget()
-            self.buttonContainer.removeWidget(widget)
+        for i in range(self.buttonContainer.layout().count()):
+            widget = self.buttonContainer.layout().itemAt(0).widget()
+            self.buttonContainer.layout().removeWidget(widget)
             print("in the loop ", i)
             if widget is not None:
                 widget.deleteLater()
@@ -152,6 +154,10 @@ class ClinicDoctorList(QMainWindow):
             doctorButton = QPushButton()
             doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
             doctorButton.setFont(buttonFont)
-            doctorButton.setFixedSize(QSize(950, 150))
+            doctorButton.setFixedSize(QSize(900, 150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
-            self.buttonContainer.addWidget(doctorButton)
+            self.buttonContainer.layout().addWidget(doctorButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.buttonContainer.layout().addWidget(spacer)

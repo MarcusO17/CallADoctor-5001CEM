@@ -164,8 +164,8 @@ class PatientSendRequest(QMainWindow):
                 print(result)
             else:
                 print('failed!')
-            self.pageManager.goBack()
 
+            self.pageManager.goBack()
 
 
     def updateTimeslot(self):

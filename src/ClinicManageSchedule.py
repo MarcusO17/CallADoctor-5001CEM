@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 from .model import Clinic
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
@@ -70,12 +70,14 @@ class ClinicManageSchedule(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QVBoxLayout()
+        buttonContainer = QWidget()
         buttonContainer.setContentsMargins(20,20,20,20)
+        buttonLayout = QVBoxLayout(buttonContainer)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
-        doctorList =  DoctorRepository.getDoctorList(self.clinic.getClinicID())
+        doctorList = DoctorRepository.getDoctorList(self.clinic.getClinicID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -87,11 +89,15 @@ class ClinicManageSchedule(QMainWindow):
             doctorButton = QPushButton()
             doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
             doctorButton.setFont(buttonFont)
-            doctorButton.setFixedSize(QSize(950,150))
+            doctorButton.setFixedSize(QSize(900,150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
-            buttonContainer.addWidget(doctorButton)
+            buttonContainer.layout().addWidget(doctorButton)
 
-        boxScrollArea.setLayout(buttonContainer)
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        buttonContainer.layout().addWidget(spacer)
+
+        boxScrollArea.setWidget(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
