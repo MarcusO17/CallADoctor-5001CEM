@@ -116,9 +116,10 @@ class ClinicAddDoctor(QMainWindow):
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
 
-        for i in range(self.buttonContainer.layout().count()):
-            button = self.buttonContainer.layout().itemAt(i).widget()
-            if button:
+        for i in range(self.buttonLayout.count()):
+            item = self.buttonLayout.itemAt(i)
+            if item and isinstance(item.widget(), QPushButton):
+                button = item.widget()
                 text = button.text().lower()
                 button.setVisible(searchedText in text)
 
@@ -160,8 +161,8 @@ class ClinicAddDoctor(QMainWindow):
             doctorButton.setFont(buttonFont)
             doctorButton.setFixedSize(QSize(900, 150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
-            self.buttonContainer.layout().addWidget(doctorButton)
+            self.buttonLayout.addWidget(doctorButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.buttonContainer.layout().addWidget(spacer)
+        self.buttonLayout.addWidget(spacer)
