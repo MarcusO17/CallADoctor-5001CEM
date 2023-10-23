@@ -2,8 +2,7 @@ import os
 import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QScrollArea, QSizePolicy, QLineEdit
 from PyQt5 import QtWidgets
 
 from .ClinicDoctorDetails import ClinicDoctorDetails
@@ -60,7 +59,6 @@ class ClinicAddDoctor(QMainWindow):
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
 
-        # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")

@@ -61,7 +61,6 @@ class ClinicDoctorList(QMainWindow):
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
 
-        # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")

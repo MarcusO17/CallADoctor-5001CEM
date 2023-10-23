@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy
+    QScrollArea, QSizePolicy, QLineEdit
 from PyQt5 import QtWidgets
 from .model import Clinic
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
@@ -70,9 +70,14 @@ class ClinicManageSchedule(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QWidget()
-        buttonContainer.setContentsMargins(20,20,20,20)
-        buttonLayout = QVBoxLayout(buttonContainer)
+        self.searchBar = QLineEdit(self.centralwidget)
+        self.searchBar.setGeometry(QRect(200, 130, 800, 40))
+        self.searchBar.setPlaceholderText("Search Bar")
+        self.searchBar.textChanged.connect(self.filterButtons)
+
+        self.buttonContainer = QWidget()
+        self.buttonContainer.setContentsMargins(20,20,20,20)
+        buttonLayout = QVBoxLayout(self.buttonContainer)
         boxScrollArea = QScrollArea()
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
@@ -91,16 +96,17 @@ class ClinicManageSchedule(QMainWindow):
             doctorButton.setFont(buttonFont)
             doctorButton.setFixedSize(QSize(900,150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
-            buttonContainer.layout().addWidget(doctorButton)
+            self.buttonContainer.layout().addWidget(doctorButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        buttonContainer.layout().addWidget(spacer)
+        self.buttonContainer.layout().addWidget(spacer)
 
-        boxScrollArea.setWidget(buttonContainer)
+        boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
@@ -118,3 +124,13 @@ class ClinicManageSchedule(QMainWindow):
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def filterButtons(self):
+        searchedText = self.searchBar.text().strip().lower()
+
+        for i in range(self.buttonContainer.layout().count()):
+            item = self.buttonContainer.layout().itemAt(i)
+            if item and isinstance(item.widget(), QPushButton):
+                button = item.widget()
+                text = button.text().lower()
+                button.setVisible(searchedText in text)
