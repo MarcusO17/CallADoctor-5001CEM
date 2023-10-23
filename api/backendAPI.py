@@ -460,10 +460,10 @@ def appointmentsWeek():
         if appointment is not None:
             return jsonify(appointment),200
 
-@app.route('/appointments/today/<string:id>',methods=['GET'])
-def appointmentsTodayID(doctorID):
-    dateToday = datetime.now().date()
-    dateEnd = dateToday + timedelta(days=6)
+@app.route('/appointments/week/<string:id>',methods=['GET'])
+def appointmentsWeekID(doctorID):
+    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
+    dateEnd = dateToday + timedelta(days=4)
     conn = dbConnect()  
     cursor = conn.cursor()
 
