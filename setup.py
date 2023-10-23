@@ -14,6 +14,7 @@ setup(
         'Flask==2.3.3',
         'idna==3.4',
         'iniconfig==2.0.0',
+        'PyQt5 ==5.15.2',
         'itsdangerous==2.1.2',
         'Jinja2==3.1.2',
         'MarkupSafe==2.1.3',

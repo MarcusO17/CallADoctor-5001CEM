@@ -1,4 +1,5 @@
 import requests
+from datetime import timedelta, datetime
 
 class Appointment:
     def __init__(self,appointmentID, doctorID, patientID, appointmentStatus, startTime, endTime, appointmentDate, visitReason):
@@ -7,8 +8,16 @@ class Appointment:
         self.patientID = patientID
         self.appointmentStatus = appointmentStatus
         self.startTime = startTime
-        self.endTime = endTime
-        self.appointmentDate = appointmentDate
+        try:
+            self.endTime = str((datetime.strptime(endTime,"%H:%M:%S")+timedelta(hours=1)).time())
+        except:
+            self.endTime = endTime
+
+        try:
+            self.appointmentDate = datetime.strptime(appointmentDate,'%a, %d %b %Y %H:%M:%S %Z').date()
+        except:
+            self.appointmentDate = appointmentDate
+
         self.visitReason = visitReason
 
     def getAppointmentID(self):
@@ -45,13 +54,13 @@ class Appointment:
         return self.endTime
 
     def setEndTime(self, endTime):
-        self.endTime = endTime
+        self.endTime = str((datetime.strptime(endTime,"%H:%M:%S")+timedelta(hours=1)).time())
 
     def getAppointmentDate(self):
         return self.appointmentDate
 
     def setAppointmentDate(self, appointmentDate):
-        self.appointmentDate = appointmentDate
+        self.appointmentDate = datetime.strptime(appointmentDate,'%a, %d %b %Y %H:%M:%S %Z').date()
 
     def getVisitReason(self):
         return self.visitReason
@@ -59,5 +68,22 @@ class Appointment:
     def setVisitReason(self, visitReason):
         self.visitReason = visitReason
 
-    def getAppointments():
-        response = requests.get
+    @classmethod
+    def getAppointmentfromID(self,appointmentID):
+        try:
+            response = requests.get(f'http://127.0.0.1:5000/appointments/{appointmentID}')
+            appointment = response.json()[0]
+        except Exception as e:
+            print(e)
+            return Appointment("","","","","","","","")
+        
+        return Appointment(
+              appointment['appointmentID'],
+              appointment['doctorID'],
+              appointment['patientID'],
+              appointment['appointmentStatus'],
+              appointment['startTime'],
+              appointment['startTime'],
+              appointment['appointmentDate'],
+              appointment['visitReasons'],
+        )
