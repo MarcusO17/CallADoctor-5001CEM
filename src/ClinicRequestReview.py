@@ -91,7 +91,7 @@ class ClinicRequestReview(QMainWindow):
             self.requestButton = QPushButton()
             self.requestButton.setText(request.getAppointmentID() + " - " + request.getAppointmentStatus())
             self.requestButton.setFont(buttonFont)
-            self.requestButton.setFixedSize(QSize(950, 150))
+            self.requestButton.setFixedSize(QSize(900, 150))
             self.requestButton.clicked.connect(
                 lambda checked, request=request: self.requestButtonFunction(request, self.clinic))
             buttonContainer.layout().addWidget(self.requestButton)
