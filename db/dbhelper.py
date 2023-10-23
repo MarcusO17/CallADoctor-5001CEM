@@ -66,6 +66,7 @@ createDoctorTable = '''CREATE TABLE doctors (
 createAppointmentTable = '''CREATE TABLE appointments (
                      appointmentID VARCHAR(64) PRIMARY KEY,
                      doctorID VARCHAR(64),
+                     clinicID VARCHAR(64),
                      patientID VARCHAR(64),
                      appointmentStatus TEXT NOT NULL,
                      startTime TIME NOT NULL,

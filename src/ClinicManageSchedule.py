@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 from .model import Clinic
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .model import Doctor
+from .model.DoctorRepo import DoctorRepository
 from .PageManager import PageManager
 
 
@@ -74,17 +75,7 @@ class ClinicManageSchedule(QMainWindow):
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
 
-        doctorList = list()
-
-        # Query and get the doctor list here
-        doctor1 = Doctor("D0001", "Doctor 1", self.clinic.getClinicName(), "AVAILABLE", "Junior", "0123456789", "030102091820", 2)
-        doctor2 = Doctor("D0002", "Doctor 2", self.clinic.getClinicName(), "AVAILABLE", "Senior", "0198765432", "090502873626", 5)
-        doctor3 = Doctor("D0003", "Doctor 3", self.clinic.getClinicName(), "AVAILABLE", "Junior", "0123456787", "030102091821", 2)
-
-        doctorList.append(doctor1)
-        doctorList.append(doctor2)
-        doctorList.append(doctor3)
-        print("doctor list size" , len(doctorList))
+        doctorList =  DoctorRepository.getDoctorList(self.clinic.getClinicID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
