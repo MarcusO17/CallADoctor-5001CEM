@@ -436,9 +436,10 @@ def appointmentDoctorAssign(aid,did):
     
 @app.route('/appointments/week',methods=['GET'])
 def appointmentsWeek():
-    dateToday = datetime.now().date()
-    dateEnd = dateToday + timedelta(days=6)
-    print(dateEnd)
+    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
+    dateEnd = dateToday + timedelta(days=4)
+    #print(dateToday)
+    #print(dateEnd)
     conn = dbConnect()  
     cursor = conn.cursor()
 
