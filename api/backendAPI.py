@@ -280,7 +280,7 @@ def doctors():
     cursor.close()
     conn.close()
 
-@app.route('/doctors/<string:clinicID>', methods=['GET'])
+@app.route('/doctors/clinics/<string:clinicID>', methods=['GET'])
 def doctorsClinic(clinicID):
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -304,12 +304,14 @@ def doctorsClinic(clinicID):
         if doctors is not None:
             return jsonify(doctors),200
 
-@app.route('/doctors/<string:id>',methods=['GET','DELETE'])
-def doctorID(id):
+@app.route('/doctors/<string:doctorID>',methods=['GET','DELETE'])
+def doctorsID(doctorID):
     conn = dbConnect()  
     cursor = conn.cursor()
+
     if request.method == 'GET':
-        cursor.execute("SELECT * FROM doctors where doctorID = %s",id)
+
+        cursor.execute("SELECT * FROM doctors where doctorID = %s;",doctorID)
         doctor = [
             dict(
                 doctorID = row['doctorID'],
@@ -325,6 +327,7 @@ def doctorID(id):
         ]
         if doctor is not None:
             return jsonify(doctor),200
+        
     if request.method == 'DELETE':
         try:
             cursor.execute("DELETE FROM doctors WHERE doctorID = %s;",id)
@@ -347,6 +350,7 @@ def appointments():
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),
@@ -361,20 +365,21 @@ def appointments():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        appointmentID = contentJSON['appointmentID']
-        doctorID  = contentJSON['doctorID']
+        appointmentID = requests.get('http://127.0.0.1:5000/appointments/idgen').text
+        doctorID  = ""
+        clinicID = contentJSON['clinicID']
         patientID = contentJSON['patientID']
-        appointmentStatus = contentJSON['appointmentStatus']
+        appointmentStatus = "Pending"
         startTime = contentJSON['startTime']
         appointmentDate = contentJSON['appointmentDate']
         visitReasons= contentJSON['visitReasons']
 
         insertQuery = """
-                        INSERT INTO appointments (appointmentID,doctorID,patientID,appointmentStatus,startTime,
+                        INSERT INTO appointments (appointmentID,clinicID,doctorID,patientID,appointmentStatus,startTime,
                                             appointmentDate,visitReasons)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
                     """
-        cursor = cursor.execute(insertQuery,(appointmentID,doctorID,patientID,appointmentStatus,startTime,
+        cursor = cursor.execute(insertQuery,(appointmentID,clinicID,doctorID,patientID,appointmentStatus,startTime,
                                             appointmentDate,visitReasons))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
@@ -397,6 +402,7 @@ def appointmentID(id):
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),
@@ -425,7 +431,22 @@ def appointmentDoctorAssign(aid,did):
     cursor = conn.cursor()
     if request.method == 'PATCH':
         try:
-            cursor.execute("UPDATE appointments SET doctorID = %s where appointmentID = %s",(did,aid))
+            cursor.execute("UPDATE appointments SET doctorID = %s, appointmentStatus = 'Approved' where appointmentID = %s",(did,aid))
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200  
+
+@app.route('/appointments/<string:aid>/deny',methods=['PATCH'])
+def appointmentDeny(aid):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE appointments SET appointmentStatus = 'Denied' where appointmentID = %s",aid)
         except pymysql.MySQLError as e:
             return 'Error : ',e
     
@@ -450,6 +471,31 @@ def appointmentsWeek():
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200  
+
+@app.route('/appointments/<string:clinicID>/pending',methods=['GET'])
+def appointmentsPending(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM appointments where appointmentStatus = %s AND clinicID = %s ORDER BY appointmentDate, startTime"
+                        ,('Pending',clinicID))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),
@@ -476,6 +522,7 @@ def appointmentsWeekID(doctorID):
             dict(
                 appointmentID = row['appointmentID'],
                 doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
                 patientID = row['patientID'],
                 appointmentStatus = row['appointmentStatus'],
                 startTime = str(row['startTime']),

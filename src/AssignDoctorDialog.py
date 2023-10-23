@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QScrollArea, QHBo
 from PyQt5.QtCore import Qt
 
 from .model import Doctor
+from .model.DoctorRepo import DoctorRepository
 
 
 class AssignDoctorDialog(QDialog):
@@ -71,10 +72,8 @@ class AssignDoctorDialog(QDialog):
             self.selectedDoctor.setStyleSheet("border: 1px solid red;")
             self.selectedDoctor.setChecked(True)
 
-    def confirmButtonFunction(self):
+    def confirmButtonFunction(self,request):
         # make the changes here
-        print("CONFIRM BUTTON TRIGGERED")
-        print(self.request.getAppointmentID())
         self.request.setDoctorID(self.doctorList[self.selectedButtonIndex-1].getDoctorID())
         self.close()
 
@@ -84,12 +83,7 @@ class AssignDoctorDialog(QDialog):
 
     def setData(self, request):
         self.request = request
-
-        # SET THE AVAILABLE DOCTORS HERE
-        doctor1 = Doctor("D0001","Doctor 1", "C0001","AVAILABLE", "Junior", "0123456789", "030102091820", 2)
-        doctor2 = Doctor("D0002","Doctor 2", "C0001","AVAILABLE", "Senior", "0198765432", "090502873626", 5)
-        self.doctorList.append(doctor1)
-        self.doctorList.append(doctor2)
+        self.doctorList = DoctorRepository.getAvailableDoctorList(DoctorRepository,request.getAppointmentID())
 
         for count, doctor in enumerate(self.doctorList):
             button = QPushButton()
@@ -102,5 +96,3 @@ class AssignDoctorDialog(QDialog):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.doctorButtonLayout.addWidget(spacer)
-
-        print(self.request)

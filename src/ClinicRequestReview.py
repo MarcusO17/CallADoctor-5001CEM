@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 
 from .ClinicRequestDetails import ClinicRequestDetails
 from .model import Appointment
+from .model.AppointmentRepo import AppointmentRepository
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from .PageManager import PageManager
 
@@ -82,10 +83,7 @@ class ClinicRequestReview(QMainWindow):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
-        unassignedAppointmentList = list()
-
-        unassignedAppointment1 = Appointment("appointmentID1", "", "patientID", "pending", "startTime", "endTime","appointmentDate", "visitReason")
-        unassignedAppointmentList.append(unassignedAppointment1)
+        unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
 
         for count, request in enumerate(unassignedAppointmentList):
             self.requestButton = QPushButton()
@@ -93,7 +91,7 @@ class ClinicRequestReview(QMainWindow):
             self.requestButton.setFont(buttonFont)
             self.requestButton.setFixedSize(QSize(950, 150))
             self.requestButton.clicked.connect(
-                lambda checked, prescription=request: self.requestButtonFunction(request, self.clinic))
+                lambda checked, request=request: self.requestButtonFunction(request, self.clinic))
             buttonContainer.addWidget(self.requestButton)
 
         boxScrollArea.setLayout(buttonContainer)

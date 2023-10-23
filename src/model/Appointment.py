@@ -2,9 +2,10 @@ import requests
 from datetime import timedelta, datetime
 
 class Appointment:
-    def __init__(self,appointmentID, doctorID, patientID, appointmentStatus, startTime, endTime, appointmentDate, visitReason):
+    def __init__(self,appointmentID, doctorID, clinicID, patientID, appointmentStatus, startTime, endTime, appointmentDate, visitReason):
         self.appointmentID = appointmentID
         self.doctorID = doctorID
+        self.clinicID = clinicID
         self.patientID = patientID
         self.appointmentStatus = appointmentStatus
         self.startTime = startTime
@@ -31,6 +32,12 @@ class Appointment:
 
     def setDoctorID(self, doctorID):
         self.doctorID = doctorID
+    
+    def getClinicID(self):
+        return self.clinicID
+
+    def setClinicID(self, clinicID):
+        self.clinicID = clinicID
 
     def getPatientID(self):
         return self.patientID
@@ -87,3 +94,42 @@ class Appointment:
               appointment['appointmentDate'],
               appointment['visitReasons'],
         )
+
+    def postAppointment(self):
+        newAppointment = {
+                    "doctorID": "",
+                    "clinicID" : self.getClinicID(),
+                    "patientID": self.getPatientID(),
+                    "startTime": self.getStartTime(),
+                    "appointmentDate": self.getAppointmentDate(),
+                    "visitReasons": self.getVisitReason()
+        }
+        
+        response = requests.post(f'http://127.0.0.1:5000/appointments',json=newAppointment)
+        postStatus = response.text
+
+        if response.status_code == 201:
+            return postStatus, True
+        else:
+            return postStatus, False
+        
+    def assignDoctorAppointment(self,doctorID):
+        
+        response = requests.patch(f'http://127.0.0.1:5000/appointments/{self.getAppointmentID()}/assign/{doctorID}')
+        assignedStatus = response.text
+
+        if response.status_code == 200:
+            return assignedStatus, True
+        else:
+            return assignedStatus, False
+        
+    def denyAppointment(self):
+        response = requests.patch(f'http://127.0.0.1:5000/appointments/{self.getAppointmentID()}/deny')
+        denyStatus = response.text
+
+        if response.status_code == 200:
+            return denyStatus , True
+        else:
+            return denyStatus , False
+        
+
