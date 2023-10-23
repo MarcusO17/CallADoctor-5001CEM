@@ -15,7 +15,7 @@ class AppointmentRepository():
                   return []
 
             for records in recordsList:
-                tempAppointment = Appointment("","","","","","",records['appointmentDate'],"")
+                tempAppointment = Appointment("","","","","","","","")
                 
                 tempAppointment.setAppointmentID(records['appointmentID'])
                 tempAppointment.setDoctorID(records['doctorID'])
@@ -23,7 +23,7 @@ class AppointmentRepository():
                 tempAppointment.setAppointmentStatus(records['appointmentStatus'])
                 tempAppointment.setStartTime(records['startTime'])
                 tempAppointment.setEndTime(records['startTime'])
-                #tempAppointment.setAppointmentDate(records['appointmentDate'])
+                tempAppointment.setAppointmentDate(records['appointmentDate'])
                 tempAppointment.setVisitReason(records['visitReasons'])
                 
                 appointmentList.append(tempAppointment)

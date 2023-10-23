@@ -8,8 +8,16 @@ class Appointment:
         self.patientID = patientID
         self.appointmentStatus = appointmentStatus
         self.startTime = startTime
-        self.endTime = endTime
-        self.appointmentDate = datetime.strptime(appointmentDate,'%a, %d %b %Y %H:%M:%S %Z').date()
+        try:
+            self.endTime = str((datetime.strptime(endTime,"%H:%M:%S")+timedelta(hours=1)).time())
+        except:
+            self.endTime = endTime
+
+        try:
+            self.appointmentDate = datetime.strptime(appointmentDate,'%a, %d %b %Y %H:%M:%S %Z').date()
+        except:
+            self.appointmentDate = appointmentDate
+
         self.visitReason = visitReason
 
     def getAppointmentID(self):
@@ -46,7 +54,7 @@ class Appointment:
         return self.endTime
 
     def setEndTime(self, endTime):
-        self.endTime = endTime
+        self.endTime = str((datetime.strptime(endTime,"%H:%M:%S")+timedelta(hours=1)).time())
 
     def getAppointmentDate(self):
         return self.appointmentDate

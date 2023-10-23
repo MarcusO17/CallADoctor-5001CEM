@@ -121,22 +121,19 @@ class ClinicDetailedSchedule(QMainWindow):
         for appointment in appointmentList:
             row = 0
             col = 0
-            dateTemp = appointment.getAppointmentDate()
+            date = appointment.getAppointmentDate()
             startTime = appointment.getStartTime()
             endTime = appointment.getEndTime()
 
             startTimeTemp = startTime.split(":") #HH:MM:SS
             startTime = int(startTimeTemp[0])
 
+            print(endTime)
             endTimeTemp = endTime.split(":") #HH:MM:SS
-            endTime = int(endTimeTemp[0])+1
+            endTime = int(endTimeTemp[0])
 
-            print(dateTemp)
+            #print(date)
             #dateTemp = dateTemp.split("-") #YYYY-MM-DD
-            print(dateTemp)
-
-            date = dateTemp
-
 
             row = date.weekday()+1
             if endTime - startTime >= 1:
