@@ -71,9 +71,11 @@ class ClinicRequestReview(QMainWindow):
         self.backButton.setIcon(self.backButtonIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QVBoxLayout()
+        buttonContainer = QWidget()
         buttonContainer.setContentsMargins(20, 20, 20, 20)
+        button_layout = QVBoxLayout(buttonContainer)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
 
@@ -92,9 +94,9 @@ class ClinicRequestReview(QMainWindow):
             self.requestButton.setFixedSize(QSize(950, 150))
             self.requestButton.clicked.connect(
                 lambda checked, request=request: self.requestButtonFunction(request, self.clinic))
-            buttonContainer.addWidget(self.requestButton)
+            buttonContainer.layout().addWidget(self.requestButton)
 
-        boxScrollArea.setLayout(buttonContainer)
+        boxScrollArea.setWidget(buttonContainer)
         boxScrollArea.setFixedSize(1000, 500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)

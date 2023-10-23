@@ -70,12 +70,14 @@ class ClinicManageSchedule(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QVBoxLayout()
+        buttonContainer = QWidget()
         buttonContainer.setContentsMargins(20,20,20,20)
+        button_layout = QVBoxLayout(buttonContainer)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
-        doctorList =  DoctorRepository.getDoctorList(self.clinic.getClinicID())
+        doctorList = DoctorRepository.getDoctorList(self.clinic.getClinicID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -87,11 +89,11 @@ class ClinicManageSchedule(QMainWindow):
             doctorButton = QPushButton()
             doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
             doctorButton.setFont(buttonFont)
-            doctorButton.setFixedSize(QSize(950,150))
+            doctorButton.setFixedSize(QSize(900,150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
-            buttonContainer.addWidget(doctorButton)
+            buttonContainer.layout().addWidget(doctorButton)
 
-        boxScrollArea.setLayout(buttonContainer)
+        boxScrollArea.setWidget(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
