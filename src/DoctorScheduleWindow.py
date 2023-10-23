@@ -107,11 +107,11 @@ class DoctorScheduleWindow(QMainWindow):
 
         # put query and create the appointment objects here
 
-        appointment1 = Appointment("appointment1", "doctor1", "patient1", "approved", "13:00", "14:00", "24-10-2023",
+        appointment1 = Appointment("appointment1", "doctor1", "clinicID", "patient1", "approved", "13:00", "14:00", "24-10-2023",
                                    "light fever")
-        appointment2 = Appointment("appointment2", "doctor1", "patient2", "approved", "8:00", "9:00", "25-10-2023",
+        appointment2 = Appointment("appointment2", "doctor1", "clinicID", "patient2", "approved", "8:00", "9:00", "25-10-2023",
                                    "light fever")
-        appointment3 = Appointment("appointment3", "doctor1", "patient3", "approved", "8:00", "9:00", "28-10-2023",
+        appointment3 = Appointment("appointment3", "doctor1", "clinicID", "patient3", "approved", "8:00", "9:00", "28-10-2023",
                                    "light fever")
 
         appointmentList.append(appointment1)

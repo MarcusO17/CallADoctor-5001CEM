@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 
 from .ClinicDoctorDetails import ClinicDoctorDetails
@@ -144,3 +144,7 @@ class ClinicAddDoctor(QMainWindow):
             doctorButton.setFixedSize(QSize(900, 150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
             self.buttonContainer.layout().addWidget(doctorButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.buttonContainer.layout().addWidget(spacer)

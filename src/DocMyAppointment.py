@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 from .model import Patient
 from .DocPatientDetails import DocPatientDetailsWindow
@@ -68,9 +68,11 @@ class DocMyAppointmentWindow(QMainWindow):
         self.docBackButton.setIcon(self.docBackIcon)
         self.docBackButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QVBoxLayout()
+        buttonContainer = QWidget()
+        buttonLayout = QVBoxLayout(buttonContainer)
         buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
         patientList = list()
@@ -95,11 +97,15 @@ class DocMyAppointmentWindow(QMainWindow):
             self.patientButton = QPushButton()
             self.patientButton.setText(patient.getPatientID() + " - " + patient.getPatientName())
             self.patientButton.setFont(buttonFont)
-            self.patientButton.setFixedSize(QSize(950,150))
+            self.patientButton.setFixedSize(QSize(900,150))
             self.patientButton.clicked.connect(lambda checked, patient=patient: self.patientButtonFunction(patient))
-            buttonContainer.addWidget(self.patientButton)
+            buttonContainer.layout().addWidget(self.patientButton)
 
-        boxScrollArea.setLayout(buttonContainer)
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        buttonContainer.layout().addWidget(spacer)
+
+        boxScrollArea.setWidget(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)

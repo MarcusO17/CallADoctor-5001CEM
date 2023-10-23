@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 from .model import Clinic
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
@@ -72,7 +72,7 @@ class ClinicManageSchedule(QMainWindow):
 
         buttonContainer = QWidget()
         buttonContainer.setContentsMargins(20,20,20,20)
-        button_layout = QVBoxLayout(buttonContainer)
+        buttonLayout = QVBoxLayout(buttonContainer)
         boxScrollArea = QScrollArea()
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
@@ -92,6 +92,10 @@ class ClinicManageSchedule(QMainWindow):
             doctorButton.setFixedSize(QSize(900,150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
             buttonContainer.layout().addWidget(doctorButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        buttonContainer.layout().addWidget(spacer)
 
         boxScrollArea.setWidget(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
