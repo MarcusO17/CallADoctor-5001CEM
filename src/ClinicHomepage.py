@@ -1,6 +1,7 @@
 import os
 import sys
 
+from .ClinicDoctorList import ClinicDoctorList
 from .ClinicRequestReview import ClinicRequestReview
 from .model import Clinic
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
@@ -26,6 +27,10 @@ class ClinicHomepage(QMainWindow):
     def goToManageSchedule(self):
         self.clinicManageSchedule = ClinicManageSchedule(self.clinic)
         self.pageManager.add(self.clinicManageSchedule)
+
+    def goToDoctorList(self):
+        self.doctorListPage = ClinicDoctorList(self.clinic)
+        self.pageManager.add(self.doctorListPage)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage")
@@ -62,6 +67,7 @@ class ClinicHomepage(QMainWindow):
         self.doctorListButton.setFont(font)
         self.doctorListButton.setLayoutDirection(Qt.LeftToRight)
         self.doctorListButton.setText("Doctor List")
+        self.doctorListButton.clicked.connect(self.goToDoctorList)
 
         self.doctorListLabel = QLabel(self.centralwidget)
         self.doctorListLabel.setGeometry(QRect(720, 225, 50, 50))
