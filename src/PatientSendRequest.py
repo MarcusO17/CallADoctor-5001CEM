@@ -149,22 +149,14 @@ class PatientSendRequest(QMainWindow):
             endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(3600)
 
             # back end magic here
-            appointment = Appointment("appointmentID HERE", "", self.patient.getPatientID(),"Pending",
+            appointment = Appointment("0", "", self.patient.getPatientID(),"Pending",
                                         self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm:ss"),self.preferredDate.date().toString("yyyy-MM-dd"), self.requestPurpose.text())
             
-            newAppointment = {
-                    "doctorID": "",
-                    "clinicID" : self.clinic.getClinicID(),
-                    "patientID": self.patient.getPatientID(),
-                    "startTime": self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm:ss"),
-                    "appointmentDate": self.preferredDate.date().toString("yyyy-MM-dd"),
-                    "visitReasons": self.requestPurpose.text()
-            }
-
-
-            print(appointment.getAppointmentID(),appointment.getAppointmentDate(),appointment.getAppointmentStatus(),appointment.getStartTime(),
-                  appointment.getEndTime(), appointment.getVisitReason())
-
+            result, isSuccess = Appointment.postAppointment(appointment)
+            if isSuccess:
+                print(result)
+            else:
+                print('failed!')
             self.pageManager.goBack()
 
 

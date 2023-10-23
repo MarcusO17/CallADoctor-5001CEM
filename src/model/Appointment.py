@@ -68,3 +68,22 @@ class Appointment:
 
     def getAppointments():
         response = requests.get
+
+    def postAppointment():
+        newAppointment = {
+                    "doctorID": "",
+                    "clinicID" : self.getClinicID(),
+                    "patientID": self.getPatientID(),
+                    "startTime": self.getStartTime(),
+                    "appointmentDate": self.getAppointmentDate(),
+                    "visitReasons": self.getVisitReasons
+            }
+        
+        response = requests.post(f'http://127.0.0.1:5000/appointments',json=newAppointment)
+        registerStatus = response.text
+
+        if response.status_code == 201:
+            return registerStatus, True
+        else:
+            return registerStatus, False
+
