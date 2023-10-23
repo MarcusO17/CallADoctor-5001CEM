@@ -17,7 +17,7 @@ class ClinicRequestDetails(QMainWindow):
         super().__init__()
 
         # set the information here
-        self.request = request
+        self.request = request #appointmentObject
         self.clinic = clinic
         self.pageManager = PageManager()
         self.setWindowTitle("Request Details")

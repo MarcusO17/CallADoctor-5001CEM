@@ -364,7 +364,7 @@ def appointments():
         appointmentID = contentJSON['appointmentID']
         doctorID  = contentJSON['doctorID']
         patientID = contentJSON['patientID']
-        appointmentStatus = contentJSON['appointmentStatus']
+        appointmentStatus = "Pending"
         startTime = contentJSON['startTime']
         appointmentDate = contentJSON['appointmentDate']
         visitReasons= contentJSON['visitReasons']
