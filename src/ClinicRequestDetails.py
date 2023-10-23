@@ -88,7 +88,7 @@ class ClinicRequestDetails(QMainWindow):
         self.dateLabel = QLabel(self.centralwidget)
         self.dateLabel.setGeometry(QRect(700, 220, 150, 40))
         self.dateLabel.setFont(font)
-        self.dateLabel.setText(self.request.getAppointmentDate())
+        self.dateLabel.setText(str(self.request.getAppointmentDate()))
         self.dateLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.timeLabel = QLabel(self.centralwidget)

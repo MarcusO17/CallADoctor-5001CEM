@@ -280,7 +280,7 @@ def doctors():
     cursor.close()
     conn.close()
 
-@app.route('/doctors/<string:clinicID>', methods=['GET'])
+@app.route('/doctors/clinic/<string:clinicID>', methods=['GET'])
 def doctorsClinic(clinicID):
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -362,8 +362,8 @@ def appointments():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        appointmentID = contentJSON['appointmentID']
-        doctorID  = contentJSON['doctorID']
+        appointmentID = requests.get('http://127.0.0.1:5000/appointments/idgen').text
+        doctorID  = ""
         clinicID = contentJSON['clinicID']
         patientID = contentJSON['patientID']
         appointmentStatus = "Pending"
@@ -372,11 +372,11 @@ def appointments():
         visitReasons= contentJSON['visitReasons']
 
         insertQuery = """
-                        INSERT INTO appointments (appointmentID,doctorID,patientID,appointmentStatus,startTime,
+                        INSERT INTO appointments (appointmentID,clinicID,doctorID,patientID,appointmentStatus,startTime,
                                             appointmentDate,visitReasons)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
                     """
-        cursor = cursor.execute(insertQuery,(appointmentID,doctorID,patientID,appointmentStatus,startTime,
+        cursor = cursor.execute(insertQuery,(appointmentID,clinicID,doctorID,patientID,appointmentStatus,startTime,
                                             appointmentDate,visitReasons))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
@@ -463,6 +463,30 @@ def appointmentsWeek():
             for row in cursor.fetchall()
         ]
         if appointment is not None:
+            return jsonify(appointment),200  
+
+@app.route('/appointments/<string:clinicID>/pending',methods=['GET'])
+def appointmentsPending(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM appointments where appointmentStatus = %s AND clinicID = %s ORDER BY appointmentDate, startTime"
+                        ,('Pending',clinicID))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
             return jsonify(appointment),200
 
 @app.route('/appointments/week/<string:doctorID>',methods=['GET'])
@@ -510,12 +534,11 @@ def appointmentsFind(id):
                             WHERE appointmentDate = %s AND startTime = %s
                           );
                         """,(date,appointment['startTime']))
-        appointment = [
-            dict(
-                doctorID  = row['doctorID']
-            )
-            for row in cursor.fetchall()
-        ]
+        appointment = []
+        for row in cursor.fetchall():
+            appointment.append(row)
+    
+  
         if appointment is not None:
             return jsonify(appointment),200    
 

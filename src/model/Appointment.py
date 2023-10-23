@@ -95,14 +95,14 @@ class Appointment:
               appointment['visitReasons'],
         )
 
-    def postAppointment():
+    def postAppointment(self):
         newAppointment = {
                     "doctorID": "",
                     "clinicID" : self.getClinicID(),
                     "patientID": self.getPatientID(),
                     "startTime": self.getStartTime(),
                     "appointmentDate": self.getAppointmentDate(),
-                    "visitReasons": self.getVisitReasons
+                    "visitReasons": self.getVisitReason()
         }
         
         response = requests.post(f'http://127.0.0.1:5000/appointments',json=newAppointment)

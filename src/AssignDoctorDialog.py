@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QScrollArea, QHBo
 from PyQt5.QtCore import Qt
 
 from .model import Doctor
+from .model.DoctorRepo import DoctorRepository
 
 
 class AssignDoctorDialog(QDialog):
@@ -83,13 +84,8 @@ class AssignDoctorDialog(QDialog):
         self.close()
 
     def setData(self, request):
-        self.request = request
 
-        # SET THE AVAILABLE DOCTORS HERE
-        doctor1 = Doctor("D0001","Doctor 1", "C0001","AVAILABLE", "Junior", "0123456789", "030102091820", 2)
-        doctor2 = Doctor("D0002","Doctor 2", "C0001","AVAILABLE", "Senior", "0198765432", "090502873626", 5)
-        self.doctorList.append(doctor1)
-        self.doctorList.append(doctor2)
+        doctorList = DoctorRepository.getAvailableDoctorList(request.getAppointmentID())
 
         for count, doctor in enumerate(self.doctorList):
             button = QPushButton()

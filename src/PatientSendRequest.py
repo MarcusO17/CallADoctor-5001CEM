@@ -149,8 +149,15 @@ class PatientSendRequest(QMainWindow):
             endTime = QTime(int(timeTemp[0]), int(timeTemp[1])).addSecs(3600)
 
             # back end magic here
-            appointment = Appointment("0", "", self.patient.getPatientID(),"Pending",
-                                        self.preferredTimeComboBox.currentText(),endTime.toString("hh:mm:ss"),self.preferredDate.date().toString("yyyy-MM-dd"), self.requestPurpose.text())
+            appointment = Appointment("0", 
+                                      "",
+                                      self.clinic.getClinicID(), 
+                                      self.patient.getPatientID(),
+                                      "Pending",
+                                       self.preferredTimeComboBox.currentText(),
+                                       endTime.toString("hh:mm:ss"),
+                                       self.preferredDate.date().toString("yyyy-MM-dd"), 
+                                       self.requestPurpose.text())
             
             result, isSuccess = Appointment.postAppointment(appointment)
             if isSuccess:
@@ -171,9 +178,7 @@ class PatientSendRequest(QMainWindow):
         timeDiff = roundedTime.secsTo(QTime(17, 0))
         hoursLeft = timeDiff // 3600
         startTime = QTime(8, 0)
-        print(timeDiff)
-        print(hoursLeft)
-        print(roundedTime)
+       
 
         if self.preferredDate.date() == QDate.currentDate():
             if currentTime > QTime(17, 0):
