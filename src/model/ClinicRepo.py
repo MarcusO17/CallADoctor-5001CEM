@@ -14,7 +14,7 @@ class ClinicRepository():
                   recordsList = response.json()
             except requests.RequestException as e:
                   print(f'Error : {e}')
-                  return Clinic("","","","","")
+                  return []
             for records in recordsList:
                   tempClinic = Clinic("","","","","")
 
