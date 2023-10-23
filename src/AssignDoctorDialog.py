@@ -19,16 +19,18 @@ class AssignDoctorDialog(QDialog):
 
         self.doctorList = list()
 
-        self.doctorButtonLayout = QVBoxLayout()
+        self.doctorButtonLayout = QWidget()
+        button_layout = QVBoxLayout(self.doctorButtonLayout)
         self.confirmationButtonLayout = QHBoxLayout()
         boxScrollArea = QScrollArea()
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
         self.doctorButtonList = list()
         self.selectedDoctor = None
         self.selectedButtonIndex = 0
 
-        boxScrollArea.setLayout(self.doctorButtonLayout)
+        boxScrollArea.setWidget(self.doctorButtonLayout)
         boxScrollArea.setFixedSize(600, 500)
 
         self.confirmButton = QPushButton()
@@ -72,7 +74,7 @@ class AssignDoctorDialog(QDialog):
             self.selectedDoctor.setStyleSheet("border: 1px solid red;")
             self.selectedDoctor.setChecked(True)
 
-    def confirmButtonFunction(self,request):
+    def confirmButtonFunction(self):
         # make the changes here
         self.request.setDoctorID(self.doctorList[self.selectedButtonIndex-1].getDoctorID())
         self.close()
@@ -91,8 +93,8 @@ class AssignDoctorDialog(QDialog):
             button.setCheckable(True)
             button.setText(doctor.getDoctorName())
             self.doctorButtonList.append(button)
-            self.doctorButtonLayout.addWidget(button)
+            self.doctorButtonLayout.layout().addWidget(button)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.doctorButtonLayout.addWidget(spacer)
+        self.doctorButtonLayout.layout().addWidget(spacer)

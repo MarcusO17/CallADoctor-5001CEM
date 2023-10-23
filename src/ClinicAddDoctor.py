@@ -69,16 +69,18 @@ class ClinicAddDoctor(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.buttonContainer = QVBoxLayout()
+        self.buttonContainer = QWidget()
         self.buttonContainer.setContentsMargins(20,20,20,20)
+        button_layout = QVBoxLayout(self.buttonContainer)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
         self.doctorList = list()
 
         self.generateDoctorButtons()
 
-        boxScrollArea.setLayout(self.buttonContainer)
+        boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
@@ -106,9 +108,9 @@ class ClinicAddDoctor(QMainWindow):
     def generateDoctorButtons(self):
 
         # delete and clear the buttons, generating back later
-        for i in range(self.buttonContainer.count()):
-            widget = self.buttonContainer.itemAt(0).widget()
-            self.buttonContainer.removeWidget(widget)
+        for i in range(self.buttonContainer.layout().count()):
+            widget = self.buttonContainer.layout().itemAt(0).widget()
+            self.buttonContainer.layout().removeWidget(widget)
             print("in the loop ", i)
             if widget is not None:
                 widget.deleteLater()
@@ -139,6 +141,6 @@ class ClinicAddDoctor(QMainWindow):
             doctorButton = QPushButton()
             doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
             doctorButton.setFont(buttonFont)
-            doctorButton.setFixedSize(QSize(950, 150))
+            doctorButton.setFixedSize(QSize(900, 150))
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
-            self.buttonContainer.addWidget(doctorButton)
+            self.buttonContainer.layout().addWidget(doctorButton)
