@@ -8,8 +8,8 @@ class PrescriptionRepository():
             self.prescriptionDetailList = []
 
 
-      def getPrescriptionDetailList():
-            prescriptionDetailList = []
+      def getPrescriptionList():
+            prescriptionList = []
             response = requests.get('http://127.0.0.1:5000/prescriptions')
             recordsList = response.json()
             for records in recordsList:

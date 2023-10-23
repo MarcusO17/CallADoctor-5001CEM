@@ -29,7 +29,6 @@ class Prescription:
     def setAppointmentID(self, expiryDate):
         self.expiryDate = expiryDate
     
-   
 
 
 class PrescriptionDetails():
