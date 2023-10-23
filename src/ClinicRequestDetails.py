@@ -190,6 +190,7 @@ class ClinicRequestDetails(QMainWindow):
         if backConfirmationDialogBox == QMessageBox.Yes:
             self.pageManager.goBack()
 
+
     def acceptRequestFunction(self):
         acceptRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Confirmation",
                                                       "Are you sure you want to approve this request",
@@ -209,6 +210,7 @@ class ClinicRequestDetails(QMainWindow):
                     print(response)
                 else:
                     print('Failed!')
+                self.pageManager.getPreviousPage().generateRequestButtons()
                 self.pageManager.goBack()
 
     def cancelRequestFunction(self):
@@ -217,6 +219,7 @@ class ClinicRequestDetails(QMainWindow):
                                                QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
             self.request.denyAppointment()
+            self.pageManager.getPreviousPage().generateRequestButtons()
             self.pageManager.goBack()
 
     def assignDoctorFunction(self):
