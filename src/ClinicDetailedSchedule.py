@@ -9,6 +9,7 @@ from PyQt5 import QtWidgets
 
 from .ClinicAppointmentDetails import ClinicAppointmentDetails
 from .model import Appointment, Doctor
+from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager
 
 class ClinicDetailedSchedule(QMainWindow):
@@ -103,21 +104,7 @@ class ClinicDetailedSchedule(QMainWindow):
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
-        appointmentList = list() # this list is for appointments that is assigned to the doctor
-
-        # put query and create the appointment objects here
-        # use doctor object to get appointments
-        appointment1 = Appointment("appointment1", "doctor1", "patient1", "approved", "13:00", "14:00", "24-10-2023",
-                                   "light fever")
-        appointment2 = Appointment("appointment2", "doctor1", "patient2", "approved", "8:00", "9:00", "25-10-2023",
-                                   "light fever")
-        appointment3 = Appointment("appointment3", "doctor1", "patient3", "approved", "8:00", "9:00", "28-10-2023",
-                                   "light fever")
-
-        appointmentList.append(appointment1)
-        appointmentList.append(appointment2)
-        appointmentList.append(appointment3)
-
+        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
         self.setSchedule(appointmentList)
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -134,21 +121,19 @@ class ClinicDetailedSchedule(QMainWindow):
         for appointment in appointmentList:
             row = 0
             col = 0
-            dateTemp = appointment.getAppointmentDate()
+            date = appointment.getAppointmentDate()
             startTime = appointment.getStartTime()
             endTime = appointment.getEndTime()
 
-            startTimeTemp = startTime.split(":")
+            startTimeTemp = startTime.split(":") #HH:MM:SS
             startTime = int(startTimeTemp[0])
 
-            endTimeTemp = endTime.split(":")
+            print(endTime)
+            endTimeTemp = endTime.split(":") #HH:MM:SS
             endTime = int(endTimeTemp[0])
 
-            dateTemp = dateTemp.split("-")
-            print(dateTemp)
-
-            date = datetime(int(dateTemp[2]),int(dateTemp[1]),int(dateTemp[0]))
-
+            #print(date)
+            #dateTemp = dateTemp.split("-") #YYYY-MM-DD
 
             row = date.weekday()+1
             if endTime - startTime >= 1:

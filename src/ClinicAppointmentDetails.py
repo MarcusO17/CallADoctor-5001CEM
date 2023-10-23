@@ -103,7 +103,7 @@ class ClinicAppointmentDetails(QMainWindow):
         self.dateTitle.setText("Date: ")
         self.dateLabel = QLabel(self.centralwidget)
         self.dateLabel.setGeometry(QRect(180, 450, 150, 40))
-        self.dateLabel.setText(self.appointment.getAppointmentDate())
+        self.dateLabel.setText(str(self.appointment.getAppointmentDate()))
         self.dateLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.startTimeTitle = QLabel(self.centralwidget)
