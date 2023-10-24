@@ -5,18 +5,28 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from .model import Patient
+from .model import Patient, PrescriptionDetails
+from .model import Appointment
+from .model import Doctor
+from .model import Prescription
+from .model import PrescriptionDetails
 from .PageManager import PageManager
+from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
+from .model.Prescription import Prescription
 
 
 class DocPatientDetailsWindow(QMainWindow):
 
-    def __init__(self, patientTemp):
+    def __init__(self, patientTemp, appointmentTemp, doctorTemp):
         super().__init__()
         self.pageManager = PageManager()
         #set the information here
         self.patient = patientTemp
-        print(self.patient.getPatientID(), self.patient.getPatientName(), self.patient.getPatientDOB(), self.patient.getPatientAddress, self.patient.getPatientBlood, self.patient.getPatientBlood())
+        self.appointment = appointmentTemp
+        self.doctor = doctorTemp
+        print(self.doctor.getDoctorName(), self.doctor.getDoctorType(), self.doctor.getDoctorContact(), self.doctor.getYearsOfExperience())
+        print(self.appointment.getPatientID(), self.appointment.getDoctorID(), self.appointment.getStartTime(), self.appointment.getEndTime(), self.appointment.getAppointmentDate(), self.appointment.getVisitReason())
+        print(self.patient.getPatientName(), self.patient.getPatientDOB(), self.patient.getPatientAddress, self.patient.getPatientBlood, self.patient.getPatientBlood())
         self.setWindowTitle("Patient Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -79,7 +89,7 @@ class DocPatientDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.patientAppointmentDetailLabel.setFont(font)
-        self.patientAppointmentDetailLabel.setText("Data of Patient Appointment")
+        self.patientAppointmentDetailLabel.setText(str(self.appointment.getVisitReason()) + " " + str(self.appointment.getStartTime()) + " " + str(self.appointment.getEndTime()) + " " + str(self.appointment.getAppointmentDate()) )
         self.patientAppointmentDetailLabel.setFrameShape(QtWidgets.QFrame.Box)
         
 
@@ -94,58 +104,44 @@ class DocPatientDetailsWindow(QMainWindow):
         self.patientDescriptionsLabel.setText(str(self.patient.getPatientName()) + " " + str(self.patient.getPatientDOB()) + " " + str(self.patient.getPatientBlood()) + " " + str(self.patient.getPatientRace()))
         self.patientDescriptionsLabel.setFrameShape(QtWidgets.QFrame.Box)
 
-        self.patientAddressLabel = QLabel(self.centralwidget)
-        self.patientAddressLabel.setGeometry(QRect(180, 450, 350, 200))
+        self.doctorDetailsLabel = QLabel(self.centralwidget)
+        self.doctorDetailsLabel.setGeometry(QRect(180, 450, 350, 200))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
         font.setBold(True)
         font.setWeight(75)
-        self.patientAddressLabel.setFont(font)
-        self.patientAddressLabel.setText(self.patient.getPatientAddress())
-        self.patientAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.doctorDetailsLabel.setFont(font)
+        self.doctorDetailsLabel.setText(str(self.doctor.getDoctorName()) + " " + str(self.doctor.getDoctorType()) + " " + str(self.doctor.getDoctorContact()) + " " + str(self.doctor.getYearsOfExperience()))
+        self.doctorDetailsLabel.setFrameShape(QtWidgets.QFrame.Box)
 
-        self.generatePrescriptionButton = QPushButton(self.centralwidget)
-        self.generatePrescriptionButton.setGeometry(QRect(710, 545, 180, 100))
-        self.generatePrescriptionButton.setLayoutDirection(Qt.RightToLeft)
+        self.viewPrescriptionButton = QPushButton(self.centralwidget)
+        self.viewPrescriptionButton.setGeometry(QRect(710, 545, 180, 100))
+        self.viewPrescriptionButton.setLayoutDirection(Qt.RightToLeft)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.generatePrescriptionButton.setFont(font)
-        self.generatePrescriptionButton.setText("generate prescription")
-        self.generatePrescriptionButton.clicked.connect(self.generatePrescriptionFunction)
+        self.viewPrescriptionButton.setFont(font)
+        self.viewPrescriptionButton.setText("View Prescription")
+        self.viewPrescriptionButton.setObjectName("ViewPrescription")
+        self.viewPrescriptionButton.clicked.connect(self.viewPrescriptionFunction)
 
-        self.generatePrescriptionLabel = QLabel(self.centralwidget)
-        self.generatePrescriptionLabel.setGeometry(QRect(730, 570, 50, 50))
-        self.generatePrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.viewPrescriptionLabel = QLabel(self.centralwidget)
+        self.viewPrescriptionLabel.setGeometry(QRect(730, 570, 50, 50))
+        self.viewPrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.generatePrescriptionIcon = QPixmap(filepath)
-        self.generatePrescriptionIcon = self.generatePrescriptionIcon.scaled(50, 50)
-        self.generatePrescriptionLabel.setPixmap(self.generatePrescriptionIcon)
-
-
-        self.requestCancelButton = QPushButton(self.centralwidget)
-        self.requestCancelButton.setGeometry(QRect(890, 545, 180, 100))
-        font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(10)
-        self.requestCancelButton.setFont(font)
-        self.requestCancelButton.setLayoutDirection(Qt.RightToLeft)
-        self.requestCancelButton.setText("Cancel Request")
-        self.requestCancelButton.clicked.connect(self.requestCancelFunction)
-
-        self.requestCancelLabel = QLabel(self.centralwidget)
-        self.requestCancelLabel.setGeometry(QRect(910, 570, 50, 50))
-        self.requestCancelLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.requestCancelIcon = QPixmap(filepath)
-        self.requestCancelIcon = self.requestCancelIcon.scaled(50, 50)
-        self.requestCancelLabel.setPixmap(self.requestCancelIcon)
+        self.viewPrescriptionIcon = QPixmap(filepath)
+        self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)
+        self.viewPrescriptionLabel.setPixmap(self.viewPrescriptionIcon)
 
 
         self.patientDetailsContainer = QLabel(self.centralwidget)
         self.patientDetailsContainer.setFixedSize(1000,500)
         self.patientDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
+
+        #get precription data here by appointmentID
+
+
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
@@ -154,18 +150,28 @@ class DocPatientDetailsWindow(QMainWindow):
         mainLayout.addWidget(self.patientDetailsContainer)
         mainLayout.setAlignment(Qt.AlignHCenter)
 
+        self.viewPrescriptionButton.raise_()
+
         self.centralwidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def generatePrescriptionFunction(self):
-        pass
-        # go to send request window
-        # pass the clinic object to the window
-    
-    def requestCancelFunction(self):
-        pass
+    def viewPrescriptionFunction(self):
+
+        prescriptionDetails1 = PrescriptionDetails("medicationName1", "1", "after", "10mg")
+        prescriptionDetails2 = PrescriptionDetails("medicationName2", "2", "before", "10mg")
+        prescriptionDetails3 = PrescriptionDetails("medicationName3", "3", "before", "10mg")
+        prescription1 = Prescription ("PR00001", "P0001", "2023-10-29")
+        prescription1.setPrescriptionDetails(prescriptionDetails1)
+        prescription1.setPrescriptionDetails(prescriptionDetails2)
+        prescription1.setPrescriptionDetails(prescriptionDetails3)
+
+        self.patientPrescription = PatientPrescriptionDetailsWindow(self.patient, prescription1)
+        self.pageManager.add(self.patientPrescription)
+        print(self.pageManager.size())
+
+
 
     def backButtonFunction(self):
         self.pageManager.goBack()

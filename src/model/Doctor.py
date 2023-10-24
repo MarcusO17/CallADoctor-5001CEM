@@ -52,11 +52,15 @@ class Doctor:
     def setDoctorContact(self, doctorContact):
         self.doctorContact = doctorContact
 
-    def getYearOfExperience(self):
+
+    def getYearsOfExperience(self):
         return self.yearsOfExperience
     
-    def setYearOfExperience(self, yearOfExperience):
-        self.yearOfExperience = yearOfExperience
+    def setYearsOfExperience(self, yearsOfExperience):
+        self.yearsOfExperience = yearsOfExperience
+
+
+    
 
     @classmethod
     def getDoctorfromID(self,doctorID):
