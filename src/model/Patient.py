@@ -27,7 +27,7 @@ class Patient:
         self.patientAddress = patientAddress
 
     def getPatientDOB(self):
-        return self.getPatientDOB
+        return self.patientDOB
 
     def setPatientDOB(self, patientDOB):
         self.patientDOB = patientDOB
