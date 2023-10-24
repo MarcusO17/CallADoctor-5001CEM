@@ -25,7 +25,7 @@ class Clinic:
         return self.clinicContact
 
     def setClinicContact (self, clinicContact ):
-        self.cliniContact  = clinicContact 
+        self.clinicContact  = clinicContact 
 
     def getClinicAddress(self):
         return self.clinicAddress
