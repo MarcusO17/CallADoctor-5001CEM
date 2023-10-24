@@ -48,6 +48,9 @@ class Clinic:
             print(e)
             return Clinic("","","","","")
         
+        if len(clinic) == 0:
+            return Clinic("","","","","")
+        
         return Clinic(
             clinic['clinicID'],
             clinic['clinicName'],
