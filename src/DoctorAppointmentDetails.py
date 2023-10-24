@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QApplication, \
     QScrollArea
 from PyQt5 import QtCore, QtWidgets
+
+from .DoctorViewPrescription import DoctorViewPrescription
 from .PageManager import PageManager
 from .model import Patient
 
@@ -194,7 +196,8 @@ class DoctorAppointmentDetails(QMainWindow):
         pass
 
     def viewPrescription(self):
-        pass
+        self.doctorViewPrescription = DoctorViewPrescription(self.patient, self.appointment)
+        self.pageManager.add(self.doctorViewPrescription)
 
     def backButtonFunction(self):
         self.pageManager.goBack()

@@ -73,10 +73,12 @@ class DoctorPatientHistoryWindow(QMainWindow):
         self.backButton.setIcon(self.backButtonIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QVBoxLayout()
-        buttonContainer.setContentsMargins(20,20,20,20)
+        self.buttonContainer = QWidget()
+        buttonLayout = QVBoxLayout(self.buttonContainer)
+        self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         appointmentList = list()
 
@@ -99,11 +101,11 @@ class DoctorPatientHistoryWindow(QMainWindow):
             self.patientAppointmentButton = QPushButton()
             self.patientAppointmentButton.setText(f"{appointment.getAppointmentID()} -  {appointment.getAppointmentDate()}")
             self.patientAppointmentButton.setFont(buttonFont)
-            self.patientAppointmentButton.setFixedSize(QSize(950,150))
+            self.patientAppointmentButton.setFixedSize(QSize(900,150))
             self.patientAppointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment,self.doctor))
-            buttonContainer.addWidget(self.patientAppointmentButton)
+            self.buttonContainer.layout().addWidget(self.patientAppointmentButton)
 
-        boxScrollArea.setLayout(buttonContainer)
+        boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
