@@ -12,6 +12,7 @@ from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .model import Appointment
 from .model import Clinic
 from .model import Doctor
+from .model.DoctorRepo import DoctorRepository
 from .PageManager import PageManager
 
 
@@ -98,7 +99,7 @@ class ClinicDoctorDetails(QMainWindow):
         self.doctorICNumber = QLabel(self.centralwidget)
         self.doctorICNumber.setGeometry(QRect(180, 390, 400, 50))
         self.doctorICNumber.setFrameShape(QtWidgets.QFrame.Box)
-        self.doctorICNumber.setText(self.doctor.getDoctorICNumber())
+        self.doctorICNumber.setText(str(self.doctor.getDoctorICNumber()))
 
         self.doctorTypeTitle = QLabel(self.centralwidget)
         self.doctorTypeTitle.setGeometry(QRect(180, 440, 400, 30))
@@ -116,7 +117,7 @@ class ClinicDoctorDetails(QMainWindow):
         self.doctorContactLabel = QLabel(self.centralwidget)
         self.doctorContactLabel.setGeometry(QRect(180, 550, 400, 50))
         self.doctorContactLabel.setFrameShape(QtWidgets.QFrame.Box)
-        self.doctorContactLabel.setText(self.doctor.getDoctorContact())
+        self.doctorContactLabel.setText(str(self.doctor.getDoctorContact()))
 
         self.doctorYearOfExperienceTitle = QLabel(self.centralwidget)
         self.doctorYearOfExperienceTitle.setGeometry(QRect(180, 600, 400, 30))
@@ -234,7 +235,7 @@ class ClinicDoctorDetails(QMainWindow):
         if addDoctorDialogBox == QMessageBox.Yes:
             print(self.doctor.getDoctorName(), self.doctor.getClinicID())
             print("THIS IS THE CLINIC ID", self.clinic.getClinicID())
-            self.doctor.setClinicID(self.clinic.getClinicID())
+            DoctorRepository.assignDoctorClinic(self.clinic.getClinicID(),self.doctor.getDoctorID())
             print(self.doctor.getDoctorName(), self.doctor.getClinicID())
             self.pageManager.getPreviousPage().generateDoctorButtons()
             self.pageManager.goBack()

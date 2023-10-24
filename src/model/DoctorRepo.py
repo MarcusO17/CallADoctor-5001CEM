@@ -18,14 +18,14 @@ class DoctorRepository():
             for records in recordsList:
                   tempDoctor = Doctor("","","","","","","")
 
-                  tempDoctor.setClinicID = records['clinicID']
-                  tempDoctor.setDoctorID = records['doctorID']
-                  tempDoctor.setDoctorName = records['doctorName']
-                  tempDoctor.setStatus = records['status']
-                  tempDoctor.setDoctorType = records['doctorType']
-                  tempDoctor.setDoctorContact = records['doctorContact']
-                  tempDoctor.setDoctorICNumber = records['doctorICNumber']
-                  tempDoctor.setYearOfExperience = records['yearOfExperience']
+                  tempDoctor.setClinicID(records['clinicID'])
+                  tempDoctor.setDoctorID(records['doctorID'])
+                  tempDoctor.setDoctorName(records['doctorName'])
+                  tempDoctor.setStatus(records['status'])
+                  tempDoctor.setDoctorType(records['doctorType'])
+                  tempDoctor.setDoctorContact(records['doctorContact'])
+                  tempDoctor.setDoctorICNumber(records['doctorICNumber'])
+                  tempDoctor.setYearOfExperience(records['yearOfExperience'])
 
                   doctorList.append(tempDoctor)
                   
@@ -95,3 +95,36 @@ class DoctorRepository():
             return doctorList
       
 
+      def getUnassignedDoctors():
+            doctorList = []
+            try:
+                  response = requests.get('http://127.0.0.1:5000/doctors/unassigned')
+                  recordsList = response.json()
+            except requests.RequestException as e:
+                  print(f'Error : {e}')
+                  return Doctor("","","","","","","","")
+            for records in recordsList:
+                  tempDoctor = Doctor("","","","","","","","")
+
+                  tempDoctor.setClinicID(records['clinicID'])
+                  tempDoctor.setDoctorID(records['doctorID'])
+                  tempDoctor.setDoctorName(records['doctorName'])
+                  tempDoctor.setStatus(records['status'])
+                  tempDoctor.setDoctorType(records['doctorType'])
+                  tempDoctor.setDoctorContact(records['doctorContact'])
+                  tempDoctor.setDoctorICNumber(records['doctorICNumber'])
+                  tempDoctor.setYearOfExperience(records['yearOfExperience'])
+
+                  doctorList.append(tempDoctor)
+                  
+            return doctorList     
+
+
+      def assignDoctorClinic(clinicID,doctorID):
+            response = requests.patch(f'http://127.0.0.1:5000/doctors/{clinicID}/assign/{doctorID}')
+            assignStatus = response.text
+
+            if response.status_code == 200:
+                  return assignStatus, True
+            else:
+                  return assignStatus, False

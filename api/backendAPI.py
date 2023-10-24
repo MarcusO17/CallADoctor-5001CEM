@@ -244,15 +244,15 @@ def doctors():
         contentJSON = request.get_json()
 
         doctorID = requests.get('http://127.0.0.1:5000/doctors/idgen').text
-        doctorName = contentJSON['doctorName'],
+        doctorName = contentJSON['doctorName']
         doctorPassword = contentJSON['doctorPassword']
         doctorICNumber = contentJSON['doctorICNumber']
         doctorContact = contentJSON['doctorContact']
         doctorType = contentJSON['doctorType']
         yearOfExperience = contentJSON['yearOfExperience']
         doctorEmail = contentJSON['doctorEmail']
-        status = 'Unassigned',
-        clinicID = "",
+        status = "Unassigned"
+        clinicID = None
 
         insertQuery = """
                         INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
@@ -338,13 +338,13 @@ def doctorsID(doctorID):
         return 'Successful DELETE', 200  
     
 
-@app.route('/doctors/add/<string:id>', methods=['GET'])
-def doctorsUnassigned(clinicID):
+@app.route('/doctors/unassigned', methods=['GET'])
+def doctorsUnassigned():
     conn = dbConnect()  
     cursor = conn.cursor()
     if request.method == 'GET':
         #Add Error Handling
-        cursor.execute("SELECT * FROM doctors where clinicID = %s",clinicID)
+        cursor.execute("SELECT * FROM doctors where status = 'Unassigned'")
 
         doctors = [
             dict(
@@ -361,6 +361,23 @@ def doctorsUnassigned(clinicID):
         ]
         if doctors is not None:
             return jsonify(doctors),200
+        
+@app.route('/doctors/<string:clinicID>/assign/<string:doctorID>',methods=['PATCH'])
+def doctorClinicAssign(clinicID,doctorID):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE doctors SET clinicID = %s, status = 'Active' where doctorID = %s",
+                           (clinicID,doctorID))
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200  
+
 
 @app.route('/appointments', methods=['GET','POST','DELETE'])
 def appointments():
