@@ -12,12 +12,13 @@ from .PageManager import PageManager
 
 class PatientPrescriptionDetailsWindow(QMainWindow):
 
-    def __init__(self, prescriptionDetailsTemp, patient):
+    def __init__(self, prescriptionDetailsTemp, patient, prescription):
         super().__init__()
 
         #set the information here
         self.prescriptionDetails = prescriptionDetailsTemp
         self.patient = patient
+        self.prescription = prescription
         self.pageManager = PageManager()
         print(self.prescriptionDetails.getPrescriptionID(), self.prescriptionDetails.getAppointmentID(), self.prescriptionDetails.getPillsPerDay(), self.prescriptionDetails.getMedicationName, self.prescriptionDetails.getFood, self.prescriptionDetails.getDosage())
         self.setWindowTitle("Patient Prescription Details")

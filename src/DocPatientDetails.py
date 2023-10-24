@@ -8,6 +8,8 @@ from PyQt5 import QtWidgets
 from .model import Patient
 from .model import Appointment
 from .model import Doctor
+from .model import Prescription
+from .model import PrescriptionDetails
 from .PageManager import PageManager
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 
@@ -155,8 +157,17 @@ class DocPatientDetailsWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def viewPrescriptionFunction(self):
-        prescription1 = Prescription ("")
-        self.patientPrescription = PatientPrescriptionDetailsWindow(self.patient)
+        prescriptionDetails1 = PrescriptionDetails ("ABC med", 4, "After", "150ML")
+        prescriptionDetails2 = PrescriptionDetails ("BCA med", 3, "Before", "50ML")
+        prescriptionDetails3 = PrescriptionDetails ("CDS med", 2, "After", "10ML")
+
+
+        prescription1 = Prescription ("p101", "ap101", "13-04-2023")
+        prescription1.setPrescriptionDetails(prescriptionDetails1)
+        prescription1.setPrescriptionDetails(prescriptionDetails2)
+        prescription1.setPrescriptionDetails(prescriptionDetails3)
+
+        self.patientPrescription = PatientPrescriptionDetailsWindow(self.patient, prescription1)
         self.pageManager.add(self.patientPrescription)
         print(self.pageManager.size())
 
