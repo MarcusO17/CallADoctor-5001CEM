@@ -10,7 +10,6 @@ from .ClinicHomepage import ClinicHomepage
 from .PatientRegister import PatientRegisterWindow
 from .ClinicRegister import ClinicRegisterWindow
 from .DoctorRegister import DoctorRegisterWindow
-from .DoctorPatientDetails import DoctorPatientDetailsWindow
 from .DoctorMyAppointment import DoctorMyAppointmentWindow
 import os
 

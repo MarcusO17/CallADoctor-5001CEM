@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from .model import Patient
-from .DoctorPatientDetails import DoctorPatientDetailsWindow
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .PageManager import PageManager
 
@@ -46,7 +45,7 @@ class DoctorPatientRecordWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Welcome! [name]")
+        self.headerTitle.setText("Patient Record")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)

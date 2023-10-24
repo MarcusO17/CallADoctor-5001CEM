@@ -5,11 +5,12 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
+
+from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Clinic
 from .model import Doctor
 from .model import Appointment
 from .model import Patient
-from .DoctorPatientDetails import DoctorPatientDetailsWindow
 from .PageManager import PageManager
 
 
@@ -25,7 +26,6 @@ class DoctorPatientHistoryWindow(QMainWindow):
         self.setupUi(self)
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("PatientMyAppointment")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
@@ -49,29 +49,29 @@ class DoctorPatientHistoryWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Welcome! [name]")
+        self.headerTitle.setText(f"{self.patient.getPatientName()} - Appointment History")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.patientHistoryMyAccountButton = QPushButton(self.centralwidget)
-        self.patientHistoryMyAccountButton.setFixedSize(70,70)
-        self.patientHistoryMyAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setFixedSize(70,70)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.patientHistoryMyAccountIcon = QIcon(filepath)
-        self.patientHistoryMyAccountButton.setIconSize(QSize(70, 70))
-        self.patientHistoryMyAccountButton.setIcon(self.patientHistoryMyAccountIcon)
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70, 70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
 
         # Push Button 5 (Log Out)
-        self.patientHistoryBackButton = QPushButton(self.centralwidget)
-        self.patientHistoryBackButton.setFixedSize(70, 70)
-        self.patientHistoryBackButton.setGeometry(QRect(1150, 40, 70, 70))
+        self.backButton = QPushButton(self.centralwidget)
+        self.backButton.setFixedSize(70, 70)
+        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
-        self.patientHistoryBackIcon = QIcon(filepath)
-        self.patientHistoryBackButton.setIconSize(QSize(70, 70))
-        self.patientHistoryBackButton.setIcon(self.patientHistoryBackIcon)
-        self.patientHistoryBackButton.clicked.connect(self.backButtonFunction)
+        self.backButtonIcon = QIcon(filepath)
+        self.backButton.setIconSize(QSize(70, 70))
+        self.backButton.setIcon(self.backButtonIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -80,9 +80,9 @@ class DoctorPatientHistoryWindow(QMainWindow):
 
         appointmentList = list()
 
-        appointment1 = Appointment("ap0001", "Doc101","clinicID", "P1001", "Completed", "Starts 10am", "Ends 5pm", "4th Novemeber", "Fever")
-        appointment2 = Appointment("ap0002", "Doc102", "clinicID","P1002", "In-Progress", "Starts 12am", "Starts 4pm", "30th Novemeber", "Cold")
-        appointment3 = Appointment("ap0003", "Doc103", "clinicID","P1003", "Completed", "Starts 9am", "Starts 6pm", "21st Novemeber", "Pain")
+        appointment1 = Appointment("ap0001", "Doc101","clinicID", "P1001", "Completed", "10:00", "11:00", "2023-10-29", "Fever")
+        appointment2 = Appointment("ap0002", "Doc102", "clinicID","P1002", "Approved", "12:00", "13:00", "2023-10-29", "Cold")
+        appointment3 = Appointment("ap0003", "Doc103", "clinicID","P1003", "Completed", "9:00", "10:00", "2023-10-29", "Pain")
 
         appointmentList.append(appointment1)
         appointmentList.append(appointment2)
@@ -97,10 +97,10 @@ class DoctorPatientHistoryWindow(QMainWindow):
 
         for count, appointment in enumerate(appointmentList):
             self.patientAppointmentButton = QPushButton()
-            self.patientAppointmentButton.setText(appointment.getPatientID() + " - " + appointment.getDoctorID())
+            self.patientAppointmentButton.setText(f"{appointment.getAppointmentID()} -  {appointment.getAppointmentDate()}")
             self.patientAppointmentButton.setFont(buttonFont)
             self.patientAppointmentButton.setFixedSize(QSize(950,150))
-            self.patientAppointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(self.patient,appointment,self.doctor))
+            self.patientAppointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment,self.doctor))
             buttonContainer.addWidget(self.patientAppointmentButton)
 
         boxScrollArea.setLayout(buttonContainer)
@@ -118,11 +118,11 @@ class DoctorPatientHistoryWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def appointmentButtonFunction(self, patient, appointment, doctor):
-        # Need to update the  page where it goes here according to button click
-        self.patientHistoryAppointmentDetailsWindow = DoctorPatientDetailsWindow(patient,appointment,doctor)
-        self.pageManager.add(self.patientHistoryAppointmentDetailsWindow)
-        print(self.pageManager.size())
+    def appointmentButtonFunction(self, appointment, doctor):
+
+        self.appointmentDetails = DoctorAppointmentDetails(appointment, doctor)
+        self.appointmentDetails.setMode(appointment.getAppointmentStatus())
+        self.pageManager.add(self.appointmentDetails)
 
     def backButtonFunction(self):
         self.pageManager.goBack()

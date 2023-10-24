@@ -5,11 +5,12 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
+
+from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Clinic
 from .model import Doctor
 from .model import Appointment
 from .model import Patient
-from .DoctorPatientDetails import DoctorPatientDetailsWindow
 from .PageManager import PageManager
 
 
@@ -18,7 +19,7 @@ class DoctorMyAppointmentWindow(QMainWindow):
 
         super().__init__()
         self.doctor = doctor
-        self.setWindowTitle("My Appointment (Doctor)")
+        self.setWindowTitle("My Appointment")
         self.pageManager = PageManager()
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -83,7 +84,7 @@ class DoctorMyAppointmentWindow(QMainWindow):
 
         appointment1 = Appointment("ap0001", "Doc101", "clinic1", "P1001", "Completed", "Starts 10am", "Ends 5pm",
                                    "4th Novemeber", "Fever")
-        appointment2 = Appointment("ap0002", "Doc102", "clinic1", "P1002", "In-Progress", "Starts 12am", "Starts 4pm",
+        appointment2 = Appointment("ap0002", "Doc102", "clinic1", "P1002", "Approved", "Starts 12am", "Starts 4pm",
                                    "30th Novemeber", "Cold")
         appointment3 = Appointment("ap0003", "Doc103", "clinic1", "P1003", "Completed", "Starts 9am", "Starts 6pm",
                                    "21st Novemeber", "Pain")
@@ -127,11 +128,10 @@ class DoctorMyAppointmentWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def appointmentButtonFunction(self, appointment, doctor):
-        #self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
-        #self.pageManager.add(self.doctorAppointmentDetails)
-        #print(self.pageManager.size())
-        pass
-
+        self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
+        self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
+        self.pageManager.add(self.doctorAppointmentDetails)
+        print(self.pageManager.size())
     def backButtonFunction(self):
         self.pageManager.goBack()
 
