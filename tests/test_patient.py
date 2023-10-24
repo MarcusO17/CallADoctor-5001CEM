@@ -35,3 +35,24 @@ class TestPatient(unittest.TestCase):
         self.assertEqual(result.getPatientDOB(),  mockPatientData["dateOfBirth"])
         self.assertEqual(result.getPatientBlood(),  mockPatientData["bloodType"])
         self.assertEqual(result.getPatientRace(),  mockPatientData["race"])
+
+    @patch('requests.get')
+    def test_getPatientfromID_failure(self, mockGet):
+        # Create a mock response
+        mockPatientData = {}
+
+        mockResponse = Mock()
+        mockResponse.json.return_value = [mockPatientData]
+        mockGet.return_value = mockResponse
+
+
+        # Call the function with a patient ID
+        result = Patient.getPatientfromID("P19200")
+
+        # Assert that the function returned the expected Patient object
+        self.assertEqual(result.getPatientID(), "")
+        self.assertEqual(result.getPatientName(), "")
+        self.assertEqual(result.getPatientAddress(),  "")
+        self.assertEqual(result.getPatientDOB(), "")
+        self.assertEqual(result.getPatientBlood(),  "")
+        self.assertEqual(result.getPatientRace(), "")

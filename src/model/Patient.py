@@ -53,6 +53,9 @@ class Patient:
             print(e)
             return Patient("","","","","","")
         
+        if len(patient) == 0:
+            return Patient("","","","","","")
+        
         return Patient(
             patient['patientID'],
             patient['patientName'],
