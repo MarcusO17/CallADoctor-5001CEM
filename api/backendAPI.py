@@ -244,15 +244,15 @@ def doctors():
         contentJSON = request.get_json()
 
         doctorID = requests.get('http://127.0.0.1:5000/doctors/idgen').text
-        doctorName = contentJSON['doctorName'],
+        doctorName = contentJSON['doctorName']
         doctorPassword = contentJSON['doctorPassword']
         doctorICNumber = contentJSON['doctorICNumber']
         doctorContact = contentJSON['doctorContact']
         doctorType = contentJSON['doctorType']
         yearOfExperience = contentJSON['yearOfExperience']
         doctorEmail = contentJSON['doctorEmail']
-        status = 'Unassigned',
-        clinicID = "",
+        status = "Unassigned"
+        clinicID = None
 
         insertQuery = """
                         INSERT INTO doctors (doctorID,doctorName,doctorEmail,doctorPassword,doctorType,
@@ -338,13 +338,13 @@ def doctorsID(doctorID):
         return 'Successful DELETE', 200  
     
 
-@app.route('/doctors/add/<string:id>', methods=['GET'])
-def doctorsUnassigned(clinicID):
+@app.route('/doctors/unassigned', methods=['GET'])
+def doctorsUnassigned():
     conn = dbConnect()  
     cursor = conn.cursor()
     if request.method == 'GET':
         #Add Error Handling
-        cursor.execute("SELECT * FROM doctors where clinicID = %s",clinicID)
+        cursor.execute("SELECT * FROM doctors where status = 'Unassigned'")
 
         doctors = [
             dict(
@@ -361,6 +361,39 @@ def doctorsUnassigned(clinicID):
         ]
         if doctors is not None:
             return jsonify(doctors),200
+        
+@app.route('/doctors/<string:clinicID>/assign/<string:doctorID>',methods=['PATCH'])
+def doctorClinicAssign(clinicID,doctorID):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE doctors SET clinicID = %s, status = 'Active' where doctorID = %s",
+                           (clinicID,doctorID))
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200  
+
+@app.route('/doctors/unassign/<string:doctorID>',methods=['PATCH'])
+def doctorClinicUnAssign(doctorID):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE doctors SET clinicID = %s, status = 'Unassigned' where doctorID = %s",
+                           (None,doctorID))
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200  
+
 
 @app.route('/appointments', methods=['GET','POST','DELETE'])
 def appointments():
@@ -610,12 +643,12 @@ def prescriptions():
 
         contentJSON = request.get_json()
 
-        prescriptionID = contentJSON['prescriptionID'],
-        appointmentID  = contentJSON['appointmentID'],
+        prescriptionID = contentJSON['prescriptionID']
+        appointmentID  = contentJSON['appointmentID']
         expiryDate = contentJSON['expiryDate']
 
         insertQuery = """
-                        INSERT INTO doctors (prescriptionID,appointmentID,expiryDate
+                        INSERT INTO prescriptions (prescriptionID,appointmentID,expiryDate
                                             )
                         VALUES (%s,%s,%s)
                     """
@@ -624,12 +657,6 @@ def prescriptions():
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
 
-    if request.method == 'DELETE':
-        try:
-            cursor.execute("DROP TABLE prescriptions")
-        except pymysql.MySQLError as e:
-            return 'Error : ',e
-        return 'Successful DELETE', 200
 
 @app.route('/prescriptions/<string:id>',methods=['GET','DELETE'])
 def prescriptionID(id):
@@ -648,6 +675,7 @@ def prescriptionID(id):
         ]
         if prescription is not None:
             return jsonify(prescription),200
+        
     if request.method == 'DELETE':
         try:
             cursor.execute("DELETE FROM prescriptions WHERE prescriptionID = %s",id)
@@ -656,6 +684,7 @@ def prescriptionID(id):
     
         conn.commit()
         return 'Successful DELETE', 200
+
     
 @app.route('/prescriptionDetails/<string:id>',methods=['GET','DELETE'])
 def prescriptionDetailsID(id):
@@ -666,9 +695,10 @@ def prescriptionDetailsID(id):
         cursor.execute("SELECT * FROM prescriptionsDetails where prescriptionID = %s",id)
         prescription = [
             dict(
-                prescriptionID = row['prescriptionID'],
-                appointmentID  = row['appointmentID'],
-                expiryDate = row['expiryDate']
+                medicationName = row['medicationName'],
+                pillsPerDay  = row['pillsPerDay'],
+                food = row['food'],
+                dosage = row['dosage']
             )
             for row in cursor.fetchall()
         ]

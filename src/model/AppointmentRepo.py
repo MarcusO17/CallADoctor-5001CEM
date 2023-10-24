@@ -4,7 +4,6 @@ from datetime import timedelta
 
 class AppointmentRepository():
 
-
       def getAppointmentsWeekly(doctorID):
             appointmentList = []
             try:
