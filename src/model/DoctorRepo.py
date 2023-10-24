@@ -54,7 +54,7 @@ class DoctorRepository():
       
 
       
-      def getDoctorList(clinicID):
+      def getDoctorListClinic(clinicID):
             doctorList = []
             try:
                   response = requests.get(f'http://127.0.0.1:5000/doctors/clinics/{clinicID}')
