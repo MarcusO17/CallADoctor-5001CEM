@@ -6,12 +6,12 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtWidgets
 from .model import Patient
-from .DocPatientDetails import DocPatientDetailsWindow
-from .DocPatientHistory import DocPatientHistoryWindow
+from .DoctorPatientDetails import DoctorPatientDetailsWindow
+from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .PageManager import PageManager
 
 
-class DocPatientRecordWindow(QMainWindow):
+class DoctorPatientRecordWindow(QMainWindow):
     def __init__(self, doctor):
         super().__init__()
         self.doctor = doctor
@@ -118,7 +118,7 @@ class DocPatientRecordWindow(QMainWindow):
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
-        self.patientHistoryWindow = DocPatientHistoryWindow(patient, doctor)
+        self.patientHistoryWindow = DoctorPatientHistoryWindow(patient, doctor)
         self.pageManager.add(self.patientHistoryWindow)
         print(self.pageManager.size())
 

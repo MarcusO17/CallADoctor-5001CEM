@@ -15,7 +15,7 @@ from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from .model.Prescription import Prescription
 
 
-class DocPatientDetailsWindow(QMainWindow):
+class DoctorPatientDetailsWindow(QMainWindow):
 
     def __init__(self, patientTemp, appointmentTemp, doctorTemp):
         super().__init__()

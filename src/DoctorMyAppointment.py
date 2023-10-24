@@ -9,14 +9,15 @@ from .model import Clinic
 from .model import Doctor
 from .model import Appointment
 from .model import Patient
-from .DocPatientDetails import DocPatientDetailsWindow
+from .DoctorPatientDetails import DoctorPatientDetailsWindow
 from .PageManager import PageManager
 
 
-class DocMyAppointmentWindow(QMainWindow):
-    def __init__(self):
+class DoctorMyAppointmentWindow(QMainWindow):
+    def __init__(self, doctor):
 
         super().__init__()
+        self.doctor = doctor
         self.setWindowTitle("My Appointment (Doctor)")
         self.pageManager = PageManager()
         self.setFixedWidth(1280)
@@ -54,23 +55,22 @@ class DocMyAppointmentWindow(QMainWindow):
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.docMyAccountButton = QPushButton(self.centralwidget)
-        self.docMyAccountButton.setFixedSize(70,70)
-        self.docMyAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setFixedSize(70,70)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.docMyAccountIcon = QIcon(filepath)
-        self.docMyAccountButton.setIconSize(QSize(70, 70))
-        self.docMyAccountButton.setIcon(self.docMyAccountIcon)
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70, 70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
 
-        # Push Button 5 (Log Out)
-        self.docBackButton = QPushButton(self.centralwidget)
-        self.docBackButton.setFixedSize(70, 70)
-        self.docBackButton.setGeometry(QRect(1150, 40, 70, 70))
+        self.backButton = QPushButton(self.centralwidget)
+        self.backButton.setFixedSize(70, 70)
+        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
-        self.docBackIcon = QIcon(filepath)
-        self.docBackButton.setIconSize(QSize(70, 70))
-        self.docBackButton.setIcon(self.docBackIcon)
-        self.docBackButton.clicked.connect(self.backButtonFunction)
+        self.backButtonIcon = QIcon(filepath)
+        self.backButton.setIconSize(QSize(70, 70))
+        self.backButton.setIcon(self.backButtonIcon)
+        self.backButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QWidget()
         buttonLayout = QVBoxLayout(buttonContainer)
@@ -79,17 +79,19 @@ class DocMyAppointmentWindow(QMainWindow):
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
-        patientList = list()
+        appointmentList = list()
 
+        appointment1 = Appointment("ap0001", "Doc101", "clinic1", "P1001", "Completed", "Starts 10am", "Ends 5pm",
+                                   "4th Novemeber", "Fever")
+        appointment2 = Appointment("ap0002", "Doc102", "clinic1", "P1002", "In-Progress", "Starts 12am", "Starts 4pm",
+                                   "30th Novemeber", "Cold")
+        appointment3 = Appointment("ap0003", "Doc103", "clinic1", "P1003", "Completed", "Starts 9am", "Starts 6pm",
+                                   "21st Novemeber", "Pain")
 
-        patient1 = Patient("p0001", "Patient 1", "Patient 1 description", "Patient 1 address", "ABC", "Indian")
-        patient2 = Patient("p0002", "Patient 2", "Patient 2 description", "Patient 2 address", "ABC", "Indian")
-        patient3 = Patient("p0003", "Patient 3", "Patient 3 description", "Patient 3 address", "ABC", "Indian")
-
-        patientList.append(patient1)
-        patientList.append(patient2)
-        patientList.append(patient3)
-        print("patient list size" , len(patientList))
+        appointmentList.append(appointment1)
+        appointmentList.append(appointment2)
+        appointmentList.append(appointment3)
+        print("appointment list size" , len(appointmentList))
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -97,13 +99,13 @@ class DocMyAppointmentWindow(QMainWindow):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
-        for count, patient in enumerate(patientList):
-            self.patientButton = QPushButton()
-            self.patientButton.setText(patient.getPatientID() + " - " + patient.getPatientName())
-            self.patientButton.setFont(buttonFont)
-            self.patientButton.setFixedSize(QSize(900,150))
-            self.patientButton.clicked.connect(lambda checked, patient=patient: self.patientButtonFunction(patient))
-            buttonContainer.layout().addWidget(self.patientButton)
+        for count, appointment in enumerate(appointmentList):
+            self.appointmentButton = QPushButton()
+            self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getAppointmentStatus()}")
+            self.appointmentButton.setFont(buttonFont)
+            self.appointmentButton.setFixedSize(QSize(900,150))
+            self.appointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
+            buttonContainer.layout().addWidget(self.appointmentButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -124,11 +126,11 @@ class DocMyAppointmentWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def patientButtonFunction(self, patient):
-        # update the clinic details page here according to button click
-        self.patientDetailsWindow = DocPatientDetailsWindow(patient)
-        self.pageManager.add(self.patientDetailsWindow)
-        print(self.pageManager.size())
+    def appointmentButtonFunction(self, appointment, doctor):
+        #self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
+        #self.pageManager.add(self.doctorAppointmentDetails)
+        #print(self.pageManager.size())
+        pass
 
     def backButtonFunction(self):
         self.pageManager.goBack()
