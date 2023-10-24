@@ -3,14 +3,14 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QLineEdit, QMessageBox
 from PyQt5 import QtWidgets
 from .model import PrescriptionDetails
 from .model import Prescription
 from .PageManager import PageManager
 
 
-class DoctorViewPrescription(QMainWindow):
+class DoctorGeneratePrescription(QMainWindow):
 
     def __init__(self, patient, appointment):
         super().__init__()
@@ -19,20 +19,8 @@ class DoctorViewPrescription(QMainWindow):
         self.patient = patient
         self.appointment = appointment
 
-        # use appointmentID to get prescriptionID
-        prescriptionDetails1 = PrescriptionDetails("medicationname1",3,"After", "10mg")
-        prescriptionDetails2 = PrescriptionDetails("medicationname2", 3, "After", "10mg")
-        prescriptionDetails3 = PrescriptionDetails("medicationname3", 3, "After", "10mg")
-        prescriptionDetails4 = PrescriptionDetails("medicationname4", 3, "After", "10mg")
-
-        self.prescription = Prescription("PR0001", "appointmentID1", "2023-12-23")
-        self.prescription.setPrescriptionDetails(prescriptionDetails1)
-        self.prescription.setPrescriptionDetails(prescriptionDetails2)
-        self.prescription.setPrescriptionDetails(prescriptionDetails3)
-        self.prescription.setPrescriptionDetails(prescriptionDetails4)
-
         self.pageManager = PageManager()
-        self.setWindowTitle("View Prescription")
+        self.setWindowTitle("Generate Prescription")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setupUi(self)
@@ -48,7 +36,6 @@ class DoctorViewPrescription(QMainWindow):
         self.topLeftLogo = QLabel(self.centralwidget)
         self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
         self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.topLeftLogoIcon = QPixmap(filepath)
         self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
@@ -61,7 +48,7 @@ class DoctorViewPrescription(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText(f"{self.patient.getPatientName()} - Prescription Details")
+        self.headerTitle.setText(f"{self.patient.getPatientName()} - Generate Prescription")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -84,11 +71,10 @@ class DoctorViewPrescription(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
 
-        rowContainer = QWidget()
-        rowLayout = QVBoxLayout(rowContainer)
-        rowContainer.setContentsMargins(20, 20, 20, 20)
+        self.rowContainer = QWidget()
+        rowLayout = QVBoxLayout(self.rowContainer)
+        self.rowContainer.setContentsMargins(20, 20, 20, 20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -121,46 +107,17 @@ class DoctorViewPrescription(QMainWindow):
         foodLabel.setFont(font)
         foodLabel.setText("Before/After Eating: ")
 
+        self.addNewRowButton = QPushButton(self.centralwidget)
+        self.addNewRowButton.setGeometry(QRect(1150, 200, 200, 50))
+        self.addNewRowButton.setText("Add New Row")
+        self.addNewRowButton.clicked.connect(self.addNewRow)
 
-        for count, prescriptionDetails in enumerate(self.prescriptionDetailsList):
-            prescriptionMedicationName = QLabel()
-            prescriptionMedicationName.setFixedSize(300,50)
-            prescriptionMedicationName.setFrameShape(QtWidgets.QFrame.Box)
-            font = QFont()
-            font.setFamily("Arial")
-            font.setPointSize(16)
-            font.setBold(True)
-            font.setWeight(75)
-            prescriptionMedicationName.setFont(font)
-            prescriptionMedicationName.setText(prescriptionDetails.getMedicationName())
+        self.completePrescriptionButton = QPushButton(self.centralwidget)
+        self.completePrescriptionButton.setGeometry(QRect(1150, 700, 200, 50))
+        self.completePrescriptionButton.setText("Complete Prescription")
+        self.completePrescriptionButton.clicked.connect(self.completePrescription)
 
-            prescriptionDosage = QLabel()
-            prescriptionDosage.setFixedSize(150,50)
-            prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
-            prescriptionDosage.setFont(font)
-            prescriptionDosage.setText(prescriptionDetails.getDosage())
-
-            prescriptionPillsPerDay = QLabel()
-            prescriptionPillsPerDay.setFixedSize(150,50)
-            prescriptionPillsPerDay.setFrameShape(QtWidgets.QFrame.Box)
-            prescriptionPillsPerDay.setFont(font)
-            prescriptionPillsPerDay.setText(str(prescriptionDetails.getPillsPerDay()))
-
-            prescriptionFood = QLabel()
-            prescriptionFood.setFixedSize(150,50)
-            prescriptionFood.setFrameShape(QtWidgets.QFrame.Box)
-            prescriptionFood.setFont(font)
-            prescriptionFood.setText(prescriptionDetails.getFood())
-
-            row = QHBoxLayout()
-            row.addWidget(prescriptionMedicationName)
-            row.addWidget(prescriptionDosage)
-            row.addWidget(prescriptionPillsPerDay)
-            row.addWidget(prescriptionFood)
-
-            rowContainer.layout().addLayout(row)
-
-        boxScrollArea.setWidget(rowContainer)
+        boxScrollArea.setWidget(self.rowContainer)
         boxScrollArea.setFixedSize(1000, 500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
@@ -176,4 +133,38 @@ class DoctorViewPrescription(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def backButtonFunction(self):
-        self.pageManager.goBack()
+        backConfirmationDialog = QMessageBox.question(self.centralwidget, "Back Confirmation",
+                                               "Do you want to discard this prescription",
+                                               QMessageBox.Yes | QMessageBox.No)
+        if backConfirmationDialog == QMessageBox.Yes:
+            self.pageManager.goBack()
+
+    def completePrescription(self):
+        pass
+
+    def addNewRow(self):
+        prescriptionMedicationName = QLineEdit()
+        prescriptionMedicationName.setFixedSize(300, 50)
+        prescriptionMedicationName.setPlaceholderText("Medication Name")
+
+        prescriptionDosage = QLineEdit()
+        prescriptionDosage.setFixedSize(150, 50)
+        prescriptionDosage.setPlaceholderText("Dosage")
+
+        prescriptionPillsPerDay = QLineEdit()
+        prescriptionPillsPerDay.setFixedSize(150, 50)
+        prescriptionPillsPerDay.setPlaceholderText("Pills Per Day")
+
+        prescriptionFood = QLineEdit()
+        prescriptionFood.setFixedSize(150, 50)
+        prescriptionFood.setPlaceholderText("Before or After eating")
+
+        row = QWidget()
+        rowLayout = QHBoxLayout(row)
+        row.setFixedSize(900,100)
+        row.layout().addWidget(prescriptionMedicationName)
+        row.layout().addWidget(prescriptionDosage)
+        row.layout().addWidget(prescriptionPillsPerDay)
+        row.layout().addWidget(prescriptionFood)
+
+        self.rowContainer.layout().addWidget(row)

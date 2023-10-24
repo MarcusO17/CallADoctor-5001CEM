@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtCore, QtWidgets
 
+from .DoctorGeneratePrescription import DoctorGeneratePrescription
 from .DoctorViewPrescription import DoctorViewPrescription
 from .PageManager import PageManager
 from .model import Patient
@@ -186,14 +187,15 @@ class DoctorAppointmentDetails(QMainWindow):
         # Cancel Appointment With Doctor
 
     def requestCancelAppointmentFunction(self):
-        requestCancelAppointmentDialogBox = QMessageBox.question(self.centralWidget, "Cancel Confirmation",
-                                                          "Are you sure you want to cancel Appointment?",
+        requestCancelAppointmentDialogBox = QMessageBox.question(self, "Request Cancel Confirmation",
+                                                          "Are you sure you want to request cancel Appointment?",
                                                           QMessageBox.Yes | QMessageBox.No)
         if requestCancelAppointmentDialogBox == QMessageBox.Yes:
             self.pageManager.goBack()
 
     def generatePrescription(self):
-        pass
+        self.doctorGeneratePrescription = DoctorGeneratePrescription(self.patient, self.appointment)
+        self.pageManager.add(self.doctorGeneratePrescription)
 
     def viewPrescription(self):
         self.doctorViewPrescription = DoctorViewPrescription(self.patient, self.appointment)
