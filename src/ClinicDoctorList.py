@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy
+    QScrollArea, QSizePolicy, QLineEdit
 from PyQt5 import QtWidgets
 
 from .ClinicAddDoctor import ClinicAddDoctor
@@ -61,7 +61,6 @@ class ClinicDoctorList(QMainWindow):
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
 
-        # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
@@ -69,6 +68,11 @@ class ClinicDoctorList(QMainWindow):
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
+
+        self.searchBar = QLineEdit(self.centralwidget)
+        self.searchBar.setGeometry(QRect(200, 130, 800, 40))
+        self.searchBar.setPlaceholderText("Search Bar")
+        self.searchBar.textChanged.connect(self.filterButtons)
 
         self.addDoctorButton = QPushButton(self.centralwidget)
         #self.addDoctorButton.setGeometry(QRect(1000, 120, 120, 50))
@@ -91,6 +95,7 @@ class ClinicDoctorList(QMainWindow):
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(50)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
@@ -161,3 +166,13 @@ class ClinicDoctorList(QMainWindow):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.buttonContainer.layout().addWidget(spacer)
+
+    def filterButtons(self):
+        searchedText = self.searchBar.text().strip().lower()
+
+        for i in range(self.buttonContainer.layout().count()):
+            item = self.buttonContainer.layout().itemAt(i)
+            if item and isinstance(item.widget(), QPushButton):
+                button = item.widget()
+                text = button.text().lower()
+                button.setVisible(searchedText in text)
