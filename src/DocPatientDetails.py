@@ -5,13 +5,14 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-from .model import Patient
+from .model import Patient, PrescriptionDetails
 from .model import Appointment
 from .model import Doctor
 from .model import Prescription
 from .model import PrescriptionDetails
 from .PageManager import PageManager
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
+from .model.Prescription import Prescription
 
 
 class DocPatientDetailsWindow(QMainWindow):
@@ -157,12 +158,11 @@ class DocPatientDetailsWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def viewPrescriptionFunction(self):
-        prescriptionDetails1 = PrescriptionDetails ("ABC med", 4, "After", "150ML")
-        prescriptionDetails2 = PrescriptionDetails ("BCA med", 3, "Before", "50ML")
-        prescriptionDetails3 = PrescriptionDetails ("CDS med", 2, "After", "10ML")
 
-
-        prescription1 = Prescription ("p101", "ap101", "13-04-2023")
+        prescriptionDetails1 = PrescriptionDetails("medicationName1", "1", "after", "10mg")
+        prescriptionDetails2 = PrescriptionDetails("medicationName2", "2", "before", "10mg")
+        prescriptionDetails3 = PrescriptionDetails("medicationName3", "3", "before", "10mg")
+        prescription1 = Prescription ("PR00001", "P0001", "2023-10-29")
         prescription1.setPrescriptionDetails(prescriptionDetails1)
         prescription1.setPrescriptionDetails(prescriptionDetails2)
         prescription1.setPrescriptionDetails(prescriptionDetails3)
