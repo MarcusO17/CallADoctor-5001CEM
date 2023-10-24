@@ -223,7 +223,7 @@ class ClinicDoctorDetails(QMainWindow):
                                                           QMessageBox.Yes | QMessageBox.No)
         if removeDoctorDialogBox == QMessageBox.Yes:
             print(self.doctor.getDoctorName(), self.doctor.getClinicID())
-            self.doctor.setClinicID("")
+            DoctorRepository.unassignDoctorClinic(self.doctor.getDoctorID())
             print(self.doctor.getDoctorName(), self.doctor.getClinicID())
             self.pageManager.getPreviousPage().generateDoctorButtons()
             self.pageManager.goBack()

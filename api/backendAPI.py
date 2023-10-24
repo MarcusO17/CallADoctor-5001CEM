@@ -378,6 +378,22 @@ def doctorClinicAssign(clinicID,doctorID):
         
         return 'Successful PATCH', 200  
 
+@app.route('/doctors/unassign/<string:doctorID>',methods=['PATCH'])
+def doctorClinicUnAssign(doctorID):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE doctors SET clinicID = %s, status = 'Unassigned' where doctorID = %s",
+                           (None,doctorID))
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200  
+
 
 @app.route('/appointments', methods=['GET','POST','DELETE'])
 def appointments():

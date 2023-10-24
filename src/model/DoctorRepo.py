@@ -128,3 +128,12 @@ class DoctorRepository():
                   return assignStatus, True
             else:
                   return assignStatus, False
+
+      def unassignDoctorClinic(doctorID):
+            response = requests.patch(f'http://127.0.0.1:5000/doctors/unassign/{doctorID}')
+            assignStatus = response.text
+
+            if response.status_code == 200:
+                  return assignStatus, True
+            else:
+                  return assignStatus, False
