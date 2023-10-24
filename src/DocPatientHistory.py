@@ -81,9 +81,11 @@ class DocPatientHistoryWindow(QMainWindow):
         appointmentList = list()
 
 
-        appointment1 = Appointment("ap0001", "Doc101", "P1001", "Completed", "Starts 10am", "Ends 5pm", "4th Novemeber", "Fever")
-        appointment2 = Appointment("ap0002", "Doc102", "P1002", "In-Progress", "Starts 12am", "Starts 4pm", "30th Novemeber", "Cold")
-        appointment3 = Appointment("ap0003", "Doc103", "P1003", "Completed", "Starts 9am", "Starts 6pm", "21st Novemeber", "Pain")
+        appointment1 = Appointment("ap0001", "Doc101","clinicID", "P1001", "Completed", "Starts 10am", "Ends 5pm", "4th Novemeber", "Fever")
+        appointment2 = Appointment("ap0002", "Doc102", "clinicID","P1002", "In-Progress", "Starts 12am", "Starts 4pm", "30th Novemeber", "Cold")
+        appointment3 = Appointment("ap0003", "Doc103", "clinicID","P1003", "Completed", "Starts 9am", "Starts 6pm", "21st Novemeber", "Pain")
+
+
 
         appointmentList.append(appointment1)
         appointmentList.append(appointment2)

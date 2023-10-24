@@ -1,6 +1,6 @@
 import requests
 from .Prescription import Prescription
-from .PrescriptionDetails import PrescriptionDetails
+from .Prescription import PrescriptionDetails
 
 class PrescriptionRepository():
         

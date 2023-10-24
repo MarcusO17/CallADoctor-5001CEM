@@ -12,14 +12,13 @@ from .PageManager import PageManager
 
 class PatientPrescriptionDetailsWindow(QMainWindow):
 
-    def __init__(self, prescriptionDetailsTemp, patient):
+    def __init__(self, patient, prescription):
         super().__init__()
 
         #set the information here
-        self.prescriptionDetails = prescriptionDetailsTemp
+        self.prescription = prescription
         self.patient = patient
         self.pageManager = PageManager()
-        print(self.prescriptionDetails.getPrescriptionID(), self.prescriptionDetails.getAppointmentID(), self.prescriptionDetails.getPillsPerDay(), self.prescriptionDetails.getMedicationName, self.prescriptionDetails.getFood, self.prescriptionDetails.getDosage())
         self.setWindowTitle("Patient Prescription Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -50,7 +49,7 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText(self.prescriptionDetails.getMedicationName())
+        self.headerTitle.setText(f"{self.patient.getPatientName()} - Prescription Details")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -68,37 +67,48 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.patientPrescriptionDetailLabel = QLabel(self.centralwidget)
-        self.patientPrescriptionDetailLabel.setGeometry(QRect(180, 220, 400, 400))
-        self.patientPrescriptionDetailLabel.setFrameShape(QtWidgets.QFrame.Box)
-        font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
-        self.patientPrescriptionDetailLabel.setFont(font)
-        self.patientPrescriptionDetailLabel.setText(str(self.prescriptionDetails.getMedicationName()) + " " + str(self.prescriptionDetails.getPillsPerDay()) + " " + str(self.prescriptionDetails.getFood()) + " " + str(self.prescriptionDetails.getDosage()))
-        self.patientPrescriptionDetailLabel.setFrameShape(QtWidgets.QFrame.Box)
-        
-# Need to edit this code to recieve Doctor's details from doctor's Model
-        self.doctorDescriptionsLabel = QLabel(self.centralwidget)
-        self.doctorDescriptionsLabel.setGeometry(QRect(700, 220, 375, 200))
-        font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
-        self.doctorDescriptionsLabel.setFont(font)
-        self.doctorDescriptionsLabel.setText("Doctor's Details")
-        self.doctorDescriptionsLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
 
-        
+        xStart = 180
+        yStart = 220
+        for i in range(len(self.prescriptionDetailsList)):
+            self.prescriptionMedicationName = QLabel(self.centralwidget)
+            self.prescriptionMedicationName.setGeometry(QRect(180, yStart, 300, 50))
+            self.prescriptionMedicationName.setFrameShape(QtWidgets.QFrame.Box)
+            font = QFont()
+            font.setFamily("Arial")
+            font.setPointSize(16)
+            font.setBold(True)
+            font.setWeight(75)
+            self.prescriptionMedicationName.setFont(font)
+            self.prescriptionMedicationName.setText(self.prescriptionDetailsList[i].getMedicationName())
+
+            self.prescriptionDosage = QLabel(self.centralwidget)
+            self.prescriptionDosage.setGeometry(QRect(550, yStart, 150, 50))
+            self.prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
+            self.prescriptionDosage.setFont(font)
+            self.prescriptionDosage.setText(self.prescriptionDetailsList[i].getDosage())
+
+            self.prescriptionPillsPerDay = QLabel(self.centralwidget)
+            self.prescriptionPillsPerDay.setGeometry(QRect(750, yStart, 150, 50))
+            self.prescriptionPillsPerDay.setFrameShape(QtWidgets.QFrame.Box)
+            self.prescriptionPillsPerDay.setFont(font)
+            self.prescriptionPillsPerDay.setText(self.prescriptionDetailsList[i].getPillsPerDay())
+
+            self.prescriptionPillsPerDay = QLabel(self.centralwidget)
+            self.prescriptionPillsPerDay.setGeometry(QRect(950, yStart, 150, 50))
+            self.prescriptionPillsPerDay.setFrameShape(QtWidgets.QFrame.Box)
+            self.prescriptionPillsPerDay.setFont(font)
+            self.prescriptionPillsPerDay.setText(self.prescriptionDetailsList[i].getFood())
+
+            yStart = yStart + 100
+
         self.patientPrescriptionDetailsContainer = QLabel(self.centralwidget)
         self.patientPrescriptionDetailsContainer.setFixedSize(1000,500)
         self.patientPrescriptionDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
