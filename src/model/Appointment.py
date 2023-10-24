@@ -9,6 +9,7 @@ class Appointment:
         self.patientID = patientID
         self.appointmentStatus = appointmentStatus
         self.startTime = startTime
+
         try:
             self.endTime = str((datetime.strptime(endTime,"%H:%M:%S")+timedelta(hours=1)).time())
         except:
@@ -18,6 +19,7 @@ class Appointment:
             self.appointmentDate = datetime.strptime(appointmentDate,'%a, %d %b %Y %H:%M:%S %Z').date()
         except:
             self.appointmentDate = appointmentDate
+
 
         self.visitReason = visitReason
 
@@ -82,11 +84,15 @@ class Appointment:
             appointment = response.json()[0]
         except Exception as e:
             print(e)
-            return Appointment("","","","","","","","")
+            return Appointment("","","","","","","","","")
+        
+        if len(appointment ) == 0:
+            return Appointment("","","","","","","","","")
         
         return Appointment(
               appointment['appointmentID'],
               appointment['doctorID'],
+              appointment['clinicID'],
               appointment['patientID'],
               appointment['appointmentStatus'],
               appointment['startTime'],

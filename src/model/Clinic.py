@@ -25,7 +25,7 @@ class Clinic:
         return self.clinicContact
 
     def setClinicContact (self, clinicContact ):
-        self.cliniContact  = clinicContact 
+        self.clinicContact  = clinicContact 
 
     def getClinicAddress(self):
         return self.clinicAddress
@@ -46,6 +46,9 @@ class Clinic:
             clinic = response.json()[0]
         except Exception as e:
             print(e)
+            return Clinic("","","","","")
+        
+        if len(clinic) == 0:
             return Clinic("","","","","")
         
         return Clinic(

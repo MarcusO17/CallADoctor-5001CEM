@@ -27,7 +27,7 @@ class Patient:
         self.patientAddress = patientAddress
 
     def getPatientDOB(self):
-        return self.getPatientDOB
+        return self.patientDOB
 
     def setPatientDOB(self, patientDOB):
         self.patientDOB = patientDOB
@@ -51,6 +51,9 @@ class Patient:
             patient = response.json()[0]
         except Exception as e:
             print(e)
+            return Patient("","","","","","")
+        
+        if len(patient) == 0:
             return Patient("","","","","","")
         
         return Patient(
