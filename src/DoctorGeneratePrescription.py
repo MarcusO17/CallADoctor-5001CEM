@@ -1,10 +1,11 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QDateTime, QDate
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QLineEdit, QMessageBox
+    QScrollArea, QLineEdit, QMessageBox, QDialog, QDateEdit
 from PyQt5 import QtWidgets
+
 from .model import PrescriptionDetails
 from .model import Prescription
 from .PageManager import PageManager
@@ -78,41 +79,13 @@ class DoctorGeneratePrescription(QMainWindow):
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        medicationNameLabel = QLabel(self.centralwidget)
-        medicationNameLabel.setGeometry(QRect(190, 130, 300, 50))
-        medicationNameLabel.setFrameShape(QtWidgets.QFrame.Box)
-        font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(10)
-        font.setWeight(75)
-        medicationNameLabel.setFont(font)
-        medicationNameLabel.setText("Medication Name: ")
-
-        dosageLabel = QLabel(self.centralwidget)
-        dosageLabel.setGeometry(QRect(530, 130, 150, 50))
-        dosageLabel.setFrameShape(QtWidgets.QFrame.Box)
-        dosageLabel.setFont(font)
-        dosageLabel.setText("Dosage: ")
-
-        pillsPerDayLabel = QLabel(self.centralwidget)
-        pillsPerDayLabel.setGeometry(QRect(720, 130, 150, 50))
-        pillsPerDayLabel.setFrameShape(QtWidgets.QFrame.Box)
-        pillsPerDayLabel.setFont(font)
-        pillsPerDayLabel.setText("Pills Per Day: ")
-
-        foodLabel = QLabel(self.centralwidget)
-        foodLabel.setGeometry(QRect(900, 130, 200, 50))
-        foodLabel.setFrameShape(QtWidgets.QFrame.Box)
-        foodLabel.setFont(font)
-        foodLabel.setText("Before/After Eating: ")
-
         self.addNewRowButton = QPushButton(self.centralwidget)
-        self.addNewRowButton.setGeometry(QRect(1150, 200, 200, 50))
+        self.addNewRowButton.setGeometry(QRect(190, 130, 200, 50))
         self.addNewRowButton.setText("Add New Row")
         self.addNewRowButton.clicked.connect(self.addNewRow)
 
         self.completePrescriptionButton = QPushButton(self.centralwidget)
-        self.completePrescriptionButton.setGeometry(QRect(1150, 700, 200, 50))
+        self.completePrescriptionButton.setGeometry(QRect(900, 130, 200, 50))
         self.completePrescriptionButton.setText("Complete Prescription")
         self.completePrescriptionButton.clicked.connect(self.completePrescription)
 
@@ -139,7 +112,58 @@ class DoctorGeneratePrescription(QMainWindow):
             self.pageManager.goBack()
 
     def completePrescription(self):
-        pass
+        self.expiryDateDialog = QDialog(self)
+        self.expiryDateDialog.setFixedSize(400, 400)
+
+        self.expiryDateDialog.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)  # Remove close button
+        self.expiryDateDialog.setWindowFlag(Qt.FramelessWindowHint)
+        self.expiryDateDialog.setWindowTitle("Select An Expiry Date")
+
+        self.layout = QVBoxLayout()
+
+        self.expiryDateDateEdit = QDateEdit()
+        self.expiryDateDateEdit.setCalendarPopup(True)
+        self.expiryDateDateEdit.setDateTime(QDateTime.currentDateTime())
+        self.expiryDateDateEdit.setMinimumDate(QDate.currentDate())
+        self.layout.addWidget(self.expiryDateDateEdit)
+
+        confirmationButtonLayout = QHBoxLayout()
+
+        cancelButton = QPushButton()
+        cancelButton.setText("Cancel")
+        cancelButton.clicked.connect(lambda checked: self.expiryDateDialog.close())
+        confirmationButtonLayout.addWidget(cancelButton)
+
+        confirmationButton = QPushButton()
+        confirmationButton.setText("Confirm")
+        confirmationButton.clicked.connect(lambda checked: self.completeButtonConfirmationFunction(self.expiryDateDateEdit.date().toString("yyyy-MM-dd")))
+        confirmationButtonLayout.addWidget(confirmationButton)
+
+        self.layout.addLayout(confirmationButtonLayout)
+        self.expiryDateDialog.setLayout(self.layout)
+        self.expiryDateDialog.exec_()
+
+    def completeButtonConfirmationFunction(self, date):
+        # marcus you do your thing here
+
+        prescription = Prescription("PR0001", self.appointment.getAppointmentID(), date)
+        for i in range(self.rowContainer.layout().count()):
+            row = self.rowContainer.layout().itemAt(i).widget()
+
+            medicationName = row.layout().itemAt(0).widget().text()
+            dosage = row.layout().itemAt(1).widget().text()
+            pillsPerDay = row.layout().itemAt(2).widget().text()
+            food = row.layout().itemAt(3).widget().text()
+
+            prescriptionDetails = PrescriptionDetails(medicationName, int(pillsPerDay), food, dosage)
+            prescription.setPrescriptionDetails(prescriptionDetails)
+
+            print(f"{prescriptionDetails.getMedicationName()} \n {prescriptionDetails.getDosage()}")
+
+        print(prescription.getExpiryDate())
+
+        self.expiryDateDialog.close()
+        self.pageManager.goBack()
 
     def addNewRow(self):
 
