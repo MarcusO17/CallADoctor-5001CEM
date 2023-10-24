@@ -10,8 +10,8 @@ from .ClinicHomepage import ClinicHomepage
 from .PatientRegister import PatientRegisterWindow
 from .ClinicRegister import ClinicRegisterWindow
 from .DoctorRegister import DoctorRegisterWindow
-from .DocPatientDetails import DocPatientDetailsWindow
-from .DocMyAppointment import DocMyAppointmentWindow
+from .DoctorPatientDetails import DoctorPatientDetailsWindow
+from .DoctorMyAppointment import DoctorMyAppointmentWindow
 import os
 
 from .PageManager import PageManager

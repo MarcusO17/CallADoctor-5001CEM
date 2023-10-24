@@ -9,11 +9,11 @@ from .model import Clinic
 from .model import Doctor
 from .model import Appointment
 from .model import Patient
-from .DocPatientDetails import DocPatientDetailsWindow 
+from .DoctorPatientDetails import DoctorPatientDetailsWindow
 from .PageManager import PageManager
 
 
-class DocPatientHistoryWindow(QMainWindow):
+class DoctorPatientHistoryWindow(QMainWindow):
     def __init__(self, patient, doctor):
         super().__init__()
         self.patient = patient
@@ -120,7 +120,7 @@ class DocPatientHistoryWindow(QMainWindow):
 
     def appointmentButtonFunction(self, patient, appointment, doctor):
         # Need to update the  page where it goes here according to button click
-        self.patientHistoryAppointmentDetailsWindow = DocPatientDetailsWindow(patient,appointment,doctor)
+        self.patientHistoryAppointmentDetailsWindow = DoctorPatientDetailsWindow(patient,appointment,doctor)
         self.pageManager.add(self.patientHistoryAppointmentDetailsWindow)
         print(self.pageManager.size())
 
