@@ -2,6 +2,7 @@ from flask import Flask
 import multiprocessing
 from api import backendAPI 
 from src.main import main
+import time
 
 
 
@@ -16,6 +17,7 @@ if __name__ == "__main__":
     t2 = multiprocessing.Process(target=run_main)
     
     t1.start()
+    time.sleep(3)
     t2.start()
 
     t1.join()

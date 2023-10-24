@@ -11,6 +11,7 @@ from .ClinicDoctorDetails import ClinicDoctorDetails
 from .model import Clinic
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .model import Doctor
+from .model.DoctorRepo import DoctorRepository
 from .PageManager import PageManager
 
 
@@ -133,21 +134,7 @@ class ClinicDoctorList(QMainWindow):
         self.doctorList.clear()
 
         # Query and get the doctor list here
-        doctor1 = Doctor("D0001", "Doctor 1", self.clinic.getClinicName(), "AVAILABLE", "Junior", "0123456789",
-                         "030102091820", 2)
-        doctor2 = Doctor("D0002", "Doctor 2", self.clinic.getClinicName(), "AVAILABLE", "Senior", "0198765432",
-                         "090502873626", 5)
-        doctor3 = Doctor("D0003", "Doctor 3", self.clinic.getClinicName(), "AVAILABLE", "Junior", "0123456787",
-                         "030102091821", 2)
-        doctor4 = Doctor("D0004", "Doctor 4", self.clinic.getClinicName(), "AVAILABLE", "Junior", "0123456782",
-                         "030102091829", 2)
-
-        self.doctorList.append(doctor1)
-        self.doctorList.append(doctor2)
-        self.doctorList.append(doctor3)
-        self.doctorList.append(doctor4)
-
-        print("doctor list size", len(self.doctorList))
+        self.doctorList = DoctorRepository.getDoctorListClinic(self.clinic.getClinicID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
