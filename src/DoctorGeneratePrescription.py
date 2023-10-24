@@ -27,7 +27,6 @@ class DoctorGeneratePrescription(QMainWindow):
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-
         # this is the header (logo, title, my back button
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -143,6 +142,10 @@ class DoctorGeneratePrescription(QMainWindow):
         pass
 
     def addNewRow(self):
+
+        row = QWidget()
+        rowLayout = QHBoxLayout(row)
+
         prescriptionMedicationName = QLineEdit()
         prescriptionMedicationName.setFixedSize(300, 50)
         prescriptionMedicationName.setPlaceholderText("Medication Name")
@@ -159,12 +162,29 @@ class DoctorGeneratePrescription(QMainWindow):
         prescriptionFood.setFixedSize(150, 50)
         prescriptionFood.setPlaceholderText("Before or After eating")
 
-        row = QWidget()
-        rowLayout = QHBoxLayout(row)
+        removeRowButton = QPushButton()
+        removeRowButton.setFixedSize(50,50)
+        filepath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "resources\\logo-placeholder-image.png")
+        removeRowIcon = QIcon(filepath)
+        removeRowButton.setIconSize(QSize(70, 70))
+        removeRowButton.setIcon(removeRowIcon)
+        removeRowButton.clicked.connect(lambda checked, row=row: self.removeRow(row))
+
         row.setFixedSize(900,100)
         row.layout().addWidget(prescriptionMedicationName)
         row.layout().addWidget(prescriptionDosage)
         row.layout().addWidget(prescriptionPillsPerDay)
         row.layout().addWidget(prescriptionFood)
+        row.layout().addWidget(removeRowButton)
 
         self.rowContainer.layout().addWidget(row)
+
+    def removeRow(self, row):
+        self.rowContainer.layout().removeWidget(row)
+
+        for i in range(row.layout().count()):
+            widget = row.layout().itemAt(0).widget()
+            row.layout().removeWidget(widget)
+            if widget is not None:
+                widget.deleteLater()
+
