@@ -151,10 +151,27 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)
         self.viewPrescriptionLabel.setPixmap(self.viewPrescriptionIcon)
 
+        self.completeAppointmentButton = QPushButton(self.centralwidget)
+        self.completeAppointmentButton.setGeometry(QRect(790, 445, 280, 100))
+        self.completeAppointmentButton.setFont(font)
+        self.completeAppointmentButton.setLayoutDirection(Qt.RightToLeft)
+        self.completeAppointmentButton.setText("Complete Appointment")
+        self.completeAppointmentButton.clicked.connect(self.completeAppointment)
+
+        self.completeAppointmentLabel = QLabel(self.centralwidget)
+        self.completeAppointmentLabel.setGeometry(QRect(810, 470, 50, 50))
+        self.completeAppointmentLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.completeAppointmentIcon = QPixmap(filepath)
+        self.completeAppointmentIcon = self.completeAppointmentIcon.scaled(50, 50)
+        self.completeAppointmentLabel.setPixmap(self.completeAppointmentIcon)
+
         self.cancelAppointmentLabel.hide()
         self.cancelAppointmentButton.hide()
         self.viewPrescriptionLabel.hide()
         self.viewPrescriptionButton.hide()
+        self.completeAppointmentButton.hide()
+        self.completeAppointmentLabel.hide()
 
         self.appointmentContainer = QLabel(self.centralwidget)
         self.appointmentContainer.setFixedSize(1000,500)
@@ -171,6 +188,8 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         self.cancelAppointmentLabel.raise_()
         self.viewPrescriptionLabel.raise_()
         self.viewPrescriptionButton.raise_()
+        self.completeAppointmentButton.raise_()
+        self.completeAppointmentLabel.raise_()
 
         self.centralwidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -185,6 +204,7 @@ class PatientAppointmentDetailsWindow(QMainWindow):
                                                           QMessageBox.Yes | QMessageBox.No)
         if cancelAppointmentDialogBox == QMessageBox.Yes:
             self.appointment.setAppointmentStatus("Cancelled")
+            self.pageManager.getPreviousPage().generateAppointmentButtons()
             self.pageManager.goBack()
 
     def backButtonFunction(self):
@@ -204,6 +224,15 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         self.patientPrescriptionDetails = PatientPrescriptionDetailsWindow(self.patient, prescription)
         self.pageManager.add(self.patientPrescriptionDetails)
 
+    def completeAppointment(self):
+        cancelAppointmentDialogBox = QMessageBox.question(self, "Cancel Confirmation",
+                                                          "Are you sure you want to cancel Appointment?",
+                                                          QMessageBox.Yes | QMessageBox.No)
+        if cancelAppointmentDialogBox == QMessageBox.Yes:
+            self.appointment.setAppointmentStatus("Complete")
+            self.pageManager.getPreviousPage().generateAppointmentButtons()
+            self.pageManager.goBack()
+
     def setMode(self, mode):
         if mode == "Completed":
             self.viewPrescriptionButton.show()
@@ -211,3 +240,5 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         elif mode == "Approved":
             self.cancelAppointmentButton.show()
             self.cancelAppointmentLabel.show()
+            self.completeAppointmentLabel.show()
+            self.completeAppointmentButton.show()
