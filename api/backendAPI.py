@@ -508,6 +508,30 @@ def appointmentID(id):
         return 'Successful DELETE', 200  
 
 
+@app.route('/appointments/past/<string:patientID>',methods=['GET'])
+def appointmentPatientID(patientID):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM appointments where patientID = %s", patientID)
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200
+
+
 @app.route('/appointments/<string:aid>/assign/<string:did>',methods=['PATCH'])
 def appointmentDoctorAssign(aid,did):
 
