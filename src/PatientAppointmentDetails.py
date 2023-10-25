@@ -18,9 +18,9 @@ class PatientAppointmentDetailsWindow(QMainWindow):
     def __init__(self, appointment, patient):
         super().__init__()
         self.pageManager = PageManager()
-         #set the information here
         self.appointment = appointment
         self.patient = patient
+        # query the information here
         self.doctor = Doctor("D0001", "Doctor1", "C0001", "Status", "DoctorType", "Doctor Contact", "IC number", 3)
         self.clinic = Clinic("C0001", "clinicName","clinicContact" ,"clinicAddress","Approved")
         self.setWindowTitle("Patient Appointment Details")
@@ -212,6 +212,8 @@ class PatientAppointmentDetailsWindow(QMainWindow):
 
     def viewPrescription(self):
         prescription = Prescription("PR001", self.appointment.getAppointmentID(), "2023-12-30")
+
+        #query prescription information here
 
         prescriptionDetails1 = PrescriptionDetails("medicationName1", 4, "After", "10mg")
         prescriptionDetails2 = PrescriptionDetails("medicationName2", 4, "After", "10mg")
