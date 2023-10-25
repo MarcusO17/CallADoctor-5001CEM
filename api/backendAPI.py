@@ -393,6 +393,30 @@ def doctorClinicUnAssign(doctorID):
         conn.commit()
         
         return 'Successful PATCH', 200  
+    
+@app.route('/doctors/pastpatients',methods=['PATCH'])
+def doctorPastPatients(doctorID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM patients")
+    
+        patients = [
+            dict(
+                patientID = row['patientID'],
+                patientName = row['patientName'],
+                address = row['address'],
+                dateOfBirth = row['dateOfBirth'],
+                patientICNumber = row['patientICNumber'],
+                bloodType = row['bloodType'],
+                race = row['race'],  
+            )
+            for row in cursor.fetchall()
+        ]
+        if patients is not None:
+            return jsonify(patients),200
+        
 
 
 @app.route('/appointments', methods=['GET','POST','DELETE'])
@@ -448,6 +472,7 @@ def appointments():
         except pymysql.MySQLError as e:
             return 'Error : ',e
         return 'Successful DELETE', 200
+    
 
 @app.route('/appointments/<string:id>',methods=['GET','DELETE'])
 def appointmentID(id):
@@ -576,6 +601,30 @@ def appointmentsWeekID(doctorID):
     if request.method == 'GET':
         cursor.execute("""SELECT * FROM appointments where doctorID = %s AND
                        appointmentDate BETWEEN %s AND %s """,(doctorID,dateToday,dateEnd))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200\
+            
+@app.route('/appointments/doctor/<string:doctorID>',methods=['GET'])
+def appointmentsByDoctor(doctorID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM appointments where doctorID = %s ",doctorID)
         appointment = [
             dict(
                 appointmentID = row['appointmentID'],
