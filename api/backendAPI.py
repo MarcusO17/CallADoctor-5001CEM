@@ -758,6 +758,24 @@ def prescriptionID(id):
     
         conn.commit()
         return 'Successful DELETE', 200
+    
+@app.route('/prescriptions/appointments/<string:id>',methods=['GET','DELETE'])
+def prescriptionAppointmentID(id):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM prescriptions where appointmentID = %s",id)
+        prescription = [
+            dict(
+                prescriptionID = row['prescriptionID'],
+                appointmentID  = row['appointmentID'],
+                expiryDate = row['expiryDate']
+            )
+            for row in cursor.fetchall()
+        ]
+        if prescription is not None:
+            return jsonify(prescription),200
 
     
 @app.route('/prescriptionDetails/<string:id>',methods=['GET','DELETE'])
