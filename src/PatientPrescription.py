@@ -87,7 +87,7 @@ class PatientPrescriptionWindow(QMainWindow):
 
         for count, prescription in enumerate(prescriptionList):
             self.prescriptionButton = QPushButton()
-            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getMedicationName())
+            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getExpiryDate())
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setFixedSize(QSize(950,150))
             self.prescriptionButton.clicked.connect(lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
