@@ -6,24 +6,23 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton,QMessageBox, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtCore, QtWidgets
-from .model import Appointment
+
+from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
+from .model import Appointment, Prescription, PrescriptionDetails
 from .model import Clinic
 from .model import Doctor
 from .PageManager import PageManager
 
-
 class PatientAppointmentDetailsWindow(QMainWindow):
 
-    def __init__(self, appointmentTemp, doctorTemp, clinicTemp):
+    def __init__(self, appointment, patient):
         super().__init__()
         self.pageManager = PageManager()
          #set the information here
-        self.appointment = appointmentTemp
-        self.doctor = doctorTemp
-        self.clinic = clinicTemp
-        print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicContact(), self.clinic.getClinicAddress())
-        print(self.doctor.getDoctorName(), self.doctor.getStatus())
-        print(self.appointment.getAppointmentID(),self.appointment.getPatientID(), self.appointment.getDoctorID(), self.appointment.getAppointmentStatus(), self.appointment.getStartTime, self.appointment.getEndTime, self.appointment.getAppointmentDate(), self.appointment.getVisitReason())
+        self.appointment = appointment
+        self.patient = patient
+        self.doctor = Doctor("D0001", "Doctor1", "C0001", "Status", "DoctorType", "Doctor Contact", "IC number", 3)
+        self.clinic = Clinic("C0001", "clinicName","clinicContact" ,"clinicAddress","Approved")
         self.setWindowTitle("Patient Appointment Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -77,17 +76,17 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.patientAppointmentPurposeLabel = QLabel(self.centralwidget)
-        self.patientAppointmentPurposeLabel.setGeometry(QRect(180, 220, 400, 200))
-        self.patientAppointmentPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.visitPurposeLabel = QLabel(self.centralwidget)
+        self.visitPurposeLabel.setGeometry(QRect(180, 220, 400, 200))
+        self.visitPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
         font.setBold(True)
         font.setWeight(75)
-        self.patientAppointmentPurposeLabel.setFont(font)
-        self.patientAppointmentPurposeLabel.setText(str(self.appointment.getVisitReason()) + " " + str(self.appointment.getStartTime()) + " " + str(self.appointment.getEndTime() + " " + str(self.appointment.getAppointmentDate())))
-        self.patientAppointmentPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.visitPurposeLabel.setFont(font)
+        self.visitPurposeLabel.setText(str(self.appointment.getVisitReason()) + " " + str(self.appointment.getStartTime()) + " " + str(self.appointment.getEndTime() + " " + str(self.appointment.getAppointmentDate())))
+        self.visitPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
         
 
         self.doctorDetailsLabel = QLabel(self.centralwidget)
@@ -98,7 +97,11 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.doctorDetailsLabel.setFont(font)
-        self.doctorDetailsLabel.setText(str(self.doctor.getDoctorName()) + " " + str(self.doctor.getStatus()) )
+        self.doctorDetailsLabel.setText(f"Doctor Name: {self.doctor.getDoctorName()} \n"
+                                        f"Doctor ID: {self.doctor.getDoctorID()} \n"
+                                        f"Doctor Type: {self.doctor.getDoctorType()} \n"
+                                        f"Years Of Experience: {str(self.doctor.getYearsOfExperience())} \n"
+                                        f"Doctor Contact: {self.doctor.getDoctorContact()} \n")
         self.doctorDetailsLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.clinicDetailsLabel = QLabel(self.centralwidget)
@@ -109,12 +112,14 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.clinicDetailsLabel.setFont(font)
-        self.clinicDetailsLabel.setText(str(self.clinic.getClinicName()) + " " + str(self.clinic.getClinicContact()) + " " + str(self.clinic.getClinicAddress()))
+        self.clinicDetailsLabel.setText(f"Clinic Name: {self.clinic.getClinicName()} \n"
+                                        f"Clinic ID: {self.clinic.getClinicID()} \n"
+                                        f"Clinic Contact: {self.clinic.getClinicContact()} \n"
+                                        f"Clinic Address: {self.clinic.getClinicAddress()}")
         self.clinicDetailsLabel.setFrameShape(QtWidgets.QFrame.Box)
 
-
         self.cancelAppointmentButton = QPushButton(self.centralwidget)
-        self.cancelAppointmentButton.setGeometry(QRect(890, 545, 180, 100))
+        self.cancelAppointmentButton.setGeometry(QRect(790, 545, 280, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
@@ -124,24 +129,48 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         self.cancelAppointmentButton.clicked.connect(self.cancelAppointmentFunction)
 
         self.cancelAppointmentLabel = QLabel(self.centralwidget)
-        self.cancelAppointmentLabel.setGeometry(QRect(910, 570, 50, 50))
+        self.cancelAppointmentLabel.setGeometry(QRect(810, 570, 50, 50))
         self.cancelAppointmentLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.cancelAppointmentIcon = QPixmap(filepath)
         self.cancelAppointmentIcon = self.cancelAppointmentIcon.scaled(50, 50)
         self.cancelAppointmentLabel.setPixmap(self.cancelAppointmentIcon)
 
+        self.viewPrescriptionButton = QPushButton(self.centralwidget)
+        self.viewPrescriptionButton.setGeometry(QRect(790, 545, 280, 100))
+        self.viewPrescriptionButton.setFont(font)
+        self.viewPrescriptionButton.setLayoutDirection(Qt.RightToLeft)
+        self.viewPrescriptionButton.setText("View Prescription")
+        self.viewPrescriptionButton.clicked.connect(self.viewPrescription)
 
-        self.patientDetailsContainer = QLabel(self.centralwidget)
-        self.patientDetailsContainer.setFixedSize(1000,500)
-        self.patientDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
+        self.viewPrescriptionLabel = QLabel(self.centralwidget)
+        self.viewPrescriptionLabel.setGeometry(QRect(810, 570, 50, 50))
+        self.viewPrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.viewPrescriptionIcon = QPixmap(filepath)
+        self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)
+        self.viewPrescriptionLabel.setPixmap(self.viewPrescriptionIcon)
+
+        self.cancelAppointmentLabel.hide()
+        self.cancelAppointmentButton.hide()
+        self.viewPrescriptionLabel.hide()
+        self.viewPrescriptionButton.hide()
+
+        self.appointmentContainer = QLabel(self.centralwidget)
+        self.appointmentContainer.setFixedSize(1000,500)
+        self.appointmentContainer.setFrameShape(QtWidgets.QFrame.Box)
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
-        mainLayout.addWidget(self.patientDetailsContainer)
+        mainLayout.addWidget(self.appointmentContainer)
         mainLayout.setAlignment(Qt.AlignHCenter)
+
+        self.cancelAppointmentButton.raise_()
+        self.cancelAppointmentLabel.raise_()
+        self.viewPrescriptionLabel.raise_()
+        self.viewPrescriptionButton.raise_()
 
         self.centralwidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -151,7 +180,7 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         # Cancel Appointment With Doctor
     
     def cancelAppointmentFunction(self):
-        cancelAppointmentDialogBox = QMessageBox.question(self.centralWidget, "Cancel Confirmation",
+        cancelAppointmentDialogBox = QMessageBox.question(self, "Cancel Confirmation",
                                                           "Are you sure you want to cancel Appointment?",
                                                           QMessageBox.Yes | QMessageBox.No)
         if cancelAppointmentDialogBox == QMessageBox.Yes:
@@ -160,3 +189,25 @@ class PatientAppointmentDetailsWindow(QMainWindow):
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def viewPrescription(self):
+        prescription = Prescription("PR001", self.appointment.getAppointmentID(), "2023-12-30")
+
+        prescriptionDetails1 = PrescriptionDetails("medicationName1", 4, "After", "10mg")
+        prescriptionDetails2 = PrescriptionDetails("medicationName2", 4, "After", "10mg")
+        prescriptionDetails3 = PrescriptionDetails("medicationName3", 4, "After", "10mg")
+
+        prescription.setPrescriptionDetails(prescriptionDetails1)
+        prescription.setPrescriptionDetails(prescriptionDetails2)
+        prescription.setPrescriptionDetails(prescriptionDetails3)
+
+        self.patientPrescriptionDetails = PatientPrescriptionDetailsWindow(self.patient, prescription)
+        self.pageManager.add(self.patientPrescriptionDetails)
+
+    def setMode(self, mode):
+        if mode == "Completed":
+            self.viewPrescriptionButton.show()
+            self.viewPrescriptionLabel.show()
+        elif mode == "Approved":
+            self.cancelAppointmentButton.show()
+            self.cancelAppointmentLabel.show()

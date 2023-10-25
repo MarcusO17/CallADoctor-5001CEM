@@ -13,9 +13,10 @@ from .PageManager import PageManager
 
 
 class PatientMyAppointmentWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, patient):
         super().__init__()
-        self.setWindowTitle("My Appointment (Patient)")
+        self.setWindowTitle("My Appointment")
+        self.patient = patient
         self.pageManager = PageManager()
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -46,7 +47,7 @@ class PatientMyAppointmentWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Welcome! [name]")
+        self.headerTitle.setText("My Appointment")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -71,15 +72,17 @@ class PatientMyAppointmentWindow(QMainWindow):
         self.patientBackButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QWidget()
+        buttonLayout = QVBoxLayout(buttonContainer)
         buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         appointmentList = list()
 
 
         appointment1 = Appointment("ap0001", "Doc101","clinic1", "P1001", "Completed", "Starts 10am", "Ends 5pm", "4th Novemeber", "Fever")
-        appointment2 = Appointment("ap0002", "Doc102","clinic1", "P1002", "In-Progress", "Starts 12am", "Starts 4pm", "30th Novemeber", "Cold")
+        appointment2 = Appointment("ap0002", "Doc102","clinic1", "P1002", "Approved", "Starts 12am", "Starts 4pm", "30th Novemeber", "Cold")
         appointment3 = Appointment("ap0003", "Doc103","clinic1", "P1003", "Completed", "Starts 9am", "Starts 6pm", "21st Novemeber", "Pain")
 
         appointmentList.append(appointment1)
@@ -97,14 +100,15 @@ class PatientMyAppointmentWindow(QMainWindow):
             self.patientAppointmentButton = QPushButton()
             self.patientAppointmentButton.setText(appointment.getPatientID() + " - " + appointment.getDoctorID())
             self.patientAppointmentButton.setFont(buttonFont)
-            self.patientAppointmentButton.setFixedSize(QSize(950,150))
-            self.patientAppointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment))
-            buttonContainer.addWidget(self.patientAppointmentButton)
+            self.patientAppointmentButton.setFixedSize(QSize(900,150))
+            self.patientAppointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.patient))
+            buttonContainer.layout().addWidget(self.patientAppointmentButton)
 
-        boxScrollArea.setLayout(buttonContainer)
+        boxScrollArea.setWidget(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
@@ -116,19 +120,13 @@ class PatientMyAppointmentWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def appointmentButtonFunction(self, appointment):
+    def appointmentButtonFunction(self, appointment, patient):
         # Need to update the  page where it goes here according to button click
-        self.patientAppointmentDetailsWindow = PatientAppointmentDetailsWindow(appointment)
+        self.patientAppointmentDetailsWindow = PatientAppointmentDetailsWindow(appointment, patient)
+        self.patientAppointmentDetailsWindow.setMode(appointment.getAppointmentStatus())
         self.pageManager.add(self.patientAppointmentDetailsWindow)
         print(self.pageManager.size())
 
     def backButtonFunction(self):
         self.pageManager.goBack()
 
-# def runthiswindow():
-#     app = QApplication(sys.argv)
-#     patientMyAppointmentWindow = PatientMyAppointmentWindow()
-#     patientMyAppointmentWindow.show()
-#     sys.exit(app.exec_())
-
-# runthiswindow()

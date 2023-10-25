@@ -118,7 +118,7 @@ class PatientHomepage(QMainWindow):
         font.setWeight(75)
         self.homepageTitle.setFont(font)
         self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.homepageTitle.setText("Welcome! [name]")
+        self.homepageTitle.setText(f"Welcome {self.patient.getPatientName()}!")
         self.homepageTitle.setAlignment(Qt.AlignCenter)
 
         self.myAccountButton = QPushButton(self.centralwidget)
