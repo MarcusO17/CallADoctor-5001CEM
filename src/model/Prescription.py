@@ -23,10 +23,10 @@ class Prescription:
     def setAppointmentID(self, appointmentID):
         self.appointmentID = appointmentID
 
-    def getAppointmentID(self):
+    def getExpiryDate(self):
         return self.expiryDate
 
-    def setAppointmentID(self, expiryDate):
+    def setExpiryDate(self, expiryDate):
         self.expiryDate = expiryDate
     
 

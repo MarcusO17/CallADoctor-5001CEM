@@ -82,7 +82,7 @@ class ClinicDoctorList(QMainWindow):
         self.addDoctorButton.clicked.connect(self.addDoctorFunction)
 
         self.buttonContainer = QWidget()
-        button_layout = QVBoxLayout(self.buttonContainer)
+        buttonLayout = QVBoxLayout(self.buttonContainer)
         self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
