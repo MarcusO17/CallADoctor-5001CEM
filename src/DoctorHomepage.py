@@ -16,7 +16,7 @@ class DoctorHomepage(QMainWindow):
     def __init__(self, sessionID):
         super().__init__()
         self.pageManager = PageManager()
-        self.doctor = Doctor("D0001", "Doctor 1", "c0001", "AVAILABLE", "Junior", "0123456789", "030102091820", 2)
+        self.doctor = Doctor.getDoctorfromID(sessionID)
         # not implemented yet
         #self.doctor = Doctor.getDoctorfromID(sessionID)
         self.setWindowTitle("Doctor Homepage")
