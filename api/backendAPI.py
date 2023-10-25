@@ -394,13 +394,14 @@ def doctorClinicUnAssign(doctorID):
         
         return 'Successful PATCH', 200  
     
-@app.route('/doctors/pastpatients',methods=['PATCH'])
+@app.route('/doctors/pastpatients/<string:doctorID>',methods=['GET'])
 def doctorPastPatients(doctorID):
     conn = dbConnect()  
     cursor = conn.cursor()
     if request.method == 'GET':
         #Add Error Handling
-        cursor.execute("SELECT * FROM patients")
+        cursor.execute("""SELECT * FROM patients where patientID in 
+                      (SELECT patientID FROM appointments where doctorID = %s)""",doctorID)
     
         patients = [
             dict(
