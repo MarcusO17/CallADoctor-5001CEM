@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 from .model import PrescriptionDetails
 from .model import Prescription
@@ -76,49 +76,88 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
 
         self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
 
-        xStart = 180
-        yStart = 220
-        for i in range(len(self.prescriptionDetailsList)):
-            self.prescriptionMedicationName = QLabel(self.centralwidget)
-            self.prescriptionMedicationName.setGeometry(QRect(180, yStart, 300, 50))
-            self.prescriptionMedicationName.setFrameShape(QtWidgets.QFrame.Box)
+        rowContainer = QWidget()
+        rowLayout = QVBoxLayout(rowContainer)
+        rowContainer.setContentsMargins(20, 20, 20, 20)
+        boxScrollArea = QScrollArea()
+        boxScrollArea.setWidgetResizable(True)
+        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+
+        medicationNameLabel = QLabel(self.centralwidget)
+        medicationNameLabel.setGeometry(QRect(190, 130, 300, 50))
+        medicationNameLabel.setFrameShape(QtWidgets.QFrame.Box)
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        font.setWeight(75)
+        medicationNameLabel.setFont(font)
+        medicationNameLabel.setText("Medication Name: ")
+
+        dosageLabel = QLabel(self.centralwidget)
+        dosageLabel.setGeometry(QRect(530, 130, 150, 50))
+        dosageLabel.setFrameShape(QtWidgets.QFrame.Box)
+        dosageLabel.setFont(font)
+        dosageLabel.setText("Dosage: ")
+
+        pillsPerDayLabel = QLabel(self.centralwidget)
+        pillsPerDayLabel.setGeometry(QRect(720, 130, 150, 50))
+        pillsPerDayLabel.setFrameShape(QtWidgets.QFrame.Box)
+        pillsPerDayLabel.setFont(font)
+        pillsPerDayLabel.setText("Pills Per Day: ")
+
+        foodLabel = QLabel(self.centralwidget)
+        foodLabel.setGeometry(QRect(900, 130, 200, 50))
+        foodLabel.setFrameShape(QtWidgets.QFrame.Box)
+        foodLabel.setFont(font)
+        foodLabel.setText("Before/After Eating: ")
+
+
+        for count, prescriptionDetails in enumerate(self.prescriptionDetailsList):
+            prescriptionMedicationName = QLabel()
+            prescriptionMedicationName.setFixedSize(300,50)
+            prescriptionMedicationName.setFrameShape(QtWidgets.QFrame.Box)
             font = QFont()
             font.setFamily("Arial")
             font.setPointSize(16)
             font.setBold(True)
             font.setWeight(75)
-            self.prescriptionMedicationName.setFont(font)
-            self.prescriptionMedicationName.setText(self.prescriptionDetailsList[i].getMedicationName())
+            prescriptionMedicationName.setFont(font)
+            prescriptionMedicationName.setText(prescriptionDetails.getMedicationName())
 
-            self.prescriptionDosage = QLabel(self.centralwidget)
-            self.prescriptionDosage.setGeometry(QRect(550, yStart, 150, 50))
-            self.prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
-            self.prescriptionDosage.setFont(font)
-            self.prescriptionDosage.setText(self.prescriptionDetailsList[i].getDosage())
+            prescriptionDosage = QLabel()
+            prescriptionDosage.setFixedSize(150,50)
+            prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
+            prescriptionDosage.setFont(font)
+            prescriptionDosage.setText(prescriptionDetails.getDosage())
 
-            self.prescriptionPillsPerDay = QLabel(self.centralwidget)
-            self.prescriptionPillsPerDay.setGeometry(QRect(750, yStart, 150, 50))
-            self.prescriptionPillsPerDay.setFrameShape(QtWidgets.QFrame.Box)
-            self.prescriptionPillsPerDay.setFont(font)
-            self.prescriptionPillsPerDay.setText(self.prescriptionDetailsList[i].getPillsPerDay())
+            prescriptionPillsPerDay = QLabel()
+            prescriptionPillsPerDay.setFixedSize(150,50)
+            prescriptionPillsPerDay.setFrameShape(QtWidgets.QFrame.Box)
+            prescriptionPillsPerDay.setFont(font)
+            prescriptionPillsPerDay.setText(str(prescriptionDetails.getPillsPerDay()))
 
-            self.prescriptionPillsPerDay = QLabel(self.centralwidget)
-            self.prescriptionPillsPerDay.setGeometry(QRect(950, yStart, 150, 50))
-            self.prescriptionPillsPerDay.setFrameShape(QtWidgets.QFrame.Box)
-            self.prescriptionPillsPerDay.setFont(font)
-            self.prescriptionPillsPerDay.setText(self.prescriptionDetailsList[i].getFood())
+            prescriptionFood = QLabel()
+            prescriptionFood.setFixedSize(150,50)
+            prescriptionFood.setFrameShape(QtWidgets.QFrame.Box)
+            prescriptionFood.setFont(font)
+            prescriptionFood.setText(prescriptionDetails.getFood())
 
-            yStart = yStart + 100
+            row = QHBoxLayout()
+            row.addWidget(prescriptionMedicationName)
+            row.addWidget(prescriptionDosage)
+            row.addWidget(prescriptionPillsPerDay)
+            row.addWidget(prescriptionFood)
 
-        self.patientPrescriptionDetailsContainer = QLabel(self.centralwidget)
-        self.patientPrescriptionDetailsContainer.setFixedSize(1000,500)
-        self.patientPrescriptionDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
+            rowContainer.layout().addLayout(row)
 
+        boxScrollArea.setWidget(rowContainer)
+        boxScrollArea.setFixedSize(1000, 500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
-        mainLayout.addWidget(self.patientPrescriptionDetailsContainer)
+        mainLayout.addWidget(boxScrollArea)
         mainLayout.setAlignment(Qt.AlignHCenter)
 
         self.centralwidget.setLayout(mainLayout)

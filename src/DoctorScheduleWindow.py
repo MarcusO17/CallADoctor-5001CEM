@@ -7,6 +7,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout
 from PyQt5 import QtWidgets
 
+from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Appointment
 from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager
@@ -106,6 +107,7 @@ class DoctorScheduleWindow(QMainWindow):
 
         appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
 
+
         self.setSchedule(appointmentList)
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -114,10 +116,9 @@ class DoctorScheduleWindow(QMainWindow):
 
     def gotoAppointment(self, appointment, doctor):
 
-        #self.clinicAppointmentDetails = ClinicAppointmentDetails(appointment, doctor)
-        #self.pageManager.add(self.clinicAppointmentDetails)
-        pass
-        #waiting for adnan
+        self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
+        self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
+        self.pageManager.add(self.doctorAppointmentDetails)
 
     def setSchedule(self, appointmentList):
         
