@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 from .model import PrescriptionDetails
 from .model import Prescription
+from .model import PrescriptionRepo
 from .PageManager import PageManager
 
 
@@ -20,16 +21,8 @@ class DoctorViewPrescription(QMainWindow):
         self.appointment = appointment
 
         # use appointmentID to get prescriptionID
-        prescriptionDetails1 = PrescriptionDetails("medicationname1",3,"After", "10mg")
-        prescriptionDetails2 = PrescriptionDetails("medicationname2", 3, "After", "10mg")
-        prescriptionDetails3 = PrescriptionDetails("medicationname3", 3, "After", "10mg")
-        prescriptionDetails4 = PrescriptionDetails("medicationname4", 3, "After", "10mg")
-
-        self.prescription = Prescription("PR0001", "appointmentID1", "2023-12-23")
-        self.prescription.setPrescriptionDetails(prescriptionDetails1)
-        self.prescription.setPrescriptionDetails(prescriptionDetails2)
-        self.prescription.setPrescriptionDetails(prescriptionDetails3)
-        self.prescription.setPrescriptionDetails(prescriptionDetails4)
+        self.prescription = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByAppointment(
+                            self.appointment.getAppointmentID())
 
         self.pageManager = PageManager()
         self.setWindowTitle("View Prescription")

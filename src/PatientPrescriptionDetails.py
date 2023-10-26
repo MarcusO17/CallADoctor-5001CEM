@@ -74,7 +74,7 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
+        self.prescriptionDetailsList = self.prescription[0].getPrescriptionDetails()[0]
 
         rowContainer = QWidget()
         rowLayout = QVBoxLayout(rowContainer)

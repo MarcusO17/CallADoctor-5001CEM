@@ -140,7 +140,7 @@ class TestClinic(unittest.TestCase):
         {
             "appointmentDate": "Tue, 24 Oct 2023 00:00:00 GMT",
             "appointmentID": "A003",
-            "appointmentStatus": "Denied",
+            "appointmentStatus": "Cancelled",
             "clinicID": "0",
             "doctorID": "",
             "patientID": "P00004",
@@ -150,7 +150,7 @@ class TestClinic(unittest.TestCase):
         {
             "appointmentDate": "Tue, 24 Oct 2023 00:00:00 GMT",
             "appointmentID": "A004",
-            "appointmentStatus": "Denied",
+            "appointmentStatus": "Cancelled",
             "clinicID": "0",
             "doctorID": "",
             "patientID": "P00004",
@@ -160,7 +160,7 @@ class TestClinic(unittest.TestCase):
         {
             "appointmentDate": "Tue, 24 Oct 2023 00:00:00 GMT",
             "appointmentID": "A005",
-            "appointmentStatus": "Denied",
+            "appointmentStatus": "Cancelled",
             "clinicID": "0",
             "doctorID": "",
             "patientID": "P00004",

@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 
 from .model import PrescriptionDetails
-from .model import Prescription
+from .model import Prescription, PrescriptionRepo
 from .PageManager import PageManager
 
 
@@ -145,8 +145,7 @@ class DoctorGeneratePrescription(QMainWindow):
 
     def completeButtonConfirmationFunction(self, date):
         # marcus you do your thing here
-
-        prescription = Prescription("PR0001", self.appointment.getAppointmentID(), date)
+        prescription = Prescription(None,self.appointment.getAppointmentID(),None)
         for i in range(self.rowContainer.layout().count()):
             row = self.rowContainer.layout().itemAt(i).widget()
 
@@ -157,10 +156,14 @@ class DoctorGeneratePrescription(QMainWindow):
 
             prescriptionDetails = PrescriptionDetails(medicationName, int(pillsPerDay), food, dosage)
             prescription.setPrescriptionDetails(prescriptionDetails)
-
+         
             print(f"{prescriptionDetails.getMedicationName()} \n {prescriptionDetails.getDosage()}")
+        #print(prescription.getExpiryDate())
 
-        print(prescription.getExpiryDate())
+        prescription.setExpiryDate(date)
+
+        #POSTING
+        PrescriptionRepo.PrescriptionRepository.postPrescription(prescription)
 
         self.expiryDateDialog.close()
         self.pageManager.goBack()

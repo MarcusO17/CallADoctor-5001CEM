@@ -82,7 +82,7 @@ class ClinicManageSchedule(QMainWindow):
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
-        doctorList = DoctorRepository.getDoctorList(self.clinic.getClinicID())
+        doctorList = DoctorRepository.getDoctorListClinic(self.clinic.getClinicID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")

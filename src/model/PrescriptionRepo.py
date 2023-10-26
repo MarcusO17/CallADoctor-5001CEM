@@ -12,7 +12,7 @@ class PrescriptionRepository():
             prescriptionList = []
             prescriptionDetailList = []
             responsePrescription = requests.get(f'http://127.0.0.1:5000/prescriptions/appointments/{appointmentID}')
-            recordsListP = responsePrescription.json()[0]
+            recordsListP = responsePrescription.json()
 
           
             for records in recordsListP:
@@ -21,9 +21,9 @@ class PrescriptionRepository():
                   prescriptionID = records['prescriptionID']
                   tempPrescription.setPrescriptionID(records['prescriptionID'])
                   tempPrescription.setAppointmentID(records['appointmentID'])
-                  tempPrescription.setAppointmentID(records['expiryDate'])
+                  tempPrescription.setExpiryDate(records['expiryDate'])
 
-                  responsePrescriptionDetails = requests.get(f'http://127.0.0.1:5000/prescriptionsDetails/{prescriptionID}')
+                  responsePrescriptionDetails = requests.get(f'http://127.0.0.1:5000/prescriptionDetails/{prescriptionID}')
                   recordsListPD = responsePrescriptionDetails.json()
 
                   for records in recordsListPD:
@@ -34,16 +34,46 @@ class PrescriptionRepository():
                         tempPrescriptionDetail.setFood(records['food'])
                         tempPrescriptionDetail.setDosage(records['dosage'])
 
-                        prescriptionDetailList.append(tempPrescriptionDetail)
+                        tempPrescription.setPrescriptionDetails(tempPrescriptionDetail)
 
-                  prescriptionDetailList.append(tempPrescriptionDetail)
-                  prescriptionDetailList.clear()
+                 
 
-                  tempPrescription.setPrescriptionDetails(prescriptionDetailList)
+              
                   prescriptionList.append(tempPrescription)
+            
                         
-            return prescriptionList      
+            return prescriptionList     
       
+
+      def postPrescription(prescription):
+            prID = requests.get('http://127.0.0.1:5000/prescriptions/idgen').text
+
+            prescriptionJSON = {
+                  "prescriptionID" : prID,
+                  "appointmentID": prescription.getAppointmentID(),
+                  "expiryDate" : prescription.getExpiryDate()
+            }
+
+            requests.post(f'http://127.0.0.1:5000/prescriptions',
+                                           json=prescriptionJSON)
+            
+            for items in prescription.getPrescriptionDetails():
+                  prescriptionDetailsJSON = {
+                        "prescriptionID" : prID,
+                        "appointmentID"  : prescription.getAppointmentID(),
+                        "medicationName" : items.getMedicationName(),
+                        "pillsPerDay"    : items.getPillsPerDay(),
+                        "food"           : items.getFood(),
+                        "dosage"         : items.getDosage(),
+                  }
+
+                  requests.post(f'http://127.0.0.1:5000/prescriptionDetails',
+                                           json=prescriptionDetailsJSON)
+                  
+                  
+           
+         
+
      
 
       

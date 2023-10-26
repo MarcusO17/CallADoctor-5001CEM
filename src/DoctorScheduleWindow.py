@@ -107,7 +107,6 @@ class DoctorScheduleWindow(QMainWindow):
 
         appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
 
-
         self.setSchedule(appointmentList)
 
         MainWindow.setCentralWidget(self.centralwidget)

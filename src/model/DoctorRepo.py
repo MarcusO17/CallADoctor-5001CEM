@@ -25,7 +25,7 @@ class DoctorRepository():
                   tempDoctor.setDoctorType(records['doctorType'])
                   tempDoctor.setDoctorContact(records['doctorContact'])
                   tempDoctor.setDoctorICNumber(records['doctorICNumber'])
-                  tempDoctor.setYearOfExperience(records['yearOfExperience'])
+                  tempDoctor.setYearsOfExperience(records['yearOfExperience'])
 
                   doctorList.append(tempDoctor)
                   
@@ -48,7 +48,7 @@ class DoctorRepository():
             tempDoctor.setDoctorType(doctor['doctorType'])
             tempDoctor.setDoctorContact(doctor['doctorContact'])
             tempDoctor.setDoctorICNumber(doctor['doctorICNumber'])
-            tempDoctor.setYearOfExperience(doctor['yearOfExperience'])
+            tempDoctor.setYearsOfExperience(doctor['yearOfExperience'])
 
             return tempDoctor   
       
@@ -72,7 +72,7 @@ class DoctorRepository():
                   tempDoctor.setDoctorType(records['doctorType'])
                   tempDoctor.setDoctorContact(records['doctorContact'])
                   tempDoctor.setDoctorICNumber(records['doctorICNumber'])
-                  tempDoctor.setYearOfExperience(records['yearOfExperience'])
+                  tempDoctor.setYearsOfExperience(records['yearOfExperience'])
 
                   doctorList.append(tempDoctor)
                   
