@@ -158,6 +158,7 @@ class AccountPage(QMainWindow):
         self.container.setFrameShape(QtWidgets.QFrame.Box)
 
         self.editButton.raise_()
+        self.addressLabel.raise_()
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
