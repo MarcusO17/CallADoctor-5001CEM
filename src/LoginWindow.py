@@ -72,13 +72,21 @@ class LoginWindow(QWidget):
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
 
+        self.goToRegistrationButton = QPushButton("Register Account")
+        self.goToRegistrationButton.setDefault(True)
+        self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
+
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
         loginFormLayout.addLayout(field2Layout)
         loginFormLayout.addWidget(self.loginButton)
+        loginFormLayout.addWidget(self.goToRegistrationButton)
         loginFormLayout.setContentsMargins(30,30,30,60)
 
         self.setLayout(loginFormLayout)
+
+    def selectRegisterPageFunction(self):
+        selectRegisterPage = QMessageBox.question(self)
 
     # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
 
