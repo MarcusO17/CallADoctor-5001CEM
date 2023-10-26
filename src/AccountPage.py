@@ -123,11 +123,11 @@ class AccountPage(QMainWindow):
         self.flexLabel4.hide()
 
         self.flexTitle5 = QLabel(self.centralwidget)
-        self.flexTitle5.setGeometry(QRect(180, 680, 400, 30))
+        self.flexTitle5.setGeometry(QRect(700, 190, 400, 30))
         self.flexTitle5.hide()
 
         self.flexLabel5 = QLabel(self.centralwidget)
-        self.flexLabel5.setGeometry(QRect(180, 710, 400, 50))
+        self.flexLabel5.setGeometry(QRect(700, 220, 400, 50))
         self.flexLabel5.setFrameShape(QtWidgets.QFrame.Box)
         self.flexLabel5.hide()
 
@@ -156,6 +156,8 @@ class AccountPage(QMainWindow):
         self.container = QLabel(self.centralwidget)
         self.container.setFixedSize(1000, 500)
         self.container.setFrameShape(QtWidgets.QFrame.Box)
+
+        self.editButton.raise_()
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
@@ -239,7 +241,7 @@ class AccountPage(QMainWindow):
             self.flexLabel3.show()
             self.flexTitle4.setText("Years of Experience")
             self.flexTitle4.show()
-            self.flexLabel4.setText(self.user.getYearsOfExperience())
+            self.flexLabel4.setText(str(self.user.getYearsOfExperience()))
             self.flexLabel4.show()
             self.flexTitle5.setText("Assigned Clinic")
             self.flexTitle5.show()
