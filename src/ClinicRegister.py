@@ -11,6 +11,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.pageManager = PageManager()
         self.ClinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
 
 
