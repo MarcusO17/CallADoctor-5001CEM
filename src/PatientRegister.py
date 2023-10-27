@@ -227,6 +227,12 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPasswordLineEdit.setFont(font)
                 self.patientPasswordLineEdit.setObjectName("patientPasswordLineEdit")
                 self.patientPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.patientPasswordLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
+
+                self.showPatientPasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.showPatientPasswordCheckbox.setGeometry(530, 200, 221, 31)
+                self.showPatientPasswordCheckbox.stateChanged.connect(self.togglePatientPasswordVisibility)
 
 
                 # Confirm Password Text - set as Label 11
@@ -251,6 +257,12 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientReEnterPassLineEdit.setFont(font)
                 self.patientReEnterPassLineEdit.setObjectName("patientReEnterPassLineEdit")
                 self.patientReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
+                self.patientReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.patientReEnterPassLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
+
+                self.showPatientRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.showPatientRePasswordCheckbox.setGeometry(530, 290, 221, 31)
+                self.showPatientRePasswordCheckbox.stateChanged.connect(self.togglePatientReEnterPasswordVisibility)
 
 
                 # Register PushButton for Registering Account - (Saves the Data)
@@ -353,3 +365,27 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                         self.pageManager.goBack()
 
 
+        def togglePatientPasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+
+        def togglePatientReEnterPasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.patientReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.patientReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+        
+        def validatePatientPasswordMatch(self):
+                password = self.patientPasswordLineEdit.text()
+                reenter_password = self.patientReEnterPassLineEdit.text()
+
+                if password == reenter_password:
+                        # Passwords match, Color of the field will be green
+                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                else:
+                        # Passwords do not match, indicate an error, Color of the field will be red
+                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
