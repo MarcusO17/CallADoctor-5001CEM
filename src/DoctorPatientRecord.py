@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .model import Patient,Doctor
@@ -11,35 +11,21 @@ from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .PageManager import PageManager
 
 
-class DoctorPatientRecordWindow(QMainWindow):
+class DoctorPatientRecordWindow(QWidget):
     def __init__(self, doctor):
         super().__init__()
         self.doctor = doctor
         self.setWindowTitle("Patient Record (Doctor)")
         self.pageManager = PageManager()
-        self.setFixedWidth(1280)
-        self.setFixedHeight(720)
-        self.setupUi(self)
+        self.setupUi()
 
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("DocPatientRecord")
+    def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
 
-        # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
-
-        self.headerTitle = QLabel(self.centralwidget)
+        self.headerTitle = QLabel()
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
@@ -51,25 +37,6 @@ class DoctorPatientRecordWindow(QMainWindow):
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
-
-        self.docMyAccountButton = QPushButton(self.centralwidget)
-        self.docMyAccountButton.setFixedSize(70,70)
-        self.docMyAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.docMyAccountIcon = QIcon(filepath)
-        self.docMyAccountButton.setIconSize(QSize(70, 70))
-        self.docMyAccountButton.setIcon(self.docMyAccountIcon)
-        self.docMyAccountButton.clicked.connect(self.goToAccountPage)
-
-        # Push Button 5 (Log Out)
-        self.docBackButton = QPushButton(self.centralwidget)
-        self.docBackButton.setFixedSize(70, 70)
-        self.docBackButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
-        self.docBackIcon = QIcon(filepath)
-        self.docBackButton.setIconSize(QSize(70, 70))
-        self.docBackButton.setIcon(self.docBackIcon)
-        self.docBackButton.clicked.connect(self.backButtonFunction)
 
         buttonContainer = QVBoxLayout()
         buttonContainer.setContentsMargins(20,20,20,20)
@@ -92,32 +59,25 @@ class DoctorPatientRecordWindow(QMainWindow):
             self.patientButton.clicked.connect(lambda checked, patient=patient: self.patientButtonFunction(patient, self.doctor))
             buttonContainer.addWidget(self.patientButton)
 
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        buttonContainer.layout().addWidget(spacer)
+
         boxScrollArea.setLayout(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
-        topSpacer.setFixedHeight(150)
+        topSpacer.setFixedHeight(80)
         topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.headerTitle)
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
         mainLayout.setAlignment(Qt.AlignHCenter)
 
-        self.centralwidget.setLayout(mainLayout)
-
-        MainWindow.setCentralWidget(self.centralwidget)
-
-        QMetaObject.connectSlotsByName(MainWindow)
+        self.setLayout(mainLayout)
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
         self.patientHistoryWindow = DoctorPatientHistoryWindow(patient, doctor)
         self.pageManager.add(self.patientHistoryWindow)
         print(self.pageManager.size())
-
-    def backButtonFunction(self):
-        self.pageManager.goBack()
-
-    def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Doctor", self.doctor)
-        self.pageManager.add(self.accountPage)

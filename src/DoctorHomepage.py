@@ -23,28 +23,27 @@ class DoctorHomepage(QMainWindow):
         self.setFixedHeight(720)
         self.setupUi(self)
 
+    def goToDashboard(self):
+        self.setButtonHighlight(self.dashboardButton)
+        self.doctorDashboard.setSchedule()
+        self.frameLayout.setCurrentIndex(0)
+
     def gotoSchedule(self):
         self.setButtonHighlight(self.scheduleButton)
         self.doctorScheduleWindow.setSchedule()
         self.frameLayout.setCurrentIndex(1)
 
-
     def gotoPatientRecord(self):
-        pass
-
+        self.setButtonHighlight(self.patientRecordButton)
+        self.frameLayout.setCurrentIndex(2)
 
     def gotoMyAppointment(self):
         self.setButtonHighlight(self.myAppointmentButton)
         self.frameLayout.setCurrentIndex(3)
 
     def goToAccountPage(self):
-        pass
-
-
-    def goToDashboard(self):
-        self.setButtonHighlight(self.dashboardButton)
-        self.doctorDashboard.setSchedule()
-        self.frameLayout.setCurrentIndex(0)
+        self.setButtonHighlight(self.myAccountButton)
+        self.frameLayout.setCurrentIndex(4)
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
