@@ -228,6 +228,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicPasswordLineEdit.setObjectName("clinicPasswordLineEdit")
                 self.clinicPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
                 self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.clinicPasswordLineEdit.textChanged.connect(self.validatePasswordMatch)
 
                 self.showPasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
                 self.showPasswordCheckbox.setGeometry(530, 200, 221, 31)
@@ -256,6 +257,8 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicReEnterPassLineEdit.setFont(font)
                 self.clinicReEnterPassLineEdit.setObjectName("clinicReEnterPassLineEdit")
                 self.clinicReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
+                self.clinicReEnterPassLineEdit.textChanged.connect(self.validatePasswordMatch)
+
 
                 
         # Register PushButton For Registering Account - Saves the Data
@@ -367,3 +370,15 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                         self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
                 else:
                         self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+        
+        def validatePasswordMatch(self):
+                password = self.clinicPasswordLineEdit.text()
+                reenter_password = self.clinicReEnterPassLineEdit.text()
+
+                if password == reenter_password:
+                        # Passwords match, Color of the field will be green
+                        self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                else:
+                        # Passwords do not match, indicate an error, Color of the field will be red
+                        self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
