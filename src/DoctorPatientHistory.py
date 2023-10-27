@@ -12,6 +12,7 @@ from .model import Clinic
 from .model import Doctor
 from .model import Appointment
 from .model import Patient
+from .model import AppointmentRepo
 from .PageManager import PageManager
 
 
@@ -82,16 +83,7 @@ class DoctorPatientHistoryWindow(QMainWindow):
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        appointmentList = list()
-
-        appointment1 = Appointment("ap0001", "Doc101","clinicID", "P1001", "Completed", "10:00", "11:00", "2023-10-29", "Fever")
-        appointment2 = Appointment("ap0002", "Doc102", "clinicID","P1002", "Approved", "12:00", "13:00", "2023-10-29", "Cold")
-        appointment3 = Appointment("ap0003", "Doc103", "clinicID","P1003", "Completed", "9:00", "10:00", "2023-10-29", "Pain")
-
-        appointmentList.append(appointment1)
-        appointmentList.append(appointment2)
-        appointmentList.append(appointment3)
-        print("appointment list size" , len(appointmentList))
+        appointmentList = AppointmentRepo.AppointmentRepository.getAppointmentsByPatients(self.patient.getPatientID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")

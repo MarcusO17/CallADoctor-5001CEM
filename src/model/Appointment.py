@@ -129,7 +129,7 @@ class Appointment:
         else:
             return assignedStatus, False
         
-    def denyAppointment(self):
+    def cancelAppointment(self):
         response = requests.patch(f'http://127.0.0.1:5000/appointments/{self.getAppointmentID()}/deny')
         denyStatus = response.text
 
@@ -139,3 +139,13 @@ class Appointment:
             return denyStatus , False
         
 
+           
+    def completeAppointment(self):
+        response = requests.patch(f'http://127.0.0.1:5000/appointments/{self.getAppointmentID()}/complete')
+        completeStatus = response.text
+
+        if response.status_code == 200:
+            return completeStatus , True
+        else:
+            return completeStatus , False
+        

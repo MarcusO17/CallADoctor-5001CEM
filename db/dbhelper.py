@@ -88,7 +88,7 @@ createPrescriptionDetailsTable = '''CREATE TABLE prescription_details (
                      prescriptionID VARCHAR(64) NOT NULL,
                      appointmentID VARCHAR(64) NOT NULL,
                      medicationName TEXT NOT NULL,
-                     pillsPerDay DATE NOT NULL,
+                     pillsPerDay INTEGER NOT NULL,
                      food TEXT,
                      dosage INT,
                      FOREIGN KEY (prescriptionID) REFERENCES prescriptions(prescriptionID),

@@ -9,7 +9,7 @@ from PyQt5 import QtCore, QtWidgets
 
 from .AccountPage import AccountPage
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
-from .model import Appointment, Prescription, PrescriptionDetails
+from .model import Appointment, Prescription, PrescriptionDetails, PrescriptionRepo
 from .model import Clinic
 from .model import Doctor
 from .PageManager import PageManager
@@ -206,6 +206,7 @@ class PatientAppointmentDetailsWindow(QMainWindow):
                                                           "Are you sure you want to cancel Appointment?",
                                                           QMessageBox.Yes | QMessageBox.No)
         if cancelAppointmentDialogBox == QMessageBox.Yes:
+            #SET CANCELLATIONS
             self.appointment.setAppointmentStatus("Cancelled")
             self.pageManager.getPreviousPage().generateAppointmentButtons()
             self.pageManager.goBack()
@@ -214,27 +215,17 @@ class PatientAppointmentDetailsWindow(QMainWindow):
         self.pageManager.goBack()
 
     def viewPrescription(self):
-        prescription = Prescription("PR001", self.appointment.getAppointmentID(), "2023-12-30")
-
-        #query prescription information here
-
-        prescriptionDetails1 = PrescriptionDetails("medicationName1", 4, "After", "10mg")
-        prescriptionDetails2 = PrescriptionDetails("medicationName2", 4, "After", "10mg")
-        prescriptionDetails3 = PrescriptionDetails("medicationName3", 4, "After", "10mg")
-
-        prescription.setPrescriptionDetails(prescriptionDetails1)
-        prescription.setPrescriptionDetails(prescriptionDetails2)
-        prescription.setPrescriptionDetails(prescriptionDetails3)
-
+        prescription = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByAppointment(self.appointment.getAppointmentID())   
         self.patientPrescriptionDetails = PatientPrescriptionDetailsWindow(self.patient, prescription)
         self.pageManager.add(self.patientPrescriptionDetails)
 
     def completeAppointment(self):
-        cancelAppointmentDialogBox = QMessageBox.question(self, "Cancel Confirmation",
-                                                          "Are you sure you want to cancel Appointment?",
+        cancelAppointmentDialogBox = QMessageBox.question(self, "Complete Confirmation",
+                                                          "Are you sure you want to complete Appointment?",
                                                           QMessageBox.Yes | QMessageBox.No)
         if cancelAppointmentDialogBox == QMessageBox.Yes:
             self.appointment.setAppointmentStatus("Complete")
+            self.appointment.completeAppointment()
             self.pageManager.getPreviousPage().generateAppointmentButtons()
             self.pageManager.goBack()
 

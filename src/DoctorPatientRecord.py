@@ -5,9 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
-
 from .AccountPage import AccountPage
-from .model import Patient
+from .model import Patient,Doctor
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .PageManager import PageManager
 
@@ -77,17 +76,7 @@ class DoctorPatientRecordWindow(QMainWindow):
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
 
-        patientList = list()
-
-
-        patient1 = Patient("p0001", "Patient 1", "Patient 1 description", "Patient 1 address", "ABC", "Indian")
-        patient2 = Patient("p0002", "Patient 2", "Patient 2 description", "Patient 2 address", "ABC", "Indian")
-        patient3 = Patient("p0003", "Patient 3", "Patient 3 description", "Patient 3 address", "ABC", "Indian")
-
-        patientList.append(patient1)
-        patientList.append(patient2)
-        patientList.append(patient3)
-        print("patient list size" , len(patientList))
+        patientList = Doctor.getDoctorPastPatients(self.doctor.getDoctorID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")

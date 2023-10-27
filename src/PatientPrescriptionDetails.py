@@ -77,7 +77,7 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
+        self.prescriptionDetailsList = self.prescription[0].getPrescriptionDetails()
 
         rowContainer = QWidget()
         rowLayout = QVBoxLayout(rowContainer)
@@ -131,7 +131,7 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
             prescriptionDosage.setFixedSize(150,50)
             prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
             prescriptionDosage.setFont(font)
-            prescriptionDosage.setText(prescriptionDetails.getDosage())
+            prescriptionDosage.setText(str(prescriptionDetails.getDosage()))
 
             prescriptionPillsPerDay = QLabel()
             prescriptionPillsPerDay.setFixedSize(150,50)
