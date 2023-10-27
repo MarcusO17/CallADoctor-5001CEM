@@ -227,6 +227,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicPasswordLineEdit.setFont(font)
                 self.clinicPasswordLineEdit.setObjectName("clinicPasswordLineEdit")
                 self.clinicPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+                self.showPasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.showPasswordCheckbox.setGeometry(530, 200, 221, 31)
+                self.showPasswordCheckbox.stateChanged.connect(self.togglePasswordVisibility)
 
 
         # Confirm Password for CLinic - Set as Label 11
@@ -355,3 +360,10 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                                                                   QMessageBox.Yes | QMessageBox.No)
                 if clinicGoBackLoginDialogBox == QMessageBox.Yes:
                         self.pageManager.goBack()
+
+        
+        def togglePasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
