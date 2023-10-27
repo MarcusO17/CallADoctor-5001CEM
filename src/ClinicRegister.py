@@ -60,14 +60,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Line Edit for Entering Clinic ID Number
-                self.ClinicIDLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicIDLineEdit.setGeometry(30, 170, 221, 31)
-                self.ClinicIDLineEdit.setText("example - P21002")
+                self.clinicIDLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicIDLineEdit.setGeometry(30, 170, 221, 31)
+                self.clinicIDLineEdit.setText("example - P21002")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicIDLineEdit.setFont(font)
-                self.ClinicIDLineEdit.setObjectName("ClinicIDLineEdit")
+                self.clinicIDLineEdit.setFont(font)
+                self.clinicIDLineEdit.setObjectName("clinicIDLineEdit")
 
 
         # Address of Clinic - Set as Label 4
@@ -82,14 +82,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Line Edit for Entering the Clinic Address
-                self.ClinicAddressLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicAddressLineEdit.setGeometry(30, 260, 221, 31)
-                self.ClinicAddressLineEdit.setText("example - Bayan Lepas, Penang")
+                self.clinicAddressLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicAddressLineEdit.setGeometry(30, 260, 221, 31)
+                self.clinicAddressLineEdit.setText("example - Bayan Lepas, Penang")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicAddressLineEdit.setFont(font)
-                self.ClinicAddressLineEdit.setObjectName("ClinicAddressLineEdit")
+                self.clinicAddressLineEdit.setFont(font)
+                self.clinicAddressLineEdit.setObjectName("clinicAddressLineEdit")
 
 
         # Name Of Clinic - Set As Label 5
@@ -104,14 +104,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Line Edit for Entering Clinic Name
-                self.ClinicNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicNameLineEdit.setGeometry(30, 350, 221, 31)
-                self.ClinicNameLineEdit.setText("example - ABCD Clinic")
+                self.clinicNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicNameLineEdit.setGeometry(30, 350, 221, 31)
+                self.clinicNameLineEdit.setText("example - ABCD Clinic")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicNameLineEdit.setFont(font)
-                self.ClinicNameLineEdit.setObjectName("ClinicNameLineEdit")
+                self.clinicNameLineEdit.setFont(font)
+                self.clinicNameLineEdit.setObjectName("clinicNameLineEdit")
 
 
         # Clinic Contact Number - Set as Label 6
@@ -126,14 +126,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Line Edit for Entering Clinic Contact Number 
-                self.ClinicContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicContactLineEdit.setGeometry(30, 440, 221, 31)
-                self.ClinicContactLineEdit.setText("example - +60xxxxxxxx")
+                self.clinicContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicContactLineEdit.setGeometry(30, 440, 221, 31)
+                self.clinicContactLineEdit.setText("example - +60xxxxxxxx")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicContactLineEdit.setFont(font)
-                self.ClinicContactLineEdit.setObjectName("ClinicContactLineEdit")
+                self.clinicContactLineEdit.setFont(font)
+                self.clinicContactLineEdit.setObjectName("clinicContactLineEdit")
 
 
         # Clinic Email - Set as Label 7
@@ -148,14 +148,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Line Edit for Entering Clinic Email
-                self.ClinicEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicEmailLineEdit.setGeometry(280, 170, 221, 31)
-                self.ClinicEmailLineEdit.setText("example - abcklinik@new.com")
+                self.clinicEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicEmailLineEdit.setGeometry(280, 170, 221, 31)
+                self.clinicEmailLineEdit.setText("example - abcklinik@new.com")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicEmailLineEdit.setFont(font)
-                self.ClinicEmailLineEdit.setObjectName("ClinicEmailLineEdit")
+                self.clinicEmailLineEdit.setFont(font)
+                self.clinicEmailLineEdit.setObjectName("clinicEmailLineEdit")
 
 
         # Clinic Post Code - Set as Label 8
@@ -170,14 +170,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Line Edit for Entering Clinic Postal Code
-                self.ClinicPostCodeLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicPostCodeLineEdit.setGeometry(280, 260, 221, 31)
-                self.ClinicPostCodeLineEdit.setText("example - 19000")
+                self.clinicPostCodeLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicPostCodeLineEdit.setGeometry(280, 260, 221, 31)
+                self.clinicPostCodeLineEdit.setText("example - 19000")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicPostCodeLineEdit.setFont(font)
-                self.ClinicPostCodeLineEdit.setObjectName("ClinicPostCodeLineEdit")
+                self.clinicPostCodeLineEdit.setFont(font)
+                self.clinicPostCodeLineEdit.setObjectName("clinicPostCodeLineEdit")
 
 
         # Verification Document - Set as Label 9
@@ -194,14 +194,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Actually for Now I set this Line Edit to show Attachnent of Document
         # But need to change the functionality of this, probably into a push button
         # which would allow to open file explorer to attach Document 
-                self.ClinicDocumentLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicDocumentLineEdit.setGeometry(280, 350, 221, 31)
-                self.ClinicDocumentLineEdit.setText("Attach Certification Document                    +")
+                self.clinicDocumentLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicDocumentLineEdit.setGeometry(280, 350, 221, 31)
+                self.clinicDocumentLineEdit.setText("Attach Certification Document                    +")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicDocumentLineEdit.setFont(font)
-                self.ClinicDocumentLineEdit.setObjectName("ClinicDocumentLineEdit")
+                self.clinicDocumentLineEdit.setFont(font)
+                self.clinicDocumentLineEdit.setObjectName("clinicDocumentLineEdit")
 
 
         # Clinic Password - Set as Label 10 
@@ -219,14 +219,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # (Validation needs constraints like passwords needs to have - 
         # Minimum 8 characters, upper case and lower case letters, numbers
         # and Special Characters)
-                self.ClinicPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicPasswordLineEdit.setGeometry(530, 170, 221, 31)
-                self.ClinicPasswordLineEdit.setText("example - SoMeThiNg@123")
+                self.clinicPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicPasswordLineEdit.setGeometry(530, 170, 221, 31)
+                self.clinicPasswordLineEdit.setText("example - SoMeThiNg@123")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicPasswordLineEdit.setFont(font)
-                self.ClinicPasswordLineEdit.setObjectName("ClinicPasswordLineEdit")
+                self.clinicPasswordLineEdit.setFont(font)
+                self.clinicPasswordLineEdit.setObjectName("clinicPasswordLineEdit")
 
 
         # Confirm Password for CLinic - Set as Label 11
@@ -243,20 +243,20 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Clinic to Enter Password again to confirm
         # need validation to check if previously written password and
         # re-entered password same or not, if not, error 404)
-                self.ClinicReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.ClinicReEnterPassLineEdit.setGeometry(530, 260, 221, 31)
-                self.ClinicReEnterPassLineEdit.setText("Re-enter Password")
+                self.clinicReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicReEnterPassLineEdit.setGeometry(530, 260, 221, 31)
+                self.clinicReEnterPassLineEdit.setText("Re-enter Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
-                self.ClinicReEnterPassLineEdit.setFont(font)
-                self.ClinicReEnterPassLineEdit.setObjectName("ClinicReEnterPassLineEdit")
+                self.clinicReEnterPassLineEdit.setFont(font)
+                self.clinicReEnterPassLineEdit.setObjectName("clinicReEnterPassLineEdit")
 
                 
         # Register PushButton For Registering Account - Saves the Data
-                self.ClinicRegisterPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.ClinicRegisterPushButton.setGeometry(530, 400, 221, 41)
-                self.ClinicRegisterPushButton.setText("Register")
+                self.clinicRegisterPushButton = QtWidgets.QPushButton(self.centralwidget)
+                self.clinicRegisterPushButton.setGeometry(530, 400, 221, 41)
+                self.clinicRegisterPushButton.setText("Register")
 
         # DONT MIND THIS - This is just me editing the STYLE SHEET for
         # the button to have color, and the text being White
@@ -297,17 +297,17 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
                 brush.setStyle(QtCore.Qt.SolidPattern)
                 palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-                self.ClinicRegisterPushButton.setPalette(palette)
+                self.clinicRegisterPushButton.setPalette(palette)
         # StyleSheet customization ends here ^^^^^^^^^^^^^
         
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(12)
-                self.ClinicRegisterPushButton.setFont(font)
-                self.ClinicRegisterPushButton.setAutoFillBackground(False)
-                self.ClinicRegisterPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
-                self.ClinicRegisterPushButton.setObjectName("ClinicRegisterPushButton")
-                self.ClinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
+                self.clinicRegisterPushButton.setFont(font)
+                self.clinicRegisterPushButton.setAutoFillBackground(False)
+                self.clinicRegisterPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
+                self.clinicRegisterPushButton.setObjectName("clinicRegisterPushButton")
+                self.clinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
 
                 
                 
@@ -316,9 +316,9 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # that it looks like a Link, so im sorry if the customization code 
         # Looks a mess, please bear with it :)
 
-                self.ClinicRegisterGoBackLogin = QtWidgets.QPushButton(self.centralwidget)
-                self.ClinicRegisterGoBackLogin.setGeometry(530, 450, 221, 41)
-                self.ClinicRegisterGoBackLogin.setText("Go Back To Login")
+                self.clinicRegisterGoBackLogin = QtWidgets.QPushButton(self.centralwidget)
+                self.clinicRegisterGoBackLogin.setGeometry(530, 450, 221, 41)
+                self.clinicRegisterGoBackLogin.setText("Go Back To Login")
 
         # Style Sheet Code for the transparent button start here vvvvvvvv
                 palette = QtGui.QPalette()
@@ -358,12 +358,12 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
                 brush.setStyle(QtCore.Qt.SolidPattern)
                 palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-                self.ClinicRegisterGoBackLogin.setPalette(palette)
+                self.clinicRegisterGoBackLogin.setPalette(palette)
         # Style Sheet code ends here ^^^^^^^^^^^^^^^
 
-                self.ClinicRegisterGoBackLogin.setAutoFillBackground(False)
-                self.ClinicRegisterGoBackLogin.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
-                self.ClinicRegisterGoBackLogin.setObjectName("ClinicGoBackLogin")
+                self.clinicRegisterGoBackLogin.setAutoFillBackground(False)
+                self.clinicRegisterGoBackLogin.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
+                self.clinicRegisterGoBackLogin.setObjectName("clinicGoBackLogin")
                 
                 
         # Icon For LOGO - Set as Label 12 (Need to Add Image)
@@ -386,13 +386,13 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def clinicSaveData(self):
         
                 data = {
-                "ClinicIDLineEdit": self.ClinicIDLineEdit.text(),
-                "ClinicAddressLineEdit": self.ClinicAddressLineEdit.text(),
-                "ClinicNameLineEdit": self.ClinicNameLineEdit.text(),
-                "ClinicContactLineEdit": self.ClinicContactLineEdit.text(),
-                "ClinicEmailLineEdit": self.ClinicEmailLineEdit.text(),
-                "ClinicPostCodeLineEdit": self.ClinicPostCodeLineEdit.text(),
-                "ClinicDocumentLineEdit": self.ClinicDocumentLineEdit.text(),
-                "ClinicPasswordLineEdit": self.ClinicPasswordLineEdit.text()
+                "clinicIDLineEdit": self.clinicIDLineEdit.text(),
+                "clinicAddressLineEdit": self.clinicAddressLineEdit.text(),
+                "clinicNameLineEdit": self.clinicNameLineEdit.text(),
+                "clinicContactLineEdit": self.clinicContactLineEdit.text(),
+                "clinicEmailLineEdit": self.clinicEmailLineEdit.text(),
+                "clinicPostCodeLineEdit": self.clinicPostCodeLineEdit.text(),
+                "clinicDocumentLineEdit": self.clinicDocumentLineEdit.text(),
+                "clinicPasswordLineEdit": self.clinicPasswordLineEdit.text()
                 
                 }
