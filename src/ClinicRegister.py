@@ -310,59 +310,28 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
 
                 
-                
-        #  Push Button for "Going Back to Login page" - This needed a lot of
-        # Style sheet editting as, i had to make the Button transparent so 
-        # that it looks like a Link, so im sorry if the customization code 
-        # Looks a mess, please bear with it :)
 
                 self.clinicRegisterGoBackLogin = QtWidgets.QPushButton(self.centralwidget)
                 self.clinicRegisterGoBackLogin.setGeometry(530, 450, 221, 41)
                 self.clinicRegisterGoBackLogin.setText("Go Back To Login")
 
         # Style Sheet Code for the transparent button start here vvvvvvvv
-                palette = QtGui.QPalette()
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(0, 67, 202))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(0, 67, 202))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-                self.clinicRegisterGoBackLogin.setPalette(palette)
+                stylesheet3 = """
+                QPushButton {
+                        background-color: rgba(255, 255, 255, 10);
+                        color: rgb(0, 67, 202);
+                        text-decoration: underline;
+                }
+
+                QPushButton:disabled {
+                         background-color: rgba(255, 255, 255, 10);
+                         color: rgb(120, 120, 120);
+                }
+                """
         # Style Sheet code ends here ^^^^^^^^^^^^^^^
 
                 self.clinicRegisterGoBackLogin.setAutoFillBackground(False)
-                self.clinicRegisterGoBackLogin.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
+                self.clinicRegisterGoBackLogin.setStyleSheet(stylesheet3)
                 self.clinicRegisterGoBackLogin.setObjectName("clinicGoBackLogin")
                 self.clinicRegisterGoBackLogin.clicked.connect(self.clinicGoBackLogin)
                 
