@@ -66,7 +66,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering doctor's First Name 
                 self.docFirstNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docFirstNameLineEdit.setGeometry(30, 170, 221, 31)
-                self.docFirstNameLineEdit.setText("example - John")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -89,7 +88,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Doctor's Last Name
                 self.docLastNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docLastNameLineEdit.setGeometry(30, 260, 221, 31)
-                self.docLastNameLineEdit.setText("example - Monroe")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -112,7 +110,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Doctor's Email 
                 self.docEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docEmailLineEdit.setGeometry(30, 350, 221, 31)
-                self.docEmailLineEdit.setText("example - Doc123@new.com")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -135,7 +132,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Doctor's Contact Number
                 self.docContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docContactLineEdit.setGeometry(30, 440, 221, 31)
-                self.docContactLineEdit.setText("example - +60xxxxxxxx")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -158,7 +154,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Doctor's Specialty 
                 self.docSpecialtyLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docSpecialtyLineEdit.setGeometry(280, 170, 221, 31)
-                self.docSpecialtyLineEdit.setText("example - Pediatrician, Surgeion etc")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -202,7 +197,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Doctor's IC/Passport Number
                 self.docPassportLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docPassportLineEdit.setGeometry(280, 350, 221, 31)
-                self.docPassportLineEdit.setText("example - 1232123xx")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -229,7 +223,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Right Now, its just for building UI, so it is Line Edit, need to change - important
                 self.docAttachmentLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docAttachmentLineEdit.setGeometry(280, 440, 221, 31)
-                self.docAttachmentLineEdit.setText("Attach Here                                              +")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -252,7 +245,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Doc's Years of Experience
                 self.docExpLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docExpLineEdit.setGeometry(530, 170, 221, 31)
-                self.docExpLineEdit.setText("example - 5 years")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -275,7 +267,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Doctor's Password
                 self.docPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docPasswordLineEdit.setGeometry(530, 260, 221, 31)
-                self.docPasswordLineEdit.setText("example - SoMeThiNg@123")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -298,7 +289,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering the password of Doctor Again
                 self.docReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.docReEnterPassLineEdit.setGeometry(530, 350, 221, 31)
-                self.docReEnterPassLineEdit.setText("Re-enter Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
