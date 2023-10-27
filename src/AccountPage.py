@@ -55,13 +55,6 @@ class AccountPage(QMainWindow):
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70, 70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
-
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")

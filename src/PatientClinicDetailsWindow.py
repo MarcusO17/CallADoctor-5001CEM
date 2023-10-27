@@ -5,6 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
+
+from .AccountPage import AccountPage
 from .model import Clinic
 from .PatientSendRequest import PatientSendRequest
 from .PageManager import PageManager
@@ -63,6 +65,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -89,7 +92,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.clinicDescriptionLabel.setFont(font)
-        self.clinicDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + self.clinic.getClinicContact())
+        self.clinicDescriptionLabel.setText(f"{self.clinic.getClinicName()} \n {str(self.clinic.getClinicContact())}")
         self.clinicDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.clinicAddressLabel = QLabel(self.centralwidget)
@@ -126,6 +129,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         self.clinicDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(self.clinicDetailsContainer)
@@ -144,3 +148,8 @@ class PatientClinicDetailsWindow(QMainWindow):
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Patient", self.patient)
+        self.pageManager.add(self.accountPage)
