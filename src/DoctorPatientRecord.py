@@ -5,6 +5,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
+from .AccountPage import AccountPage
 from .model import Patient,Doctor
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .PageManager import PageManager
@@ -58,6 +59,7 @@ class DoctorPatientRecordWindow(QMainWindow):
         self.docMyAccountIcon = QIcon(filepath)
         self.docMyAccountButton.setIconSize(QSize(70, 70))
         self.docMyAccountButton.setIcon(self.docMyAccountIcon)
+        self.docMyAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.docBackButton = QPushButton(self.centralwidget)
@@ -94,6 +96,7 @@ class DoctorPatientRecordWindow(QMainWindow):
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
@@ -113,3 +116,8 @@ class DoctorPatientRecordWindow(QMainWindow):
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Doctor", self.doctor)
+        self.pageManager.add(self.accountPage)

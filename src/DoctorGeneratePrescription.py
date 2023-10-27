@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea, QLineEdit, QMessageBox, QDialog, QDateEdit
 from PyQt5 import QtWidgets
 
+from .AccountPage import AccountPage
 from .model import PrescriptionDetails
 from .model import Prescription, PrescriptionRepo
 from .PageManager import PageManager
@@ -13,12 +14,13 @@ from .PageManager import PageManager
 
 class DoctorGeneratePrescription(QMainWindow):
 
-    def __init__(self, patient, appointment):
+    def __init__(self, patient, appointment, doctor):
         super().__init__()
 
         #set the information here
         self.patient = patient
         self.appointment = appointment
+        self.doctor = doctor
 
         self.pageManager = PageManager()
         self.setWindowTitle("Generate Prescription")
@@ -60,6 +62,7 @@ class DoctorGeneratePrescription(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -214,4 +217,9 @@ class DoctorGeneratePrescription(QMainWindow):
             row.layout().removeWidget(widget)
             if widget is not None:
                 widget.deleteLater()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Doctor", self.doctor)
+        self.pageManager.add(self.accountPage)
 

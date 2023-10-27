@@ -5,6 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
+
+from .AccountPage import AccountPage
 from .model import Prescription, PrescriptionRepo
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from .PageManager import PageManager
@@ -51,13 +53,15 @@ class PatientPrescriptionWindow(QMainWindow):
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.patientPrescriptionMyAccountButton = QPushButton(self.centralwidget)
-        self.patientPrescriptionMyAccountButton.setFixedSize(70,70)
-        self.patientPrescriptionMyAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setFixedSize(70,70)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.patientPrescriptionMyAccountIcon = QIcon(filepath)
-        self.patientPrescriptionMyAccountButton.setIconSize(QSize(70, 70))
-        self.patientPrescriptionMyAccountButton.setIcon(self.patientPrescriptionMyAccountIcon)
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70, 70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
+
 
         # Push Button 5 (Log Out)
         self.patientPrescriptionBackButton = QPushButton(self.centralwidget)
@@ -101,6 +105,7 @@ class PatientPrescriptionWindow(QMainWindow):
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
@@ -119,5 +124,10 @@ class PatientPrescriptionWindow(QMainWindow):
         
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Patient", self.patient)
+        self.pageManager.add(self.accountPage)
 
 

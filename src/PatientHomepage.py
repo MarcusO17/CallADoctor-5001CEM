@@ -4,6 +4,8 @@ from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
+
+from .AccountPage import AccountPage
 from .model import Patient
 from .PatientClinicsNearbyWindow import PatientClinicsNearbyWindow
 from .PageManager import PageManager
@@ -34,6 +36,11 @@ class PatientHomepage(QMainWindow):
     def gotoPatientMyAppointment(self):
         self.patientMyAppointment = PatientMyAppointmentWindow(self.patient)
         self.pageManager.add(self.patientMyAppointment)
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Patient", self.patient)
+        self.pageManager.add(self.accountPage)
 
 
     def setupUi(self, MainWindow):
@@ -127,6 +134,7 @@ class PatientHomepage(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70,70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)

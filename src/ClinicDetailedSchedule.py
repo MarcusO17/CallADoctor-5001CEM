@@ -7,6 +7,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
 
+from .AccountPage import AccountPage
 from .ClinicAppointmentDetails import ClinicAppointmentDetails
 from .model import Appointment, Doctor
 from .model.AppointmentRepo import AppointmentRepository
@@ -58,6 +59,7 @@ class ClinicDetailedSchedule(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70,70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
@@ -111,9 +113,9 @@ class ClinicDetailedSchedule(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def gotoAppointment(self, appointment, doctor):
+    def gotoAppointment(self, appointment, doctor, clinic):
 
-        self.clinicAppointmentDetails = ClinicAppointmentDetails(appointment, doctor)
+        self.clinicAppointmentDetails = ClinicAppointmentDetails(appointment, doctor, clinic)
         self.pageManager.add(self.clinicAppointmentDetails)
 
     def setSchedule(self, appointmentList):
@@ -143,7 +145,12 @@ class ClinicDetailedSchedule(QMainWindow):
                     self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
                     self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
                     self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
-                    self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
+                    self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor, self.clinic))
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)

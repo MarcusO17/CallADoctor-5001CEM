@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
 
+from .AccountPage import AccountPage
 from .ClinicRequestDetails import ClinicRequestDetails
 from .model import Appointment
 from .model.AppointmentRepo import AppointmentRepository
@@ -60,6 +61,7 @@ class ClinicRequestReview(QMainWindow):
         self.MyAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.MyAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -86,6 +88,7 @@ class ClinicRequestReview(QMainWindow):
         boxScrollArea.setFixedSize(1000, 500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
@@ -135,5 +138,10 @@ class ClinicRequestReview(QMainWindow):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.buttonContainer.layout().addWidget(spacer)
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)
 
 

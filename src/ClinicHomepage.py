@@ -1,6 +1,7 @@
 import os
 import sys
 
+from .AccountPage import AccountPage
 from .ClinicDoctorList import ClinicDoctorList
 from .ClinicRequestReview import ClinicRequestReview
 from .model import Clinic
@@ -31,6 +32,11 @@ class ClinicHomepage(QMainWindow):
     def goToDoctorList(self):
         self.doctorListPage = ClinicDoctorList(self.clinic)
         self.pageManager.add(self.doctorListPage)
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage")
@@ -138,6 +144,7 @@ class ClinicHomepage(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70,70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)

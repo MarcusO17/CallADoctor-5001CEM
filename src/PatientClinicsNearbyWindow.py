@@ -5,6 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea, QSizePolicy, QLineEdit
 from PyQt5 import QtWidgets
+
+from .AccountPage import AccountPage
 from .PatientClinicDetailsWindow import PatientClinicDetailsWindow
 from .model.Clinic import Clinic
 from .model.ClinicRepo import ClinicRepository
@@ -61,6 +63,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -140,3 +143,7 @@ class PatientClinicsNearbyWindow(QMainWindow):
                 button = item.widget()
                 text = button.text().lower()
                 button.setVisible(searchedText in text)
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Patient", self.patient)
+        self.pageManager.add(self.accountPage)
