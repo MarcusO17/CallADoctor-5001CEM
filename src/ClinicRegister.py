@@ -398,6 +398,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 
                 }
 
+                #Marcus post to Database here
+
+                clinicGoRegisterDialogBox = QMessageBox.question(self.centralwidget, "Registration Confirmation",
+                                                                "Are you sure you all your details are correct?",
+                                                        QMessageBox.Yes | QMessageBox.No)
+                if clinicGoRegisterDialogBox == QMessageBox.Yes:
+                        self.pageManager.goBack()
+
         
         def clinicGoBackLogin(self):
                 clinicGoBackLoginDialogBox = QMessageBox.question(self.centralwidget, "Go Back Login",
