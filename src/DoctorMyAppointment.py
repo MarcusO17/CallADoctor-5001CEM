@@ -7,10 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
-from .model import Clinic
-from .model import Doctor
-from .model import Appointment
-from .model import Patient
+from .model import Clinic, Doctor, Appointment, Patient, AppointmentRepo
 from .PageManager import PageManager
 
 
@@ -80,19 +77,8 @@ class DoctorMyAppointmentWindow(QMainWindow):
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
-        appointmentList = list()
-
-        appointment1 = Appointment("ap0001", "Doc101", "clinic1", "P1001", "Completed", "Starts 10am", "Ends 5pm",
-                                   "4th Novemeber", "Fever")
-        appointment2 = Appointment("ap0002", "Doc102", "clinic1", "P1002", "Approved", "Starts 12am", "Starts 4pm",
-                                   "30th Novemeber", "Cold")
-        appointment3 = Appointment("ap0003", "Doc103", "clinic1", "P1003", "Completed", "Starts 9am", "Starts 6pm",
-                                   "21st Novemeber", "Pain")
-
-        appointmentList.append(appointment1)
-        appointmentList.append(appointment2)
-        appointmentList.append(appointment3)
-        print("appointment list size" , len(appointmentList))
+        #Query Here!!
+        appointmentList = AppointmentRepo.AppointmentRepository.getAppointmentsByDoctor(self.doctor.getDoctorID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")

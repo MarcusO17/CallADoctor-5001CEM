@@ -9,6 +9,7 @@ from PyQt5 import QtWidgets
 
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Appointment
+from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager
 
 
@@ -104,20 +105,7 @@ class DoctorScheduleWindow(QMainWindow):
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
-        appointmentList = list()
-
-        # put query and create the appointment objects here
-
-        appointment1 = Appointment("appointment1", "doctor1", "clinicID", "patient1", "Approved", "13:00", "14:00", "24-10-2023",
-                                   "light fever")
-        appointment2 = Appointment("appointment2", "doctor1", "clinicID", "patient2", "Completed", "8:00", "9:00", "25-10-2023",
-                                   "light fever")
-        appointment3 = Appointment("appointment3", "doctor1", "clinicID", "patient3", "Approved", "8:00", "9:00", "28-10-2023",
-                                   "light fever")
-
-        appointmentList.append(appointment1)
-        appointmentList.append(appointment2)
-        appointmentList.append(appointment3)
+        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
 
         self.setSchedule(appointmentList)
 
@@ -132,35 +120,34 @@ class DoctorScheduleWindow(QMainWindow):
         self.pageManager.add(self.doctorAppointmentDetails)
 
     def setSchedule(self, appointmentList):
-
+        
         for appointment in appointmentList:
             row = 0
             col = 0
-            dateTemp = appointment.getAppointmentDate()
+            date = appointment.getAppointmentDate()
             startTime = appointment.getStartTime()
             endTime = appointment.getEndTime()
 
-            startTimeTemp = startTime.split(":")
+            startTimeTemp = startTime.split(":") #HH:MM:SS
             startTime = int(startTimeTemp[0])
 
-            endTimeTemp = endTime.split(":")
+            print(endTime)
+            endTimeTemp = endTime.split(":") #HH:MM:SS
             endTime = int(endTimeTemp[0])
 
-            dateTemp = dateTemp.split("-")
-            print(dateTemp)
+            #print(date)
+            #dateTemp = dateTemp.split("-") #YYYY-MM-DD
 
-            date = datetime(int(dateTemp[2]), int(dateTemp[1]), int(dateTemp[0]))
-
-            row = date.weekday() + 1
+            row = date.weekday()+1
             if endTime - startTime >= 1:
                 duration = endTime - startTime
                 col = startTime - 7
                 for i in range(duration):
-                    self.timeSlotButtonList[row][col + (i - 1)].setText("Appointment")
-                    self.timeSlotButtonList[row][col + (i - 1)].setStyleSheet("background-color: green;")
-                    self.timeSlotButtonList[row][col + (i - 1)].setEnabled(True)
-                    self.timeSlotButtonList[row][col + (i - 1)].clicked.connect(
-                        lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
+                    self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
+                    self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
+                    self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
+                    self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
+
 
     def backButtonFunction(self):
         self.pageManager.goBack()

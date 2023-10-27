@@ -22,7 +22,7 @@ class DoctorAppointmentDetails(QMainWindow):
 
         # query the patient with patient ID from appointment
 
-        self.patient = Patient("p0001", "Patient 1", "Patient 1 address", "2001-01-30", "ABC", "Indian")
+        self.patient = Patient.getPatientfromID(self.appointment.getPatientID())
 
         self.setWindowTitle("Patient Appointment Details")
         self.setFixedWidth(1280)

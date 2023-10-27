@@ -89,7 +89,7 @@ class PatientClinicDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.clinicDescriptionLabel.setFont(font)
-        self.clinicDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + self.clinic.getClinicContact())
+        self.clinicDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + str(self.clinic.getClinicContact()))
         self.clinicDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.clinicAddressLabel = QLabel(self.centralwidget)

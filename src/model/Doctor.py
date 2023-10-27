@@ -1,4 +1,5 @@
 import requests
+from .Patient import Patient
 class Doctor:
     def __init__(self,doctorID, doctorName, clinicID, status, doctorType, doctorContact, doctorICNumber, yearsOfExperience):
         self.doctorID = doctorID
@@ -58,8 +59,6 @@ class Doctor:
     
     def setYearsOfExperience(self, yearsOfExperience):
         self.yearsOfExperience = yearsOfExperience
-
-
     
 
     @classmethod
@@ -69,15 +68,39 @@ class Doctor:
             doctor = response.json()[0]
         except Exception as e:
             print(e)
-            return Doctor("","","","","","")
+            return Doctor("","","","","","","")
         
         return Doctor(
+                doctor['doctorID'],
                 doctor['doctorName'],
-                doctor['doctorType'],
-                doctor['doctorICNumber'],
-                doctor['doctorContact'],
-                doctor['yearOfExperience'],
+                doctor['clinicID'],
                 doctor['status'],
-                doctor['clinicID']
+                doctor['doctorType'],
+                doctor['doctorContact'],
+                doctor['doctorICNumber'],    
+                doctor['yearOfExperience'] 
         )
         
+    @classmethod
+    def getDoctorPastPatients(self,doctorID):
+        patientList = []
+        try:
+            response = requests.get(f'http://127.0.0.1:5000/doctors/pastpatients/{doctorID}')
+            recordsList = response.json()
+        except requests.RequestException as e:
+                print(f'Error : {e}')
+                return []
+        
+        for records in recordsList:
+                tempPatient = Patient("","","","","","",)
+
+                tempPatient.setPatientID(records['patientID'])
+                tempPatient.setPatientName(records['patientName'])
+                tempPatient.setPatientAddress(records['address'])
+                tempPatient.setPatientDOB(records['dateOfBirth'])
+                tempPatient.setPatientBlood(records['bloodType'])
+                tempPatient.setPatientRace(records['race'])
+
+                patientList.append(tempPatient)
+                
+        return patientList   

@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 from .model import Clinic
 from .model import Doctor
 from .model import Appointment
+from .model.AppointmentRepo import AppointmentRepository
 from .PatientAppointmentDetails import PatientAppointmentDetailsWindow 
 from .PageManager import PageManager
 
@@ -119,18 +120,7 @@ class PatientMyAppointmentWindow(QMainWindow):
         self.appointmentList.clear()
 
         #query appointment here
-
-        appointment1 = Appointment("ap0001", "Doc101", "clinic1", "P1001", "Completed", "Starts 10am", "Ends 5pm",
-                                   "4th Novemeber", "Fever")
-        appointment2 = Appointment("ap0002", "Doc102", "clinic1", "P1002", "Approved", "Starts 12am", "Starts 4pm",
-                                   "30th Novemeber", "Cold")
-        appointment3 = Appointment("ap0003", "Doc103", "clinic1", "P1003", "Completed", "Starts 9am", "Starts 6pm",
-                                   "21st Novemeber", "Pain")
-
-        self.appointmentList.append(appointment1)
-        self.appointmentList.append(appointment2)
-        self.appointmentList.append(appointment3)
-        print("appointment list size", len(self.appointmentList))
+        self.appointmentList = AppointmentRepository.getAppointmentsByPatients(self.patient.getPatientID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -141,7 +131,7 @@ class PatientMyAppointmentWindow(QMainWindow):
         for count, appointment in enumerate(self.appointmentList):
             self.patientAppointmentButton = QPushButton()
             self.patientAppointmentButton.setText(
-                appointment.getPatientID() + " - " + appointment.getAppointmentStatus())
+                appointment.getAppointmentID() + " - " + appointment.getAppointmentStatus())
             self.patientAppointmentButton.setFont(buttonFont)
             self.patientAppointmentButton.setFixedSize(QSize(900, 150))
             self.patientAppointmentButton.clicked.connect(

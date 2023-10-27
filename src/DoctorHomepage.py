@@ -16,7 +16,7 @@ class DoctorHomepage(QMainWindow):
     def __init__(self, sessionID):
         super().__init__()
         self.pageManager = PageManager()
-        self.doctor = Doctor("D0001", "Doctor 1", "c0001", "AVAILABLE", "Junior", "0123456789", "030102091820", 2)
+        self.doctor = Doctor.getDoctorfromID(sessionID)
         # not implemented yet
         #self.doctor = Doctor.getDoctorfromID(sessionID)
         self.setWindowTitle("Doctor Homepage")
@@ -25,19 +25,19 @@ class DoctorHomepage(QMainWindow):
         self.setupUi(self)
 
     def gotoSchedule(self):
-        doctor1 = Doctor("D0001", "Doctor 1", "c0001", "AVAILABLE", "Junior", "0123456789", "030102091820", 2)
-        self.doctorScheduleWindow = DoctorScheduleWindow(doctor1)
+        #doctor1 = Doctor("D0001", "Doctor 1", "c0001", "AVAILABLE", "Junior", "0123456789", "030102091820", 2)
+        self.doctorScheduleWindow = DoctorScheduleWindow(self.doctor)
         self.pageManager.add(self.doctorScheduleWindow)
         print(self.pageManager.size())
 
     def gotoPatientRecord(self):
-        self.doctor = Doctor("D0001", "Doctor 1", "C0001", "status", "doctortype", "doctorContact", "doctorICNUmber", 5)
+        #self.doctor = Doctor("D0001", "Doctor 1", "C0001", "status", "doctortype", "doctorContact", "doctorICNUmber", 5)
         self.patientRecord = DoctorPatientRecordWindow(self.doctor)
         self.pageManager.add(self.patientRecord)
         print(self.pageManager.size())
 
     def gotoMyAppointment(self):
-        self.doctor = Doctor("D0001", "Doctor 1", "C0001", "status", "doctortype", "doctorContact", "doctorICNUmber", 5)
+        #self.doctor = Doctor("D0001", "Doctor 1", "C0001", "status", "doctortype", "doctorContact", "doctorICNUmber", 5)
         self.myAppointment = DoctorMyAppointmentWindow(self.doctor)
         self.pageManager.add(self.myAppointment)
         print(self.pageManager.size())
