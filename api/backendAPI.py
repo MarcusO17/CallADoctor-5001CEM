@@ -681,8 +681,8 @@ def appointmentsByDoctor(doctorID):
         if appointment is not None:
             return jsonify(appointment),200
     
-@app.route('/appointments/<string:id>/find',methods=['GET'])
-def appointmentsFind(id):
+@app.route('/appointments/<string:id>/find/<string:clinicID>',methods=['GET'])
+def appointmentsFind(id,clinicID):
     conn = dbConnect()  
     cursor = conn.cursor()
 
@@ -696,9 +696,9 @@ def appointmentsFind(id):
                           WHERE doctorID NOT IN (
                             SELECT doctorID
                             FROM appointments
-                            WHERE appointmentDate = %s AND startTime = %s
+                            WHERE appointmentDate = %s AND startTime = %s and clinicID = %s
                           );
-                        """,(date,appointment['startTime']))
+                        """,(date,appointment['startTime'],clinicID))
         appointment = [
             dict(
                 doctorID  = row['doctorID']
