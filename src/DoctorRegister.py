@@ -303,52 +303,25 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docRegisterPushButton.setText("Register")
                 
                 #Style Sheet Code for Register vvvvvvvvvvvvvvvvvvvvvv
-                palette = QtGui.QPalette()
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-                self.docRegisterPushButton.setPalette(palette)
+                stylesheet2 = """
+                QPushButton {
+                        background-color: rgba(53, 63, 203);
+                        color: rgb(255, 255, 255);
+                }
+
+                QPushButton:disabled {
+                        background-color: rgba(53, 63, 203);
+                        color: rgb(120, 120, 120);
+                }
+                """
 
                 #Style Sheet Code for Register End ^^^^^^^^^^^^^^^^^^^^^^^
+                self.docRegisterPushButton.setStyleSheet(stylesheet2)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(12)
                 self.docRegisterPushButton.setFont(font)
                 self.docRegisterPushButton.setAutoFillBackground(False)
-                self.docRegisterPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
                 self.docRegisterPushButton.setObjectName("Register")
                 self.docRegisterPushButton.clicked.connect(lambda checked: self.saveData)
 
