@@ -22,16 +22,16 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
         self.centralwidget.setObjectName("centralwidget")
 
 # Main Title for Patient Register set as Label 
-        self.PatientRegMainTitle = QtWidgets.QLabel(self.centralwidget)
-        self.PatientRegMainTitle.setGeometry(20, 40, 541, 51)
-        self.PatientRegMainTitle.setText("Registration for Call-A-Doctor!")
+        self.patientRegMainTitle = QtWidgets.QLabel(self.centralwidget)
+        self.patientRegMainTitle.setGeometry(20, 40, 541, 51)
+        self.patientRegMainTitle.setText("Registration for Call-A-Doctor!")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
         font.setBold(True)
         font.setWeight(75)
-        self.PatientRegMainTitle.setFont(font)
-        self.PatientRegMainTitle.setObjectName("PatientRegMainTitle")
+        self.patientRegMainTitle.setFont(font)
+        self.patientRegMainTitle.setObjectName("PatientRegMainTitle")
 
 
 # Sub TItle for Patient Register set  as Label 2
