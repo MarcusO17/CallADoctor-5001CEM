@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtCore, QtWidgets
 
+from .AccountPage import AccountPage
 from .DoctorGeneratePrescription import DoctorGeneratePrescription
 from .DoctorViewPrescription import DoctorViewPrescription
 from .PageManager import PageManager
@@ -67,6 +68,7 @@ class DoctorAppointmentDetails(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
@@ -194,15 +196,20 @@ class DoctorAppointmentDetails(QMainWindow):
             self.pageManager.goBack()
 
     def generatePrescription(self):
-        self.doctorGeneratePrescription = DoctorGeneratePrescription(self.patient, self.appointment)
+        self.doctorGeneratePrescription = DoctorGeneratePrescription(self.patient, self.appointment, self.doctor)
         self.pageManager.add(self.doctorGeneratePrescription)
 
     def viewPrescription(self):
-        self.doctorViewPrescription = DoctorViewPrescription(self.patient, self.appointment)
+        self.doctorViewPrescription = DoctorViewPrescription(self.patient, self.appointment, self.doctor)
         self.pageManager.add(self.doctorViewPrescription)
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Doctor", self.doctor)
+        self.pageManager.add(self.accountPage)
 
     def setMode(self, mode):
         if mode == "Completed":

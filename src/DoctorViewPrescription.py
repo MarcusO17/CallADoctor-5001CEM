@@ -5,6 +5,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
+
+from .AccountPage import AccountPage
 from .model import PrescriptionDetails
 from .model import Prescription
 from .PageManager import PageManager
@@ -12,12 +14,13 @@ from .PageManager import PageManager
 
 class DoctorViewPrescription(QMainWindow):
 
-    def __init__(self, patient, appointment):
+    def __init__(self, patient, appointment, doctor):
         super().__init__()
 
         #set the information here
         self.patient = patient
         self.appointment = appointment
+        self.doctor = doctor
 
         # use appointmentID to get prescriptionID
         prescriptionDetails1 = PrescriptionDetails("medicationname1",3,"After", "10mg")
@@ -73,6 +76,7 @@ class DoctorViewPrescription(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -177,3 +181,8 @@ class DoctorViewPrescription(QMainWindow):
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Doctor", self.doctor)
+        self.pageManager.add(self.accountPage)

@@ -7,6 +7,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout
 from PyQt5 import QtWidgets
 
+from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Appointment
 from .PageManager import PageManager
@@ -58,6 +59,7 @@ class DoctorScheduleWindow(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70,70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
@@ -165,5 +167,9 @@ class DoctorScheduleWindow(QMainWindow):
     def backButtonFunction(self):
         self.pageManager.goBack()
 
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Doctor", self.doctor)
+        self.pageManager.add(self.accountPage)
 
 
