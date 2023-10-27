@@ -62,7 +62,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Clinic ID Number
                 self.clinicIDLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicIDLineEdit.setGeometry(30, 170, 221, 31)
-                self.clinicIDLineEdit.setText("example - P21002")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -85,7 +84,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering the Clinic Address
                 self.clinicAddressLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicAddressLineEdit.setGeometry(30, 260, 221, 31)
-                self.clinicAddressLineEdit.setText("example - Bayan Lepas, Penang")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -108,7 +106,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Clinic Name
                 self.clinicNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicNameLineEdit.setGeometry(30, 350, 221, 31)
-                self.clinicNameLineEdit.setText("example - ABCD Clinic")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -131,7 +128,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Clinic Contact Number 
                 self.clinicContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicContactLineEdit.setGeometry(30, 440, 221, 31)
-                self.clinicContactLineEdit.setText("example - +60xxxxxxxx")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -154,7 +150,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Clinic Email
                 self.clinicEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicEmailLineEdit.setGeometry(280, 170, 221, 31)
-                self.clinicEmailLineEdit.setText("example - abcklinik@new.com")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -177,7 +172,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # Line Edit for Entering Clinic Postal Code
                 self.clinicPostCodeLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicPostCodeLineEdit.setGeometry(280, 260, 221, 31)
-                self.clinicPostCodeLineEdit.setText("example - 19000")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -202,7 +196,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # which would allow to open file explorer to attach Document 
                 self.clinicDocumentLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicDocumentLineEdit.setGeometry(280, 350, 221, 31)
-                self.clinicDocumentLineEdit.setText("Attach Certification Document                    +")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -228,7 +221,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # and Special Characters)
                 self.clinicPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicPasswordLineEdit.setGeometry(530, 170, 221, 31)
-                self.clinicPasswordLineEdit.setText("example - SoMeThiNg@123")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -253,7 +245,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # re-entered password same or not, if not, error 404)
                 self.clinicReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicReEnterPassLineEdit.setGeometry(530, 260, 221, 31)
-                self.clinicReEnterPassLineEdit.setText("Re-enter Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
