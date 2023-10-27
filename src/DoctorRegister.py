@@ -452,6 +452,12 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 else:
                         print(response)
 
+                docGoRegisterDialogBox = QMessageBox.question(self.centralwidget, "Registration Confirmation",
+                                                                "Are you sure you all your details are correct?",
+                                                        QMessageBox.Yes | QMessageBox.No)
+                if docGoRegisterDialogBox == QMessageBox.Yes:
+                        self.pageManager.goBack()
+
 
         def docGoBackLogin(self):
                 docGoBackLoginDialogBox = QMessageBox.question(self.centralwidget, "Go Back Login",
