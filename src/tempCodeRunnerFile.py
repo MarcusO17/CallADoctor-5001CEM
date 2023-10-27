@@ -1,90 +1,75 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QSplitter, \
-    QStackedWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QGridLayout
+from src.AccountPage import AccountPage
+from src.DoctorAppointmentDetails import DoctorAppointmentDetails
+from src.PageManager import PageManager
+from src.model import Doctor
+from src.model.AppointmentRepo import AppointmentRepository
 
 
-class CustomTabbedApp(QMainWindow):
-    def __init__(self):
+class DoctorDashboard(QWidget):
+    def __init__(self, doctor):
         super().__init__()
+        self.doctor = doctor
+        self.pageManager = PageManager()
+        self.setupUi()
 
-        self.setWindowTitle("Custom Tabbed Application")
-        self.setGeometry(100, 100, 800, 600)
+    def setupUi(self):
+        mainLayout = QVBoxLayout(self)
+        scheduleLayout = QGridLayout()
+        mainLayout.addLayout(scheduleLayout)
+        mainLayout.addStretch(1)  # Add stretch to push the schedule to the top
 
-        # Create a central widget to hold the content pages
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
+        HEIGHT = 7
+        WIDTH = 8
 
-        # Create a layout for the central widget
-        layout = QVBoxLayout()
+        self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
-        # Create a QSplitter to divide the space
-        splitter = QSplitter()
+        # header of the grid
+        timeStart = 8
+        for i in range(WIDTH):
+            timeSlotLabel = QLabel(f"{timeStart:02d}:00")
+            scheduleLayout.addWidget(timeSlotLabel, 0, i)
+            timeStart += 1
 
-        # Create a stacked widget to hold content pages
-        self.stacked_widget = QStackedWidget()
+        daysOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        for i in range(HEIGHT):
+            dayCell = QLabel(daysOfTheWeek[i])
+            scheduleLayout.addWidget(dayCell, i + 1, 0)
 
-        # Create a sidebar for tab buttons
-        sidebar = QWidget()
-        sidebar_layout = QVBoxLayout()
+        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
+        self.setSchedule(appointmentList, scheduleLayout)
 
-        button_page1 = QPushButton("Page 1")
-        button_page2 = QPushButton("Page 2")
+    def setSchedule(self, appointmentList, scheduleLayout):
+        for appointment in appointmentList:
+            date = appointment.getAppointmentDate()
+            start_time = appointment.getStartTime()
+            end_time = appointment.getEndTime()
 
-        button_page1.clicked.connect(self.show_page1)
-        button_page2.clicked.connect(self.show_page2)
+            row = date.weekday() + 1
+            start_hour = int(start_time.split(":")[0])
+            end_hour = int(end_time.split(":")[0])
 
-        sidebar_layout.addWidget(button_page1)
-        sidebar_layout.addWidget(button_page2)
+            if end_hour - start_hour >= 1:
+                for hour in range(start_hour, end_hour):
+                    button = self.timeSlotButtonList[row][hour - 7]
+                    button.setText("Appointment")
+                    button.setStyleSheet("background-color: green;")
+                    button.setEnabled(True)
+                    button.clicked.connect(
+                        lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
 
-        sidebar.setLayout(sidebar_layout)
-
-        splitter.addWidget(sidebar)
-        splitter.addWidget(self.stacked_widget)
-        splitter.setSizes([self.width() * 0.1, self.width() * 0.9])
-
-        layout.addWidget(splitter)
-
-        central_widget.setLayout(layout)
-
-        self.current_page = None
-
-    def show_page1(self):
-        if self.current_page is not None:
-            self.current_page.hide()
-            self.current_page = None
-
-        page1 = QWidget()
-        layout1 = QVBoxLayout()
-        label1 = QLabel("This is Page 1")
-        layout1.addWidget(label1)
-        page1.setLayout(layout1)
-
-        self.stacked_widget.addWidget(page1)
-        self.stacked_widget.setCurrentWidget(page1)
-
-        self.current_page = page1
-
-    def show_page2(self):
-        if self.current_page is not None:
-            self.current_page.hide()
-            self.current_page = None
-
-        page2 = QWidget()
-        layout2 = QVBoxLayout()
-        label2 = QLabel("This is Page 2")
-        layout2.addWidget(label2)
-        page2.setLayout(layout2)
-
-        self.stacked_widget.addWidget(page2)
-        self.stacked_widget.setCurrentWidget(page2)
-
-        self.current_page = page2
+    def gotoAppointment(self, appointment, doctor):
+        self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
+        self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
+        self.pageManager.add(self.doctorAppointmentDetails)
 
 
 def main():
     app = QApplication(sys.argv)
-    window = CustomTabbedApp()
-    window.show()
+    doctor = Doctor("D0001", "doctor name", "C0001", "status", "doctortype", "doctorContact", "ICNUmber", 5)
+    doctor_dashboard = DoctorDashboard(doctor)
+    doctor_dashboard.show()
     sys.exit(app.exec_())
 
 

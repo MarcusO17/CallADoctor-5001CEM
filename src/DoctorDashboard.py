@@ -5,7 +5,7 @@ from datetime import datetime
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout, \
-    QHBoxLayout
+    QHBoxLayout, QSplitter
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -25,57 +25,66 @@ class DoctorDashboard(QWidget):
     def setupUi(self):
 
         self.mainLayout = QHBoxLayout()
+        self.rightLayout = QVBoxLayout()
+        self.leftLayout = QVBoxLayout()
+
         HEIGHT = 7
         WIDTH = 8
         self.centralwidget = QWidget()
 
-        self.scheduleLayoutWidget = QWidget()
-        self.scheduleLayout = QVBoxLayout(self.scheduleLayoutWidget)
-
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
+
+        scheduleWidget = QWidget()
+        scheduleLayout = QGridLayout(scheduleWidget)
 
         # header of the grid
         timeStart = 8
         timeEnd = 9
-        timeSlotLabelXStart = 70
         for i in range(WIDTH):
-            timeSlotLabel = QLabel(self.centralwidget)
-            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart, 50, 50, 30))
+            timeSlotLabel = QLabel()
+            timeSlotLabel.setFixedSize(50,30)
+            scheduleLayout.addWidget(timeSlotLabel, 0, i+1)
             timeSlotLabel.setStyleSheet("border: 1px solid black;")
             timeSlotLabel.setText(str(timeStart) + ":00")
-            timeSlotLabelXStart = timeSlotLabelXStart + 50
             timeStart = timeStart + 1
             timeEnd = timeStart + 1
 
-        dayCellYStart = 80
         # side of the grid
         daysOfTheWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
         for i in range(HEIGHT):
-            dayCell = QLabel(self.centralwidget)
-            dayCell.setGeometry(QRect(20, dayCellYStart, 50, 30))
+            dayCell = QLabel()
+            dayCell.setFixedSize(50, 30)
+            scheduleLayout.addWidget(dayCell, i + 1, 0)
             dayCell.setStyleSheet("border: 1px solid black;")
             dayCell.setText(daysOfTheWeek[i])
-            dayCellYStart = dayCellYStart + 30
 
-        tempButtonYStart = 50
         for h in range(HEIGHT):
-            tempButtonXStart = 70
-            tempButtonYStart = tempButtonYStart + 30
+
             for w in range(WIDTH):
-                timeSlotButton = QPushButton(self.centralwidget)
-                timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 50, 30))
+                timeSlotButton = QPushButton()
+                timeSlotButton.setFixedSize(50, 30)
+                scheduleLayout.addWidget(timeSlotButton, h + 1, w+1)
                 timeSlotButton.setStyleSheet("border: 1px solid black;")
-                tempButtonXStart = tempButtonXStart + 50
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
-
-        self.upcomingAppointmentLayout = QVBoxLayout()
 
         appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
 
         self.setSchedule(appointmentList)
 
-        self.mainLayout.addWidget(self.centralwidget)
+        self.upcomingAppointmentWidget = QWidget()
+        self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
+
+
+        self.upcomingAppointmentTitle = QLabel()
+        self.upcomingAppointmentTitle.setText("Upcoming Appointment")
+        self.upcomingAppointmentLayout.addWidget(self.upcomingAppointmentTitle)
+
+        self.leftLayout.addWidget(scheduleWidget, 3)
+        self.leftLayout.addWidget(self.upcomingAppointmentWidget, 7)
+
+        self.mainLayout.addLayout(self.leftLayout, 5)
+        self.mainLayout.addLayout(self.rightLayout, 5)
 
         self.setLayout(self.mainLayout)
 
