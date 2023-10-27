@@ -85,7 +85,7 @@ class AssignDoctorDialog(QDialog):
 
     def setData(self, request):
         self.request = request
-        self.doctorList = DoctorRepository.getAvailableDoctorList(DoctorRepository,request.getAppointmentID())
+        self.doctorList = DoctorRepository.getAvailableDoctorList(DoctorRepository,request.getAppointmentID(),request.getClinicID())
 
         for count, doctor in enumerate(self.doctorList):
             button = QPushButton()

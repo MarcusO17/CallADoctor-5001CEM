@@ -79,10 +79,10 @@ class DoctorRepository():
             return doctorList      
       
     
-      def getAvailableDoctorList(self,appointmentID):
+      def getAvailableDoctorList(self,appointmentID,clinicID):
             doctorList = []
             try:
-                  response = requests.get(f'http://127.0.0.1:5000/appointments/{appointmentID}/find')
+                  response = requests.get(f'http://127.0.0.1:5000/appointments/{appointmentID}/find/{clinicID}')
                   responseList = response.json()
             except requests.RequestException as e:
                   print(f'Error : {e}')
@@ -113,7 +113,7 @@ class DoctorRepository():
                   tempDoctor.setDoctorType(records['doctorType'])
                   tempDoctor.setDoctorContact(records['doctorContact'])
                   tempDoctor.setDoctorICNumber(records['doctorICNumber'])
-                  tempDoctor.setYearOfExperience(records['yearOfExperience'])
+                  tempDoctor.setYearsOfExperience(records['yearOfExperience'])
 
                   doctorList.append(tempDoctor)
                   

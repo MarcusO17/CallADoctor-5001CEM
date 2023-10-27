@@ -185,7 +185,7 @@ class PatientSendRequest(QMainWindow):
        
 
         if self.preferredDate.date() == QDate.currentDate():
-            if currentTime > QTime(17, 0):
+            if roundedTime > QTime(17, 0):
                 self.preferredDate.setDate(QDate.currentDate().addDays(1))
                 self.preferredDate.setMinimumDate(QDate.currentDate().addDays(1))
                 self.timeList.clear()

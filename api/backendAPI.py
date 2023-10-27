@@ -581,9 +581,9 @@ def appointmentComplete(aid):
 @app.route('/appointments/week',methods=['GET'])
 def appointmentsWeek():
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
-    dateEnd = dateToday + timedelta(days=4)
-    #print(dateToday)
-    #print(dateEnd)
+    dateEnd = dateToday + timedelta(days=6)
+    print(dateToday)
+    print(dateEnd)
     conn = dbConnect()  
     cursor = conn.cursor()
 
@@ -633,7 +633,7 @@ def appointmentsPending(clinicID):
 @app.route('/appointments/week/<string:doctorID>',methods=['GET'])
 def appointmentsWeekID(doctorID):
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
-    dateEnd = dateToday + timedelta(days=4)
+    dateEnd = dateToday + timedelta(days=6)
     conn = dbConnect()  
     cursor = conn.cursor()
 
@@ -681,8 +681,8 @@ def appointmentsByDoctor(doctorID):
         if appointment is not None:
             return jsonify(appointment),200
     
-@app.route('/appointments/<string:id>/find',methods=['GET'])
-def appointmentsFind(id):
+@app.route('/appointments/<string:id>/find/<string:clinicID>',methods=['GET'])
+def appointmentsFind(id,clinicID):
     conn = dbConnect()  
     cursor = conn.cursor()
 
@@ -697,8 +697,8 @@ def appointmentsFind(id):
                             SELECT doctorID
                             FROM appointments
                             WHERE appointmentDate = %s AND startTime = %s
-                          );
-                        """,(date,appointment['startTime']))
+                          ) AND clinicID = %s
+                        """,(date,appointment['startTime'],clinicID))
         appointment = [
             dict(
                 doctorID  = row['doctorID']
@@ -781,6 +781,25 @@ def prescriptionAppointmentID(id):
     cursor = conn.cursor()
     if request.method == 'GET':
         cursor.execute("SELECT * FROM prescriptions where appointmentID = %s",id)
+        prescription = [
+            dict(
+                prescriptionID = row['prescriptionID'],
+                appointmentID  = row['appointmentID'],
+                expiryDate = row['expiryDate']
+            )
+            for row in cursor.fetchall()
+        ]
+        if prescription is not None:
+            return jsonify(prescription),200
+        
+@app.route('/prescriptions/patients/<string:id>',methods=['GET','DELETE'])
+def prescriptionPatientID(id):
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("""SELECT * FROM prescriptions where appointmentID in (SELECT 
+                       appointmentID FROM appointments where patientID = %s)""",id)
         prescription = [
             dict(
                 prescriptionID = row['prescriptionID'],

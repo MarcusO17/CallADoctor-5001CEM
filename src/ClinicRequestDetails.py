@@ -221,7 +221,7 @@ class ClinicRequestDetails(QMainWindow):
                                                "Are you sure you want to cancel this request",
                                                QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
-            self.request.denyAppointment()
+            self.request.cancelAppointment()
             self.pageManager.getPreviousPage().generateRequestButtons()
             self.pageManager.goBack()
 

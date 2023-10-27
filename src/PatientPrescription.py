@@ -81,7 +81,7 @@ class PatientPrescriptionWindow(QMainWindow):
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         
         #INSERT HEREE
-        prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionDetailList()
+        prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(self.patient.getPatientID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
