@@ -1,16 +1,11 @@
-import os
-import sys
-from datetime import datetime
-
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout, \
-    QHBoxLayout, QSplitter, QSizePolicy
-from PyQt5 import QtWidgets
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
+    QHBoxLayout,QSizePolicy
 
 from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
-from .model import Appointment
+from .model import Appointment, AppointmentRepo
 from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager
 
@@ -20,6 +15,7 @@ class DoctorDashboard(QWidget):
         super().__init__()
         self.doctor = doctor
         self.pageManager = PageManager()
+        self.setStyleSheet("")
         self.setupUi()
 
     def setupUi(self):
@@ -36,13 +32,7 @@ class DoctorDashboard(QWidget):
 
         self.setSchedule(appointmentList)
 
-        self.upcomingAppointmentWidget = QWidget()
-        self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
-
-
-        self.upcomingAppointmentTitle = QLabel()
-        self.upcomingAppointmentTitle.setText("Upcoming Appointment")
-        self.upcomingAppointmentLayout.addWidget(self.upcomingAppointmentTitle)
+        #self.generateUpcomingAppointments()
 
         self.leftLayout.addWidget(self.scheduleWidget, 3)
         self.leftLayout.addWidget(self.upcomingAppointmentWidget, 7)
@@ -184,4 +174,40 @@ class DoctorDashboard(QWidget):
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         scheduleLayout.addWidget(spacer)
 
+    def generateUpcomingAppointments(self):
+
+        self.upcomingAppointmentWidget = QWidget()
+        self.upcomingAppointmentWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
+
+        self.upcomingAppointmentTitle = QLabel()
+        self.upcomingAppointmentTitle.setText("Upcoming Appointment")
+        self.upcomingAppointmentLayout.addWidget(self.upcomingAppointmentTitle)
+
+        buttonContainer = QWidget()
+        buttonLayout = QVBoxLayout(buttonContainer)
+        buttonContainer.setContentsMargins(20, 20, 20, 20)
+
+
+        appointmentList = list()
+
+        buttonFont = QFont()
+        buttonFont.setFamily("Arial")
+        buttonFont.setPointSize(28)
+        buttonFont.setBold(True)
+        buttonFont.setWeight(75)
+
+
+        for count, appointment in enumerate(appointmentList):
+            self.appointmentButton = QPushButton()
+            self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getAppointmentStatus()}")
+            self.appointmentButton.setFont(buttonFont)
+            self.appointmentButton.setFixedSize(QSize(900, 150))
+            self.appointmentButton.clicked.connect(
+                lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
+            buttonContainer.layout().addWidget(self.appointmentButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        buttonContainer.layout().addWidget(spacer)
 
