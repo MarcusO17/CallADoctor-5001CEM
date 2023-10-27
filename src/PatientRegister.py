@@ -408,3 +408,4 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 if goBackLoginDialogBox == QMessageBox.Yes:
                         self.pageManager.goBack()
 
+
