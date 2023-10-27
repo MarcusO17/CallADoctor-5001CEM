@@ -10,7 +10,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.ClinicRegisterPushButton.clicked.connect(self.ClinicSaveData)
+        self.ClinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
 
 
     def setupUi(self, MainWindow):
@@ -380,7 +380,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
 
-def ClinicSaveData(self):
+def clinicSaveData(self):
      
         data = {
             "ClinicIDLineEdit": self.ClinicIDLineEdit.text(),

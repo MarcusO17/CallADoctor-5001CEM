@@ -13,7 +13,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.RegisterPushButton.clicked.connect(self.saveData)
+        self.RegisterPushButton.clicked.connect(lambda checked: self.saveData)
 
 
     def setupUi(self, MainWindow):

@@ -1,7 +1,8 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox
 from PyQt5 import QtCore
+from .PageManager import PageManager
 from .model import Login
 from .model import Clinic
 from .PatientHomepage import PatientHomepage
@@ -72,13 +73,45 @@ class LoginWindow(QWidget):
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
 
+        self.goToRegistrationButton = QPushButton("Register Account")
+        self.goToRegistrationButton.setDefault(True)
+        self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
+
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
         loginFormLayout.addLayout(field2Layout)
         loginFormLayout.addWidget(self.loginButton)
+        loginFormLayout.addWidget(self.goToRegistrationButton)
         loginFormLayout.setContentsMargins(30,30,30,60)
 
         self.setLayout(loginFormLayout)
+
+    def selectRegisterPageFunction(self):
+        message_box = QMessageBox()
+        message_box.setText("Choose Which Registration Page")
+        clinicButton = message_box.addButton("Clinic", QMessageBox.ActionRole)
+        patientButton = message_box.addButton("Patient", QMessageBox.ActionRole)
+        doctorButton = message_box.addButton("Doctor", QMessageBox.ActionRole)
+        message_box.exec_()
+
+        if message_box.clickedButton() == clinicButton:
+            self.openClinicRegisterWindow()
+        elif message_box.clickedButton() == patientButton:
+            self.openPatientRegisterWindow()
+        elif message_box.clickedButton() == doctorButton:
+            self.openDoctorRegisterWindow()
+        
+    def openClinicRegisterWindow(self):
+        self.clinicRegister = ClinicRegisterWindow()
+        self.pageManager.add(self.clinicRegister)
+
+    def openPatientRegisterWindow(self):
+        self.patientRegister = PatientRegisterWindow()
+        self.pageManager.add(self.patientRegister)
+
+    def openDoctorRegisterWindow(self):
+        self.DoctorRegister = DoctorRegisterWindow()
+        self.pageManager.add(self.DoctorRegister)
 
     # for each of the login here, please pass in the id of the patient, doctor or clinic when creating the homepage
 
