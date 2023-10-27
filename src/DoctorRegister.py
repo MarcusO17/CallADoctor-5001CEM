@@ -15,7 +15,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 super().__init__()
                 self.setupUi(self)
                 self.pageManager = PageManager()
-                self.RegisterPushButton.clicked.connect(lambda checked: self.saveData)
 
 
         def setupUi(self, MainWindow):
@@ -351,6 +350,8 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.RegisterPushButton.setAutoFillBackground(False)
                 self.RegisterPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
                 self.RegisterPushButton.setObjectName("Register")
+                self.RegisterPushButton.clicked.connect(lambda checked: self.saveData)
+
 
 
         # Push Button for Going Back to Login Page
