@@ -14,7 +14,7 @@ from .PageManager import PageManager
 
 class PatientPrescriptionDetailsWindow(QMainWindow):
 
-    def __init__(self, patient, prescription):
+    def __init__(self,prescription,patient):
         super().__init__()
 
         #set the information here
@@ -77,7 +77,12 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.prescriptionDetailsList = self.prescription[0].getPrescriptionDetails()
+        try:
+            self.prescriptionDetailsList = self.prescription[0].getPrescriptionDetails()
+        except:
+            self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
+  
+             
 
         rowContainer = QWidget()
         rowLayout = QVBoxLayout(rowContainer)

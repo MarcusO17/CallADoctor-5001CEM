@@ -216,7 +216,7 @@ class PatientAppointmentDetailsWindow(QMainWindow):
 
     def viewPrescription(self):
         prescription = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByAppointment(self.appointment.getAppointmentID())   
-        self.patientPrescriptionDetails = PatientPrescriptionDetailsWindow(self.patient, prescription)
+        self.patientPrescriptionDetails = PatientPrescriptionDetailsWindow(prescription,self.patient)
         self.pageManager.add(self.patientPrescriptionDetails)
 
     def completeAppointment(self):
