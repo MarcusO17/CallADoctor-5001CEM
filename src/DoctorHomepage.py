@@ -2,7 +2,7 @@ import os
 from PyQt5.QtCore import Qt, QRect, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QMessageBox, QVBoxLayout, QHBoxLayout, QWidget, \
-    QSizePolicy
+    QSizePolicy, QStackedWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from .AccountPage import AccountPage
@@ -18,35 +18,33 @@ class DoctorHomepage(QMainWindow):
         super().__init__()
         self.pageManager = PageManager()
         self.doctor = Doctor.getDoctorfromID(sessionID)
-        # not implemented yet
-        #self.doctor = Doctor.getDoctorfromID(sessionID)
         self.setWindowTitle("Doctor Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setupUi(self)
 
     def gotoSchedule(self):
-        #doctor1 = Doctor("D0001", "Doctor 1", "c0001", "AVAILABLE", "Junior", "0123456789", "030102091820", 2)
-        self.doctorScheduleWindow = DoctorScheduleWindow(self.doctor)
-        self.pageManager.add(self.doctorScheduleWindow)
-        print(self.pageManager.size())
+        self.setButtonHighlight(self.scheduleButton)
+        self.doctorScheduleWindow.setSchedule()
+        self.frameLayout.setCurrentIndex(1)
+
 
     def gotoPatientRecord(self):
-        #self.doctor = Doctor("D0001", "Doctor 1", "C0001", "status", "doctortype", "doctorContact", "doctorICNUmber", 5)
-        self.patientRecord = DoctorPatientRecordWindow(self.doctor)
-        self.pageManager.add(self.patientRecord)
-        print(self.pageManager.size())
+        pass
+
 
     def gotoMyAppointment(self):
-        #self.doctor = Doctor("D0001", "Doctor 1", "C0001", "status", "doctortype", "doctorContact", "doctorICNUmber", 5)
-        self.myAppointment = DoctorMyAppointmentWindow(self.doctor)
-        self.pageManager.add(self.myAppointment)
-        print(self.pageManager.size())
+        self.setButtonHighlight(self.myAppointmentButton)
+        self.frameLayout.setCurrentIndex(3)
 
     def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Doctor", self.doctor)
-        self.pageManager.add(self.accountPage)
+        pass
+
+
+    def goToDashboard(self):
+        self.setButtonHighlight(self.dashboardButton)
+        self.doctorDashboard.setSchedule()
+        self.frameLayout.setCurrentIndex(0)
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -77,6 +75,7 @@ class DoctorHomepage(QMainWindow):
         self.dashboardButton.setIconSize(QSize(35, 35))
         self.dashboardButton.setIcon(self.dashboardIcon)
         self.dashboardButton.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
+        self.dashboardButton.clicked.connect(self.goToDashboard)
 
         # Button, Label and Icon for Patient Record
         self.patientRecordButton = QPushButton()
@@ -123,6 +122,13 @@ class DoctorHomepage(QMainWindow):
         self.logoutButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
         self.logoutButton.clicked.connect(self.logout)
 
+        self.highlightButtonList = list()
+        self.highlightButtonList.append(self.myAccountButton)
+        self.highlightButtonList.append(self.myAppointmentButton)
+        self.highlightButtonList.append(self.scheduleButton)
+        self.highlightButtonList.append(self.dashboardButton)
+        self.highlightButtonList.append(self.patientRecordButton)
+
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
         spacer1.setFixedHeight(100)
@@ -142,13 +148,23 @@ class DoctorHomepage(QMainWindow):
 
         self.mainLayout.addWidget(self.sideLayoutWidget, 1)
 
-        # THIS LAYOUT IS ONLY FOR QWIDGET SWITCHING
-        self.frameLayout = QVBoxLayout()
+        # THIS QSTACKEDWIDGET IS ONLY FOR QWIDGET SWITCHING
+        self.frameLayout = QStackedWidget()
+        # start and set all pages to the framelayout
+        self.doctorDashboard = DoctorDashboard(self.doctor) # index 0
+        self.doctorScheduleWindow = DoctorScheduleWindow(self.doctor) # index 1
+        self.doctorPatientRecord = DoctorPatientRecordWindow(self.doctor) # index 2
+        self.doctorMyAppointment = DoctorMyAppointmentWindow(self.doctor) # index 3
+        self.accountPage = AccountPage() # index 4
+        self.accountPage.setUser("Doctor", self.doctor)
 
-        doctorDashboard = DoctorDashboard(self.doctor)
-        self.frameLayout.addWidget(doctorDashboard)
+        self.frameLayout.addWidget(self.doctorDashboard)
+        self.frameLayout.addWidget(self.doctorScheduleWindow)
+        self.frameLayout.addWidget(self.doctorPatientRecord)
+        self.frameLayout.addWidget(self.doctorMyAppointment)
+        self.frameLayout.addWidget(self.accountPage)
 
-        self.mainLayout.addLayout(self.frameLayout, 11)
+        self.mainLayout.addWidget(self.frameLayout, 11)
 
         self.centralwidget.setLayout(self.mainLayout)
 
@@ -162,3 +178,9 @@ class DoctorHomepage(QMainWindow):
                                                QMessageBox.Yes | QMessageBox.No)
         if logoutDialogBox == QMessageBox.Yes:
             self.pageManager.goBack()
+    def setButtonHighlight(self, button):
+        for buttonTemp in self.highlightButtonList:
+            if buttonTemp == button:
+                button.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
+            else:
+                buttonTemp.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")

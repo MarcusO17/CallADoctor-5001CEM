@@ -1,3 +1,6 @@
+from PyQt5.QtWidgets import QStackedWidget
+
+
 class PageManager():
     _instance = None
     def __new__(cls):
@@ -22,7 +25,6 @@ class PageManager():
 
     def getPreviousPage(self):
         return self.stack[len(self.stack) - 2]
-
 
     def size(self):
         return len(self.stack)

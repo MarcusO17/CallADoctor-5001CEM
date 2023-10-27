@@ -25,13 +25,11 @@ class DoctorDashboard(QWidget):
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
 
-        self.centralwidget = QWidget()
-
         self.generateSchedule()
 
-        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
+        self.appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
 
-        self.setSchedule(appointmentList)
+        self.setSchedule()
 
         self.generateUpcomingAppointments()
 
@@ -71,9 +69,12 @@ class DoctorDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
-    def setSchedule(self, appointmentList):
+    def setSchedule(self):
 
-        for appointment in appointmentList:
+        self.appointmentList.clear()
+        self.appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
+
+        for appointment in self.appointmentList:
             row = 0
             col = 0
             date = appointment.getAppointmentDate()
