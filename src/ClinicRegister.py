@@ -37,27 +37,27 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicRegMainTitle.setObjectName("clinicRegMainTitle")
 
         # Sub Title for Clinic Register set as Label 2
-                self.ClinicRegSubTitle = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicRegSubTitle.setGeometry(60, 90, 451, 41)
-                self.ClinicRegSubTitle.setText("Get your Clinic registered now!")
+                self.clinicRegSubTitle = QtWidgets.QLabel(self.centralwidget)
+                self.clinicRegSubTitle.setGeometry(60, 90, 451, 41)
+                self.clinicRegSubTitle.setText("Get your Clinic registered now!")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(20)
                 font.setBold(True)
                 font.setWeight(75)
-                self.ClinicRegSubTitle.setFont(font)
-                self.ClinicRegSubTitle.setObjectName("ClinicRegSubTitle")
+                self.clinicRegSubTitle.setFont(font)
+                self.clinicRegSubTitle.setObjectName("clinicRegSubTitle")
 
 
         # Clinic ID Number - Set as Label 3
-                self.ClinicIDLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicIDLabel.setGeometry(30, 150, 221, 21)
-                self.ClinicIDLabel.setText("Clinic ID Number")
+                self.clinicIDLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicIDLabel.setGeometry(30, 150, 221, 21)
+                self.clinicIDLabel.setText("Clinic ID Number")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicIDLabel.setFont(font)
-                self.ClinicIDLabel.setObjectName("ClinicIDLabel")
+                self.clinicIDLabel.setFont(font)
+                self.clinicIDLabel.setObjectName("clinicIDLabel")
 
 
         # Line Edit for Entering Clinic ID Number
@@ -72,14 +72,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Address of Clinic - Set as Label 4
-                self.ClinicAddressLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicAddressLabel.setGeometry(30, 240, 221, 16)
-                self.ClinicAddressLabel.setText("Address of Clinic")
+                self.clinicAddressLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicAddressLabel.setGeometry(30, 240, 221, 16)
+                self.clinicAddressLabel.setText("Address of Clinic")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicAddressLabel.setFont(font)
-                self.ClinicAddressLabel.setObjectName("ClinicAddressLabel")
+                self.clinicAddressLabel.setFont(font)
+                self.clinicAddressLabel.setObjectName("clinicAddressLabel")
 
 
         # Line Edit for Entering the Clinic Address
@@ -94,14 +94,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Name Of Clinic - Set As Label 5
-                self.ClinicNameLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicNameLabel.setGeometry(30, 330, 221, 16)
-                self.ClinicNameLabel.setText("Name of Clinic")
+                self.clinicNameLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicNameLabel.setGeometry(30, 330, 221, 16)
+                self.clinicNameLabel.setText("Name of Clinic")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicNameLabel.setFont(font)
-                self.ClinicNameLabel.setObjectName("ClinicNameLabel")
+                self.clinicNameLabel.setFont(font)
+                self.clinicNameLabel.setObjectName("clinicNameLabel")
 
 
         # Line Edit for Entering Clinic Name
@@ -116,14 +116,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Clinic Contact Number - Set as Label 6
-                self.ClinicContactLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicContactLabel.setGeometry(30, 420, 221, 16)
-                self.ClinicContactLabel.setText("Clinic Contact Number")
+                self.clinicContactLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicContactLabel.setGeometry(30, 420, 221, 16)
+                self.clinicContactLabel.setText("Clinic Contact Number")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicContactLabel.setFont(font)
-                self.ClinicContactLabel.setObjectName("ClinicContactLabel")
+                self.clinicContactLabel.setFont(font)
+                self.clinicContactLabel.setObjectName("clinicContactLabel")
 
 
         # Line Edit for Entering Clinic Contact Number 
@@ -138,14 +138,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Clinic Email - Set as Label 7
-                self.ClinicEmailLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicEmailLabel.setGeometry(280, 150, 221, 16)
-                self.ClinicEmailLabel.setText("Clinic Email")
+                self.clinicEmailLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicEmailLabel.setGeometry(280, 150, 221, 16)
+                self.clinicEmailLabel.setText("Clinic Email")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicEmailLabel.setFont(font)
-                self.ClinicEmailLabel.setObjectName("ClinicEmailLabel")
+                self.clinicEmailLabel.setFont(font)
+                self.clinicEmailLabel.setObjectName("clinicEmailLabel")
 
 
         # Line Edit for Entering Clinic Email
@@ -160,14 +160,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Clinic Post Code - Set as Label 8
-                self.ClinicPostCodeLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicPostCodeLabel.setGeometry(280, 240, 221, 16)
-                self.ClinicPostCodeLabel.setText("Clinic Post Code")
+                self.clinicPostCodeLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicPostCodeLabel.setGeometry(280, 240, 221, 16)
+                self.clinicPostCodeLabel.setText("Clinic Post Code")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicPostCodeLabel.setFont(font)
-                self.ClinicPostCodeLabel.setObjectName("ClinicPostCodeLabel")
+                self.clinicPostCodeLabel.setFont(font)
+                self.clinicPostCodeLabel.setObjectName("clinicPostCodeLabel")
 
 
         # Line Edit for Entering Clinic Postal Code
@@ -182,14 +182,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Verification Document - Set as Label 9
-                self.ClinicDocumentLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicDocumentLabel.setGeometry(280, 330, 221, 16)
-                self.ClinicDocumentLabel.setText("Verification Document")
+                self.clinicDocumentLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicDocumentLabel.setGeometry(280, 330, 221, 16)
+                self.clinicDocumentLabel.setText("Verification Document")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicDocumentLabel.setFont(font)
-                self.ClinicDocumentLabel.setObjectName("ClinicDocumentLabel")
+                self.clinicDocumentLabel.setFont(font)
+                self.clinicDocumentLabel.setObjectName("clinicDocumentLabel")
 
 
         # Actually for Now I set this Line Edit to show Attachnent of Document
@@ -206,14 +206,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Clinic Password - Set as Label 10 
-                self.ClinicPasswordLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicPasswordLabel.setGeometry(530, 150, 221, 16)
-                self.ClinicPasswordLabel.setText("Password")
+                self.clinicPasswordLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicPasswordLabel.setGeometry(530, 150, 221, 16)
+                self.clinicPasswordLabel.setText("Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicPasswordLabel.setFont(font)
-                self.ClinicPasswordLabel.setObjectName("ClinicPasswordLabel")
+                self.clinicPasswordLabel.setFont(font)
+                self.clinicPasswordLabel.setObjectName("clinicPasswordLabel")
 
 
         # Line Edit for Clinic to Enter the Password
@@ -231,14 +231,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Confirm Password for CLinic - Set as Label 11
-                self.ClinicReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicReEnterPassLabel.setGeometry(530, 240, 221, 16)
-                self.ClinicReEnterPassLabel.setText("Confirm Password")
+                self.clinicReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicReEnterPassLabel.setGeometry(530, 240, 221, 16)
+                self.clinicReEnterPassLabel.setText("Confirm Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.ClinicReEnterPassLabel.setFont(font)
-                self.ClinicReEnterPassLabel.setObjectName("ClinicReEnterPassLabel")
+                self.clinicReEnterPassLabel.setFont(font)
+                self.clinicReEnterPassLabel.setObjectName("clinicReEnterPassLabel")
 
 
         # Line Edit for Clinic to Enter Password again to confirm
@@ -366,11 +366,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 
                 
         # Icon For LOGO - Set as Label 12 (Need to Add Image)
-                self.ClinicRegisterLogo = QtWidgets.QLabel(self.centralwidget)
-                self.ClinicRegisterLogo.setGeometry(650, 50, 91, 61)
-                self.ClinicRegisterLogo.setText("LOGO Here")
-                self.ClinicRegisterLogo.setFrameShape(QtWidgets.QFrame.Box)
-                self.ClinicRegisterLogo.setObjectName("ClinicRegisterLogo")
+                self.clinicRegisterLogo = QtWidgets.QLabel(self.centralwidget)
+                self.clinicRegisterLogo.setGeometry(650, 50, 91, 61)
+                self.clinicRegisterLogo.setText("LOGO Here")
+                self.clinicRegisterLogo.setFrameShape(QtWidgets.QFrame.Box)
+                self.clinicRegisterLogo.setObjectName("clinicRegisterLogo")
                 
         # Code for all Label, Buttons and even the Line Edits ends here ^^^^^^^^^^^^
 
