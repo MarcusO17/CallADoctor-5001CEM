@@ -54,14 +54,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # First Name for Doctor - Set as Label 3
-                self.DocFirstNameLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocFirstNameLabel.setGeometry(30, 150, 221, 21)
-                self.DocFirstNameLabel.setText("First Name as per IC/Passport")
+                self.docFirstNameLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docFirstNameLabel.setGeometry(30, 150, 221, 21)
+                self.docFirstNameLabel.setText("First Name as per IC/Passport")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocFirstNameLabel.setFont(font)
-                self.DocFirstNameLabel.setObjectName("DocFirstNameLabel")
+                self.docFirstNameLabel.setFont(font)
+                self.docFirstNameLabel.setObjectName("docFirstNameLabel")
 
 
         # Line Edit for Entering doctor's First Name 
@@ -76,14 +76,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Last Name for Doctor - Set as Label 4
-                self.DocLastNameLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocLastNameLabel.setGeometry(30, 240, 221, 16)
-                self.DocLastNameLabel.setText("Last Name as per IC/Passport")
+                self.docLastNameLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docLastNameLabel.setGeometry(30, 240, 221, 16)
+                self.docLastNameLabel.setText("Last Name as per IC/Passport")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocLastNameLabel.setFont(font)
-                self.DocLastNameLabel.setObjectName("DocLastNameLabel")
+                self.docLastNameLabel.setFont(font)
+                self.docLastNameLabel.setObjectName("docLastNameLabel")
 
 
         # Line Edit for Entering Doctor's Last Name
@@ -98,14 +98,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Email for Doctor - Set as Label 5
-                self.DocEmailLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocEmailLabel.setGeometry(30, 330, 221, 16)
-                self.DocEmailLabel.setText("Email")
+                self.docEmailLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docEmailLabel.setGeometry(30, 330, 221, 16)
+                self.docEmailLabel.setText("Email")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocEmailLabel.setFont(font)
-                self.DocEmailLabel.setObjectName("DocEmailLabel")
+                self.docEmailLabel.setFont(font)
+                self.docEmailLabel.setObjectName("docEmailLabel")
 
 
         # Line Edit for Doctor's Email 
@@ -120,14 +120,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Doctor's Contact Number - Set as Label 6
-                self.DocContactLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocContactLabel.setGeometry(30, 420, 221, 16)
-                self.DocContactLabel.setText("Doctor Contact Number")
+                self.docContactLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docContactLabel.setGeometry(30, 420, 221, 16)
+                self.docContactLabel.setText("Doctor Contact Number")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocContactLabel.setFont(font)
-                self.DocContactLabel.setObjectName("DocContactLabel")
+                self.docContactLabel.setFont(font)
+                self.docContactLabel.setObjectName("docContactLabel")
 
 
         # Line Edit for Doctor's Contact Number
@@ -142,14 +142,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Doctor's Specialty - Set as Label 7
-                self.DocSpecialtyLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocSpecialtyLabel.setGeometry(280, 150, 221, 16)
-                self.DocSpecialtyLabel.setText("Specialty (Type Of Doctor)")
+                self.docSpecialtyLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docSpecialtyLabel.setGeometry(280, 150, 221, 16)
+                self.docSpecialtyLabel.setText("Specialty (Type Of Doctor)")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocSpecialtyLabel.setFont(font)
-                self.DocSpecialtyLabel.setObjectName("DocSpecialtyLabel")
+                self.docSpecialtyLabel.setFont(font)
+                self.docSpecialtyLabel.setObjectName("docSpecialtyLabel")
 
 
         # Line Edit for Entering Doctor's Specialty 
@@ -164,14 +164,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Doctor's Date of Birth - Set as Label 8
-                self.DocDOBLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocDOBLabel.setGeometry(280, 240, 221, 16)
-                self.DocDOBLabel.setText("Date Of Birth")
+                self.docDOBLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docDOBLabel.setGeometry(280, 240, 221, 16)
+                self.docDOBLabel.setText("Date Of Birth")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocDOBLabel.setFont(font)
-                self.DocDOBLabel.setObjectName("DocDOBLabel")
+                self.docDOBLabel.setFont(font)
+                self.docDOBLabel.setObjectName("docDOBLabel")
 
 
         # Date Edit option to Select doctor's DOB 
@@ -185,14 +185,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # IC/Passport Number For Doctor - Set as label 9
-                self.DocPassportLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocPassportLabel.setGeometry(280, 330, 221, 16)
-                self.DocPassportLabel.setText("IC/Passport Number")
+                self.docPassportLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docPassportLabel.setGeometry(280, 330, 221, 16)
+                self.docPassportLabel.setText("IC/Passport Number")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocPassportLabel.setFont(font)
-                self.DocPassportLabel.setObjectName("DocPassportLabel")
+                self.docPassportLabel.setFont(font)
+                self.docPassportLabel.setObjectName("docPassportLabel")
 
 
         # Line Edit for Entering Doctor's IC/Passport Number
@@ -207,17 +207,17 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Highest Achievement & Verification Documents Attachment 
-                self.DocAttachmentLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocAttachmentLabel.setGeometry(280, 400, 221, 40)
-                self.DocAttachmentLabel.setText("Highest Achievement & Verification Documents")
+                self.docAttachmentLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docAttachmentLabel.setGeometry(280, 400, 221, 40)
+                self.docAttachmentLabel.setText("Highest Achievement & Verification Documents")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocAttachmentLabel.setFont(font)
-                self.DocAttachmentLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
-                self.DocAttachmentLabel.setStyleSheet("")
-                self.DocAttachmentLabel.setWordWrap(True)
-                self.DocAttachmentLabel.setObjectName("DocAttachmentLabel")
+                self.docAttachmentLabel.setFont(font)
+                self.docAttachmentLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
+                self.docAttachmentLabel.setStyleSheet("")
+                self.docAttachmentLabel.setWordWrap(True)
+                self.docAttachmentLabel.setObjectName("docAttachmentLabel")
 
 
         # (NEED TO CHANGE FORMAT)
@@ -233,14 +233,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Years of Experience for Doctor - Set as Label 10
-                self.DocExpLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocExpLabel.setGeometry(530, 150, 221, 16)
-                self.DocExpLabel.setText("How many Years of Experience")
+                self.docExpLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docExpLabel.setGeometry(530, 150, 221, 16)
+                self.docExpLabel.setText("How many Years of Experience")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocExpLabel.setFont(font)
-                self.DocExpLabel.setObjectName("DocExpLabel")
+                self.docExpLabel.setFont(font)
+                self.docExpLabel.setObjectName("docExpLabel")
 
 
         # Line Edit for Entering Doc's Years of Experience
@@ -255,14 +255,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         # Doctor's Password - Set as Label 11
-                self.DocPasswordLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocPasswordLabel.setGeometry(530, 240, 221, 16)
-                self.DocPasswordLabel.setText("Password")
+                self.docPasswordLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docPasswordLabel.setGeometry(530, 240, 221, 16)
+                self.docPasswordLabel.setText("Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocPasswordLabel.setFont(font)
-                self.DocPasswordLabel.setObjectName("DocPasswordLabel")
+                self.docPasswordLabel.setFont(font)
+                self.docPasswordLabel.setObjectName("docPasswordLabel")
                 
 
         # Line Edit for Entering Doctor's Password
@@ -277,14 +277,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 
                 
         # Confirmation of Password for Doctor - Set as Label 14
-                self.DocReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
-                self.DocReEnterPassLabel.setGeometry(530, 330, 221, 16)
-                self.DocReEnterPassLabel.setText("Confirm Password")
+                self.docReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
+                self.docReEnterPassLabel.setGeometry(530, 330, 221, 16)
+                self.docReEnterPassLabel.setText("Confirm Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(10)
-                self.DocReEnterPassLabel.setFont(font)
-                self.DocReEnterPassLabel.setObjectName("DocReEnterPassLabel")
+                self.docReEnterPassLabel.setFont(font)
+                self.docReEnterPassLabel.setObjectName("docReEnterPassLabel")
                 
                 
         # Line Edit for Entering the password of Doctor Again
@@ -405,11 +405,11 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
                 
         # Icon For LOGO - Set as Label 12 (Need to Add Image)
-                self.DocPageLogo = QtWidgets.QLabel(self.centralwidget)
-                self.DocPageLogo.setGeometry(650, 50, 91, 61)
-                self.DocPageLogo.setText("LOGO Here")
-                self.DocPageLogo.setFrameShape(QtWidgets.QFrame.Box)
-                self.DocPageLogo.setObjectName("DocPageLogo")
+                self.docPageLogo = QtWidgets.QLabel(self.centralwidget)
+                self.docPageLogo.setGeometry(650, 50, 91, 61)
+                self.docPageLogo.setText("LOGO Here")
+                self.docPageLogo.setFrameShape(QtWidgets.QFrame.Box)
+                self.docPageLogo.setObjectName("docPageLogo")
                 
         # Code for all Label, Buttons and even the Line Edits ends here ^^^^^^^^^^^^
 
