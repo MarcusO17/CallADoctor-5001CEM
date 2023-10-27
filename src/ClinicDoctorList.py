@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea, QSizePolicy, QLineEdit
 from PyQt5 import QtWidgets
 
+from .AccountPage import AccountPage
 from .ClinicAddDoctor import ClinicAddDoctor
 from .ClinicDoctorDetails import ClinicDoctorDetails
 from .model import Clinic
@@ -61,6 +62,7 @@ class ClinicDoctorList(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
@@ -119,6 +121,11 @@ class ClinicDoctorList(QMainWindow):
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)
 
     def generateDoctorButtons(self):
 

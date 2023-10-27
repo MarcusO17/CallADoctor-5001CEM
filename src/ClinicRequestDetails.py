@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea, QMessageBox
 from PyQt5 import QtWidgets
 
+from .AccountPage import AccountPage
 from .AssignDoctorDialog import AssignDoctorDialog
 from .model import Appointment, Clinic
 from .PageManager import PageManager
@@ -62,6 +63,7 @@ class ClinicRequestDetails(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -161,6 +163,7 @@ class ClinicRequestDetails(QMainWindow):
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
 
         self.requestContainer = QLabel(self.centralwidget)
         self.requestContainer.setFixedSize(1000, 500)
@@ -229,4 +232,9 @@ class ClinicRequestDetails(QMainWindow):
         self.assignDoctorDialog.exec_()
 
         self.assignedDoctorLabel.setText(self.request.getDoctorID())
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)
        

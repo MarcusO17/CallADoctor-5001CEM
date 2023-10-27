@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QApplication, \
     QScrollArea
 from PyQt5 import QtCore, QtWidgets
+
+from .AccountPage import AccountPage
 from .model import Appointment
 from .model import Clinic
 from .model import Doctor
@@ -15,16 +17,13 @@ from .PageManager import PageManager
 
 class ClinicAppointmentDetails(QMainWindow):
 
-    def __init__(self, appointment, doctor):
+    def __init__(self, appointment, doctor, clinic):
         super().__init__()
         self.pageManager = PageManager()
         # set the information here
         self.appointment = appointment
         self.doctor = doctor
-
-        print(self.appointment.getAppointmentID(), self.appointment.getPatientID(), self.appointment.getDoctorID(),
-              self.appointment.getAppointmentStatus(), self.appointment.getStartTime, self.appointment.getEndTime,
-              self.appointment.getAppointmentDate(), self.appointment.getVisitReason())
+        self.clinic = clinic
         self.setWindowTitle("Appointment Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -65,6 +64,7 @@ class ClinicAppointmentDetails(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
@@ -146,6 +146,7 @@ class ClinicAppointmentDetails(QMainWindow):
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(self.container)
@@ -169,3 +170,8 @@ class ClinicAppointmentDetails(QMainWindow):
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)

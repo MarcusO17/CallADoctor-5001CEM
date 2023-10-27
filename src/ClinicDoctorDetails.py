@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
     QScrollArea
 from PyQt5 import QtCore, QtWidgets
 
+from .AccountPage import AccountPage
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .model import Appointment
 from .model import Clinic
@@ -64,6 +65,7 @@ class ClinicDoctorDetails(QMainWindow):
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(70, 70))
         self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
@@ -202,6 +204,7 @@ class ClinicDoctorDetails(QMainWindow):
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(self.container)
@@ -259,3 +262,8 @@ class ClinicDoctorDetails(QMainWindow):
             self.addDoctorLabel.show()
             self.scheduleButton.hide()
             self.scheduleButtonLabel.hide()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)
