@@ -14,6 +14,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.pageManager = PageManager()
         self.RegisterPushButton.clicked.connect(lambda checked: self.saveData)
 
 
