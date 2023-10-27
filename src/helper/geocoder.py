@@ -10,8 +10,13 @@ class GeoHelper:
         try:
             location = self.geocoder.geocode(address)
         except:
-            print(f'Unknown Location!')
-            return(None,None)
+            try:
+                addressComponents = address.split(",")
+                location = self.geocoder.geocode(addressComponents[1:])
+            except:
+                print("No Location Found")
+                return(None,None)
+            
         lat=location.latitude
         lon=location.longitude
         return[lat,lon]
