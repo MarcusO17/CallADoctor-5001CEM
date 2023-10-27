@@ -403,6 +403,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docGoBackLoginPushButton.setAutoFillBackground(False)
                 self.docGoBackLoginPushButton.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
                 self.docGoBackLoginPushButton.setObjectName("docGoBackLoginPushButton")
+                self.docGoBackLoginPushButton.clicked.connect(self.docGoBackLogin)
 
                 
         # Icon For LOGO - Set as Label 12 (Need to Add Image)
@@ -450,3 +451,11 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         pass
                 else:
                         print(response)
+
+
+        def docGoBackLogin(self):
+                docGoBackLoginDialogBox = QMessageBox.question(self.centralwidget, "Go Back Login",
+                                                                "Are you sure you want to go back?",
+                                                QMessageBox.Yes | QMessageBox.No)
+                if docGoBackLoginDialogBox == QMessageBox.Yes:
+                        self.pageManager.goBack()
