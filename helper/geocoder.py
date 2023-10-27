@@ -34,6 +34,7 @@ class GeoHelper:
             icon=folium.Icon(icon='star')
         ).add_to(map)
 
+
     def getDistance(self,coord1,coord2):
         return geodesic(coord1,coord2).kilometers
 

@@ -68,6 +68,8 @@ def patients():
                 patientICNumber = row['patientICNumber'],
                 bloodType = row['bloodType'],
                 race = row['race'],  
+                lat = row['lat'],
+                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
@@ -88,14 +90,17 @@ def patients():
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
         race = contentJSON['race']
+        lat = contentJSON['lat']
+        lon = contentJSON['lon']
+
    
         insertQuery = """
                         INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
-                                            patientICNumber,dateOfBirth,bloodType,race)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                                            patientICNumber,dateOfBirth,bloodType,race,lat,lon)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
-                                             patientICNumber,dateOfBirth,bloodType,race))
+                                             patientICNumber,dateOfBirth,bloodType,race,lat,lon))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -122,6 +127,8 @@ def patientID(id):
                 patientICNumber = row['patientICNumber'],
                 bloodType = row['bloodType'],
                 race = row['race'],  
+                lat = row['lat'],
+                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
@@ -151,6 +158,8 @@ def clinics():
                 clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
+                lat = row['lat'],
+                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
@@ -169,14 +178,16 @@ def clinics():
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
         governmentApproved = contentJSON['governmentApproved']
+        lat = contentJSON['lat'],
+        lon = contentJSON['lon']
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s)
+                                            clinicContact,governmentApproved,lat,lon)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved))
+                                            clinicContact,governmentApproved,lat,lon))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -200,6 +211,8 @@ def clinicID(id):
                 clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
+                lat = row['lat'],
+                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
