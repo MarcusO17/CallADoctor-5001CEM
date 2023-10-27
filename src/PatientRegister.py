@@ -61,12 +61,12 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering First Name 
         self.patientFirstNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientFirstNameLineEdit.setGeometry(30, 170, 221, 31)
-        self.patientFirstNameLineEdit.setText("example - John")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientFirstNameLineEdit.setFont(font)
         self.patientFirstNameLineEdit.setObjectName("patientFirstNameLineEdit")
+        self.patientFirstNameLineEdit.setPlaceholderText("example - John")
 
     
 # Last Name Text - set as Label 4
@@ -83,12 +83,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Last Name 
         self.patientLastNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientLastNameLineEdit.setGeometry(30, 260, 221, 31)
-        self.patientLastNameLineEdit.setText("example - Monroe")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientLastNameLineEdit.setFont(font)
         self.patientLastNameLineEdit.setObjectName("patientLastNameLineEdit")
+        self.patientLastNameLineEdit.setPlaceholderText("example - Monroe")
+
 
 
 # Email Text - set as label 5
@@ -105,12 +106,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 #Line Edit for Entering Email 
         self.patientEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientEmailLineEdit.setGeometry(30, 350, 221, 31)
-        self.patientEmailLineEdit.setText("example - superhero@miro.com")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientEmailLineEdit.setFont(font)
         self.patientEmailLineEdit.setObjectName("patientEmailLineEdit")
+        self.patientEmailLineEdit.setPlaceholderText("example - superhero@miro.com")
+
 
 
 # Contact Numebr Text - set as label 6
@@ -127,11 +129,11 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Contact Number
         self.patientContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientContactLineEdit.setGeometry(30, 440, 221, 31)
-        self.patientContactLineEdit.setText("example - +60xxxxxxxx")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientContactLineEdit.setObjectName("patientContactLineEdit")
+        self.patientContactLineEdit.setPlaceholderText("example - +60xxxxxxxx")
 
 
 # Current Residence Address Text - Set as Label 7
@@ -148,12 +150,12 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Address
         self.patientResidenceLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientResidenceLineEdit.setGeometry(280, 170, 221, 31)
-        self.patientResidenceLineEdit.setText("example - Bayan Lepas, Penang")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientResidenceLineEdit.setFont(font)
         self.patientResidenceLineEdit.setObjectName("patientResidenceLineEdit")
+        self.patientResidenceLineEdit.setPlaceholderText("example - Bayan Lepas, Penang")
 
 
 # Date of Birth Text - Set as Label 8
@@ -192,12 +194,12 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 # Line-Edit for Entering the IC or passport number
         self.patientPassportLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientPassportLineEdit.setGeometry(280, 350, 221, 31)
-        self.patientPassportLineEdit.setText("example - i123133xx")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientPassportLineEdit.setFont(font)
         self.patientPassportLineEdit.setObjectName("patientPassportLineEdit")
+        self.patientPassportLineEdit.setPlaceholderText("example - i123133xx")
 
 
 # Password Text - Set as Label 10
@@ -217,12 +219,12 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 # and Special Characters) 
         self.patientPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientPasswordLineEdit.setGeometry(530, 170, 221, 31)
-        self.patientPasswordLineEdit.setText("example - SoMeThiNg@123")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientPasswordLineEdit.setFont(font)
         self.patientPasswordLineEdit.setObjectName("patientPasswordLineEdit")
+        self.patientPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
 
 
 # Confirm Password Text - set as Label 11
@@ -241,12 +243,12 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 # re-entered password same or not, if not, error 404)
         self.patientReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.patientReEnterPassLineEdit.setGeometry(530, 260, 221, 31)
-        self.patientReEnterPassLineEdit.setText("Re-enter Password")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
         self.patientReEnterPassLineEdit.setFont(font)
         self.patientReEnterPassLineEdit.setObjectName("patientReEnterPassLineEdit")
+        self.patientReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
 
 
 # Register PushButton for Registering Account - (Saves the Data)
