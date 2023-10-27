@@ -65,7 +65,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering doctor's First Name 
         self.DocFirstNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocFirstNameLineEdit.setGeometry(30, 170, 221, 31)
-        self.DocFirstNameLineEdit.setText("example - John")
+        self.DocFirstNameLineEdit.setPlaceholderText("example - John")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -87,7 +87,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Doctor's Last Name
         self.DocLastNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocLastNameLineEdit.setGeometry(30, 260, 221, 31)
-        self.DocLastNameLineEdit.setText("example - Monroe")
+        self.DocLastNameLineEdit.setPlaceholderText("example - Monroe")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -109,7 +109,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Doctor's Email 
         self.DocEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocEmailLineEdit.setGeometry(30, 350, 221, 31)
-        self.DocEmailLineEdit.setText("example - Doc123@new.com")
+        self.DocEmailLineEdit.setPlaceholderText("example - Doc123@new.com")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -131,7 +131,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Doctor's Contact Number
         self.DocContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocContactLineEdit.setGeometry(30, 440, 221, 31)
-        self.DocContactLineEdit.setText("example - +60xxxxxxxx")
+        self.DocContactLineEdit.setPlaceholderText("example - +60xxxxxxxx")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -153,7 +153,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Doctor's Specialty 
         self.DocSpecialtyLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocSpecialtyLineEdit.setGeometry(280, 170, 221, 31)
-        self.DocSpecialtyLineEdit.setText("example - Pediatrician, Surgeion etc")
+        self.DocSpecialtyLineEdit.setPlaceholderText("example - Pediatrician, Surgeion etc")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -196,7 +196,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Doctor's IC/Passport Number
         self.DocPassportLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocPassportLineEdit.setGeometry(280, 350, 221, 31)
-        self.DocPassportLineEdit.setText("example - 1232123xx")
+        self.DocPassportLineEdit.setPlaceholderText("example - 1232123xx")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -222,7 +222,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Right Now, its just for building UI, so it is Line Edit, need to change - important
         self.DocAttachmentLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocAttachmentLineEdit.setGeometry(280, 440, 221, 31)
-        self.DocAttachmentLineEdit.setText("Attach Here                                              +")
+        self.DocAttachmentLineEdit.setPlaceholderText("Attach Here                                              +")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -244,7 +244,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Doc's Years of Experience
         self.DocExpLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocExpLineEdit.setGeometry(530, 170, 221, 31)
-        self.DocExpLineEdit.setText("example - 5 years")
+        self.DocExpLineEdit.setPlaceholderText("example - 5")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -266,7 +266,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering Doctor's Password
         self.DocPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocPasswordLineEdit.setGeometry(530, 260, 221, 31)
-        self.DocPasswordLineEdit.setText("example - SoMeThiNg@123")
+        self.DocPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -288,7 +288,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 # Line Edit for Entering the password of Doctor Again
         self.DocReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.DocReEnterPassLineEdit.setGeometry(530, 350, 221, 31)
-        self.DocReEnterPassLineEdit.setText("Re-enter Password")
+        self.DocReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
