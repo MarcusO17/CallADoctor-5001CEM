@@ -364,6 +364,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicRegisterGoBackLogin.setAutoFillBackground(False)
                 self.clinicRegisterGoBackLogin.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
                 self.clinicRegisterGoBackLogin.setObjectName("clinicGoBackLogin")
+                self.clinicRegisterGoBackLogin.clicked.connect(self.clinicGoBackLogin)
                 
                 
         # Icon For LOGO - Set as Label 12 (Need to Add Image)
@@ -396,3 +397,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 "clinicPasswordLineEdit": self.clinicPasswordLineEdit.text()
                 
                 }
+
+        
+        def clinicGoBackLogin(self):
+                clinicGoBackLoginDialogBox = QMessageBox.question(self.centralwidget, "Go Back Login",
+                                                                  "Are you sure you want to go back?",
+                                                                  QMessageBox.Yes | QMessageBox.No)
+                if clinicGoBackLoginDialogBox == QMessageBox.Yes:
+                        self.pageManager.goBack()
