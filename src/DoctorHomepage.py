@@ -56,7 +56,7 @@ class DoctorHomepage(QMainWindow):
 
         self.mainLayout = QHBoxLayout()
         self.sideLayoutWidget = QWidget()
-        self.sideLayoutWidget.setStyleSheet("background-color: #dcdcdc;")
+        self.sideLayoutWidget.setStyleSheet("background-color: #E6EBF5; border-radius: 10px;")
         self.sideLayout = QVBoxLayout(self.sideLayoutWidget)
         self.sideLayout.setContentsMargins(10,10,10,10)
 
@@ -127,7 +127,6 @@ class DoctorHomepage(QMainWindow):
         self.mainLayout.addLayout(self.frameLayout, 11)
 
         self.centralwidget.setLayout(self.mainLayout)
-
 
         MainWindow.setCentralWidget(self.centralwidget)
 

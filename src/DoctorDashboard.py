@@ -5,7 +5,7 @@ from datetime import datetime
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout, \
-    QHBoxLayout, QSplitter
+    QHBoxLayout, QSplitter, QSizePolicy
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -28,45 +28,9 @@ class DoctorDashboard(QWidget):
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
 
-        HEIGHT = 7
-        WIDTH = 8
         self.centralwidget = QWidget()
 
-        self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
-
-        scheduleWidget = QWidget()
-        scheduleLayout = QGridLayout(scheduleWidget)
-
-        # header of the grid
-        timeStart = 8
-        timeEnd = 9
-        for i in range(WIDTH):
-            timeSlotLabel = QLabel()
-            timeSlotLabel.setFixedSize(50,30)
-            scheduleLayout.addWidget(timeSlotLabel, 0, i+1)
-            timeSlotLabel.setStyleSheet("border: 1px solid black;")
-            timeSlotLabel.setText(str(timeStart) + ":00")
-            timeStart = timeStart + 1
-            timeEnd = timeStart + 1
-
-        # side of the grid
-        daysOfTheWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
-        for i in range(HEIGHT):
-            dayCell = QLabel()
-            dayCell.setFixedSize(50, 30)
-            scheduleLayout.addWidget(dayCell, i + 1, 0)
-            dayCell.setStyleSheet("border: 1px solid black;")
-            dayCell.setText(daysOfTheWeek[i])
-
-        for h in range(HEIGHT):
-
-            for w in range(WIDTH):
-                timeSlotButton = QPushButton()
-                timeSlotButton.setFixedSize(50, 30)
-                scheduleLayout.addWidget(timeSlotButton, h + 1, w+1)
-                timeSlotButton.setStyleSheet("border: 1px solid black;")
-                self.timeSlotButtonList[h][w] = timeSlotButton
-                timeSlotButton.setEnabled(False)
+        self.generateSchedule()
 
         appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
 
@@ -80,7 +44,7 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentTitle.setText("Upcoming Appointment")
         self.upcomingAppointmentLayout.addWidget(self.upcomingAppointmentTitle)
 
-        self.leftLayout.addWidget(scheduleWidget, 3)
+        self.leftLayout.addWidget(self.scheduleWidget, 3)
         self.leftLayout.addWidget(self.upcomingAppointmentWidget, 7)
 
         self.mainLayout.addLayout(self.leftLayout, 5)
@@ -131,5 +95,93 @@ class DoctorDashboard(QWidget):
         self.accountPage = AccountPage()
         self.accountPage.setUser("Doctor", self.doctor)
         self.pageManager.add(self.accountPage)
+
+    def generateSchedule(self):
+
+        HEIGHT = 7
+        WIDTH = 8
+
+        self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
+
+        self.scheduleWidget = QWidget()
+        self.scheduleWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        scheduleLayout = QVBoxLayout(self.scheduleWidget)
+        scheduleLayout.setSpacing(0)
+
+        scheduleRowLayout = QHBoxLayout()
+        scheduleTitle = QLabel()
+        scheduleTitle.setFixedWidth(150)
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(20)
+        font.setBold(True)
+        font.setWeight(75)
+        scheduleTitle.setFont(font)
+        scheduleTitle.setText("Schedule")
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        scheduleRowLayout.addWidget(spacer)
+        scheduleRowLayout.addWidget(scheduleTitle)
+        scheduleLayout.addLayout(scheduleRowLayout)
+
+        scheduleRowLayout = QHBoxLayout()
+        spacer = QWidget()
+        spacer.setFixedHeight(20)
+        scheduleRowLayout.addWidget(spacer)
+        scheduleLayout.addLayout(scheduleRowLayout)
+
+        scheduleRowLayout = QHBoxLayout()
+        scheduleRowLayout.setSpacing(0)
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        scheduleRowLayout.addWidget(spacer)
+
+        spacer = QWidget()
+        spacer.setFixedSize(50, 30)
+        scheduleRowLayout.addWidget(spacer)
+        # header of the grid
+        timeStart = 8
+        for i in range(WIDTH):
+            timeSlotLabel = QLabel()
+            timeSlotLabel.setFixedSize(50, 30)
+            scheduleRowLayout.addWidget(timeSlotLabel)
+            timeSlotLabel.setStyleSheet("border: 1px solid black; background-color: white;")
+            timeSlotLabel.setText(str(timeStart) + ":00")
+            timeStart = timeStart + 1
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        scheduleRowLayout.addWidget(spacer)
+        scheduleLayout.addLayout(scheduleRowLayout)
+
+        # side of the grid
+        daysOfTheWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
+
+        for h in range(HEIGHT):
+            scheduleRowLayout = QHBoxLayout()
+            scheduleRowLayout.setSpacing(0)
+            spacer = QWidget()
+            spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+            scheduleRowLayout.addWidget(spacer)
+            dayCell = QLabel()
+            dayCell.setFixedSize(50, 30)
+            dayCell.setText(daysOfTheWeek[h])
+            dayCell.setStyleSheet("border: 1px solid black; background-color: white;")
+            scheduleRowLayout.addWidget(dayCell)
+            for w in range(WIDTH):
+                timeSlotButton = QPushButton()
+                timeSlotButton.setFixedSize(50, 30)
+                scheduleRowLayout.addWidget(timeSlotButton)
+                timeSlotButton.setStyleSheet("border: 1px solid black; background-color: white;")
+                self.timeSlotButtonList[h][w] = timeSlotButton
+                timeSlotButton.setEnabled(False)
+            spacer = QWidget()
+            spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+            scheduleRowLayout.addWidget(spacer)
+            scheduleLayout.addLayout(scheduleRowLayout)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        scheduleLayout.addWidget(spacer)
 
 
