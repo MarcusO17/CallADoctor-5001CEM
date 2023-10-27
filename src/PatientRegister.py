@@ -48,14 +48,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # First Name Text - set as Label 3
-        self.PatientFirstNameLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientFirstNameLabel.setGeometry(30, 150, 221, 21)
-        self.PatientFirstNameLabel.setText("First Name as per IC/Passport")
+        self.patientFirstNameLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientFirstNameLabel.setGeometry(30, 150, 221, 21)
+        self.patientFirstNameLabel.setText("First Name as per IC/Passport")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientFirstNameLabel.setFont(font)
-        self.PatientFirstNameLabel.setObjectName("PatientFirstNameLabel")
+        self.patientFirstNameLabel.setFont(font)
+        self.patientFirstNameLabel.setObjectName("PatientFirstNameLabel")
 
 
 # Line Edit for Entering First Name 
@@ -70,14 +70,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
     
 # Last Name Text - set as Label 4
-        self.PatientLastNameLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientLastNameLabel.setGeometry(30, 240, 221, 16)
-        self.PatientLastNameLabel.setText("Last Name as per IC/Passport")
+        self.patientLastNameLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientLastNameLabel.setGeometry(30, 240, 221, 16)
+        self.patientLastNameLabel.setText("Last Name as per IC/Passport")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientLastNameLabel.setFont(font)
-        self.PatientLastNameLabel.setObjectName("PatientLastNameLabel")
+        self.patientLastNameLabel.setFont(font)
+        self.patientLastNameLabel.setObjectName("PatientLastNameLabel")
 
 
 # Line Edit for Entering Last Name 
@@ -92,14 +92,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # Email Text - set as label 5
-        self.PatientEmailLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientEmailLabel.setGeometry(30, 330, 221, 16)
-        self.PatientEmailLabel.setText("Email")
+        self.patientEmailLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientEmailLabel.setGeometry(30, 330, 221, 16)
+        self.patientEmailLabel.setText("Email")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientEmailLabel.setFont(font)
-        self.PatientEmailLabel.setObjectName("PatientEmailLabel")
+        self.patientEmailLabel.setFont(font)
+        self.patientEmailLabel.setObjectName("PatientEmailLabel")
 
 
 #Line Edit for Entering Email 
@@ -114,14 +114,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # Contact Numebr Text - set as label 6
-        self.PatientContactLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientContactLabel.setGeometry(30, 420, 221, 16)
-        self.PatientContactLabel.setText("Contact Number")
+        self.patientContactLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientContactLabel.setGeometry(30, 420, 221, 16)
+        self.patientContactLabel.setText("Contact Number")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientContactLabel.setFont(font)
-        self.PatientContactLabel.setObjectName("PatientContactLabel")
+        self.patientContactLabel.setFont(font)
+        self.patientContactLabel.setObjectName("PatientContactLabel")
 
 
 # Line Edit for Entering Contact Number
@@ -135,14 +135,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # Current Residence Address Text - Set as Label 7
-        self.PatientResidenceLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientResidenceLabel.setGeometry(280, 150, 221, 16)
-        self.PatientResidenceLabel.setText("Current Residence Address")
+        self.patientResidenceLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientResidenceLabel.setGeometry(280, 150, 221, 16)
+        self.patientResidenceLabel.setText("Current Residence Address")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientResidenceLabel.setFont(font)
-        self.PatientResidenceLabel.setObjectName("PatientResidenceLabel")
+        self.patientResidenceLabel.setFont(font)
+        self.patientResidenceLabel.setObjectName("PatientResidenceLabel")
 
 
 # Line Edit for Entering Address
@@ -157,14 +157,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # Date of Birth Text - Set as Label 8
-        self.PatientDOBLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientDOBLabel.setGeometry(280, 240, 221, 16)
-        self.PatientDOBLabel.setText("Date Of Birth")
+        self.patientDOBLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientDOBLabel.setGeometry(280, 240, 221, 16)
+        self.patientDOBLabel.setText("Date Of Birth")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientDOBLabel.setFont(font)
-        self.PatientDOBLabel.setObjectName("PatientDOBLabel")
+        self.patientDOBLabel.setFont(font)
+        self.patientDOBLabel.setObjectName("PatientDOBLabel")
 
 
 # Date-Edit for Selecting the DOB (The Function allows user to 
@@ -179,14 +179,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # IC or Passport Numebr Text - Set as Label 9
-        self.PatientPassportLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientPassportLabel.setGeometry(280, 330, 221, 16)
-        self.PatientPassportLabel.setText("IC/Passport Number")
+        self.patientPassportLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientPassportLabel.setGeometry(280, 330, 221, 16)
+        self.patientPassportLabel.setText("IC/Passport Number")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientPassportLabel.setFont(font)
-        self.PatientPassportLabel.setObjectName("PatientPassportLabel")
+        self.patientPassportLabel.setFont(font)
+        self.patientPassportLabel.setObjectName("PatientPassportLabel")
 
 
 # Line-Edit for Entering the IC or passport number
@@ -201,14 +201,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # Password Text - Set as Label 10
-        self.PatientPasswordLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientPasswordLabel.setGeometry(530, 150, 221, 16)
-        self.PatientPasswordLabel.setText("Password")
+        self.patientPasswordLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientPasswordLabel.setGeometry(530, 150, 221, 16)
+        self.patientPasswordLabel.setText("Password")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientPasswordLabel.setFont(font)
-        self.PatientPasswordLabel.setObjectName("PatientPasswordLabel")
+        self.patientPasswordLabel.setFont(font)
+        self.patientPasswordLabel.setObjectName("PatientPasswordLabel")
 
 
 # Line-Edit for Entering the password (Need to add validation)
@@ -226,14 +226,14 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
 
 # Confirm Password Text - set as Label 11
-        self.PatientReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PatientReEnterPassLabel.setGeometry(530, 240, 221, 16)
-        self.PatientReEnterPassLabel.setText("Confirm Password")
+        self.patientReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
+        self.patientReEnterPassLabel.setGeometry(530, 240, 221, 16)
+        self.patientReEnterPassLabel.setText("Confirm Password")
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        self.PatientReEnterPassLabel.setFont(font)
-        self.PatientReEnterPassLabel.setObjectName("PatientReEnterPassLabel")
+        self.patientReEnterPassLabel.setFont(font)
+        self.patientReEnterPassLabel.setObjectName("PatientReEnterPassLabel")
 
 
 # Line-Edit for Entering the password again to confirm. 
@@ -358,11 +358,11 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
         self.PatientGoBackLoginButton.setObjectName("GoBackLogin")
 
 # Icon for LOGO - Set as Label 12        
-        self.PatientRegisterLogo = QtWidgets.QLabel(self.centralwidget)
-        self.PatientRegisterLogo.setGeometry(650, 50, 91, 61)
-        self.PatientRegisterLogo.setText("LOGO Here")
-        self.PatientRegisterLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.PatientRegisterLogo.setObjectName("PatientRegisterLogo")
+        self.patientRegisterLogo = QtWidgets.QLabel(self.centralwidget)
+        self.patientRegisterLogo.setGeometry(650, 50, 91, 61)
+        self.patientRegisterLogo.setText("LOGO Here")
+        self.patientRegisterLogo.setFrameShape(QtWidgets.QFrame.Box)
+        self.patientRegisterLogo.setObjectName("PatientRegisterLogo")
 
 # Code for All Labels, Buttons, Line-Edits end here ^^^^^^^
 
