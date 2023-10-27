@@ -128,7 +128,7 @@ class ClinicDoctorDetails(QMainWindow):
         self.doctorYearOfExperienceLabel = QLabel(self.centralwidget)
         self.doctorYearOfExperienceLabel.setGeometry(QRect(180, 630, 400, 50))
         self.doctorYearOfExperienceLabel.setFrameShape(QtWidgets.QFrame.Box)
-        self.doctorYearOfExperienceLabel.setText(f"{self.doctor.getYearOfExperience()} Years")
+        self.doctorYearOfExperienceLabel.setText(f"{self.doctor.getYearsOfExperience()} Years")
 
         self.scheduleButton = QPushButton(self.centralwidget)
         self.scheduleButton.setGeometry(QRect(710, 400, 325, 100))
