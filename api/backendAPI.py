@@ -696,8 +696,8 @@ def appointmentsFind(id,clinicID):
                           WHERE doctorID NOT IN (
                             SELECT doctorID
                             FROM appointments
-                            WHERE appointmentDate = %s AND startTime = %s and clinicID = %s
-                          );
+                            WHERE appointmentDate = %s AND startTime = %s
+                          ) AND clinicID = %s
                         """,(date,appointment['startTime'],clinicID))
         appointment = [
             dict(
