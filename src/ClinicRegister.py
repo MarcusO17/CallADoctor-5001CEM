@@ -260,44 +260,17 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
         # DONT MIND THIS - This is just me editing the STYLE SHEET for
         # the button to have color, and the text being White
-                palette = QtGui.QPalette()
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-                self.clinicRegisterPushButton.setPalette(palette)
+                stylesheet4 = """
+                QPushButton {
+                        background-color: rgba(53, 63, 203);
+                        color: rgb(255, 255, 255);
+                }
+
+                QPushButton:disabled {
+                        background-color: rgba(53, 63, 203);
+                        color: rgb(120, 120, 120);
+                }
+                """
         # StyleSheet customization ends here ^^^^^^^^^^^^^
         
                 font = QtGui.QFont()
@@ -305,7 +278,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(12)
                 self.clinicRegisterPushButton.setFont(font)
                 self.clinicRegisterPushButton.setAutoFillBackground(False)
-                self.clinicRegisterPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
+                self.clinicRegisterPushButton.setStyleSheet(stylesheet4)
                 self.clinicRegisterPushButton.setObjectName("clinicRegisterPushButton")
                 self.clinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
 
