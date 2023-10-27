@@ -68,6 +68,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicIDLineEdit.setFont(font)
                 self.clinicIDLineEdit.setObjectName("clinicIDLineEdit")
+                self.clinicIDLineEdit.setPlaceholderText("example - P21002")
 
 
         # Address of Clinic - Set as Label 4
@@ -90,6 +91,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicAddressLineEdit.setFont(font)
                 self.clinicAddressLineEdit.setObjectName("clinicAddressLineEdit")
+                self.clinicAddressLineEdit.setPlaceholderText("example - Bayan Lepas, Penang")
 
 
         # Name Of Clinic - Set As Label 5
@@ -112,6 +114,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicNameLineEdit.setFont(font)
                 self.clinicNameLineEdit.setObjectName("clinicNameLineEdit")
+                self.clinicNameLineEdit.setPlaceholderText("example - ABCD Clinic")
 
 
         # Clinic Contact Number - Set as Label 6
@@ -134,6 +137,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicContactLineEdit.setFont(font)
                 self.clinicContactLineEdit.setObjectName("clinicContactLineEdit")
+                self.clinicContactLineEdit.setPlaceholderText("example - +60xxxxxxxx")
 
 
         # Clinic Email - Set as Label 7
@@ -156,6 +160,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicEmailLineEdit.setFont(font)
                 self.clinicEmailLineEdit.setObjectName("clinicEmailLineEdit")
+                self.clinicEmailLineEdit.setPlaceholderText("example - abcklinik@new.com")
 
 
         # Clinic Post Code - Set as Label 8
@@ -178,6 +183,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicPostCodeLineEdit.setFont(font)
                 self.clinicPostCodeLineEdit.setObjectName("clinicPostCodeLineEdit")
+                self.clinicPostCodeLineEdit.setPlaceholderText("example - 19000")
 
 
         # Verification Document - Set as Label 9
@@ -202,6 +208,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicDocumentLineEdit.setFont(font)
                 self.clinicDocumentLineEdit.setObjectName("clinicDocumentLineEdit")
+                self.clinicDocumentLineEdit.setPlaceholderText("Attach Certification Document                    +")
 
 
         # Clinic Password - Set as Label 10 
@@ -227,6 +234,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicPasswordLineEdit.setFont(font)
                 self.clinicPasswordLineEdit.setObjectName("clinicPasswordLineEdit")
+                self.clinicPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
 
 
         # Confirm Password for CLinic - Set as Label 11
@@ -251,6 +259,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.clinicReEnterPassLineEdit.setFont(font)
                 self.clinicReEnterPassLineEdit.setObjectName("clinicReEnterPassLineEdit")
+                self.clinicReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
 
                 
         # Register PushButton For Registering Account - Saves the Data
