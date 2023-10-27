@@ -257,7 +257,12 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicReEnterPassLineEdit.setFont(font)
                 self.clinicReEnterPassLineEdit.setObjectName("clinicReEnterPassLineEdit")
                 self.clinicReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
+                self.clinicReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
                 self.clinicReEnterPassLineEdit.textChanged.connect(self.validatePasswordMatch)
+
+                self.showRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.showRePasswordCheckbox.setGeometry(530, 290, 221, 31)
+                self.showRePasswordCheckbox.stateChanged.connect(self.toggleReEnterPasswordVisibility)
 
 
                 
@@ -270,12 +275,12 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # the button to have color, and the text being White
                 stylesheet4 = """
                 QPushButton {
-                        background-color: rgba(53, 63, 203);
+                        background-color: rgb(53, 63, 203);
                         color: rgb(255, 255, 255);
                 }
 
                 QPushButton:disabled {
-                        background-color: rgba(53, 63, 203);
+                        background-color: rgb(53, 63, 203);
                         color: rgb(120, 120, 120);
                 }
                 """
@@ -370,6 +375,13 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                         self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
                 else:
                         self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+
+        def toggleReEnterPasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.clinicReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.clinicReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
 
         
         def validatePasswordMatch(self):
