@@ -360,48 +360,21 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docGoBackLoginPushButton.setText("Go Back To Login")
 
                 #Style SHeet code for Transparent Block white differnt text color vvvvvvvv
-                palette = QtGui.QPalette()
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(0, 67, 202))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(0, 67, 202))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-                self.docGoBackLoginPushButton.setPalette(palette)
-                #Style Sheet code for transparent Block End ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                stylesheet = """
+                QPushButton {
+                        background-color: rgba(255, 255, 255, 10);
+                        color: rgb(0, 67, 202);
+                        text-decoration: underline;
+                }
 
+                QPushButton:disabled {
+                         background-color: rgba(255, 255, 255, 10);
+                         color: rgb(120, 120, 120);
+                }
+                """
+                #Style Sheet code for transparent Block End ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                self.docGoBackLoginPushButton.setStyleSheet(stylesheet)
                 self.docGoBackLoginPushButton.setAutoFillBackground(False)
-                self.docGoBackLoginPushButton.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
                 self.docGoBackLoginPushButton.setObjectName("docGoBackLoginPushButton")
                 self.docGoBackLoginPushButton.clicked.connect(self.docGoBackLogin)
 
