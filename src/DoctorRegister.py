@@ -72,6 +72,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docFirstNameLineEdit.setFont(font)
                 self.docFirstNameLineEdit.setObjectName("docFirstNameLineEdit")
+                self.docFirstNameLineEdit.setPlaceholderText("example - John")
 
 
         # Last Name for Doctor - Set as Label 4
@@ -94,6 +95,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docLastNameLineEdit.setFont(font)
                 self.docLastNameLineEdit.setObjectName("docLastNameLineEdit")
+                self.docLastNameLineEdit.setPlaceholderText("example - Monroe")
 
 
         # Email for Doctor - Set as Label 5
@@ -116,6 +118,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docEmailLineEdit.setFont(font)
                 self.docEmailLineEdit.setObjectName("docEmailLineEdit")
+                self.docEmailLineEdit.setPlaceholderText("example - Doc123@new.com")
 
 
         # Doctor's Contact Number - Set as Label 6
@@ -138,6 +141,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docContactLineEdit.setFont(font)
                 self.docContactLineEdit.setObjectName("docContactLineEdit")
+                self.docContactLineEdit.setPlaceholderText("example - +60xxxxxxxx")
 
 
         # Doctor's Specialty - Set as Label 7
@@ -160,6 +164,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docSpecialtyLineEdit.setFont(font)
                 self.docSpecialtyLineEdit.setObjectName("docSpecialtyLineEdit")
+                self.docSpecialtyLineEdit.setPlaceholderText("example - Pediatrician, Surgeon")
 
 
         # Doctor's Date of Birth - Set as Label 8
@@ -203,6 +208,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docPassportLineEdit.setFont(font)
                 self.docPassportLineEdit.setObjectName("docPassportLineEdit")
+                self.docPassportLineEdit.setPlaceholderText("example - 1232123xx")
 
 
         # Highest Achievement & Verification Documents Attachment 
@@ -229,6 +235,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docAttachmentLineEdit.setFont(font)
                 self.docAttachmentLineEdit.setObjectName("docAttachmentLineEdit")
+                self.docAttachmentLineEdit.setPlaceholderText("Attach Here                                              +")
 
 
         # Years of Experience for Doctor - Set as Label 10
@@ -251,6 +258,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docExpLineEdit.setFont(font)
                 self.docExpLineEdit.setObjectName("docExpLineEdit")
+                self.docExpLineEdit.setPlaceholderText("example - 5 years")
 
 
         # Doctor's Password - Set as Label 11
@@ -273,6 +281,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docPasswordLineEdit.setFont(font)
                 self.docPasswordLineEdit.setObjectName("docPasswordLineEdit")
+                self.docPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
                 
                 
         # Confirmation of Password for Doctor - Set as Label 14
@@ -295,6 +304,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docReEnterPassLineEdit.setFont(font)
                 self.docReEnterPassLineEdit.setObjectName("docReEnterPassLineEdit")
+                self.docReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
 
                 
         # PushButton for registering - Saves Data of Doctor        
