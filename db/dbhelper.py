@@ -29,6 +29,7 @@ createPatientTable = '''CREATE TABLE patients (
                      patientEmail TEXT NOT NULL,
                      patientPassword TEXT NOT NULL,
                      patientICNumber INTEGER UNIQUE,
+                     patientContactNumber INTEGER UNIQUE,
                      address TEXT NOT NULL,
                      dateOfBirth DATE NOT NULL,
                      bloodType TEXT,

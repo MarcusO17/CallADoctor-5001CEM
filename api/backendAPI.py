@@ -79,11 +79,12 @@ def patients():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        patientID = contentJSON['patientID']
+        patientID =requests.get('http://127.0.0.1:5000/patients/idgen').text
         patientName = contentJSON['patientName']
         patientEmail = contentJSON['patientEmail']
         patientPassword = contentJSON['patientPassword']
         patientICNumber = contentJSON['patientICNumber']
+        patientContactNumber = contentJSON['patientContactNumber']
         address = contentJSON['address']
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
@@ -91,11 +92,11 @@ def patients():
    
         insertQuery = """
                         INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
-                                            patientICNumber,dateOfBirth,bloodType,race)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                                            patientICNumber,dateOfBirth,bloodType,race,patientContactNumber)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
-                                             patientICNumber,dateOfBirth,bloodType,race))
+                                             patientICNumber,dateOfBirth,bloodType,race,patientContactNumber))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -162,7 +163,7 @@ def clinics():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        clinicID = contentJSON['clinicID']
+        clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
         clinicName = contentJSON['clinicName']
         clinicEmail = contentJSON['clinicEmail']
         clinicPassword = contentJSON['clinicPassword']

@@ -5,12 +5,13 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
+from .model.Registration import Registration
 
 class ClinicRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.ClinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
+        self.ClinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData)
 
 
     def setupUi(self, MainWindow):
@@ -380,16 +381,18 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
 
-def clinicSaveData(self):
-     
-        data = {
-            "ClinicIDLineEdit": self.ClinicIDLineEdit.text(),
-            "ClinicAddressLineEdit": self.ClinicAddressLineEdit.text(),
-            "ClinicNameLineEdit": self.ClinicNameLineEdit.text(),
-            "ClinicContactLineEdit": self.ClinicContactLineEdit.text(),
-            "ClinicEmailLineEdit": self.ClinicEmailLineEdit.text(),
-            "ClinicPostCodeLineEdit": self.ClinicPostCodeLineEdit.text(),
-            "ClinicDocumentLineEdit": self.ClinicDocumentLineEdit.text(),
-            "ClinicPasswordLineEdit": self.ClinicPasswordLineEdit.text()
-            
-        }
+        def clinicSaveData(self):
+        
+                clinicData = { 
+                "address": f'{self.ClinicPostCodeLineEdit.text()},{self.ClinicAddressLineEdit.text()}',
+                "clinicName": self.ClinicNameLineEdit.text(),
+                "clinicContactNumber": self.ClinicContactLineEdit.text(),
+                "clinicEmail": self.ClinicEmailLineEdit.text(),     
+                "clinicPassword": self.ClinicPasswordLineEdit.text()
+                }
+
+                response,registerFlag = Registration.registerClinic(clinicData)
+                if registerFlag:
+                        pass
+                else:
+                        print(response)

@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QMessag
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from .PageManager import PageManager
+from .model import Registration
 
 class PatientRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
@@ -307,7 +308,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientRegPushButton.setAutoFillBackground(False)
                 self.patientRegPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
                 self.patientRegPushButton.setObjectName("patientRegPushButton")
-                self.patientRegPushButton.clicked.connect(self.patient_save_data)
+                self.patientRegPushButton.clicked.connect(self.patientSaveData)
 
 
                 # Push Button for "Going Back to Login page" - This needed a lot of
@@ -379,18 +380,20 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setWindowTitle("Patient Register")
 
         # Creating Code for User (Patient) to save their data
-        def patient_save_data(self):
+        def patientSaveData(self):
 
-                patient_data = {
-                        "patientFirstNameLineEdit": self.patientFirstNameLineEdit.text(),
-                        "patientLastNameLineEdit": self.patientLastNameLineEdit.text(),
-                        "patientEmailLineEdit": self.patientEmailLineEdit.text(),
-                        "patientContactLineEdit": self.patientContactLineEdit.text(),
-                        "patientResidenceLineEdit": self.patientResidenceLineEdit.text(),
-                        "patientDOBDateEdit": self.patientDOBDateEdit.date().toString(Qt.ISODate),
-                        "patientPassportLineEdit": self.patientPassportLineEdit.text(),
-                        "patientPasswordLineEdit": self.patientPasswordLineEdit.text(),
+                patientData = {
+                        "patientName": f'{self.patientFirstNameLineEdit.text()}  {self.patientLastNameLineEdit.text()}',
+                        "patientEmail" : self.patientEmailLineEdit.text(),
+                        "patientPassword" : self.patientPasswordLineEdit.text(),
+                        "patientContactNumber": self.patientContactLineEdit.text(),
+                        "address": self.patientResidenceLineEdit.text(),
+                        "dateOfBirth": self.patientDOBDateEdit.date().toString(Qt.ISODate),
+                        "patientICNumber": self.patientPassportLineEdit.text(),
+
                 }
+
+                
 
                 # marcus post to databasee here
 
