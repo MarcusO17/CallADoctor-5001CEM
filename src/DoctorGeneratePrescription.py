@@ -9,10 +9,10 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .model import PrescriptionDetails
 from .model import Prescription, PrescriptionRepo
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
-class DoctorGeneratePrescription(QMainWindow):
+class DoctorGeneratePrescription(QWidget):
 
     def __init__(self, patient, appointment, doctor):
         super().__init__()
@@ -22,26 +22,14 @@ class DoctorGeneratePrescription(QMainWindow):
         self.appointment = appointment
         self.doctor = doctor
 
-        self.pageManager = PageManager()
-        self.setWindowTitle("Generate Prescription")
-        self.setFixedWidth(1280)
-        self.setFixedHeight(720)
-        self.setupUi(self)
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+        self.setupUi()
 
-    def setupUi(self, MainWindow):
+    def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         # this is the header (logo, title, my back button
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-
-        # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.centralwidget = QWidget()
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -52,28 +40,18 @@ class DoctorGeneratePrescription(QMainWindow):
         self.headerTitle.setFont(font)
         self.headerTitle.setText(f"{self.patient.getPatientName()} - Generate Prescription")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70, 70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
-        self.myAccountButton.clicked.connect(self.goToAccountPage)
-
-        # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
+        self.backButton.setGeometry(QRect(900, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
-
 
         self.rowContainer = QWidget()
         rowLayout = QVBoxLayout(self.rowContainer)
@@ -83,39 +61,38 @@ class DoctorGeneratePrescription(QMainWindow):
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         self.addNewRowButton = QPushButton(self.centralwidget)
-        self.addNewRowButton.setGeometry(QRect(190, 130, 200, 50))
+        self.addNewRowButton.setGeometry(QRect(140, 125, 150, 35))
         self.addNewRowButton.setText("Add New Row")
         self.addNewRowButton.clicked.connect(self.addNewRow)
 
         self.completePrescriptionButton = QPushButton(self.centralwidget)
-        self.completePrescriptionButton.setGeometry(QRect(900, 130, 200, 50))
+        self.completePrescriptionButton.setGeometry(QRect(850, 125, 150, 35))
         self.completePrescriptionButton.setText("Complete Prescription")
         self.completePrescriptionButton.clicked.connect(self.completePrescription)
 
         boxScrollArea.setWidget(self.rowContainer)
         boxScrollArea.setFixedSize(1000, 500)
-        topSpacer = QWidget()
-        topSpacer.setFixedHeight(150)
-        topSpacer.setFixedWidth(20)
+        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
+
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(topSpacer)
+        mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
-        mainLayout.setAlignment(Qt.AlignHCenter)
 
-        self.centralwidget.setLayout(mainLayout)
-        MainWindow.setCentralWidget(self.centralwidget)
-
-        QMetaObject.connectSlotsByName(MainWindow)
+        self.setLayout(mainLayout)
 
     def backButtonFunction(self):
         backConfirmationDialog = QMessageBox.question(self.centralwidget, "Back Confirmation",
                                                "Do you want to discard this prescription",
                                                QMessageBox.Yes | QMessageBox.No)
         if backConfirmationDialog == QMessageBox.Yes:
-            self.pageManager.goBack()
+            self.frameLayoutManager.back()
+            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def completePrescription(self):
         self.expiryDateDialog = QDialog(self)
+
+        self.expiryDateDialog.move(350,200)
+        self.expiryDateDialog.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
         self.expiryDateDialog.setFixedSize(400, 400)
 
         self.expiryDateDialog.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)  # Remove close button
@@ -128,6 +105,7 @@ class DoctorGeneratePrescription(QMainWindow):
         self.expiryDateDateEdit.setCalendarPopup(True)
         self.expiryDateDateEdit.setDateTime(QDateTime.currentDateTime())
         self.expiryDateDateEdit.setMinimumDate(QDate.currentDate())
+        self.expiryDateDateEdit.setStyleSheet("background-color: white; border-radius: 10px;")
         self.layout.addWidget(self.expiryDateDateEdit)
 
         confirmationButtonLayout = QHBoxLayout()
@@ -135,11 +113,13 @@ class DoctorGeneratePrescription(QMainWindow):
         cancelButton = QPushButton()
         cancelButton.setText("Cancel")
         cancelButton.clicked.connect(lambda checked: self.expiryDateDialog.close())
+        cancelButton.setStyleSheet("background-color: white; border-radius: 10px;")
         confirmationButtonLayout.addWidget(cancelButton)
 
         confirmationButton = QPushButton()
         confirmationButton.setText("Confirm")
         confirmationButton.clicked.connect(lambda checked: self.completeButtonConfirmationFunction(self.expiryDateDateEdit.date().toString("yyyy-MM-dd")))
+        confirmationButton.setStyleSheet("background-color: white; border-radius: 10px;")
         confirmationButtonLayout.addWidget(confirmationButton)
 
         self.layout.addLayout(confirmationButtonLayout)
@@ -169,7 +149,8 @@ class DoctorGeneratePrescription(QMainWindow):
         PrescriptionRepo.PrescriptionRepository.postPrescription(prescription)
 
         self.expiryDateDialog.close()
-        self.pageManager.goBack()
+        self.frameLayoutManager.back()
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def addNewRow(self):
 
@@ -218,8 +199,4 @@ class DoctorGeneratePrescription(QMainWindow):
             if widget is not None:
                 widget.deleteLater()
 
-    def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Doctor", self.doctor)
-        self.pageManager.add(self.accountPage)
 
