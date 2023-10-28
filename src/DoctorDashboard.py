@@ -216,7 +216,7 @@ class DoctorDashboard(QWidget):
 
         appointment1 = Appointment("A0001", "D00001", "C0001", "P0001", "Approved", "8:00", "9:00", "appointmentDate",
                                    "visitReason")
-        appointment2 = Appointment("A0002", "D00002", "C0002", "P0002", "Approved", "8:00", "9:00", "appointmentDate",
+        appointment2 = Appointment("A0002", "D00002", "C0002", "P0002", "Completed", "8:00", "9:00", "appointmentDate",
                                    "visitReason")
         appointment3 = Appointment("A0003", "D00003", "C0003", "P0003", "Approved", "8:00", "9:00", "appointmentDate",
                                    "visitReason")

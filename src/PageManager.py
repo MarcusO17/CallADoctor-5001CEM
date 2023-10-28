@@ -36,6 +36,7 @@ class FrameLayoutManager():
             cls._instance = super(FrameLayoutManager, cls).__new__(cls)
             cls._instance.indexStack = []
             cls._instance.frameLayout = QStackedWidget()
+            cls._instance.basePages = 0
         return cls._instance
 
     def add(self, index):
@@ -47,10 +48,13 @@ class FrameLayoutManager():
         widget.deleteLater()
 
     def backToBasePage(self, index):
-        for i in range(self.frameLayout.count()):
-            widget = self.frameLayout.widget(0)
-            self.frameLayout.removeWidget(widget)
-            widget.deleteLater()
+        # deletes all except the starting pages
+        if self.frameLayout.count() > self.basePages:
+            numberOfPagesToBeRemoved = self.basePages - self.frameLayout.count()
+            for i in range(numberOfPagesToBeRemoved):
+                widget = self.frameLayout.widget(i+self.basePages)
+                self.frameLayout.removeWidget(widget)
+                widget.deleteLater()
 
         self.indexStack.clear()
         self.indexStack.append(index)
@@ -69,3 +73,9 @@ class FrameLayoutManager():
 
     def getFrameLayout(self):
         return self.frameLayout
+
+    def setBasePages(self, basePages):
+        self.basePages = basePages
+
+    def getBasePages(self):
+        return self.basePages

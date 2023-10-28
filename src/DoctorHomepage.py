@@ -20,6 +20,7 @@ class DoctorHomepage(QMainWindow):
         self.frameLayoutManager = FrameLayoutManager()
         self.doctor = Doctor.getDoctorfromID(sessionID)
         self.frameLayoutManager.add(0)
+        self.frameLayoutManager.setBasePages(5)
         self.setWindowTitle("Doctor Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -28,29 +29,29 @@ class DoctorHomepage(QMainWindow):
     def goToDashboard(self):
         self.setButtonHighlight(self.dashboardButton)
         self.doctorDashboard.setSchedule()
-        self.frameLayout.setCurrentIndex(0)
         self.frameLayoutManager.backToBasePage(0)
+        self.frameLayout.setCurrentIndex(0)
 
     def gotoSchedule(self):
         self.setButtonHighlight(self.scheduleButton)
         self.doctorScheduleWindow.setSchedule()
-        self.frameLayout.setCurrentIndex(1)
         self.frameLayoutManager.backToBasePage(1)
+        self.frameLayout.setCurrentIndex(1)
 
     def gotoPatientRecord(self):
         self.setButtonHighlight(self.patientRecordButton)
-        self.frameLayout.setCurrentIndex(2)
         self.frameLayoutManager.backToBasePage(2)
+        self.frameLayout.setCurrentIndex(2)
 
     def gotoMyAppointment(self):
         self.setButtonHighlight(self.myAppointmentButton)
-        self.frameLayout.setCurrentIndex(3)
         self.frameLayoutManager.backToBasePage(3)
+        self.frameLayout.setCurrentIndex(3)
 
     def goToAccountPage(self):
         self.setButtonHighlight(self.myAccountButton)
-        self.frameLayout.setCurrentIndex(4)
         self.frameLayoutManager.backToBasePage(4)
+        self.frameLayout.setCurrentIndex(4)
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

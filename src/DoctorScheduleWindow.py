@@ -30,7 +30,7 @@ class DoctorScheduleWindow(QWidget):
         self.centralwidget = QWidget()
 
         self.homepageTitle = QLabel(self.centralwidget)
-        self.homepageTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.homepageTitle.setGeometry(QRect(100, 40, 800, 70))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
@@ -40,6 +40,7 @@ class DoctorScheduleWindow(QWidget):
         self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.homepageTitle.setText("Doctor Schedule")
         self.homepageTitle.setAlignment(Qt.AlignCenter)
+        self.homepageTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 

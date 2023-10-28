@@ -25,10 +25,11 @@ class DoctorMyAppointmentWindow(QWidget):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
-        mainWidget = QWidget()
-        mainLayout = QVBoxLayout(mainWidget)
+        mainLayout = QVBoxLayout()
 
-        self.headerTitle = QLabel()
+        self.centralwidget = QWidget()
+
+        self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
@@ -37,10 +38,9 @@ class DoctorMyAppointmentWindow(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText("My Appointment")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setFixedSize(800, 70)
-        self.headerTitle.setAlignment(Qt.AlignHCenter)
-
-        mainLayout.addWidget(self.headerTitle)
+        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setAlignment(Qt.AlignCenter)
+        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
         self.buttonContainer = QWidget()
         buttonLayout = QVBoxLayout(self.buttonContainer)
@@ -55,13 +55,10 @@ class DoctorMyAppointmentWindow(QWidget):
 
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
-        topSpacer = QWidget()
-        topSpacer.setFixedHeight(80)
-        topSpacer.setFixedWidth(20)
+        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
 
-        mainLayout.addWidget(topSpacer)
+        mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
-        mainLayout.setAlignment(Qt.AlignHCenter)
 
         self.setLayout(mainLayout)
 

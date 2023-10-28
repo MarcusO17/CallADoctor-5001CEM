@@ -37,7 +37,7 @@ class AccountPage(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText("My Account")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 

@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .model import Patient,Doctor
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
 class DoctorPatientRecordWindow(QWidget):
@@ -24,8 +24,9 @@ class DoctorPatientRecordWindow(QWidget):
 
         # this is the header (logo, title, my back button
 
+        self.centralwidget = QWidget()
 
-        self.headerTitle = QLabel()
+        self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
@@ -34,7 +35,7 @@ class DoctorPatientRecordWindow(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Patient Record")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
@@ -65,19 +66,20 @@ class DoctorPatientRecordWindow(QWidget):
 
         boxScrollArea.setLayout(buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
-        topSpacer = QWidget()
-        topSpacer.setFixedHeight(80)
-        topSpacer.setFixedWidth(20)
+        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
+
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.headerTitle)
-        mainLayout.addWidget(topSpacer)
+        mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
-        mainLayout.setAlignment(Qt.AlignHCenter)
 
         self.setLayout(mainLayout)
 
     def patientButtonFunction(self, patient, doctor):
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
         # update the clinic details page here according to button click
         self.patientHistoryWindow = DoctorPatientHistoryWindow(patient, doctor)
-        self.pageManager.add(self.patientHistoryWindow)
-        print(self.pageManager.size())
+        self.frameLayout.addWidget(self.patientHistoryWindow)
+        self.frameLayoutManager.add(self.frameLayout.count() - 1)
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+
