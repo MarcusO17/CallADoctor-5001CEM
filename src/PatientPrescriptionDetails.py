@@ -9,10 +9,10 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .model import PrescriptionDetails
 from .model import Prescription
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
-class PatientPrescriptionDetailsWindow(QMainWindow):
+class PatientPrescriptionDetailsWindow(QWidget):
 
     def __init__(self,prescription,patient):
         super().__init__()
@@ -139,11 +139,14 @@ class PatientPrescriptionDetailsWindow(QMainWindow):
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
 
-
         self.setLayout(mainLayout)
 
 
     def backButtonFunction(self):
-        self.pageManager.goBack()
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+        self.frameLayoutManager.back()
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
 

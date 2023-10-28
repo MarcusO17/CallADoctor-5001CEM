@@ -49,7 +49,6 @@ class PatientMyAppointmentWindow(QWidget):
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
 
         self.appointmentList = list()
 

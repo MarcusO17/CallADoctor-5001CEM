@@ -44,7 +44,6 @@ class PatientPrescriptionWindow(QWidget):
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
         
         #INSERT HEREE
         prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(self.patient.getPatientID())
