@@ -28,3 +28,21 @@ class PageManager():
 
     def size(self):
         return len(self.stack)
+
+class FrameLayoutManager():
+    _instance = None
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(FrameLayoutManager, cls).__new__(cls)
+            cls._instance.indexStack = []
+        return cls._instance
+
+    def add(self, index):
+        self.indexStack.append(index)
+
+    def back(self):
+        self.indexStack.pop()
+        return self.indexStack[self.size()]
+
+    def size(self):
+        return len(self.indexStack)

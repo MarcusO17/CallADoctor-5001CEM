@@ -49,7 +49,6 @@ class DoctorHomepage(QMainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
 
         self.mainLayout = QHBoxLayout()
         self.sideLayoutWidget = QWidget()
