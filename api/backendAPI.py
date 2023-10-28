@@ -169,7 +169,7 @@ def clinics():
         clinicPassword = contentJSON['clinicPassword']
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
-        governmentApproved = contentJSON['governmentApproved']
+        governmentApproved = 'Unapproved'
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,

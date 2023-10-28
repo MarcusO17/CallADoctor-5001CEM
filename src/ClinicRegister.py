@@ -11,7 +11,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.ClinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData)
+        self.ClinicRegisterPushButton.clicked.connect(lambda checked: self.clinicSaveData())
 
 
     def setupUi(self, MainWindow):
@@ -381,18 +381,18 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
 
-        def clinicSaveData(self):
+    def clinicSaveData(self):
         
-                clinicData = { 
-                "address": f'{self.ClinicPostCodeLineEdit.text()},{self.ClinicAddressLineEdit.text()}',
-                "clinicName": self.ClinicNameLineEdit.text(),
-                "clinicContactNumber": self.ClinicContactLineEdit.text(),
-                "clinicEmail": self.ClinicEmailLineEdit.text(),     
-                "clinicPassword": self.ClinicPasswordLineEdit.text()
-                }
+        clinicData = { 
+        "address": f'{self.ClinicPostCodeLineEdit.text()},{self.ClinicAddressLineEdit.text()}',
+        "clinicName": self.ClinicNameLineEdit.text(),
+        "clinicContact": self.ClinicContactLineEdit.text(),
+        "clinicEmail": self.ClinicEmailLineEdit.text(),     
+        "clinicPassword": self.ClinicPasswordLineEdit.text()
+        }
 
-                response,registerFlag = Registration.registerClinic(clinicData)
-                if registerFlag:
-                        pass
-                else:
-                        print(response)
+        response,registerFlag = Registration.registerClinic(clinicData)
+        if registerFlag:
+                pass
+        else:
+                print(response)
