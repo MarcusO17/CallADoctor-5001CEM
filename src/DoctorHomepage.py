@@ -8,7 +8,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from .AccountPage import AccountPage
 from .DoctorDashboard import DoctorDashboard
 from .DoctorScheduleWindow import DoctorScheduleWindow
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 from .model import Doctor
 from .DoctorMyAppointment import DoctorMyAppointmentWindow
 from .DoctorPatientRecord import DoctorPatientRecordWindow
@@ -17,7 +17,9 @@ class DoctorHomepage(QMainWindow):
     def __init__(self, sessionID):
         super().__init__()
         self.pageManager = PageManager()
+        self.frameLayoutManager = FrameLayoutManager()
         self.doctor = Doctor.getDoctorfromID(sessionID)
+        self.frameLayoutManager.add(0)
         self.setWindowTitle("Doctor Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -27,23 +29,28 @@ class DoctorHomepage(QMainWindow):
         self.setButtonHighlight(self.dashboardButton)
         self.doctorDashboard.setSchedule()
         self.frameLayout.setCurrentIndex(0)
+        self.frameLayoutManager.backToBasePage(0)
 
     def gotoSchedule(self):
         self.setButtonHighlight(self.scheduleButton)
         self.doctorScheduleWindow.setSchedule()
         self.frameLayout.setCurrentIndex(1)
+        self.frameLayoutManager.backToBasePage(1)
 
     def gotoPatientRecord(self):
         self.setButtonHighlight(self.patientRecordButton)
         self.frameLayout.setCurrentIndex(2)
+        self.frameLayoutManager.backToBasePage(2)
 
     def gotoMyAppointment(self):
         self.setButtonHighlight(self.myAppointmentButton)
         self.frameLayout.setCurrentIndex(3)
+        self.frameLayoutManager.backToBasePage(3)
 
     def goToAccountPage(self):
         self.setButtonHighlight(self.myAccountButton)
         self.frameLayout.setCurrentIndex(4)
+        self.frameLayoutManager.backToBasePage(4)
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -162,6 +169,8 @@ class DoctorHomepage(QMainWindow):
         self.frameLayout.addWidget(self.doctorMyAppointment)
         self.frameLayout.addWidget(self.accountPage)
 
+        self.frameLayoutManager.setFrameLayout(self.frameLayout)
+
         self.mainLayout.addWidget(self.frameLayout, 11)
 
         self.centralwidget.setLayout(self.mainLayout)
@@ -176,6 +185,7 @@ class DoctorHomepage(QMainWindow):
                                                QMessageBox.Yes | QMessageBox.No)
         if logoutDialogBox == QMessageBox.Yes:
             self.pageManager.goBack()
+            self.frameLayoutManager.back()
     def setButtonHighlight(self, button):
         for buttonTemp in self.highlightButtonList:
             if buttonTemp == button:

@@ -35,14 +35,37 @@ class FrameLayoutManager():
         if cls._instance is None:
             cls._instance = super(FrameLayoutManager, cls).__new__(cls)
             cls._instance.indexStack = []
+            cls._instance.frameLayout = QStackedWidget()
         return cls._instance
 
     def add(self, index):
         self.indexStack.append(index)
 
     def back(self):
-        self.indexStack.pop()
-        return self.indexStack[self.size()]
+        widget = self.frameLayout.widget(self.indexStack.pop())
+        self.frameLayout.removeWidget(widget)
+        widget.deleteLater()
+
+    def backToBasePage(self, index):
+        for i in range(self.frameLayout.count()):
+            widget = self.frameLayout.widget(0)
+            self.frameLayout.removeWidget(widget)
+            widget.deleteLater()
+
+        self.indexStack.clear()
+        self.indexStack.append(index)
+
+    def top(self):
+        if self.indexStack:
+            return self.indexStack[-1]
+        else:
+            return None
 
     def size(self):
         return len(self.indexStack)
+
+    def setFrameLayout(self, frameLayout):
+        self.frameLayout = frameLayout
+
+    def getFrameLayout(self):
+        return self.frameLayout

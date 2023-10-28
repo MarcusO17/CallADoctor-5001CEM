@@ -8,15 +8,13 @@ from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .model import Appointment, AppointmentRepo, Patient
 from .model.AppointmentRepo import AppointmentRepository
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
 class DoctorDashboard(QWidget):
     def __init__(self, doctor):
         super().__init__()
         self.doctor = doctor
-        self.pageManager = PageManager()
-        self.setStyleSheet("")
         self.setupUi()
 
     def setupUi(self):
@@ -99,14 +97,6 @@ class DoctorDashboard(QWidget):
                     self.timeSlotButtonList[row][col + (i - 1)].setText("Appointment")
                     self.timeSlotButtonList[row][col + (i - 1)].setStyleSheet("background-color: green;")
                     self.timeSlotButtonList[row][col + (i - 1)].setEnabled(True)
-
-    def backButtonFunction(self):
-        self.pageManager.goBack()
-
-    def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Doctor", self.doctor)
-        self.pageManager.add(self.accountPage)
 
     def generateSchedule(self):
 
@@ -258,8 +248,18 @@ class DoctorDashboard(QWidget):
     def appointmentButtonFunction(self, appointment, doctor):
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
         self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
-        self.pageManager.add(self.doctorAppointmentDetails)
-        print(self.pageManager.size())
+
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+        print(self.frameLayout.count())
+        print(self.frameLayoutManager.size())
+        self.frameLayout.addWidget(self.doctorAppointmentDetails)
+        self.frameLayoutManager.add(self.frameLayout.count()-1)
+        print(self.frameLayout.count())
+        print(self.frameLayoutManager.size())
+        print("top",self.frameLayoutManager.top())
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def generateRecentPatients(self):
 
@@ -324,6 +324,11 @@ class DoctorDashboard(QWidget):
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
+
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
         self.patientHistoryWindow = DoctorPatientHistoryWindow(patient, doctor)
-        self.pageManager.add(self.patientHistoryWindow)
-        print(self.pageManager.size())
+        self.frameLayout.addWidget(self.patientHistoryWindow)
+        self.frameLayoutManager.add(self.frameLayout.count() - 1)
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
