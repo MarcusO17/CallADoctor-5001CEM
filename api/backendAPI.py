@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+from helper.geocoder import GeoHelper
 import os
 import requests
 import pymysql
@@ -90,8 +91,8 @@ def patients():
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
         race = contentJSON['race']
-        lat = contentJSON['lat']
-        lon = contentJSON['lon']
+        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
+    
 
    
         insertQuery = """
@@ -178,8 +179,7 @@ def clinics():
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
         governmentApproved = contentJSON['governmentApproved']
-        lat = contentJSON['lat'],
-        lon = contentJSON['lon']
+        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,

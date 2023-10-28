@@ -19,11 +19,11 @@ class GeoHelper:
             
         lat=location.latitude
         lon=location.longitude
-        return[lat,lon]
+        return lat,lon 
     
 
     def showMap(self,coordinates):
-        map = folium.Map(location=coordinates,zoom_start=11.6)
+        map = folium.Map(location=[coordinates],zoom_start=11.6)
         return map
         
     
