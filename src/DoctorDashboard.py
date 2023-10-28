@@ -1,5 +1,7 @@
+import os
+
 from PyQt5.QtCore import QSize, QDate
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
     QHBoxLayout,QSizePolicy
 
@@ -31,14 +33,13 @@ class DoctorDashboard(QWidget):
 
         self.generateUpcomingAppointments()
 
-        self.generateRecentPatients()
+        self.generateMapWidget()
 
         self.leftLayout.addWidget(self.scheduleWidget, 3)
         spacer = QWidget()
         spacer.setFixedHeight(50)
         self.leftLayout.addWidget(spacer)
-        self.upcomingAppointmentWidget.setFixedWidth(500)
-        self.leftLayout.addWidget(self.upcomingAppointmentWidget, 7)
+        self.leftLayout.addWidget(self.mapWidget, 7)
 
         self.dateLayout = QHBoxLayout()
         spacer = QWidget()
@@ -58,9 +59,10 @@ class DoctorDashboard(QWidget):
         self.rightLayout.addLayout(self.dateLayout)
 
         spacer = QWidget()
-        spacer.setFixedHeight(100)
+        spacer.setFixedHeight(50)
         self.rightLayout.addWidget(spacer)
-        self.rightLayout.addLayout(self.recentPatientSpacerLayout)
+        self.upcomingAppointmentWidget.setFixedWidth(500)
+        self.rightLayout.addWidget(self.upcomingAppointmentWidget)
 
         self.mainLayout.addLayout(self.leftLayout, 7)
         self.mainLayout.addLayout(self.rightLayout, 5)
@@ -189,13 +191,13 @@ class DoctorDashboard(QWidget):
     def generateUpcomingAppointments(self):
 
         self.upcomingAppointmentWidget = QWidget()
-        self.upcomingAppointmentWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.upcomingAppointmentWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px; margin-left: 20px;")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.upcomingAppointmentTitle = QLabel()
-        self.upcomingAppointmentTitle.setFixedWidth(380)
+        self.upcomingAppointmentTitle.setFixedWidth(420)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -231,12 +233,18 @@ class DoctorDashboard(QWidget):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\appointment.png")
+        self.appointmentButtonIcon = QIcon(filepath)
+
         for count, appointment in enumerate(appointmentList):
             self.appointmentButton = QPushButton()
             self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
-            self.appointmentButton.setStyleSheet("background-color: white; border-radius: 10px;")
+            self.appointmentButton.setStyleSheet("background-color: white; border-radius: 10px; margin-left: 30px;")
             self.appointmentButton.setFont(buttonFont)
-            self.appointmentButton.setFixedSize(QSize(300,70))
+            self.appointmentButton.setFixedSize(QSize(400,100))
+            self.appointmentButton.setIconSize(QSize(70, 70))
+            self.appointmentButton.setIcon(self.appointmentButtonIcon)
             self.appointmentButton.clicked.connect(
                 lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
             self.upcomingAppointmentLayout.addWidget(self.appointmentButton)
@@ -252,75 +260,34 @@ class DoctorDashboard(QWidget):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
-        print(self.frameLayout.count())
-        print(self.frameLayoutManager.size())
         self.frameLayout.addWidget(self.doctorAppointmentDetails)
         self.frameLayoutManager.add(self.frameLayout.count()-1)
-        print(self.frameLayout.count())
-        print(self.frameLayoutManager.size())
-        print("top",self.frameLayoutManager.top())
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-    def generateRecentPatients(self):
+    def generateMapWidget(self):
 
-        self.recentPatientSpacerLayout = QHBoxLayout()
-        spacer = QWidget()
-        spacer.setFixedWidth(100)
-        self.recentPatientSpacerLayout.addWidget(spacer)
-        self.recentPatientWidget = QWidget()
-        self.recentPatientWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
-        self.recentPatientLayout = QVBoxLayout(self.recentPatientWidget)
+        self.mapWidget = QWidget()
+        self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
 
-        self.recentPatientSpacerLayout.addWidget(self.recentPatientWidget)
-
-        self.recentPatientTitle = QLabel()
-        self.recentPatientTitle.setFixedWidth(380)
+        self.widgetTitle = QLabel()
+        self.widgetTitle.setFixedWidth(380)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
-        self.recentPatientTitle.setFont(font)
-        self.recentPatientTitle.setText("Recent Patients")
+        self.widgetTitle.setFont(font)
+        self.widgetTitle.setText("Map")
 
         headerRow = QHBoxLayout()
         spacer = QWidget()
         spacer.setFixedWidth(200)
         headerRow.addWidget(spacer)
-        headerRow.addWidget(self.recentPatientTitle)
+        headerRow.addWidget(self.widgetTitle)
 
-        self.recentPatientLayout.addLayout(headerRow)
-        self.recentPatientLayout.setContentsMargins(20, 20, 20, 20)
-
-        # get 3 upcoming patient here
-        patientList = list()
-
-        patient1 = Patient("P0001", "patientname1", "patientAddress", "patientDOB", "patientBlood", "patientRace")
-        patient2 = Patient("P0002", "patientname2", "patientAddress", "patientDOB", "patientBlood", "patientRace")
-        patient3 = Patient("P0003", "patientname3", "patientAddress", "patientDOB", "patientBlood", "patientRace")
-
-        patientList.append(patient1)
-        patientList.append(patient2)
-        patientList.append(patient3)
-
-        buttonFont = QFont()
-        buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
-
-        for count, patient in enumerate(patientList):
-            self.patientButton = QPushButton()
-            self.patientButton.setText(patient.getPatientName())
-            self.patientButton.setFont(buttonFont)
-            self.patientButton.setStyleSheet("background-color: white; border-radius: 10px;")
-            self.patientButton.setFixedSize(QSize(300, 70))
-            self.patientButton.clicked.connect(lambda checked, patient=patient: self.patientButtonFunction(patient, self.doctor))
-            self.recentPatientLayout.addWidget(self.patientButton)
-
-        spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.recentPatientLayout.addWidget(spacer)
+        self.mapWidgetLayout.addLayout(headerRow)
+        self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
