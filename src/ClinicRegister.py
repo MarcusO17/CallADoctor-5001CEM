@@ -186,6 +186,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.uploadDocumentButton.setGeometry(472, 350, 30, 30)
                 self.uploadDocumentButton.clicked.connect(self.uploadDocument)
 
+                self.clinicRemoveDocumentButton = QtWidgets.QPushButton("Remove file", self.centralwidget)
+                self.clinicRemoveDocumentButton.setGeometry(280, 380, 80, 30)
+                self.clinicRemoveDocumentButton.clicked.connect(self.clinicRemoveDocument)
+                self.clinicRemoveDocumentButton.setDisabled(True)
+
 
         # Clinic Password - Set as Label 10 
                 self.clinicPasswordLabel = QtWidgets.QLabel(self.centralwidget)
@@ -390,3 +395,9 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
                 if document:
                         self.clinicDocumentLineEdit.setText(document)
+                        self.clinicRemoveDocumentButton.setDisabled(False)
+
+        
+        def clinicRemoveDocument(self):
+                self.clinicDocumentLineEdit.clear()
+                self.clinicRemoveDocumentButton.setDisabled(True)
