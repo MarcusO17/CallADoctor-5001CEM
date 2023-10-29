@@ -204,6 +204,28 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPassportLineEdit.setPlaceholderText("example - i123133xx")
 
 
+                # Patient Race Text - Set as Label 
+                self.patientRaceLabel = QtWidgets.QLabel(self.centralwidget)
+                self.patientRaceLabel.setGeometry(280, 420, 221, 16)
+                self.patientRaceLabel.setText("Race")
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(10)
+                self.patientRaceLabel.setFont(font)
+                self.patientRaceLabel.setObjectName("PatientRaceLabel")
+
+
+                # Line-Edit for patient's Race
+                self.patientRaceLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.patientRaceLineEdit.setGeometry(280, 440, 221, 31)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.patientRaceLineEdit.setFont(font)
+                self.patientRaceLineEdit.setObjectName("patientRaceLineEdit")
+                self.patientRaceLineEdit.setPlaceholderText("example - Indian")
+
+
                 # Blood Type Text - Set as Label
                 self.patientBloodTypeLabel = QtWidgets.QLabel(self.centralwidget)
                 self.patientBloodTypeLabel.setGeometry(530, 150, 221, 16)
@@ -222,7 +244,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 font.setFamily("Arial")
                 font.setPointSize(9)
                 self.patientBloodTypeLineEdit.setFont(font)
-                self.patientBloodTypeLineEdit.setObjectName("patientBloodType")
+                self.patientBloodTypeLineEdit.setObjectName("patientBloodTypeLineEdit")
                 self.patientBloodTypeLineEdit.setPlaceholderText("example -  AB+")
 
 
