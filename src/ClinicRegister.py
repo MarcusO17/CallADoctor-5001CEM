@@ -94,7 +94,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
         # Clinic Contact Number - Set as Label 6
                 self.clinicContactLabel = QtWidgets.QLabel(self.centralwidget)
-                self.clinicContactLabel.setGeometry(30, 420, 221, 16)
+                self.clinicContactLabel.setGeometry(30, 330, 221, 16)
                 self.clinicContactLabel.setText("Clinic Contact Number")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -105,7 +105,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
         # Line Edit for Entering Clinic Contact Number 
                 self.clinicContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.clinicContactLineEdit.setGeometry(30, 440, 221, 31)
+                self.clinicContactLineEdit.setGeometry(30, 350, 221, 31)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
