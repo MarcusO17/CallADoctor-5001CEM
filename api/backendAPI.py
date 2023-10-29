@@ -903,6 +903,52 @@ def prescriptionDetails():
                                             ,pillsPerDay,food,dosage))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
+    
+
+@app.route('/requests',methods=['GET','POST'])
+def requests():
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM requests")
+        requests = [
+            dict(
+                requestsID = row['requestsID'],
+                requestsType = row['requestsType'],
+                clientID  = row['clientID'],
+                approvalStatus = row['approvalStatus'],
+                dateSubmitted = row['dateSubmitted'],
+                requestReason = row['requestReason']
+            )
+            for row in cursor.fetchall()
+        ]
+        if requests  is not None:
+            return jsonify(requests),200
+        
+    if request.method == 'POST':
+        
+        contentJSON = request.get_json()
+
+        requestsID = contentJSON['requestsID']
+        requestsType = contentJSON['requestsType']
+        clientID = contentJSON['clientID']
+        approvalStatus = contentJSON['approvalStatus']
+        dateSubmitted = datetime.now().date() 
+        requestReason = contentJSON['requestReason']
+
+        insertQuery = """
+                        INSERT INTO requests (requestsID,requestsType,clientID,approvalStatus,
+                                             dateSubmitted,requestReason)
+                        VALUES (%s,%s,%s,%s,%s,%s)
+                    """
+        cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
+                                             dateSubmitted,requestReason)
+                                             )
+        conn.commit() #Commit Changes to db, like git commit
+        return'Successful POST', 201
+
+        
 
 @app.route('/users/auth')
 def userAuthentication():

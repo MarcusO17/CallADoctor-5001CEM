@@ -111,6 +111,7 @@ createRequestsTable = '''CREATE TABLE requests (
                      clientID TEXT NOT NULL,
                      approvalStatus TEXT NOT NULL,
                      dateSubmitted DATE NOT NULL,
+                     requestReason TEXT NOT NULL,
                      CONSTRAINT chk_approvalStatus CHECK (approvalStatus IN ('Pending', 'Approved', 'Rejected'))
                      )       
                     '''
