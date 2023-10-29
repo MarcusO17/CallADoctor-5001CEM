@@ -48,7 +48,26 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicRegSubTitle.setObjectName("clinicRegSubTitle")
 
 
+        # Name Of Clinic - Set As Label 5
+                self.clinicNameLabel = QtWidgets.QLabel(self.centralwidget)
+                self.clinicNameLabel.setGeometry(30, 150, 221, 16)
+                self.clinicNameLabel.setText("Name of Clinic")
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(10)
+                self.clinicNameLabel.setFont(font)
+                self.clinicNameLabel.setObjectName("clinicNameLabel")
 
+
+        # Line Edit for Entering Clinic Name
+                self.clinicNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicNameLineEdit.setGeometry(30, 170, 221, 31)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.clinicNameLineEdit.setFont(font)
+                self.clinicNameLineEdit.setObjectName("clinicNameLineEdit")
+                self.clinicNameLineEdit.setPlaceholderText("example - ABCD Clinic")
 
 
         # Address of Clinic - Set as Label 4
@@ -71,28 +90,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicAddressLineEdit.setFont(font)
                 self.clinicAddressLineEdit.setObjectName("clinicAddressLineEdit")
                 self.clinicAddressLineEdit.setPlaceholderText("example - Bayan Lepas, Penang")
-
-
-        # Name Of Clinic - Set As Label 5
-                self.clinicNameLabel = QtWidgets.QLabel(self.centralwidget)
-                self.clinicNameLabel.setGeometry(30, 330, 221, 16)
-                self.clinicNameLabel.setText("Name of Clinic")
-                font = QtGui.QFont()
-                font.setFamily("Arial")
-                font.setPointSize(10)
-                self.clinicNameLabel.setFont(font)
-                self.clinicNameLabel.setObjectName("clinicNameLabel")
-
-
-        # Line Edit for Entering Clinic Name
-                self.clinicNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.clinicNameLineEdit.setGeometry(30, 350, 221, 31)
-                font = QtGui.QFont()
-                font.setFamily("Arial")
-                font.setPointSize(9)
-                self.clinicNameLineEdit.setFont(font)
-                self.clinicNameLineEdit.setObjectName("clinicNameLineEdit")
-                self.clinicNameLineEdit.setPlaceholderText("example - ABCD Clinic")
 
 
         # Clinic Contact Number - Set as Label 6
