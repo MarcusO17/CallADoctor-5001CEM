@@ -2,7 +2,7 @@ import os
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QPushButton, QVBoxLayout, QWidget, QApplication
+from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from .PageManager import PageManager
@@ -174,12 +174,17 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         # which would allow to open file explorer to attach Document 
                 self.clinicDocumentLineEdit = QtWidgets.QLineEdit(self.centralwidget)
                 self.clinicDocumentLineEdit.setGeometry(280, 350, 221, 31)
+                self.clinicDocumentLineEdit.setDisabled(True)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
                 self.clinicDocumentLineEdit.setFont(font)
                 self.clinicDocumentLineEdit.setObjectName("clinicDocumentLineEdit")
-                self.clinicDocumentLineEdit.setPlaceholderText("Attach Certification Document                    +")
+                self.clinicDocumentLineEdit.setPlaceholderText("Attach Certification Document")
+
+                self.uploadDocumentButton = QtWidgets.QPushButton("+", self.centralwidget)
+                self.uploadDocumentButton.setGeometry(472, 350, 30, 30)
+                self.uploadDocumentButton.clicked.connect(self.uploadDocument)
 
 
         # Clinic Password - Set as Label 10 
@@ -318,16 +323,21 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
 
         def clinicSaveData(self):
-        
+                documentPath = self.clinicDocumentLineEdit.text()
+
+                documentData = None
+                with open(documentPath, "rb") as documentFile:
+                        documentData = documentFile.read()
+
                 data = {
                 "clinicAddressLineEdit": self.clinicAddressLineEdit.text(),
                 "clinicNameLineEdit": self.clinicNameLineEdit.text(),
                 "clinicContactLineEdit": self.clinicContactLineEdit.text(),
                 "clinicEmailLineEdit": self.clinicEmailLineEdit.text(),
                 "clinicPostCodeLineEdit": self.clinicPostCodeLineEdit.text(),
-                "clinicDocumentLineEdit": self.clinicDocumentLineEdit.text(),
+                "clinicDocumentLineEdit": documentData,
                 "clinicPasswordLineEdit": self.clinicPasswordLineEdit.text()
-                
+
                 }
 
                 #Marcus post to Database here
@@ -371,3 +381,12 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 else:
                         # Passwords do not match, indicate an error, Color of the field will be red
                         self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+        
+
+        def uploadDocument(self):
+                options = QFileDialog.Options()
+                options |= QFileDialog.ReadOnly
+                document,  _ = QFileDialog.getOpenFileName(self, "Open Documents", "", "All files (*)", options=options)
+
+                if document:
+                        self.clinicDocumentLineEdit.setText(document)
