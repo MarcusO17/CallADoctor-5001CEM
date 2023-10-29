@@ -305,12 +305,12 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 #Style Sheet Code for Register vvvvvvvvvvvvvvvvvvvvvv
                 stylesheet2 = """
                 QPushButton {
-                        background-color: rgba(53, 63, 203);
+                        background-color: rgb(53, 63, 203);
                         color: rgb(255, 255, 255);
                 }
 
                 QPushButton:disabled {
-                        background-color: rgba(53, 63, 203);
+                        background-color: rgb(53, 63, 203);
                         color: rgb(120, 120, 120);
                 }
                 """
