@@ -320,7 +320,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 
         # PushButton for registering - Saves Data of Doctor        
                 self.docRegisterPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.docRegisterPushButton.setGeometry(530, 410, 221, 41)
+                self.docRegisterPushButton.setGeometry(530, 440, 221, 41)
                 self.docRegisterPushButton.setText("Register")
                 
                 #Style Sheet Code for Register vvvvvvvvvvvvvvvvvvvvvv
@@ -350,7 +350,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
         # Push Button for Going Back to Login Page
                 self.docGoBackLoginPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.docGoBackLoginPushButton.setGeometry(530, 460, 221, 41)
+                self.docGoBackLoginPushButton.setGeometry(530, 490, 221, 41)
                 self.docGoBackLoginPushButton.setText("Go Back To Login")
 
                 #Style SHeet code for Transparent Block white differnt text color vvvvvvvv
