@@ -2,6 +2,8 @@ import os
 import sys
 
 from .AccountPage import AccountPage
+from .ClinicAnalytics import ClinicAnalytics
+from .ClinicDashboard import ClinicDashboard
 from .ClinicDoctorList import ClinicDoctorList
 from .ClinicRequestReview import ClinicRequestReview
 from .model import Clinic
@@ -21,7 +23,7 @@ class ClinicHomepage(QMainWindow):
         self.pageManager = PageManager()
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayoutManager.add(0)
-        self.frameLayoutManager.setBasePages(5)
+        self.frameLayoutManager.setBasePages(6)
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -48,10 +50,15 @@ class ClinicHomepage(QMainWindow):
         self.frameLayoutManager.backToBasePage(3)
         self.frameLayout.setCurrentIndex(3)
 
-    def goToAccountPage(self):
-        self.setButtonHighlight(self.myAccountButton)
+    def goToAnalyticsPage(self):
+        self.setButtonHighlight(self.analyticsButton)
         self.frameLayoutManager.backToBasePage(4)
         self.frameLayout.setCurrentIndex(4)
+
+    def goToAccountPage(self):
+        self.setButtonHighlight(self.myAccountButton)
+        self.frameLayoutManager.backToBasePage(5)
+        self.frameLayout.setCurrentIndex(5)
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -100,6 +107,15 @@ class ClinicHomepage(QMainWindow):
         self.requestReviewButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
         self.requestReviewButton.clicked.connect(self.goToRequestReview)
 
+        self.analyticsButton = QPushButton(self.centralwidget)
+        self.analyticsButton.setFixedSize(70, 70)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\analytics.png")
+        self.analyticsIcon = QIcon(filepath)
+        self.analyticsButton.setIconSize(QSize(35, 35))
+        self.analyticsButton.setIcon(self.analyticsIcon)
+        self.analyticsButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.analyticsButton.clicked.connect(self.goToAnalyticsPage)
+
         self.topLeftLogo = QLabel()
         self.topLeftLogo.setFixedSize(70, 70)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
@@ -109,9 +125,10 @@ class ClinicHomepage(QMainWindow):
 
         self.myAccountButton = QPushButton(self.centralwidget)
         self.myAccountButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\account.png")
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(35, 35))
+        self.myAccountButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
         self.myAccountButton.setIcon(self.myAccountIcon)
         self.myAccountButton.clicked.connect(self.goToAccountPage)
 
@@ -131,17 +148,19 @@ class ClinicHomepage(QMainWindow):
         self.highlightButtonList.append(self.doctorListButton)
         self.highlightButtonList.append(self.dashboardButton)
         self.highlightButtonList.append(self.manageScheduleButton)
+        self.highlightButtonList.append(self.analyticsButton)
 
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
-        spacer1.setFixedHeight(100)
+        spacer1.setFixedHeight(50)
         self.sideLayout.addWidget(spacer1)
         self.sideLayout.addWidget(self.dashboardButton)
         self.sideLayout.addWidget(self.manageScheduleButton)
         self.sideLayout.addWidget(self.doctorListButton)
         self.sideLayout.addWidget(self.requestReviewButton)
+        self.sideLayout.addWidget(self.analyticsButton)
         spacer2 = QWidget()
-        spacer2.setFixedHeight(100)
+        spacer2.setFixedHeight(30)
         self.sideLayout.addWidget(spacer2)
         self.sideLayout.addWidget(self.myAccountButton)
         self.sideLayout.addWidget(self.logoutButton)
@@ -158,13 +177,15 @@ class ClinicHomepage(QMainWindow):
         self.clinicManageSchedule = ClinicManageSchedule(self.clinic)  # index 1
         self.clinicDoctorList = ClinicDoctorList(self.clinic)  # index 2
         self.clinicRequestReview = ClinicRequestReview(self.clinic)  # index 3
-        self.accountPage = AccountPage()  # index 4
+        self.clinicAnalytics = ClinicAnalytics(self.clinic) # index 4
+        self.accountPage = AccountPage()  # index 5
         self.accountPage.setUser("Clinic", self.clinic)
 
         self.frameLayout.addWidget(self.clinicDashboard)
         self.frameLayout.addWidget(self.clinicManageSchedule)
         self.frameLayout.addWidget(self.clinicDoctorList)
         self.frameLayout.addWidget(self.clinicRequestReview)
+        self.frameLayout.addWidget(self.clinicAnalytics)
         self.frameLayout.addWidget(self.accountPage)
 
         self.frameLayoutManager.setFrameLayout(self.frameLayout)
