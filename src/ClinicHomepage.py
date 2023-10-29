@@ -32,7 +32,6 @@ class ClinicHomepage(QMainWindow):
 
     def goToDashboard(self):
         self.setButtonHighlight(self.dashboardButton)
-        self.clinicDashboard.setSchedule()
         self.frameLayoutManager.backToBasePage(0)
         self.frameLayout.setCurrentIndex(0)
     def goToManageSchedule(self):
@@ -42,6 +41,8 @@ class ClinicHomepage(QMainWindow):
 
     def goToDoctorList(self):
         self.setButtonHighlight(self.doctorListButton)
+
+        self.frameLayout.widget(2).generateDoctorButtons()
         self.frameLayoutManager.backToBasePage(2)
         self.frameLayout.setCurrentIndex(2)
 

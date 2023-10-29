@@ -151,6 +151,8 @@ class ClinicDashboard(QWidget):
 
     def generateRequestReview(self):
 
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+
         self.requestReviewWidget = QWidget()
         self.requestReviewWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px; margin-left: 20px;")
         self.requestReviewLayout = QVBoxLayout(self.requestReviewWidget)
@@ -184,6 +186,10 @@ class ClinicDashboard(QWidget):
 
         threeAppointments = self.unassignedAppointmentList[:3]
 
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\request.png")
+
+        requestIcon = QIcon(filepath)
+
         if len(threeAppointments) == 0:
             emptyReviews = QLabel()
             emptyReviews.setFont(buttonFont)
@@ -197,6 +203,7 @@ class ClinicDashboard(QWidget):
                 self.requestButton.setStyleSheet("background-color: white; border-radius: 10px; margin-left: 30px;")
                 self.requestButton.setFont(buttonFont)
                 self.requestButton.setFixedSize(QSize(400, 100))
+                self.requestButton.setIcon(requestIcon)
                 self.requestButton.setIconSize(QSize(70, 70))
                 self.requestButton.clicked.connect(
                     lambda checked, request=request: self.requestButtonFunction(request, self.clinic))
