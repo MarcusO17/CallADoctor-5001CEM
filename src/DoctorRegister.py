@@ -283,6 +283,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docPasswordLineEdit.setObjectName("docPasswordLineEdit")
                 self.docPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
                 self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.docPasswordLineEdit.textChanged.connect(self.docValidatePasswordMatch)
 
                 self.docShowPasswordCheckBox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
                 self.docShowPasswordCheckBox.setGeometry(530, 290, 221, 31)
@@ -310,6 +311,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docReEnterPassLineEdit.setObjectName("docReEnterPassLineEdit")
                 self.docReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
                 self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.docReEnterPassLineEdit.textChanged.connect(self.docValidatePasswordMatch)
                 
                 self.docShowRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
                 self.docShowRePasswordCheckbox.setGeometry(530, 380, 221, 31)
@@ -467,3 +469,13 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
                 else:
                         self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+
+        def docValidatePasswordMatch(self):
+                doctorPassword = self.docPasswordLineEdit.text()
+                doctorReEnterPassword = self.docReEnterPassLineEdit.text()
+
+                if doctorPassword == doctorReEnterPassword:
+                        self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                else:
+                        self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
