@@ -378,9 +378,9 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         
         def validatePasswordMatch(self):
                 password = self.clinicPasswordLineEdit.text()
-                reenter_password = self.clinicReEnterPassLineEdit.text()
+                reenterPassword = self.clinicReEnterPassLineEdit.text()
 
-                if password == reenter_password:
+                if password == reenterPassword:
                         # Passwords match, Color of the field will be green
                         self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
                 else:
