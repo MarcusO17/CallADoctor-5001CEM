@@ -390,6 +390,8 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                         "patientDOBDateEdit": self.patientDOBDateEdit.date().toString(Qt.ISODate),
                         "patientPassportLineEdit": self.patientPassportLineEdit.text(),
                         "patientPasswordLineEdit": self.patientPasswordLineEdit.text(),
+                        "patientBloodTypeLineEdit": self.patientBloodTypeLineEdit.text(),
+                        "patientRaceLineEdit": self.patientRaceLineEdit.text()
                 }
 
                 # marcus post to databasee here
