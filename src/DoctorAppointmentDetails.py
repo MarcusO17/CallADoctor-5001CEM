@@ -64,7 +64,9 @@ class DoctorAppointmentDetails(QWidget):
         font.setBold(True)
         font.setWeight(75)
         self.appointmentPurposeLabel.setFont(font)
-        self.appointmentPurposeLabel.setText(self.appointment.getVisitReason())
+        self.appointmentPurposeLabel.setText(f"{self.appointment.getVisitReason()} \n"
+                                             f"Date: {self.appointment.getAppointmentDate()} \n"
+                                             f"Start Time: {self.appointment.getStartTime()}")
         self.appointmentPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.patientDetailsLabel = QLabel(self.centralwidget)

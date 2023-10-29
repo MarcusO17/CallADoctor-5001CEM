@@ -9,7 +9,7 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Clinic, Doctor, Appointment, Patient, AppointmentRepo
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
 class DoctorMyAppointmentWindow(QWidget):
@@ -65,8 +65,13 @@ class DoctorMyAppointmentWindow(QWidget):
     def appointmentButtonFunction(self, appointment, doctor):
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
         self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
-        self.pageManager.add(self.doctorAppointmentDetails)
-        print(self.pageManager.size())
+
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+        self.frameLayout.addWidget(self.doctorAppointmentDetails)
+        self.frameLayoutManager.add(self.frameLayout.count() - 1)
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def generateMyAppointmentButtons(self):
 
