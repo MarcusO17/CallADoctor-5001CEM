@@ -309,6 +309,11 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docReEnterPassLineEdit.setFont(font)
                 self.docReEnterPassLineEdit.setObjectName("docReEnterPassLineEdit")
                 self.docReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
+                self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                
+                self.docShowRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.docShowRePasswordCheckbox.setGeometry(530, 380, 221, 31)
+                self.docShowRePasswordCheckbox.stateChanged.connect(self.docToggleReEnterPasswordVisibility)
 
                 
         # PushButton for registering - Saves Data of Doctor        
@@ -455,3 +460,10 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
                 else:
                         self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+        
+        def docToggleReEnterPasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
