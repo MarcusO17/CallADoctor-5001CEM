@@ -37,7 +37,7 @@ class ClinicManageSchedule(QWidget):
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
         self.searchBar = QLineEdit(self.centralwidget)
-        self.searchBar.setGeometry(QRect(180, 40, 800, 40))
+        self.searchBar.setGeometry(QRect(100, 120, 800, 40))
         self.searchBar.setPlaceholderText("Search Bar")
         self.searchBar.textChanged.connect(self.filterButtons)
 
