@@ -204,6 +204,28 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPassportLineEdit.setPlaceholderText("example - i123133xx")
 
 
+                # Blood Type Text - Set as Label
+                self.patientBloodTypeLabel = QtWidgets.QLabel(self.centralwidget)
+                self.patientBloodTypeLabel.setGeometry(530, 150, 221, 16)
+                self.patientBloodTypeLabel.setText("Blood Type")
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(10)
+                self.patientBloodTypeLabel.setFont(font)
+                self.patientBloodTypeLabel.setObjectName("PatientBloodType")
+
+
+                # Line Edit for entering Blood Type
+                self.patientBloodTypeLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.patientBloodTypeLineEdit.setGeometry(530, 170, 221, 31)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.patientBloodTypeLineEdit.setFont(font)
+                self.patientBloodTypeLineEdit.setObjectName("patientBloodType")
+                self.patientBloodTypeLineEdit.setPlaceholderText("example -  AB+")
+
+
                 # Password Text - Set as Label 10
                 self.patientPasswordLabel = QtWidgets.QLabel(self.centralwidget)
                 self.patientPasswordLabel.setGeometry(530, 240, 221, 16)
