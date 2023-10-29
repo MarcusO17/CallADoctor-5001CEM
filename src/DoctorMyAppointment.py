@@ -18,7 +18,6 @@ class DoctorMyAppointmentWindow(QWidget):
         super().__init__()
         self.doctor = doctor
         self.pageManager = PageManager()
-        self.setWindowTitle("My Appointment")
         self.setupUi()
 
     def setupUi(self):
