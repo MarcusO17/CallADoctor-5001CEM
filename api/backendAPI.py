@@ -930,7 +930,7 @@ def requests():
         
         contentJSON = request.get_json()
 
-        requestsID = contentJSON['requestsID']
+        requestsID =  requests.get('http://127.0.0.1:5000/requests/idgen').text
         requestsType = contentJSON['requestsType']
         clientID = contentJSON['clientID']
         approvalStatus = contentJSON['approvalStatus']
@@ -1055,6 +1055,23 @@ def getLastPrescriptionID():
     counter = cursor.fetchall()
     id = str(counter[0]['COUNT(*)'])
     id = f'PR{id.zfill(3)}'
+    
+    cursor.close()
+    conn.close()
+
+    if id is not None:
+            return id,200
+
+@app.route('/requests/idgen')
+def getLastPrescriptionID():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    
+    #Add Error Handling
+    cursor.execute("SELECT COUNT(*) FROM requests")
+    counter = cursor.fetchall()
+    id = str(counter[0]['COUNT(*)'])
+    id = f'REQ{id.zfill(3)}'
     
     cursor.close()
     conn.close()
