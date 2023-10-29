@@ -2,7 +2,7 @@ import os
 import sys
 
 from .AccountPage import AccountPage
-from .ClinicAnalytics import ClinicAnalytics
+from .ClinicMap import ClinicMap
 from .ClinicDashboard import ClinicDashboard
 from .ClinicDoctorList import ClinicDoctorList
 from .ClinicRequestReview import ClinicRequestReview
@@ -51,8 +51,8 @@ class ClinicHomepage(QMainWindow):
         self.frameLayoutManager.backToBasePage(3)
         self.frameLayout.setCurrentIndex(3)
 
-    def goToAnalyticsPage(self):
-        self.setButtonHighlight(self.analyticsButton)
+    def goToMapPage(self):
+        self.setButtonHighlight(self.mapButton)
         self.frameLayoutManager.backToBasePage(4)
         self.frameLayout.setCurrentIndex(4)
 
@@ -108,14 +108,14 @@ class ClinicHomepage(QMainWindow):
         self.requestReviewButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
         self.requestReviewButton.clicked.connect(self.goToRequestReview)
 
-        self.analyticsButton = QPushButton(self.centralwidget)
-        self.analyticsButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\analytics.png")
-        self.analyticsIcon = QIcon(filepath)
-        self.analyticsButton.setIconSize(QSize(35, 35))
-        self.analyticsButton.setIcon(self.analyticsIcon)
-        self.analyticsButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
-        self.analyticsButton.clicked.connect(self.goToAnalyticsPage)
+        self.mapButton = QPushButton(self.centralwidget)
+        self.mapButton.setFixedSize(70, 70)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\map.png")
+        self.mapIcon = QIcon(filepath)
+        self.mapButton.setIconSize(QSize(35, 35))
+        self.mapButton.setIcon(self.mapIcon)
+        self.mapButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.mapButton.clicked.connect(self.goToMapPage)
 
         self.topLeftLogo = QLabel()
         self.topLeftLogo.setFixedSize(70, 70)
@@ -149,7 +149,7 @@ class ClinicHomepage(QMainWindow):
         self.highlightButtonList.append(self.doctorListButton)
         self.highlightButtonList.append(self.dashboardButton)
         self.highlightButtonList.append(self.manageScheduleButton)
-        self.highlightButtonList.append(self.analyticsButton)
+        self.highlightButtonList.append(self.mapButton)
 
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
@@ -159,7 +159,7 @@ class ClinicHomepage(QMainWindow):
         self.sideLayout.addWidget(self.manageScheduleButton)
         self.sideLayout.addWidget(self.doctorListButton)
         self.sideLayout.addWidget(self.requestReviewButton)
-        self.sideLayout.addWidget(self.analyticsButton)
+        self.sideLayout.addWidget(self.mapButton)
         spacer2 = QWidget()
         spacer2.setFixedHeight(30)
         self.sideLayout.addWidget(spacer2)
@@ -178,7 +178,7 @@ class ClinicHomepage(QMainWindow):
         self.clinicManageSchedule = ClinicManageSchedule(self.clinic)  # index 1
         self.clinicDoctorList = ClinicDoctorList(self.clinic)  # index 2
         self.clinicRequestReview = ClinicRequestReview(self.clinic)  # index 3
-        self.clinicAnalytics = ClinicAnalytics(self.clinic) # index 4
+        self.clinicMap = ClinicMap(self.clinic) # index 4
         self.accountPage = AccountPage()  # index 5
         self.accountPage.setUser("Clinic", self.clinic)
 
@@ -186,7 +186,7 @@ class ClinicHomepage(QMainWindow):
         self.frameLayout.addWidget(self.clinicManageSchedule)
         self.frameLayout.addWidget(self.clinicDoctorList)
         self.frameLayout.addWidget(self.clinicRequestReview)
-        self.frameLayout.addWidget(self.clinicAnalytics)
+        self.frameLayout.addWidget(self.clinicMap)
         self.frameLayout.addWidget(self.accountPage)
 
         self.frameLayoutManager.setFrameLayout(self.frameLayout)
@@ -194,6 +194,10 @@ class ClinicHomepage(QMainWindow):
         self.mainLayout.addWidget(self.frameLayout, 11)
 
         self.centralwidget.setLayout(self.mainLayout)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
+        backgroundImage = QPixmap(filepath)
+        self.setStyleSheet(f"background-image: url({backgroundImage});")
 
         MainWindow.setCentralWidget(self.centralwidget)
 

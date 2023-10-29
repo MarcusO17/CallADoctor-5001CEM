@@ -1,7 +1,7 @@
 import os
 
 from PyQt5.QtCore import QSize, QDate
-from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtGui import QFont, QIcon, QPixmap
 from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
     QHBoxLayout,QSizePolicy
 
@@ -23,6 +23,7 @@ class ClinicDashboard(QWidget):
         self.setupUi()
 
     def setupUi(self):
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
@@ -32,13 +33,13 @@ class ClinicDashboard(QWidget):
 
         self.generateRequestReview()
 
-        self.generateMapWidget()
+        self.generateGraphWidget()
 
         self.leftLayout.addWidget(self.doctorWidgets, 3)
         spacer = QWidget()
         spacer.setFixedHeight(25)
         self.leftLayout.addWidget(spacer)
-        self.leftLayout.addWidget(self.mapWidget, 7)
+        self.leftLayout.addWidget(self.graphWidget, 7)
 
         self.dateLayout = QHBoxLayout()
         spacer = QWidget()
@@ -59,6 +60,7 @@ class ClinicDashboard(QWidget):
 
         spacer = QWidget()
         spacer.setFixedHeight(50)
+        spacer.setFixedWidth(0)
         self.rightLayout.addWidget(spacer)
         self.requestReviewWidget.setFixedWidth(500)
         self.rightLayout.addWidget(self.requestReviewWidget)
@@ -67,6 +69,10 @@ class ClinicDashboard(QWidget):
         self.mainLayout.addLayout(self.rightLayout, 5)
 
         self.setLayout(self.mainLayout)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
+        backgroundImage = QPixmap(filepath)
+        self.setStyleSheet(f"background-image: url({backgroundImage});")
 
     def generateDoctorWidgets(self):
 
@@ -228,11 +234,12 @@ class ClinicDashboard(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-    def generateMapWidget(self):
+    def generateGraphWidget(self):
 
-        self.mapWidget = QWidget()
-        self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
-        self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+        self.graphWidget = QWidget()
+        self.graphWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.graphWidgetLayout = QVBoxLayout(self.graphWidget)
 
         self.widgetTitle = QLabel()
         self.widgetTitle.setFixedWidth(380)
@@ -242,7 +249,7 @@ class ClinicDashboard(QWidget):
         font.setBold(True)
         font.setWeight(75)
         self.widgetTitle.setFont(font)
-        self.widgetTitle.setText("Map")
+        self.widgetTitle.setText("ANALYTIC STUFF")
 
         headerRow = QHBoxLayout()
         spacer = QWidget()
@@ -250,5 +257,15 @@ class ClinicDashboard(QWidget):
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.widgetTitle)
 
-        self.mapWidgetLayout.addLayout(headerRow)
-        self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
+        self.graphWidgetLayout.addLayout(headerRow)
+        self.graphWidgetLayout.setContentsMargins(20, 20, 20, 20)
+
+        #generate your graph here
+
+        self.graphLabel = QLabel()
+        self.graphLabel.setFixedSize(600,400)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        graphPixmap = QPixmap(filepath)
+        self.graphLabel.setPixmap(graphPixmap)
+
+        self.graphWidgetLayout.addWidget(self.graphLabel)
