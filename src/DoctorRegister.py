@@ -238,6 +238,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.doctorRemoveDocumentButton = QtWidgets.QPushButton("Remove file", self.centralwidget)
                 self.doctorRemoveDocumentButton.setGeometry(280, 470, 80, 30)
                 self.doctorRemoveDocumentButton.clicked.connect(self.doctorRemoveDocument)
+                self.doctorRemoveDocumentButton.setDisabled(True)
 
 
         # Years of Experience for Doctor - Set as Label 10
