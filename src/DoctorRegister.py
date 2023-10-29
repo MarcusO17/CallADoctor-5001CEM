@@ -4,7 +4,7 @@ import json
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QPushButton, QVBoxLayout, QWidget, QApplication
+from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from .model import Registration
@@ -228,7 +228,16 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docAttachmentLineEdit.setFont(font)
                 self.docAttachmentLineEdit.setObjectName("docAttachmentLineEdit")
-                self.docAttachmentLineEdit.setPlaceholderText("Attach Here                                              +")
+                self.docAttachmentLineEdit.setPlaceholderText("Attach Certificates")
+                self.docAttachmentLineEdit.setDisabled(True)
+
+                self.doctorAttachDocumentButton = QtWidgets.QPushButton("+",self.centralwidget)
+                self.doctorAttachDocumentButton.setGeometry(472, 440, 30, 30)
+                self.doctorAttachDocumentButton.clicked.connect(self.doctorAttachDocument)
+
+                self.doctorRemoveDocumentButton = QtWidgets.QPushButton("Remove file", self.centralwidget)
+                self.doctorRemoveDocumentButton.setGeometry(280, 470, 80, 30)
+                self.doctorRemoveDocumentButton.clicked.connect(self.doctorRemoveDocument)
 
 
         # Years of Experience for Doctor - Set as Label 10
@@ -371,11 +380,18 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         def saveData(self):
+                doctorDocumentPath = self.docAttachmentLineEdit.text()
+                doctorDocumentData = None
+                with open(doctorDocumentPath, "rb") as doctorDocumentFile:
+                        doctorDocumentData = doctorDocumentFile.read()
+
+
                 doctorName  = f'{self.docFirstNameLineEdit.text()} {self.docLastNameLineEdit.text()}'
                 doctorEmail = self.docEmailLineEdit.text()
                 doctorPassword = self.docPasswordLineEdit.text()
                 doctorContact = self.docContactLineEdit.text()
                 doctorType = self.docSpecialtyLineEdit.text()
+                doctorDocument = doctorDocumentData
                 yearsOfExperience = self.docExpLineEdit.text()
                 doctorICNumber = self.docPassportLineEdit.text()
                 
@@ -385,6 +401,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         "doctorPassword": doctorPassword,
                         "doctorICNumber": doctorICNumber,
                         "doctorContact": doctorContact,
+                        "doctorDocument": doctorDocument,
                         "doctorType": doctorType,
                         "yearOfExperience": yearsOfExperience,
                         "doctorEmail": doctorEmail,
@@ -411,3 +428,18 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                                                 QMessageBox.Yes | QMessageBox.No)
                 if docGoBackLoginDialogBox == QMessageBox.Yes:
                         self.pageManager.goBack()
+
+        
+        def doctorAttachDocument(self):
+                options = QFileDialog.Options()
+                options |= QFileDialog.ReadOnly
+                document, _ = QFileDialog.getOpenFileName(self, "Open Documents", "", "All fiels (*)", options=options)
+
+                if document:
+                        self.docAttachmentLineEdit.setText(document)
+                        self.doctorRemoveDocumentButton.setDisabled(False)
+
+
+        def doctorRemoveDocument(self):
+                self.docAttachmentLineEdit.clear()
+                self.doctorRemoveDocumentButton.setDisabled(True)
