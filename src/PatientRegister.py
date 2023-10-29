@@ -206,7 +206,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Password Text - Set as Label 10
                 self.patientPasswordLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientPasswordLabel.setGeometry(530, 150, 221, 16)
+                self.patientPasswordLabel.setGeometry(530, 240, 221, 16)
                 self.patientPasswordLabel.setText("Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -220,7 +220,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # Minimum 8 characters, upper case and lower case letters, numbers
                 # and Special Characters) 
                 self.patientPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientPasswordLineEdit.setGeometry(530, 170, 221, 31)
+                self.patientPasswordLineEdit.setGeometry(530, 260, 221, 31)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -231,13 +231,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPasswordLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
 
                 self.showPatientPasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientPasswordCheckbox.setGeometry(530, 200, 221, 31)
+                self.showPatientPasswordCheckbox.setGeometry(530, 290, 221, 31)
                 self.showPatientPasswordCheckbox.stateChanged.connect(self.togglePatientPasswordVisibility)
 
 
                 # Confirm Password Text - set as Label 11
                 self.patientReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientReEnterPassLabel.setGeometry(530, 240, 221, 16)
+                self.patientReEnterPassLabel.setGeometry(530, 330, 221, 16)
                 self.patientReEnterPassLabel.setText("Confirm Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -250,7 +250,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # need validation to check if previously written password and
                 # re-entered password same or not, if not, error 404)
                 self.patientReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientReEnterPassLineEdit.setGeometry(530, 260, 221, 31)
+                self.patientReEnterPassLineEdit.setGeometry(530, 350, 221, 31)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -261,7 +261,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientReEnterPassLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
 
                 self.showPatientRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientRePasswordCheckbox.setGeometry(530, 290, 221, 31)
+                self.showPatientRePasswordCheckbox.setGeometry(530, 380, 221, 31)
                 self.showPatientRePasswordCheckbox.stateChanged.connect(self.togglePatientReEnterPasswordVisibility)
 
 
