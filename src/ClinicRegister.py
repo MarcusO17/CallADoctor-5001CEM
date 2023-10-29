@@ -48,26 +48,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.clinicRegSubTitle.setObjectName("clinicRegSubTitle")
 
 
-        # Clinic ID Number - Set as Label 3
-                self.clinicIDLabel = QtWidgets.QLabel(self.centralwidget)
-                self.clinicIDLabel.setGeometry(30, 150, 221, 21)
-                self.clinicIDLabel.setText("Clinic ID Number")
-                font = QtGui.QFont()
-                font.setFamily("Arial")
-                font.setPointSize(10)
-                self.clinicIDLabel.setFont(font)
-                self.clinicIDLabel.setObjectName("clinicIDLabel")
 
-
-        # Line Edit for Entering Clinic ID Number
-                self.clinicIDLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.clinicIDLineEdit.setGeometry(30, 170, 221, 31)
-                font = QtGui.QFont()
-                font.setFamily("Arial")
-                font.setPointSize(9)
-                self.clinicIDLineEdit.setFont(font)
-                self.clinicIDLineEdit.setObjectName("clinicIDLineEdit")
-                self.clinicIDLineEdit.setPlaceholderText("example - P21002")
 
 
         # Address of Clinic - Set as Label 4
@@ -342,7 +323,6 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def clinicSaveData(self):
         
                 data = {
-                "clinicIDLineEdit": self.clinicIDLineEdit.text(),
                 "clinicAddressLineEdit": self.clinicAddressLineEdit.text(),
                 "clinicNameLineEdit": self.clinicNameLineEdit.text(),
                 "clinicContactLineEdit": self.clinicContactLineEdit.text(),
