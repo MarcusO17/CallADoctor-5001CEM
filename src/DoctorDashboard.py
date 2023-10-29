@@ -17,6 +17,7 @@ class DoctorDashboard(QWidget):
     def __init__(self, doctor):
         super().__init__()
         self.doctor = doctor
+        print(doctor.getDoctorID())
         self.setupUi()
 
     def setupUi(self):
@@ -214,18 +215,7 @@ class DoctorDashboard(QWidget):
 
         #get 3 upcoming appointment here
 
-        appointmentList = list()
-
-        appointment1 = Appointment("A0001", "D00001", "C0001", "P0001", "Approved", "8:00", "9:00", "appointmentDate",
-                                   "visitReason")
-        appointment2 = Appointment("A0002", "D00002", "C0002", "P0002", "Completed", "8:00", "9:00", "appointmentDate",
-                                   "visitReason")
-        appointment3 = Appointment("A0003", "D00003", "C0003", "P0003", "Approved", "8:00", "9:00", "appointmentDate",
-                                   "visitReason")
-
-        appointmentList.append(appointment1)
-        appointmentList.append(appointment2)
-        appointmentList.append(appointment3)
+        appointmentList = AppointmentRepository.getDashboardAppointments(self.doctor.getDoctorID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")

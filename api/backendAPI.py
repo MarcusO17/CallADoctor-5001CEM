@@ -618,6 +618,33 @@ def appointmentsWeek():
         ]
         if appointment is not None:
             return jsonify(appointment),200  
+        
+
+@app.route('/appointments/upcoming/<string:doctorID>',methods=['GET'])
+def appointmentsUpcoming(doctorID):
+    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+    if request.method == 'GET':
+        cursor.execute("""SELECT * FROM appointments where appointmentDate >= %s AND 
+                       doctorID = %s ORDER BY appointmentDate, startTime LIMIT 3"""
+                        ,(dateToday,doctorID))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200  
 
 @app.route('/appointments/<string:clinicID>/pending',methods=['GET'])
 def appointmentsPending(clinicID):
