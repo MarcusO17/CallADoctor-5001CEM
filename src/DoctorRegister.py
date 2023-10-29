@@ -282,6 +282,11 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docPasswordLineEdit.setFont(font)
                 self.docPasswordLineEdit.setObjectName("docPasswordLineEdit")
                 self.docPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+                self.docShowPasswordCheckBox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.docShowPasswordCheckBox.setGeometry(530, 290, 221, 31)
+                self.docShowPasswordCheckBox.stateChanged.connect(self.docTogglePasswordVisibility)
                 
                 
         # Confirmation of Password for Doctor - Set as Label 14
@@ -443,3 +448,10 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         def doctorRemoveDocument(self):
                 self.docAttachmentLineEdit.clear()
                 self.doctorRemoveDocumentButton.setDisabled(True)
+
+        
+        def docTogglePasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
