@@ -267,7 +267,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Register PushButton for Registering Account - (Saves the Data)
                 self.patientRegPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.patientRegPushButton.setGeometry(530, 400, 221, 41)
+                self.patientRegPushButton.setGeometry(530, 440, 221, 41)
                 self.patientRegPushButton.setText("Register")
 
                 # DONT MIND THIS - This is just me editing the STYLE SHEET for
@@ -298,7 +298,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # Push Button for "Going Back to Login page" - 
 
                 self.patientGoBackLoginButton = QtWidgets.QPushButton(self.centralwidget)
-                self.patientGoBackLoginButton.setGeometry(530, 450, 221, 41)
+                self.patientGoBackLoginButton.setGeometry(530, 490, 221, 41)
                 self.patientGoBackLoginButton.setText("Go Back To Login")
                 #stylesheeet editing vv
                 stylesheet6 = """
