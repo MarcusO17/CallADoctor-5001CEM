@@ -172,22 +172,23 @@ def clinics():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        clinicID = contentJSON['clinicID']
+        clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
         clinicName = contentJSON['clinicName']
         clinicEmail = contentJSON['clinicEmail']
         clinicPassword = contentJSON['clinicPassword']
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
-        governmentApproved = contentJSON['governmentApproved']
+        verifiedDoc = contentJSON['clinicDocument']
+        governmentApproved = 'Unverified'
         lat,lon = GeoHelper.geocode(GeoHelper,address=address)
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                                            clinicContact,governmentApproved,verifiedDoc,lat,lon)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon))
+                                            clinicContact,governmentApproved,verifiedDoc,lat,lon))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     

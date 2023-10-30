@@ -334,15 +334,13 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 with open(documentPath, "rb") as documentFile:
                         documentData = documentFile.read()
 
-                data = {
-                "clinicAddressLineEdit": self.clinicAddressLineEdit.text(),
-                "clinicNameLineEdit": self.clinicNameLineEdit.text(),
-                "clinicContactLineEdit": self.clinicContactLineEdit.text(),
-                "clinicEmailLineEdit": self.clinicEmailLineEdit.text(),
-                "clinicPostCodeLineEdit": self.clinicPostCodeLineEdit.text(),
-                "clinicDocumentLineEdit": documentData,
-                "clinicPasswordLineEdit": self.clinicPasswordLineEdit.text()
-
+                clinicData = {
+                "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}'`,
+                "clinicName": self.clinicNameLineEdit.text(),
+                "clinicContact": self.clinicContactLineEdit.text(),
+                "clinicEmail": self.clinicEmailLineEdit.text(),
+                "clinicDocument": documentData,
+                "clinicPassword": self.clinicPasswordLineEdit.text()
                 }
 
                 #Marcus post to Database here
