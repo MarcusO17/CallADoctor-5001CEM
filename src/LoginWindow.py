@@ -87,20 +87,24 @@ class LoginWindow(QWidget):
         self.setLayout(loginFormLayout)
 
     def selectRegisterPageFunction(self):
-        messageBox = QMessageBox()
-        messageBox.setText("Choose Which Registration Page")
-        clinicButton = messageBox.addButton("Clinic", QMessageBox.ActionRole)
-        patientButton = messageBox.addButton("Patient", QMessageBox.ActionRole)
-        doctorButton = messageBox.addButton("Doctor", QMessageBox.ActionRole)
-        messageBox.exec_()
+        self.messageBox = QMessageBox()
+        self.messageBox.setWindowTitle("Registration options")
+        self.messageBox.setText("Choose Which Registration Page")
+        clinicButton = self.messageBox.addButton("Clinic", QMessageBox.ActionRole)
+        patientButton = self.messageBox.addButton("Patient", QMessageBox.ActionRole)
+        doctorButton = self.messageBox.addButton("Doctor", QMessageBox.ActionRole)
+        cancelButton = self.messageBox.addButton("Cancel", QMessageBox.RejectRole)
+        self.messageBox.exec_()
 
-        if messageBox.clickedButton() == clinicButton:
+        if self.messageBox.clickedButton() == cancelButton:
+           self.messageBox.done(QMessageBox.Accepted) 
+        elif self.messageBox.clickedButton() == clinicButton:
             self.openClinicRegisterWindow()
-        elif messageBox.clickedButton() == patientButton:
+        elif self.messageBox.clickedButton() == patientButton:
             self.openPatientRegisterWindow()
-        elif messageBox.clickedButton() == doctorButton:
+        elif self.messageBox.clickedButton() == doctorButton:
             self.openDoctorRegisterWindow()
-        
+           
     def openClinicRegisterWindow(self):
         self.clinicRegister = ClinicRegisterWindow()
         self.pageManager.add(self.clinicRegister)
