@@ -4,7 +4,7 @@ import json
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QPushButton, QVBoxLayout, QWidget, QApplication
+from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from .model import Registration
@@ -228,7 +228,17 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(9)
                 self.docAttachmentLineEdit.setFont(font)
                 self.docAttachmentLineEdit.setObjectName("docAttachmentLineEdit")
-                self.docAttachmentLineEdit.setPlaceholderText("Attach Here                                              +")
+                self.docAttachmentLineEdit.setPlaceholderText("Attach Certificates")
+                self.docAttachmentLineEdit.setDisabled(True)
+
+                self.doctorAttachDocumentButton = QtWidgets.QPushButton("+",self.centralwidget)
+                self.doctorAttachDocumentButton.setGeometry(472, 440, 30, 30)
+                self.doctorAttachDocumentButton.clicked.connect(self.doctorAttachDocument)
+
+                self.doctorRemoveDocumentButton = QtWidgets.QPushButton("Remove file", self.centralwidget)
+                self.doctorRemoveDocumentButton.setGeometry(280, 470, 80, 30)
+                self.doctorRemoveDocumentButton.clicked.connect(self.doctorRemoveDocument)
+                self.doctorRemoveDocumentButton.setDisabled(True)
 
 
         # Years of Experience for Doctor - Set as Label 10
@@ -273,6 +283,12 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docPasswordLineEdit.setFont(font)
                 self.docPasswordLineEdit.setObjectName("docPasswordLineEdit")
                 self.docPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.docPasswordLineEdit.textChanged.connect(self.docValidatePasswordMatch)
+
+                self.docShowPasswordCheckBox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.docShowPasswordCheckBox.setGeometry(530, 290, 221, 31)
+                self.docShowPasswordCheckBox.stateChanged.connect(self.docTogglePasswordVisibility)
                 
                 
         # Confirmation of Password for Doctor - Set as Label 14
@@ -295,22 +311,28 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docReEnterPassLineEdit.setFont(font)
                 self.docReEnterPassLineEdit.setObjectName("docReEnterPassLineEdit")
                 self.docReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
+                self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.docReEnterPassLineEdit.textChanged.connect(self.docValidatePasswordMatch)
+                
+                self.docShowRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
+                self.docShowRePasswordCheckbox.setGeometry(530, 380, 221, 31)
+                self.docShowRePasswordCheckbox.stateChanged.connect(self.docToggleReEnterPasswordVisibility)
 
                 
         # PushButton for registering - Saves Data of Doctor        
                 self.docRegisterPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.docRegisterPushButton.setGeometry(530, 410, 221, 41)
+                self.docRegisterPushButton.setGeometry(530, 440, 221, 41)
                 self.docRegisterPushButton.setText("Register")
                 
                 #Style Sheet Code for Register vvvvvvvvvvvvvvvvvvvvvv
                 stylesheet2 = """
                 QPushButton {
-                        background-color: rgba(53, 63, 203);
+                        background-color: rgb(53, 63, 203);
                         color: rgb(255, 255, 255);
                 }
 
                 QPushButton:disabled {
-                        background-color: rgba(53, 63, 203);
+                        background-color: rgb(53, 63, 203);
                         color: rgb(120, 120, 120);
                 }
                 """
@@ -329,7 +351,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
         # Push Button for Going Back to Login Page
                 self.docGoBackLoginPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.docGoBackLoginPushButton.setGeometry(530, 460, 221, 41)
+                self.docGoBackLoginPushButton.setGeometry(530, 490, 221, 41)
                 self.docGoBackLoginPushButton.setText("Go Back To Login")
 
                 #Style SHeet code for Transparent Block white differnt text color vvvvvvvv
@@ -371,11 +393,18 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
 
         def saveData(self):
+                doctorDocumentPath = self.docAttachmentLineEdit.text()
+                doctorDocumentData = None
+                with open(doctorDocumentPath, "rb") as doctorDocumentFile:
+                        doctorDocumentData = doctorDocumentFile.read()
+
+
                 doctorName  = f'{self.docFirstNameLineEdit.text()} {self.docLastNameLineEdit.text()}'
                 doctorEmail = self.docEmailLineEdit.text()
                 doctorPassword = self.docPasswordLineEdit.text()
                 doctorContact = self.docContactLineEdit.text()
                 doctorType = self.docSpecialtyLineEdit.text()
+                doctorDocument = doctorDocumentData
                 yearsOfExperience = self.docExpLineEdit.text()
                 doctorICNumber = self.docPassportLineEdit.text()
                 
@@ -385,6 +414,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         "doctorPassword": doctorPassword,
                         "doctorICNumber": doctorICNumber,
                         "doctorContact": doctorContact,
+                        "doctorDocument": doctorDocument,
                         "doctorType": doctorType,
                         "yearOfExperience": yearsOfExperience,
                         "doctorEmail": doctorEmail,
@@ -411,3 +441,42 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                                                 QMessageBox.Yes | QMessageBox.No)
                 if docGoBackLoginDialogBox == QMessageBox.Yes:
                         self.pageManager.goBack()
+
+        
+        def doctorAttachDocument(self):
+                options = QFileDialog.Options()
+                options |= QFileDialog.ReadOnly
+                document, _ = QFileDialog.getOpenFileName(self, "Open Documents", "", "All fiels (*)", options=options)
+
+                if document:
+                        self.docAttachmentLineEdit.setText(document)
+                        self.doctorRemoveDocumentButton.setDisabled(False)
+
+
+        def doctorRemoveDocument(self):
+                self.docAttachmentLineEdit.clear()
+                self.doctorRemoveDocumentButton.setDisabled(True)
+
+        
+        def docTogglePasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+        
+        def docToggleReEnterPasswordVisibility(self, state):
+                if state == Qt.Checked:
+                        self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+                else:
+                        self.docReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+
+
+        def docValidatePasswordMatch(self):
+                doctorPassword = self.docPasswordLineEdit.text()
+                doctorReEnterPassword = self.docReEnterPassLineEdit.text()
+
+                if doctorPassword == doctorReEnterPassword:
+                        self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                else:
+                        self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
