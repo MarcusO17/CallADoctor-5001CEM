@@ -28,7 +28,5 @@ setup(
         'six==1.16.0',
         'urllib3==2.0.5',
         'Werkzeug==2.3.7',
-        'geopy'
-        'folium'
     ]
 )

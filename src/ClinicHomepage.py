@@ -2,18 +2,16 @@ import os
 import sys
 
 from .AccountPage import AccountPage
-from .ClinicMap import ClinicMap
-from .ClinicDashboard import ClinicDashboard
 from .ClinicDoctorList import ClinicDoctorList
 from .ClinicRequestReview import ClinicRequestReview
 from .model import Clinic
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox, QHBoxLayout, \
-    QVBoxLayout, QSizePolicy, QStackedWidget
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
 from .ClinicManageSchedule import ClinicManageSchedule
-from .PageManager import PageManager, FrameLayoutManager
+from .PageManager import PageManager
+
 
 
 class ClinicHomepage(QMainWindow):
@@ -21,183 +19,139 @@ class ClinicHomepage(QMainWindow):
         super().__init__()
         self.clinic = Clinic.getClinicfromID(clinicID)
         self.pageManager = PageManager()
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayoutManager.add(0)
-        self.frameLayoutManager.setBasePages(6)
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
 
         self.setupUi(self)
 
-    def goToDashboard(self):
-        self.setButtonHighlight(self.dashboardButton)
-        self.frameLayoutManager.backToBasePage(0)
-        self.frameLayout.setCurrentIndex(0)
     def goToManageSchedule(self):
-        self.setButtonHighlight(self.manageScheduleButton)
-        self.frameLayoutManager.backToBasePage(1)
-        self.frameLayout.setCurrentIndex(1)
+        self.clinicManageSchedule = ClinicManageSchedule(self.clinic)
+        self.pageManager.add(self.clinicManageSchedule)
 
     def goToDoctorList(self):
-        self.setButtonHighlight(self.doctorListButton)
-
-        self.frameLayout.widget(2).generateDoctorButtons()
-        self.frameLayoutManager.backToBasePage(2)
-        self.frameLayout.setCurrentIndex(2)
-
-    def goToRequestReview(self):
-        self.setButtonHighlight(self.requestReviewButton)
-        self.frameLayoutManager.backToBasePage(3)
-        self.frameLayout.setCurrentIndex(3)
-
-    def goToMapPage(self):
-        self.setButtonHighlight(self.mapButton)
-        self.frameLayoutManager.backToBasePage(4)
-        self.frameLayout.setCurrentIndex(4)
+        self.doctorListPage = ClinicDoctorList(self.clinic)
+        self.pageManager.add(self.doctorListPage)
 
     def goToAccountPage(self):
-        self.setButtonHighlight(self.myAccountButton)
-        self.frameLayoutManager.backToBasePage(5)
-        self.frameLayout.setCurrentIndex(5)
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)
 
     def setupUi(self, MainWindow):
+        MainWindow.setObjectName("Homepage")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.centralwidget = QWidget(MainWindow)
-
-        self.mainLayout = QHBoxLayout()
-        self.sideLayoutWidget = QWidget()
-        self.sideLayoutWidget.setStyleSheet("background-color: #E6EBF5; border-radius: 10px;")
-        self.sideLayout = QVBoxLayout(self.sideLayoutWidget)
-        self.sideLayout.setContentsMargins(10, 10, 10, 10)
-
-        self.dashboardButton = QPushButton()
-        self.dashboardButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\dashboard.png")
-        self.dashboardIcon = QIcon(filepath)
-        self.dashboardButton.setIconSize(QSize(35, 35))
-        self.dashboardButton.setIcon(self.dashboardIcon)
-        self.dashboardButton.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
-        self.dashboardButton.clicked.connect(self.goToDashboard)
+        self.centralwidget.setObjectName("centralwidget")
 
         self.manageScheduleButton = QPushButton(self.centralwidget)
-        self.manageScheduleButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\schedule.png")
-        self.scheduleIcon = QIcon(filepath)
-        self.manageScheduleButton.setIconSize(QSize(35, 35))
-        self.manageScheduleButton.setIcon(self.scheduleIcon)
-        self.manageScheduleButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.manageScheduleButton.setGeometry(QRect(150, 200, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.manageScheduleButton.setFont(font)
+        self.manageScheduleButton.setText("Manage Schedule")
         self.manageScheduleButton.clicked.connect(self.goToManageSchedule)
 
+        self.manageScheduleLabel = QLabel(self.centralwidget)
+        self.manageScheduleLabel.setGeometry(QRect(170, 225, 50, 50))
+        self.manageScheduleLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.manageScheduleIcon = QPixmap(filepath)
+        self.manageScheduleIcon = self.manageScheduleIcon.scaled(50, 50)
+        self.manageScheduleLabel.setPixmap(self.manageScheduleIcon)
+
+
         self.doctorListButton = QPushButton(self.centralwidget)
-        self.doctorListButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\doctor.png")
-        self.doctorIcon = QIcon(filepath)
-        self.doctorListButton.setIconSize(QSize(35, 35))
-        self.doctorListButton.setIcon(self.doctorIcon)
-        self.doctorListButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.doctorListButton.setGeometry(QRect(700, 200, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(20)
+        self.doctorListButton.setFont(font)
+        self.doctorListButton.setLayoutDirection(Qt.LeftToRight)
+        self.doctorListButton.setText("Doctor List")
         self.doctorListButton.clicked.connect(self.goToDoctorList)
 
+        self.doctorListLabel = QLabel(self.centralwidget)
+        self.doctorListLabel.setGeometry(QRect(720, 225, 50, 50))
+        self.doctorListLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.doctorListIcon = QPixmap(filepath)
+        self.doctorListIcon = self.doctorListIcon.scaled(50, 50)
+        self.doctorListLabel.setPixmap(self.doctorListIcon)
+
+
         self.requestReviewButton = QPushButton(self.centralwidget)
-        self.requestReviewButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\request.png")
-        self.requestReviewIcon = QIcon(filepath)
-        self.requestReviewButton.setIconSize(QSize(35, 35))
-        self.requestReviewButton.setIcon(self.requestReviewIcon)
-        self.requestReviewButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
-        self.requestReviewButton.clicked.connect(self.goToRequestReview)
+        self.requestReviewButton.setGeometry(QRect(150, 400, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(18)
+        self.requestReviewButton.setFont(font)
+        self.requestReviewButton.setText("Request Review")
+        self.requestReviewButton.clicked.connect(self.gotoRequestReview)
 
-        self.mapButton = QPushButton(self.centralwidget)
-        self.mapButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\map.png")
-        self.mapIcon = QIcon(filepath)
-        self.mapButton.setIconSize(QSize(35, 35))
-        self.mapButton.setIcon(self.mapIcon)
-        self.mapButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
-        self.mapButton.clicked.connect(self.goToMapPage)
+        self.requestReviewLabel = QLabel(self.centralwidget)
+        self.requestReviewLabel.setGeometry(QRect(175, 425, 50, 50))
+        self.requestReviewLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.requestReviewIcon = QPixmap(filepath)
+        self.requestReviewIcon = self.requestReviewIcon.scaled(50, 50)
+        self.requestReviewLabel.setPixmap(self.requestReviewIcon)
 
-        self.topLeftLogo = QLabel()
-        self.topLeftLogo.setFixedSize(70, 70)
+        self.patientListButton = QPushButton(self.centralwidget)
+        self.patientListButton.setGeometry(QRect(700, 400, 400, 100))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(18)
+        self.patientListButton.setFont(font)
+        self.patientListButton.setText("Patient List")
+
+        self.patientListLabel = QLabel(self.centralwidget)
+        self.patientListLabel.setGeometry(QRect(725, 425, 50, 50))
+        self.patientListLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.patientListIcon = QPixmap(filepath)
+        self.patientListIcon = self.patientListIcon.scaled(50, 50)
+        self.patientListLabel.setPixmap(self.patientListIcon)
+
+
+        self.topLeftLogo = QLabel(self.centralwidget)
+        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
+        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(70, 70)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
         self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
 
+        self.homepageTitle = QLabel(self.centralwidget)
+        self.homepageTitle.setGeometry(QRect(200, 40, 800, 70))
+        font = QFont()
+        font.setFamily("Arial")
+        font.setPointSize(28)
+        font.setBold(True)
+        font.setWeight(75)
+        self.homepageTitle.setFont(font)
+        self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
+        self.homepageTitle.setText(self.clinic.getClinicName())
+        self.homepageTitle.setAlignment(Qt.AlignCenter)
+
         self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\account.png")
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(35, 35))
-        self.myAccountButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.myAccountButton.setIconSize(QSize(70,70))
         self.myAccountButton.setIcon(self.myAccountIcon)
         self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
-        self.logoutButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logout.png")
-        self.logoutIcon = QIcon(filepath)
-        self.logoutButton.setIconSize(QSize(35, 35))
-        self.logoutButton.setIcon(self.logoutIcon)
-        self.logoutButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.logoutButton.setGeometry(QRect(1150, 40, 70, 70))
+        self.logoutButton.setIconSize(QSize(70, 70))
+        self.logoutButton.setText("Log out")
         self.logoutButton.clicked.connect(self.logout)
-
-        self.highlightButtonList = list()
-        self.highlightButtonList.append(self.myAccountButton)
-        self.highlightButtonList.append(self.requestReviewButton)
-        self.highlightButtonList.append(self.doctorListButton)
-        self.highlightButtonList.append(self.dashboardButton)
-        self.highlightButtonList.append(self.manageScheduleButton)
-        self.highlightButtonList.append(self.mapButton)
-
-        self.sideLayout.addWidget(self.topLeftLogo)
-        spacer1 = QWidget()
-        spacer1.setFixedHeight(50)
-        self.sideLayout.addWidget(spacer1)
-        self.sideLayout.addWidget(self.dashboardButton)
-        self.sideLayout.addWidget(self.manageScheduleButton)
-        self.sideLayout.addWidget(self.doctorListButton)
-        self.sideLayout.addWidget(self.requestReviewButton)
-        self.sideLayout.addWidget(self.mapButton)
-        spacer2 = QWidget()
-        spacer2.setFixedHeight(30)
-        self.sideLayout.addWidget(spacer2)
-        self.sideLayout.addWidget(self.myAccountButton)
-        self.sideLayout.addWidget(self.logoutButton)
-        bottomSpacer = QWidget()
-        bottomSpacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.sideLayout.addWidget(bottomSpacer)
-
-        self.mainLayout.addWidget(self.sideLayoutWidget, 1)
-
-        # THIS QSTACKEDWIDGET IS ONLY FOR QWIDGET SWITCHING
-        self.frameLayout = QStackedWidget()
-        # start and set all pages to the framelayout
-        self.clinicDashboard = ClinicDashboard(self.clinic)  # index 0
-        self.clinicManageSchedule = ClinicManageSchedule(self.clinic)  # index 1
-        self.clinicDoctorList = ClinicDoctorList(self.clinic)  # index 2
-        self.clinicRequestReview = ClinicRequestReview(self.clinic)  # index 3
-        self.clinicMap = ClinicMap(self.clinic) # index 4
-        self.accountPage = AccountPage()  # index 5
-        self.accountPage.setUser("Clinic", self.clinic)
-
-        self.frameLayout.addWidget(self.clinicDashboard)
-        self.frameLayout.addWidget(self.clinicManageSchedule)
-        self.frameLayout.addWidget(self.clinicDoctorList)
-        self.frameLayout.addWidget(self.clinicRequestReview)
-        self.frameLayout.addWidget(self.clinicMap)
-        self.frameLayout.addWidget(self.accountPage)
-
-        self.frameLayoutManager.setFrameLayout(self.frameLayout)
-
-        self.mainLayout.addWidget(self.frameLayout, 11)
-
-        self.centralwidget.setLayout(self.mainLayout)
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
-        backgroundImage = QPixmap(filepath)
-        self.setStyleSheet(f"background-image: url({backgroundImage});")
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -205,16 +159,11 @@ class ClinicHomepage(QMainWindow):
 
     def logout(self):
 
-        logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation",
-                                               "Are you sure you want to logout",
+        logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation", "Are you sure you want to logout",
                                                QMessageBox.Yes | QMessageBox.No)
         if logoutDialogBox == QMessageBox.Yes:
             self.pageManager.goBack()
-            self.frameLayoutManager.back()
 
-    def setButtonHighlight(self, button):
-        for buttonTemp in self.highlightButtonList:
-            if buttonTemp == button:
-                button.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
-            else:
-                buttonTemp.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+    def gotoRequestReview(self):
+        self.requestReview = ClinicRequestReview(self.clinic)
+        self.pageManager.add(self.requestReview)

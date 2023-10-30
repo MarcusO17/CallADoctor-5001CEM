@@ -11,20 +11,35 @@ from .model import Clinic
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .model import Doctor
 from .model.DoctorRepo import DoctorRepository
-from .PageManager import PageManager, FrameLayoutManager
+from .PageManager import PageManager
 
 
-class ClinicAddDoctor(QWidget):
+class ClinicAddDoctor(QMainWindow):
     def __init__(self, clinic):
         super().__init__()
+        self.setWindowTitle("Add Doctor")
         self.clinic = clinic
-        self.setupUi()
+        self.pageManager = PageManager()
+        self.setFixedWidth(1280)
+        self.setFixedHeight(720)
+        self.setupUi(self)
 
-    def setupUi(self):
+    def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
-        self.centralwidget = QWidget()
+        self.centralwidget = QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+        # header (probably reused in most files)
+        self.topLeftLogo = QLabel(self.centralwidget)
+        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
+        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogoIcon = QPixmap(filepath)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
+        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -35,12 +50,20 @@ class ClinicAddDoctor(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Add Doctor")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70, 70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
+
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
+        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
@@ -48,7 +71,7 @@ class ClinicAddDoctor(QWidget):
         self.backButton.clicked.connect(self.backButtonFunction)
 
         self.searchBar = QLineEdit(self.centralwidget)
-        self.searchBar.setGeometry(QRect(100, 120, 800, 40))
+        self.searchBar.setGeometry(QRect(200, 130, 800, 40))
         self.searchBar.setPlaceholderText("Search Bar")
         self.searchBar.textChanged.connect(self.filterButtons)
 
@@ -66,33 +89,30 @@ class ClinicAddDoctor(QWidget):
 
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
+        topSpacer = QWidget()
+        topSpacer.setFixedHeight(180)
+        topSpacer.setFixedWidth(50)
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.centralwidget)
+        mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
+        mainLayout.setAlignment(Qt.AlignHCenter)
 
         self.searchBar.raise_()
 
-        self.setLayout(mainLayout)
+        self.centralwidget.setLayout(mainLayout)
 
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        QMetaObject.connectSlotsByName(MainWindow)
 
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorDetails = ClinicDoctorDetails(doctor, clinic)
         self.doctorDetails.setMode("Add")
-
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-        self.frameLayout.addWidget(self.doctorDetails)
-        self.frameLayoutManager.add(self.frameLayout.count() - 1)
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+        self.pageManager.add(self.doctorDetails)
 
     def backButtonFunction(self):
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-        self.frameLayoutManager.back()
-        self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+        self.pageManager.getPreviousPage().generateDoctorButtons()
+        self.pageManager.goBack()
 
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
@@ -137,3 +157,8 @@ class ClinicAddDoctor(QWidget):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.buttonLayout.addWidget(spacer)
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)

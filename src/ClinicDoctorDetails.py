@@ -14,22 +14,36 @@ from .model import Appointment
 from .model import Clinic
 from .model import Doctor
 from .model.DoctorRepo import DoctorRepository
-from .PageManager import PageManager, FrameLayoutManager
+from .PageManager import PageManager
 
 
-class ClinicDoctorDetails(QWidget):
+class ClinicDoctorDetails(QMainWindow):
 
     def __init__(self, doctor, clinic):
         super().__init__()
+        self.pageManager = PageManager()
         # set the information here
         self.clinic = clinic
         self.doctor = doctor
-        self.setupUi()
+        self.setWindowTitle("Doctor Details")
+        self.setFixedWidth(1280)
+        self.setFixedHeight(720)
+        self.setupUi(self)
 
-    def setupUi(self):
+    def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-        self.centralwidget = QWidget()
+        self.centralwidget = QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+        self.topLeftLogo = QLabel(self.centralwidget)
+        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
+        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogoIcon = QPixmap(filepath)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
+        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -40,13 +54,22 @@ class ClinicDoctorDetails(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText(f"{self.doctor.getDoctorName()} Details")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setFixedSize(70, 70)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70, 70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
+
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
+        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
@@ -168,6 +191,10 @@ class ClinicDoctorDetails(QWidget):
         self.addDoctorButton.hide()
         self.addDoctorLabel.hide()
 
+        self.container = QLabel(self.centralwidget)
+        self.container.setFixedSize(1000, 500)
+        self.container.setFrameShape(QtWidgets.QFrame.Box)
+
         self.removeDoctorButton.raise_()
         self.scheduleButton.raise_()
         self.removeDoctorLabel.raise_()
@@ -175,20 +202,23 @@ class ClinicDoctorDetails(QWidget):
         self.addDoctorButton.raise_()
         self.addDoctorLabel.raise_()
 
+        topSpacer = QWidget()
+        topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.centralwidget)
+        mainLayout.addWidget(topSpacer)
+        mainLayout.addWidget(self.container)
+        mainLayout.setAlignment(Qt.AlignHCenter)
 
-        self.setLayout(mainLayout)
+        self.centralwidget.setLayout(mainLayout)
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        QMetaObject.connectSlotsByName(MainWindow)
+
 
     def goToSchedule(self):
         self.doctorSchedule = ClinicDetailedSchedule(self.doctor, self.clinic)
-
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-        self.frameLayout.addWidget(self.doctorSchedule)
-        self.frameLayoutManager.add(self.frameLayout.count() - 1)
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+        self.pageManager.add(self.doctorSchedule)
 
     def removeDoctor(self):
         removeDoctorDialogBox = QMessageBox.question(self, "Remove Confirmation",
@@ -198,13 +228,8 @@ class ClinicDoctorDetails(QWidget):
             print(self.doctor.getDoctorName(), self.doctor.getClinicID())
             DoctorRepository.unassignDoctorClinic(self.doctor.getDoctorID())
             print(self.doctor.getDoctorName(), self.doctor.getClinicID())
-
-            self.frameLayoutManager = FrameLayoutManager()
-            self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-            self.frameLayoutManager.back()
-            self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
-            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+            self.pageManager.getPreviousPage().generateDoctorButtons()
+            self.pageManager.goBack()
 
     def addDoctor(self):
         addDoctorDialogBox = QMessageBox.question(self, "Add Confirmation",
@@ -215,21 +240,11 @@ class ClinicDoctorDetails(QWidget):
             print("THIS IS THE CLINIC ID", self.clinic.getClinicID())
             DoctorRepository.assignDoctorClinic(self.clinic.getClinicID(),self.doctor.getDoctorID())
             print(self.doctor.getDoctorName(), self.doctor.getClinicID())
-
-            self.frameLayoutManager = FrameLayoutManager()
-            self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-            self.frameLayoutManager.back()
-            self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
-            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+            self.pageManager.getPreviousPage().generateDoctorButtons()
+            self.pageManager.goBack()
 
     def backButtonFunction(self):
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-        self.frameLayoutManager.back()
-        self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+        self.pageManager.goBack()
 
     def setMode(self, state):
         if state == "Remove":
@@ -247,3 +262,8 @@ class ClinicDoctorDetails(QWidget):
             self.addDoctorLabel.show()
             self.scheduleButton.hide()
             self.scheduleButtonLabel.hide()
+
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)

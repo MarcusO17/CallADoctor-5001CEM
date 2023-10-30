@@ -4,32 +4,45 @@ from datetime import datetime
 
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
 from .ClinicAppointmentDetails import ClinicAppointmentDetails
 from .model import Appointment, Doctor
 from .model.AppointmentRepo import AppointmentRepository
-from .PageManager import PageManager, FrameLayoutManager
+from .PageManager import PageManager
 
-
-class ClinicDetailedSchedule(QWidget):
+class ClinicDetailedSchedule(QMainWindow):
     def __init__(self, doctor, clinic):
         super().__init__()
         self.doctor = doctor
         self.clinic = clinic
-        self.setupUi()
+        self.pageManager = PageManager()
+        self.setWindowTitle("Homepage")
+        self.setFixedWidth(1280)
+        self.setFixedHeight(720)
 
-    def setupUi(self):
+        self.setupUi(self)
+
+    def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         HEIGHT = 7
         WIDTH = 8
 
-        self.centralwidget = QWidget()
+        self.centralwidget = QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+        self.topLeftLogo = QLabel(self.centralwidget)
+        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
+        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogoIcon = QPixmap(filepath)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
+        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
 
         self.homepageTitle = QLabel(self.centralwidget)
-        self.homepageTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.homepageTitle.setGeometry(QRect(200, 40, 800, 70))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
@@ -40,8 +53,16 @@ class ClinicDetailedSchedule(QWidget):
         self.homepageTitle.setText("Doctor Schedule")
         self.homepageTitle.setAlignment(Qt.AlignCenter)
 
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70,70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
+
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
+        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
@@ -88,20 +109,14 @@ class ClinicDetailedSchedule(QWidget):
         appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
         self.setSchedule(appointmentList)
 
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.centralwidget)
+        MainWindow.setCentralWidget(self.centralwidget)
 
-        self.setLayout(mainLayout)
+        QMetaObject.connectSlotsByName(MainWindow)
+
     def gotoAppointment(self, appointment, doctor, clinic):
 
         self.clinicAppointmentDetails = ClinicAppointmentDetails(appointment, doctor, clinic)
-
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-        self.frameLayout.addWidget(self.clinicAppointmentDetails)
-        self.frameLayoutManager.add(self.frameLayout.count() - 1)
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+        self.pageManager.add(self.clinicAppointmentDetails)
 
     def setSchedule(self, appointmentList):
 
@@ -133,8 +148,9 @@ class ClinicDetailedSchedule(QWidget):
                     self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor, self.clinic))
 
     def backButtonFunction(self):
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+        self.pageManager.goBack()
 
-        self.frameLayoutManager.back()
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)

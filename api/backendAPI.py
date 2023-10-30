@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from helper.geocoder import GeoHelper
 import os
 import requests
 import pymysql
@@ -69,8 +68,6 @@ def patients():
                 patientICNumber = row['patientICNumber'],
                 bloodType = row['bloodType'],
                 race = row['race'],  
-                lat = row['lat'],
-                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
@@ -82,26 +79,24 @@ def patients():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        patientID = contentJSON['patientID']
+        patientID =requests.get('http://127.0.0.1:5000/patients/idgen').text
         patientName = contentJSON['patientName']
         patientEmail = contentJSON['patientEmail']
         patientPassword = contentJSON['patientPassword']
         patientICNumber = contentJSON['patientICNumber']
+        patientContactNumber = contentJSON['patientContactNumber']
         address = contentJSON['address']
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
         race = contentJSON['race']
-        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
-    
-
    
         insertQuery = """
                         INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
-                                            patientICNumber,dateOfBirth,bloodType,race,lat,lon)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                                            patientICNumber,dateOfBirth,bloodType,race,patientContactNumber)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
-                                             patientICNumber,dateOfBirth,bloodType,race,lat,lon))
+                                             patientICNumber,dateOfBirth,bloodType,race,patientContactNumber))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -128,8 +123,6 @@ def patientID(id):
                 patientICNumber = row['patientICNumber'],
                 bloodType = row['bloodType'],
                 race = row['race'],  
-                lat = row['lat'],
-                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
@@ -159,8 +152,6 @@ def clinics():
                 clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
-                lat = row['lat'],
-                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
@@ -172,22 +163,21 @@ def clinics():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        clinicID = contentJSON['clinicID']
+        clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
         clinicName = contentJSON['clinicName']
         clinicEmail = contentJSON['clinicEmail']
         clinicPassword = contentJSON['clinicPassword']
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
-        governmentApproved = contentJSON['governmentApproved']
-        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
+        governmentApproved = 'Unapproved'
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                                            clinicContact,governmentApproved)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon))
+                                            clinicContact,governmentApproved))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -211,8 +201,6 @@ def clinicID(id):
                 clinicContact = row['clinicContact'],
                 address = row['address'],
                 governmentApproved = row['governmentApproved'],
-                lat = row['lat'],
-                lon = row['lon']
             )
             for row in cursor.fetchall()
         ]
