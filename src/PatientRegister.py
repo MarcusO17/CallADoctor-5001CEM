@@ -204,9 +204,53 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPassportLineEdit.setPlaceholderText("example - i123133xx")
 
 
+                # Patient Race Text - Set as Label 
+                self.patientRaceLabel = QtWidgets.QLabel(self.centralwidget)
+                self.patientRaceLabel.setGeometry(280, 420, 221, 16)
+                self.patientRaceLabel.setText("Race")
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(10)
+                self.patientRaceLabel.setFont(font)
+                self.patientRaceLabel.setObjectName("PatientRaceLabel")
+
+
+                # Line-Edit for patient's Race
+                self.patientRaceLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.patientRaceLineEdit.setGeometry(280, 440, 221, 31)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.patientRaceLineEdit.setFont(font)
+                self.patientRaceLineEdit.setObjectName("patientRaceLineEdit")
+                self.patientRaceLineEdit.setPlaceholderText("example - Indian")
+
+
+                # Blood Type Text - Set as Label
+                self.patientBloodTypeLabel = QtWidgets.QLabel(self.centralwidget)
+                self.patientBloodTypeLabel.setGeometry(530, 150, 221, 16)
+                self.patientBloodTypeLabel.setText("Blood Type")
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(10)
+                self.patientBloodTypeLabel.setFont(font)
+                self.patientBloodTypeLabel.setObjectName("PatientBloodType")
+
+
+                # Line Edit for entering Blood Type
+                self.patientBloodTypeLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.patientBloodTypeLineEdit.setGeometry(530, 170, 221, 31)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.patientBloodTypeLineEdit.setFont(font)
+                self.patientBloodTypeLineEdit.setObjectName("patientBloodTypeLineEdit")
+                self.patientBloodTypeLineEdit.setPlaceholderText("example -  AB+")
+
+
                 # Password Text - Set as Label 10
                 self.patientPasswordLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientPasswordLabel.setGeometry(530, 150, 221, 16)
+                self.patientPasswordLabel.setGeometry(530, 240, 221, 16)
                 self.patientPasswordLabel.setText("Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -220,7 +264,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # Minimum 8 characters, upper case and lower case letters, numbers
                 # and Special Characters) 
                 self.patientPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientPasswordLineEdit.setGeometry(530, 170, 221, 31)
+                self.patientPasswordLineEdit.setGeometry(530, 260, 221, 31)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -231,13 +275,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPasswordLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
 
                 self.showPatientPasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientPasswordCheckbox.setGeometry(530, 200, 221, 31)
+                self.showPatientPasswordCheckbox.setGeometry(530, 290, 221, 31)
                 self.showPatientPasswordCheckbox.stateChanged.connect(self.togglePatientPasswordVisibility)
 
 
                 # Confirm Password Text - set as Label 11
                 self.patientReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientReEnterPassLabel.setGeometry(530, 240, 221, 16)
+                self.patientReEnterPassLabel.setGeometry(530, 330, 221, 16)
                 self.patientReEnterPassLabel.setText("Confirm Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -250,7 +294,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # need validation to check if previously written password and
                 # re-entered password same or not, if not, error 404)
                 self.patientReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientReEnterPassLineEdit.setGeometry(530, 260, 221, 31)
+                self.patientReEnterPassLineEdit.setGeometry(530, 350, 221, 31)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -261,13 +305,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientReEnterPassLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
 
                 self.showPatientRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientRePasswordCheckbox.setGeometry(530, 290, 221, 31)
+                self.showPatientRePasswordCheckbox.setGeometry(530, 380, 221, 31)
                 self.showPatientRePasswordCheckbox.stateChanged.connect(self.togglePatientReEnterPasswordVisibility)
 
 
                 # Register PushButton for Registering Account - (Saves the Data)
                 self.patientRegPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.patientRegPushButton.setGeometry(530, 400, 221, 41)
+                self.patientRegPushButton.setGeometry(530, 440, 221, 41)
                 self.patientRegPushButton.setText("Register")
 
                 # DONT MIND THIS - This is just me editing the STYLE SHEET for
@@ -298,7 +342,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # Push Button for "Going Back to Login page" - 
 
                 self.patientGoBackLoginButton = QtWidgets.QPushButton(self.centralwidget)
-                self.patientGoBackLoginButton.setGeometry(530, 450, 221, 41)
+                self.patientGoBackLoginButton.setGeometry(530, 490, 221, 41)
                 self.patientGoBackLoginButton.setText("Go Back To Login")
                 #stylesheeet editing vv
                 stylesheet6 = """
@@ -346,6 +390,8 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                         "patientDOBDateEdit": self.patientDOBDateEdit.date().toString(Qt.ISODate),
                         "patientPassportLineEdit": self.patientPassportLineEdit.text(),
                         "patientPasswordLineEdit": self.patientPasswordLineEdit.text(),
+                        "patientBloodTypeLineEdit": self.patientBloodTypeLineEdit.text(),
+                        "patientRaceLineEdit": self.patientRaceLineEdit.text()
                 }
 
                 # marcus post to databasee here
