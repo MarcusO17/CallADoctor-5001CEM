@@ -31,8 +31,6 @@ createPatientTable = '''CREATE TABLE patients (
                      patientICNumber INTEGER UNIQUE,
                      patientContactNumber INTEGER UNIQUE,
                      address TEXT NOT NULL,
-                     lat FLOAT,
-                     lon FLOAT,
                      dateOfBirth DATE NOT NULL,
                      bloodType TEXT,
                      race TEXT
@@ -46,8 +44,6 @@ createClinicTable = '''CREATE TABLE clinics (
                      clinicContact INTEGER NOT NULL,
                      verifiedDoc BLOB,
                      address TEXT NOT NULL,
-                     lat FLOAT,
-                     lon FLOAT,
                      governmentApproved BOOLEAN NOT NULL
                      )
                     '''

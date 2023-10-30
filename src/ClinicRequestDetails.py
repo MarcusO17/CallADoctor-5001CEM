@@ -9,10 +9,10 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .AssignDoctorDialog import AssignDoctorDialog
 from .model import Appointment, Clinic
-from .PageManager import PageManager, FrameLayoutManager
+from .PageManager import PageManager
 
 
-class ClinicRequestDetails(QWidget):
+class ClinicRequestDetails(QMainWindow):
 
     def __init__(self, request, clinic):
         super().__init__()
@@ -20,13 +20,28 @@ class ClinicRequestDetails(QWidget):
         # set the information here
         self.request = request #appointmentObject
         self.clinic = clinic
-        self.setupUi()
+        self.pageManager = PageManager()
+        self.setWindowTitle("Request Details")
+        self.setFixedWidth(1280)
+        self.setFixedHeight(720)
+        self.setupUi(self)
 
-    def setupUi(self):
+    def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
-        self.centralwidget = QWidget()
+        self.centralwidget = QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+        # header (probably reused in most files)
+        self.topLeftLogo = QLabel(self.centralwidget)
+        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
+        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogoIcon = QPixmap(filepath)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
+        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -40,6 +55,15 @@ class ClinicRequestDetails(QWidget):
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setFixedSize(70, 70)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70, 70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -136,6 +160,15 @@ class ClinicRequestDetails(QWidget):
         self.acceptButtonIcon = self.acceptButtonIcon.scaled(50, 50)
         self.acceptButtonLabel.setPixmap(self.acceptButtonIcon)
 
+
+        topSpacer = QWidget()
+        topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
+
+        self.requestContainer = QLabel(self.centralwidget)
+        self.requestContainer.setFixedSize(1000, 500)
+        self.requestContainer.setFrameShape(QtWidgets.QFrame.Box)
+
         self.acceptButton.raise_()
         self.acceptButtonLabel.raise_()
         self.cancelButton.raise_()
@@ -144,19 +177,22 @@ class ClinicRequestDetails(QWidget):
         self.assignDoctorLabel.raise_()
 
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.centralwidget)
+        mainLayout.addWidget(topSpacer)
+        mainLayout.addWidget(self.requestContainer)
+        mainLayout.setAlignment(Qt.AlignHCenter)
 
-        self.setLayout(mainLayout)
+        self.centralwidget.setLayout(mainLayout)
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        QMetaObject.connectSlotsByName(MainWindow)
+
     def backButtonFunction(self):
         backConfirmationDialogBox = QMessageBox.question(self.centralwidget, "Back Confirmation",
                                                       "Are you sure you want to back from this request, you may continue later.",
                                                       QMessageBox.Yes | QMessageBox.No)
         if backConfirmationDialogBox == QMessageBox.Yes:
-            self.frameLayoutManager = FrameLayoutManager()
-            self.frameLayout = self.frameLayoutManager.getFrameLayout()
+            self.pageManager.goBack()
 
-            self.frameLayoutManager.back()
-            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def acceptRequestFunction(self):
         acceptRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Confirmation",
@@ -177,12 +213,8 @@ class ClinicRequestDetails(QWidget):
                     print(response)
                 else:
                     print('Failed!')
-                self.frameLayoutManager = FrameLayoutManager()
-                self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-                self.frameLayoutManager.back()
-                self.frameLayout.widget(self.frameLayoutManager.top()).generateRequestButtons()
-                self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+                self.pageManager.getPreviousPage().generateRequestButtons()
+                self.pageManager.goBack()
 
     def cancelRequestFunction(self):
         cancelRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Cancel Confirmation",
@@ -190,12 +222,8 @@ class ClinicRequestDetails(QWidget):
                                                QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
             self.request.cancelAppointment()
-            self.frameLayoutManager = FrameLayoutManager()
-            self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-            self.frameLayoutManager.back()
-            self.frameLayout.widget(self.frameLayoutManager.top()).generateRequestButtons()
-            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+            self.pageManager.getPreviousPage().generateRequestButtons()
+            self.pageManager.goBack()
 
     def assignDoctorFunction(self):
         self.assignDoctorDialog = AssignDoctorDialog(self)
@@ -205,4 +233,8 @@ class ClinicRequestDetails(QWidget):
 
         self.assignedDoctorLabel.setText(self.request.getDoctorID())
 
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Clinic", self.clinic)
+        self.pageManager.add(self.accountPage)
        

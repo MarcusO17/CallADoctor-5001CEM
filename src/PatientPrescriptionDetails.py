@@ -9,10 +9,10 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .model import PrescriptionDetails
 from .model import Prescription
-from .PageManager import PageManager, FrameLayoutManager
+from .PageManager import PageManager
 
 
-class PatientPrescriptionDetailsWindow(QWidget):
+class PatientPrescriptionDetailsWindow(QMainWindow):
 
     def __init__(self,prescription,patient):
         super().__init__()
@@ -22,13 +22,28 @@ class PatientPrescriptionDetailsWindow(QWidget):
         self.patient = patient
         self.prescription = prescription
         self.pageManager = PageManager()
-        self.setupUi()
+        self.setWindowTitle("Patient Prescription Details")
+        self.setFixedWidth(1280)
+        self.setFixedHeight(720)
+        self.setupUi(self)
 
-    def setupUi(self):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("patient_prescription_details")
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
-        self.centralwidget = QWidget()
+        self.centralwidget = QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+        # header (probably reused in most files)
+        self.topLeftLogo = QLabel(self.centralwidget)
+        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
+        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogoIcon = QPixmap(filepath)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
+        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -39,14 +54,23 @@ class PatientPrescriptionDetailsWindow(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText(f"{self.patient.getPatientName()} - Prescription Details")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+
+        self.myAccountButton = QPushButton(self.centralwidget)
+        self.myAccountButton.setFixedSize(70, 70)
+        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.myAccountIcon = QIcon(filepath)
+        self.myAccountButton.setIconSize(QSize(70, 70))
+        self.myAccountButton.setIcon(self.myAccountIcon)
+        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
+        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
@@ -57,6 +81,8 @@ class PatientPrescriptionDetailsWindow(QWidget):
             self.prescriptionDetailsList = self.prescription[0].getPrescriptionDetails()
         except:
             self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
+  
+             
 
         rowContainer = QWidget()
         rowLayout = QVBoxLayout(rowContainer)
@@ -134,19 +160,24 @@ class PatientPrescriptionDetailsWindow(QWidget):
 
         boxScrollArea.setWidget(rowContainer)
         boxScrollArea.setFixedSize(1000, 500)
-
+        topSpacer = QWidget()
+        topSpacer.setFixedHeight(150)
+        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.centralwidget)
+        mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(boxScrollArea)
+        mainLayout.setAlignment(Qt.AlignHCenter)
 
-        self.setLayout(mainLayout)
+        self.centralwidget.setLayout(mainLayout)
+        MainWindow.setCentralWidget(self.centralwidget)
 
+        QMetaObject.connectSlotsByName(MainWindow)
 
     def backButtonFunction(self):
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+        self.pageManager.goBack()
 
-        self.frameLayoutManager.back()
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
-
+    def goToAccountPage(self):
+        self.accountPage = AccountPage()
+        self.accountPage.setUser("Patient", self.patient)
+        self.pageManager.add(self.accountPage)
 
