@@ -1,5 +1,5 @@
 import plotly_express as px
-import matplotlib.pyplot as plt
+from PyQt5.QtGui import QPixmap
 import requests
 import pandas as pd
 
@@ -14,7 +14,9 @@ class graphGen:
         fig = px.line(df, x="dates", y="count", title='Appointments by Day').update_layout(
                     xaxis_title="Date", yaxis_title="Appointments"
                 )
-        return fig.to_image(format="png", width=600, height=350, scale=2)
+        pixmap = QPixmap()
+        return pixmap.loadFromData(fig.to_image(format="png", width=600, height=350, scale=2))
+        
     
         """
         plt.plot(df['dates'],df['count'])
