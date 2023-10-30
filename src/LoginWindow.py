@@ -87,18 +87,18 @@ class LoginWindow(QWidget):
         self.setLayout(loginFormLayout)
 
     def selectRegisterPageFunction(self):
-        message_box = QMessageBox()
-        message_box.setText("Choose Which Registration Page")
-        clinicButton = message_box.addButton("Clinic", QMessageBox.ActionRole)
-        patientButton = message_box.addButton("Patient", QMessageBox.ActionRole)
-        doctorButton = message_box.addButton("Doctor", QMessageBox.ActionRole)
-        message_box.exec_()
+        messageBox = QMessageBox()
+        messageBox.setText("Choose Which Registration Page")
+        clinicButton = messageBox.addButton("Clinic", QMessageBox.ActionRole)
+        patientButton = messageBox.addButton("Patient", QMessageBox.ActionRole)
+        doctorButton = messageBox.addButton("Doctor", QMessageBox.ActionRole)
+        messageBox.exec_()
 
-        if message_box.clickedButton() == clinicButton:
+        if messageBox.clickedButton() == clinicButton:
             self.openClinicRegisterWindow()
-        elif message_box.clickedButton() == patientButton:
+        elif messageBox.clickedButton() == patientButton:
             self.openPatientRegisterWindow()
-        elif message_box.clickedButton() == doctorButton:
+        elif messageBox.clickedButton() == doctorButton:
             self.openDoctorRegisterWindow()
         
     def openClinicRegisterWindow(self):
