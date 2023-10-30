@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QMessag
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from .PageManager import PageManager
+from .model import Registration
 
 class PatientRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
@@ -227,12 +228,6 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPasswordLineEdit.setFont(font)
                 self.patientPasswordLineEdit.setObjectName("patientPasswordLineEdit")
                 self.patientPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
-                self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
-                self.patientPasswordLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
-
-                self.showPatientPasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientPasswordCheckbox.setGeometry(530, 200, 221, 31)
-                self.showPatientPasswordCheckbox.stateChanged.connect(self.togglePatientPasswordVisibility)
 
 
                 # Confirm Password Text - set as Label 11
@@ -257,12 +252,6 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientReEnterPassLineEdit.setFont(font)
                 self.patientReEnterPassLineEdit.setObjectName("patientReEnterPassLineEdit")
                 self.patientReEnterPassLineEdit.setPlaceholderText("Re-enter Password")
-                self.patientReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
-                self.patientReEnterPassLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
-
-                self.showPatientRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientRePasswordCheckbox.setGeometry(530, 290, 221, 31)
-                self.showPatientRePasswordCheckbox.stateChanged.connect(self.togglePatientReEnterPasswordVisibility)
 
 
                 # Register PushButton for Registering Account - (Saves the Data)
@@ -272,17 +261,44 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # DONT MIND THIS - This is just me editing the STYLE SHEET for
                 # the button to have color, and the text being White
-                stylesheet5 = """
-                QPushButton {
-                        background-color: rgb(53, 63, 203);
-                        color: rgb(255, 255, 255);
-                }
-
-                QPushButton:disabled {
-                        background-color: rgb(53, 63, 203);
-                        color: rgb(120, 120, 120);
-                }
-                """
+                palette = QtGui.QPalette()
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+                brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+                brush = QtGui.QBrush(QtGui.QColor(53, 63, 203))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+                self.patientRegPushButton.setPalette(palette)
                 # StyleSheet customization ends here ^^^^^^^^^^^^^
 
                 font = QtGui.QFont()
@@ -290,32 +306,61 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 font.setPointSize(12)
                 self.patientRegPushButton.setFont(font)
                 self.patientRegPushButton.setAutoFillBackground(False)
-                self.patientRegPushButton.setStyleSheet(stylesheet5)
+                self.patientRegPushButton.setStyleSheet("background-color: rgb(53, 63, 203)")
                 self.patientRegPushButton.setObjectName("patientRegPushButton")
-                self.patientRegPushButton.clicked.connect(self.patient_save_data)
+                self.patientRegPushButton.clicked.connect(self.patientSaveData)
 
 
-                # Push Button for "Going Back to Login page" - 
+                # Push Button for "Going Back to Login page" - This needed a lot of
+                # Style sheet editting as, i had to make the Button transparent so 
+                # that it looks like a Link, so im sorry if the customization code 
+                # Looks a mess, please bear with it :) VVVVV
 
                 self.patientGoBackLoginButton = QtWidgets.QPushButton(self.centralwidget)
                 self.patientGoBackLoginButton.setGeometry(530, 450, 221, 41)
                 self.patientGoBackLoginButton.setText("Go Back To Login")
-                #stylesheeet editing vv
-                stylesheet6 = """
-                QPushButton {
-                        background-color: rgba(255, 255, 255, 10);
-                        color: rgb(0, 67, 202);
-                        text-decoration: underline;
-                }
-
-                QPushButton:disabled {
-                         background-color: rgba(255, 255, 255, 10);
-                         color: rgb(120, 120, 120);
-                }
-                """
+                palette = QtGui.QPalette()
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+                brush = QtGui.QBrush(QtGui.QColor(0, 67, 202))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+                brush = QtGui.QBrush(QtGui.QColor(0, 67, 202))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+                brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 10))
+                brush.setStyle(QtCore.Qt.SolidPattern)
+                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
                 # The StyleSheet Customization ends here ^^^^^^
+
+                self.patientGoBackLoginButton.setPalette(palette)
                 self.patientGoBackLoginButton.setAutoFillBackground(True)
-                self.patientGoBackLoginButton.setStyleSheet(stylesheet6)
+                self.patientGoBackLoginButton.setStyleSheet("background-color: rgba(255, 255, 255, 10)")
                 self.patientGoBackLoginButton.setObjectName("GoBackLogin")
                 self.patientGoBackLoginButton.clicked.connect(self.goBackLogin)
 
@@ -335,18 +380,20 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setWindowTitle("Patient Register")
 
         # Creating Code for User (Patient) to save their data
-        def patient_save_data(self):
+        def patientSaveData(self):
 
-                patient_data = {
-                        "patientFirstNameLineEdit": self.patientFirstNameLineEdit.text(),
-                        "patientLastNameLineEdit": self.patientLastNameLineEdit.text(),
-                        "patientEmailLineEdit": self.patientEmailLineEdit.text(),
-                        "patientContactLineEdit": self.patientContactLineEdit.text(),
-                        "patientResidenceLineEdit": self.patientResidenceLineEdit.text(),
-                        "patientDOBDateEdit": self.patientDOBDateEdit.date().toString(Qt.ISODate),
-                        "patientPassportLineEdit": self.patientPassportLineEdit.text(),
-                        "patientPasswordLineEdit": self.patientPasswordLineEdit.text(),
+                patientData = {
+                        "patientName": f'{self.patientFirstNameLineEdit.text()}  {self.patientLastNameLineEdit.text()}',
+                        "patientEmail" : self.patientEmailLineEdit.text(),
+                        "patientPassword" : self.patientPasswordLineEdit.text(),
+                        "patientContactNumber": self.patientContactLineEdit.text(),
+                        "address": self.patientResidenceLineEdit.text(),
+                        "dateOfBirth": self.patientDOBDateEdit.date().toString(Qt.ISODate),
+                        "patientICNumber": self.patientPassportLineEdit.text(),
+
                 }
+
+                
 
                 # marcus post to databasee here
 
@@ -365,27 +412,3 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                         self.pageManager.goBack()
 
 
-        def togglePatientPasswordVisibility(self, state):
-                if state == Qt.Checked:
-                        self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
-                else:
-                        self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
-
-
-        def togglePatientReEnterPasswordVisibility(self, state):
-                if state == Qt.Checked:
-                        self.patientReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
-                else:
-                        self.patientReEnterPassLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
-
-        
-        def validatePatientPasswordMatch(self):
-                password = self.patientPasswordLineEdit.text()
-                reenter_password = self.patientReEnterPassLineEdit.text()
-
-                if password == reenter_password:
-                        # Passwords match, Color of the field will be green
-                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
-                else:
-                        # Passwords do not match, indicate an error, Color of the field will be red
-                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
