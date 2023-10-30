@@ -422,16 +422,17 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         "clinicID": 0
                 }
 
-                response,registerFlag = Registration.registerDoctor(doctorJSON)
-                if registerFlag:
-                        pass
-                else:
-                        print(response)
 
                 docGoRegisterDialogBox = QMessageBox.question(self.centralwidget, "Registration Confirmation",
                                                                 "Are you sure you all your details are correct?",
                                                         QMessageBox.Yes | QMessageBox.No)
                 if docGoRegisterDialogBox == QMessageBox.Yes:
+                                
+                        response,registerFlag = Registration.registerDoctor(doctorJSON)
+                        if registerFlag:
+                                pass
+                        else:
+                                print(response)
                         self.pageManager.goBack()
 
 

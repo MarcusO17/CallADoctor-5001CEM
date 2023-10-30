@@ -1,11 +1,13 @@
 import os
 import sys
+import base64
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from .PageManager import PageManager
+from .model import Registration
 
 class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
@@ -335,11 +337,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                         documentData = documentFile.read()
 
                 clinicData = {
-                "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}'`,
+                "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}',
                 "clinicName": self.clinicNameLineEdit.text(),
                 "clinicContact": self.clinicContactLineEdit.text(),
                 "clinicEmail": self.clinicEmailLineEdit.text(),
-                "clinicDocument": documentData,
+                "clinicDocument": documentData.decode('base64'),
                 "clinicPassword": self.clinicPasswordLineEdit.text()
                 }
 
@@ -349,6 +351,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                                                                 "Are you sure you all your details are correct?",
                                                         QMessageBox.Yes | QMessageBox.No)
                 if clinicGoRegisterDialogBox == QMessageBox.Yes:
+                        response,registerFlag = Registration.registerClinic(clinicData)
+                        if registerFlag:
+                                pass
+                        else:
+                                print(response)
                         self.pageManager.goBack()
 
         
