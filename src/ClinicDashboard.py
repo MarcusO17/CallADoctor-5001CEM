@@ -51,7 +51,7 @@ class ClinicDashboard(QWidget):
         font.setPointSize(15)
         self.dateWidget.setFont(font)
         self.dateWidget.setFixedSize(220,75)
-        self.dateWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.dateWidget.setStyleSheet("background-color: transparent;")
         self.dateWidget.setContentsMargins(10, 10, 10, 10)
 
         self.dateLayout.addWidget(self.dateWidget)
@@ -70,16 +70,12 @@ class ClinicDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
-        backgroundImage = QPixmap(filepath)
-        self.setStyleSheet(f"background-image: url({backgroundImage});")
-
     def generateDoctorWidgets(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.doctorWidgets = QWidget()
-        self.doctorWidgets.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.doctorWidgets.setStyleSheet("background-color: transparent;")
         doctorWidgetsLayout = QVBoxLayout(self.doctorWidgets)
 
         doctorWidgetsRow = QHBoxLayout()
@@ -135,7 +131,7 @@ class ClinicDashboard(QWidget):
 
             doctorWidget = QWidget()
             doctorWidget.setFixedSize(125, 125)
-            doctorWidget.setStyleSheet("background-color: white; border-radius: 10px;")
+            doctorWidget.setStyleSheet("background-color: transparent;")
             doctorLayout = QVBoxLayout(doctorWidget)
             doctorLayout.addWidget(doctorButton)
             doctorLayout.addWidget(doctorLabel)
@@ -160,7 +156,7 @@ class ClinicDashboard(QWidget):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.requestReviewWidget = QWidget()
-        self.requestReviewWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px; margin-left: 20px;")
+        self.requestReviewWidget.setStyleSheet("background-color: transparent;")
         self.requestReviewLayout = QVBoxLayout(self.requestReviewWidget)
 
         spacer = QWidget()
@@ -206,7 +202,7 @@ class ClinicDashboard(QWidget):
             for count, request in enumerate(threeAppointments):
                 self.requestButton = QPushButton()
                 self.requestButton.setText(request.getAppointmentID() + " - " + request.getAppointmentStatus())
-                self.requestButton.setStyleSheet("background-color: white; border-radius: 10px; margin-left: 30px;")
+                self.requestButton.setStyleSheet("background-color: transparent; margin-left: 30px;")
                 self.requestButton.setFont(buttonFont)
                 self.requestButton.setFixedSize(QSize(400, 100))
                 self.requestButton.setIcon(requestIcon)
@@ -238,7 +234,7 @@ class ClinicDashboard(QWidget):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         self.graphWidget = QWidget()
-        self.graphWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.graphWidget.setStyleSheet("background-color: transparent;")
         self.graphWidgetLayout = QVBoxLayout(self.graphWidget)
 
         self.widgetTitle = QLabel()

@@ -27,7 +27,7 @@ class ClinicHomepage(QMainWindow):
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
-
+        self.setStyleSheet(f"QMainWindow {{background-image: url(src/resources/6044355.jpg);}}")
         self.setupUi(self)
 
     def goToDashboard(self):
@@ -173,6 +173,7 @@ class ClinicHomepage(QMainWindow):
 
         # THIS QSTACKEDWIDGET IS ONLY FOR QWIDGET SWITCHING
         self.frameLayout = QStackedWidget()
+        self.frameLayout.setStyleSheet(f"QStackedWidget {{background-color: transparent;}}")
         # start and set all pages to the framelayout
         self.clinicDashboard = ClinicDashboard(self.clinic)  # index 0
         self.clinicManageSchedule = ClinicManageSchedule(self.clinic)  # index 1
@@ -194,10 +195,6 @@ class ClinicHomepage(QMainWindow):
         self.mainLayout.addWidget(self.frameLayout, 11)
 
         self.centralwidget.setLayout(self.mainLayout)
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
-        backgroundImage = QPixmap(filepath)
-        self.setStyleSheet(f"background-image: url({backgroundImage});")
 
         MainWindow.setCentralWidget(self.centralwidget)
 

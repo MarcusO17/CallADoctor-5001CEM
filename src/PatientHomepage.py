@@ -27,7 +27,7 @@ class PatientHomepage(QMainWindow):
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
-
+        self.setStyleSheet(f"QMainWindow {{background-image: url(src/resources/6044355.jpg);}}")
         self.setupUi(self)
 
     def goToDashboard(self):
@@ -164,6 +164,8 @@ class PatientHomepage(QMainWindow):
         self.patientPrescription = PatientPrescriptionWindow(self.patient)  # index 3
         self.accountPage = AccountPage()  # index 4
         self.accountPage.setUser("Patient", self.patient)
+
+        self.frameLayout.setStyleSheet(f"QStackedWidget {{background-color: transparent;}}")
 
         self.frameLayout.addWidget(self.patientDashboard)
         self.frameLayout.addWidget(self.patientClinicsNearby)
