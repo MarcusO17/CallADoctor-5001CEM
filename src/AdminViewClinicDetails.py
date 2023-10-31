@@ -108,7 +108,7 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         font.setPointSize(20)
         self.adminRemoveClinicButton.setFont(font)
         self.adminRemoveClinicButton.setLayoutDirection(Qt.LeftToRight)
-        self.adminRemoveClinicButton.setText("Send Request")
+        self.adminRemoveClinicButton.setText("Remove Clinic")
         self.adminRemoveClinicButton.clicked.connect(self.adminRemoveClinicFunction)
         self.adminRemoveClinicButton.raise_()
 
