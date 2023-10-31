@@ -101,12 +101,6 @@ class AdminHomepageWindow(QMainWindow):
         self.homepageTitle.setText("Welcome Admin!")
         self.homepageTitle.setAlignment(Qt.AlignCenter)
 
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70,70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
