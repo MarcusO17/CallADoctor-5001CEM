@@ -9,6 +9,8 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
 from .ClinicManageSchedule import ClinicManageSchedule
+from .AdminViewApprovals import AdminViewApprovalsWindow
+from .AdminViewClinics import AdminViewClinicsWindow
 from .PageManager import PageManager
 
 
@@ -25,13 +27,13 @@ class AdminHomepageWindow(QMainWindow):
 
         self.setupUi(self)
 
-    # def goToViewClinics(self):
-    #     self.viewClinics = AdminViewClinicsWindow(self.clinic)
-    #     self.pageManager.add(self.viewClinics)
+    def goToViewClinics(self):
+        self.viewClinics = AdminViewClinicsWindow(self.clinic)
+        self.pageManager.add(self.viewClinics)
 
-    # def goToViewApprovals(self):
-    #     self.viewApprovals = AdminViewApprovalsWindow(self.clinic)
-    #     self.pageManager.add(self.viewApprovals)
+    def goToViewApprovals(self):
+        self.viewApprovals = AdminViewApprovalsWindow(self.clinic)
+        self.pageManager.add(self.viewApprovals)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage (Admin)")
