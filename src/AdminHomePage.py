@@ -51,7 +51,7 @@ class AdminHomepageWindow(QMainWindow):
         font.setWeight(50)
         self.viewClinicsButton.setFont(font)
         self.viewClinicsButton.setText("View Clinics")
-        # self.viewClinicsButton.clicked.connect(self.goToViewClinics)
+        self.viewClinicsButton.clicked.connect(self.goToViewClinics)
 
         self.viewClinicsLabel = QLabel(self.centralwidget)
         self.viewClinicsLabel.setGeometry(QRect(170, 225, 50, 50))
@@ -70,7 +70,7 @@ class AdminHomepageWindow(QMainWindow):
         self.viewApprovalsButton.setFont(font)
         self.viewApprovalsButton.setLayoutDirection(Qt.LeftToRight)
         self.viewApprovalsButton.setText("View Approvals")
-        # self.viewApprovalsButton.clicked.connect(self.goToViewApprovals)
+        self.viewApprovalsButton.clicked.connect(self.goToViewApprovals)
 
         self.viewApprovalsLabel = QLabel(self.centralwidget)
         self.viewApprovalsLabel.setGeometry(QRect(720, 225, 50, 50))
