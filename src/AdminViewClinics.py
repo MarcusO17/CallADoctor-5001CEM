@@ -5,7 +5,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea, QSizePolicy
 from PyQt5 import QtWidgets
-# from .AdminClinicDetails import AdminClinicDetailsWindow
+from .AdminViewClinicDetails import AdminViewClinicDetailsWindow
 from .model.Clinic import Clinic
 from .model.ClinicRepo import ClinicRepository
 from .PageManager import PageManager
@@ -53,13 +53,6 @@ class AdminViewClinicsWindow(QMainWindow):
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setFixedSize(70,70)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70, 70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -94,8 +87,8 @@ class AdminViewClinicsWindow(QMainWindow):
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
             self.clinicButton.setFixedSize(QSize(900,150))
-            # self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.clinic))
-            # buttonContainer.layout().addWidget(self.clinicButton)
+            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.clinic))
+            buttonContainer.layout().addWidget(self.clinicButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -116,12 +109,10 @@ class AdminViewClinicsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    # def clinicButtonFunction(self, clinic, patient):
-        # update the clinic details page here according to button click
-	# previously had patient with clinic as parameter, removed it
+    def clinicButtonFunction(self, clinic):
 
-        # self.adminClinicDetails = AdminClinicDetailsWindow(clinic)
-        # self.pageManager.add(self.adminClinicDetails)
+        self.adminClinicDetails = AdminViewClinicDetailsWindow(clinic)
+        self.pageManager.add(self.adminClinicDetails)
 
     def backButtonFunction(self):
         self.pageManager.goBack()
