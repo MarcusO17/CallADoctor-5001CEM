@@ -1,6 +1,6 @@
 import os
 import sys
-import base64
+from PIL import Image
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
@@ -332,16 +332,15 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def clinicSaveData(self):
                 documentPath = self.clinicDocumentLineEdit.text()
 
-                documentData = None
-                with open(documentPath, "rb") as documentFile:
-                        documentData = documentFile.read()
+                documentData = Image.open(documentPath)
+                
 
                 clinicData = {
                 "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}',
                 "clinicName": self.clinicNameLineEdit.text(),
                 "clinicContact": self.clinicContactLineEdit.text(),
                 "clinicEmail": self.clinicEmailLineEdit.text(),
-                "clinicDocument": documentData.decode('base64'),
+                "clinicDocument": ('document',documentData.tobytes()),
                 "clinicPassword": self.clinicPasswordLineEdit.text()
                 }
 

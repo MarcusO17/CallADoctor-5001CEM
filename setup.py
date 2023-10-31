@@ -30,5 +30,6 @@ setup(
         'Werkzeug==2.3.7',
         'geopy'
         'folium'
+        'Pillow'
     ]
 )

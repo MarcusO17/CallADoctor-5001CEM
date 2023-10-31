@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from helper.geocoder import GeoHelper
+from PIL import Image
 import os
 import requests
 import pymysql
@@ -178,17 +179,16 @@ def clinics():
         clinicPassword = contentJSON['clinicPassword']
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
-        verifiedDoc = contentJSON['clinicDocument']
         governmentApproved = 'Unverified'
         lat,lon = GeoHelper.geocode(GeoHelper,address=address)
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,verifiedDoc,lat,lon)
+                                            clinicContact,governmentApproved,lat,lon)
                         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,verifiedDoc,lat,lon))
+                                            clinicContact,governmentApproved,lat,lon))
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
@@ -990,7 +990,22 @@ def getLastPrescriptionID():
     if id is not None:
             return id,200
    
+@app.route('/clinics/image/upload/<string:id>', methods=['POST'])
+def uploadImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+    imageFile = request.files['image']
+
+    if imageFile:
+        image = Image.open(imageFile)
+        
+        cursor.execute("UPDATE appointments SET verfiedDoc = %s WHERE appointmentID = %s", (api_data,id))
+        conn.commit()
+        conn.close()
 
 
+        return jsonify({"message": "Image uploaded and processed successfully"})
+    
 if __name__ == "__main__":
     app.run(debug=True)
