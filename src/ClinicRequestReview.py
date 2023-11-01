@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
+from .ClinicCancellationDetails import ClinicCancellationDetails
 from .ClinicRequestDetails import ClinicRequestDetails
 from .model import Appointment
 from .model.AppointmentRepo import AppointmentRepository
@@ -151,12 +152,12 @@ class ClinicRequestReview(QWidget):
 
     def cancellationButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click
-        self.clinicRequestDetails = ClinicRequestDetails(request, clinic)
+        self.clinicCancellationDetails = ClinicCancellationDetails(request, clinic)
 
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
-        self.frameLayout.addWidget(self.clinicRequestDetails)
+        self.frameLayout.addWidget(self.clinicCancellationDetails)
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
