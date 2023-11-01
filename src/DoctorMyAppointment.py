@@ -9,37 +9,24 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Clinic, Doctor, Appointment, Patient, AppointmentRepo
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
-class DoctorMyAppointmentWindow(QMainWindow):
+class DoctorMyAppointmentWindow(QWidget):
     def __init__(self, doctor):
 
         super().__init__()
         self.doctor = doctor
-        self.setWindowTitle("My Appointment")
         self.pageManager = PageManager()
-        self.setFixedWidth(1280)
-        self.setFixedHeight(720)
-        self.setupUi(self)
+        self.setupUi()
 
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("DocMyAppointment")
+    def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
+        mainLayout = QVBoxLayout()
 
-        # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.centralwidget = QWidget()
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -48,39 +35,54 @@ class DoctorMyAppointmentWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Welcome! [name]")
+        self.headerTitle.setText("My Appointment")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setFixedSize(70,70)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70, 70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
-        self.myAccountButton.clicked.connect(self.goToAccountPage)
-
-        self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
-        self.backButtonIcon = QIcon(filepath)
-        self.backButton.setIconSize(QSize(70, 70))
-        self.backButton.setIcon(self.backButtonIcon)
-        self.backButton.clicked.connect(self.backButtonFunction)
-
-        buttonContainer = QWidget()
-        buttonLayout = QVBoxLayout(buttonContainer)
-        buttonContainer.setContentsMargins(20,20,20,20)
+        self.buttonContainer = QWidget()
+        buttonLayout = QVBoxLayout(self.buttonContainer)
+        self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
-        #Query Here!!
-        appointmentList = AppointmentRepo.AppointmentRepository.getAppointmentsByDoctor(self.doctor.getDoctorID())
+        self.appointmentList = list()
+
+        self.generateMyAppointmentButtons()
+
+        boxScrollArea.setWidget(self.buttonContainer)
+        boxScrollArea.setFixedSize(1000,500)
+        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
+
+        mainLayout.addWidget(self.centralwidget)
+        mainLayout.addWidget(boxScrollArea)
+
+        self.setLayout(mainLayout)
+
+    def appointmentButtonFunction(self, appointment, doctor):
+        self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
+        self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
+
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+        self.frameLayout.addWidget(self.doctorAppointmentDetails)
+        self.frameLayoutManager.add(self.frameLayout.count() - 1)
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+
+    def generateMyAppointmentButtons(self):
+
+        for i in range(self.buttonContainer.layout().count()):
+            widget = self.buttonContainer.layout().itemAt(0).widget()
+            self.buttonContainer.layout().removeWidget(widget)
+            if widget is not None:
+                widget.deleteLater()
+
+        self.appointmentList.clear()
+
+        self.appointmentList = AppointmentRepo.AppointmentRepository.getAppointmentsByDoctor(self.doctor.getDoctorID())
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -88,44 +90,17 @@ class DoctorMyAppointmentWindow(QMainWindow):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
-        for count, appointment in enumerate(appointmentList):
+        for count, appointment in enumerate(self.appointmentList):
             self.appointmentButton = QPushButton()
             self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getAppointmentStatus()}")
             self.appointmentButton.setFont(buttonFont)
-            self.appointmentButton.setFixedSize(QSize(900,150))
-            self.appointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
-            buttonContainer.layout().addWidget(self.appointmentButton)
+            self.appointmentButton.setFixedSize(QSize(800, 150))
+            self.appointmentButton.clicked.connect(
+                lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
+            self.buttonContainer.layout().addWidget(self.appointmentButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        buttonContainer.layout().addWidget(spacer)
+        self.buttonContainer.layout().addWidget(spacer)
 
-        boxScrollArea.setWidget(buttonContainer)
-        boxScrollArea.setFixedSize(1000,500)
-        topSpacer = QWidget()
-        topSpacer.setFixedHeight(150)
-        topSpacer.setFixedWidth(20)
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(topSpacer)
-        mainLayout.addWidget(boxScrollArea)
-        mainLayout.setAlignment(Qt.AlignHCenter)
-
-        self.centralwidget.setLayout(mainLayout)
-
-        MainWindow.setCentralWidget(self.centralwidget)
-
-        QMetaObject.connectSlotsByName(MainWindow)
-
-    def appointmentButtonFunction(self, appointment, doctor):
-        self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
-        self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
-        self.pageManager.add(self.doctorAppointmentDetails)
-        print(self.pageManager.size())
-    def backButtonFunction(self):
-        self.pageManager.goBack()
-
-    def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Doctor", self.doctor)
-        self.pageManager.add(self.accountPage)
 

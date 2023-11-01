@@ -12,37 +12,23 @@ from .AccountPage import AccountPage
 from .model import Appointment
 from .model import Clinic
 from .model import Doctor
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
-class ClinicAppointmentDetails(QMainWindow):
+class ClinicAppointmentDetails(QWidget):
 
     def __init__(self, appointment, doctor, clinic):
         super().__init__()
-        self.pageManager = PageManager()
         # set the information here
         self.appointment = appointment
         self.doctor = doctor
         self.clinic = clinic
-        self.setWindowTitle("Appointment Details")
-        self.setFixedWidth(1280)
-        self.setFixedHeight(720)
-        self.setupUi(self)
+        self.setupUi()
 
-    def setupUi(self, MainWindow):
+    def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.centralwidget = QWidget()
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -56,15 +42,6 @@ class ClinicAppointmentDetails(QMainWindow):
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
-
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setFixedSize(70, 70)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70, 70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
-        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
@@ -140,22 +117,10 @@ class ClinicAppointmentDetails(QMainWindow):
         self.cancelAppointmentIcon = self.cancelAppointmentIcon.scaled(50, 50)
         self.cancelAppointmentLabel.setPixmap(self.cancelAppointmentIcon)
 
-        self.container = QLabel(self.centralwidget)
-        self.container.setFixedSize(1000, 500)
-        self.container.setFrameShape(QtWidgets.QFrame.Box)
-
-        topSpacer = QWidget()
-        topSpacer.setFixedHeight(150)
-        topSpacer.setFixedWidth(20)
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(topSpacer)
-        mainLayout.addWidget(self.container)
-        mainLayout.setAlignment(Qt.AlignHCenter)
+        mainLayout.addWidget(self.centralwidget)
 
-        self.centralwidget.setLayout(mainLayout)
-        MainWindow.setCentralWidget(self.centralwidget)
-
-        QMetaObject.connectSlotsByName(MainWindow)
+        self.setLayout(mainLayout)
 
         # Cancel Appointment With Doctor
 
@@ -165,13 +130,15 @@ class ClinicAppointmentDetails(QMainWindow):
                                                           QMessageBox.Yes | QMessageBox.No)
         if cancelAppointmentDialogBox == QMessageBox.Yes:
             self.appointment.setAppointmentStatus("Cancelled")
-            self.pageManager.goBack()
-            print(self.appointment.getAppointmentStatus())
+            self.frameLayoutManager = FrameLayoutManager()
+            self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+            self.frameLayoutManager.back()
+            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def backButtonFunction(self):
-        self.pageManager.goBack()
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
-    def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Clinic", self.clinic)
-        self.pageManager.add(self.accountPage)
+        self.frameLayoutManager.back()
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())

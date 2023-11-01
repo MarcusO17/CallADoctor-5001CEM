@@ -15,35 +15,22 @@ from .PageManager import PageManager
 
 
 
-class DoctorScheduleWindow(QMainWindow):
+class DoctorScheduleWindow(QWidget):
     def __init__(self, doctor):
         super().__init__()
         self.setWindowTitle("Homepage")
         self.doctor = doctor
-        self.setFixedWidth(1280)
-        self.setFixedHeight(720)
         self.pageManager = PageManager()
-        self.setupUi(self)
+        self.setupUi()
 
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("Doctor Schedule")
+    def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         HEIGHT = 7
         WIDTH = 8
-
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.centralwidget = QWidget()
 
         self.homepageTitle = QLabel(self.centralwidget)
-        self.homepageTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.homepageTitle.setGeometry(QRect(100, 40, 800, 70))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
@@ -53,22 +40,7 @@ class DoctorScheduleWindow(QMainWindow):
         self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.homepageTitle.setText("Doctor Schedule")
         self.homepageTitle.setAlignment(Qt.AlignCenter)
-
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70,70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
-        self.myAccountButton.clicked.connect(self.goToAccountPage)
-
-        self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
-        self.backIcon = QIcon(filepath)
-        self.backButton.setIconSize(QSize(70, 70))
-        self.backButton.setIcon(self.backIcon)
-        self.backButton.clicked.connect(self.backButtonFunction)
+        self.homepageTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
@@ -107,23 +79,27 @@ class DoctorScheduleWindow(QMainWindow):
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
-        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
+        self.appointmentList = list()
 
-        self.setSchedule(appointmentList)
+        self.setSchedule()
 
-        MainWindow.setCentralWidget(self.centralwidget)
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.centralwidget)
 
-        QMetaObject.connectSlotsByName(MainWindow)
-
+        self.setLayout(mainLayout)
     def gotoAppointment(self, appointment, doctor):
 
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
         self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
         self.pageManager.add(self.doctorAppointmentDetails)
 
-    def setSchedule(self, appointmentList):
+    def setSchedule(self):
+
+        self.appointmentList.clear()
+
+        self.appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
         
-        for appointment in appointmentList:
+        for appointment in self.appointmentList:
             row = 0
             col = 0
             date = appointment.getAppointmentDate()
@@ -151,12 +127,5 @@ class DoctorScheduleWindow(QMainWindow):
                     self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
 
 
-    def backButtonFunction(self):
-        self.pageManager.goBack()
-
-    def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Doctor", self.doctor)
-        self.pageManager.add(self.accountPage)
 
 

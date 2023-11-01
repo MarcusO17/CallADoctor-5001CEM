@@ -9,11 +9,10 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .model import Clinic
 from .model import Appointment
-from .PageManager import PageManager
+from .PageManager import PageManager, FrameLayoutManager
 
 
-
-class PatientSendRequest(QMainWindow):
+class PatientSendRequest(QWidget):
 
     def __init__(self, clinic, patient):
         super().__init__()
@@ -21,30 +20,14 @@ class PatientSendRequest(QMainWindow):
         self.pageManager = PageManager()
         self.clinic = clinic
         self.patient = patient
-        print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
-        self.setWindowTitle("Clinics Details")
-        self.setFixedWidth(1280)
-        self.setFixedHeight(720)
-        self.setupUi(self)
+        self.setupUi()
 
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("clinic_details")
+    def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         self.timeList = list()
 
         # this is the header (logo, title, my back button
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-
-        # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.centralwidget = QWidget()
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -55,23 +38,14 @@ class PatientSendRequest(QMainWindow):
         self.headerTitle.setFont(font)
         self.headerTitle.setText(self.clinic.getClinicName() + " - Send Request")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
-
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setFixedSize(70, 70)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70, 70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
-        self.myAccountButton.clicked.connect(self.goToAccountPage)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(1150, 40, 70, 70))
+        self.backButton.setGeometry(QRect(900, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
@@ -121,27 +95,16 @@ class PatientSendRequest(QMainWindow):
         self.submitButtonIcon = QPixmap(filepath)
         self.submitButtonIcon = self.submitButtonIcon.scaled(50, 50)
         self.submitButtonLabel.setPixmap(self.submitButtonIcon)
-
-        self.clinicDetailsContainer = QLabel(self.centralwidget)
-        self.clinicDetailsContainer.setFixedSize(1000,500)
-        self.clinicDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
         self.requestPurpose.raise_()
         self.preferredTimeComboBox.raise_()
         self.preferredDate.raise_()
         self.submitButton.raise_()
-        topSpacer = QWidget()
-        topSpacer.setFixedHeight(150)
-        topSpacer.setFixedWidth(20)
+
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(topSpacer)
-        mainLayout.addWidget(self.clinicDetailsContainer)
-        mainLayout.setAlignment(Qt.AlignHCenter)
+        mainLayout.addWidget(self.centralwidget)
 
-        self.centralwidget.setLayout(mainLayout)
-        self.centralwidget.setLayout(mainLayout)
-        MainWindow.setCentralWidget(self.centralwidget)
+        self.setLayout(mainLayout)
 
-        QMetaObject.connectSlotsByName(MainWindow)
 
     def sendRequestFunction(self):
         # generate an appointmentID
@@ -169,7 +132,11 @@ class PatientSendRequest(QMainWindow):
             else:
                 print('failed!')
 
-            self.pageManager.goBack()
+            self.frameLayoutManager = FrameLayoutManager()
+            self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+            self.frameLayoutManager.back()
+            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
 
     def updateTimeslot(self):
@@ -215,9 +182,8 @@ class PatientSendRequest(QMainWindow):
                                                "Do you want to discard this request",
                                                QMessageBox.Yes | QMessageBox.No)
         if backDialogBox == QMessageBox.Yes:
-            self.pageManager.goBack()
+            self.frameLayoutManager = FrameLayoutManager()
+            self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
-    def goToAccountPage(self):
-        self.accountPage = AccountPage()
-        self.accountPage.setUser("Patient", self.patient)
-        self.pageManager.add(self.accountPage)
+            self.frameLayoutManager.back()
+            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
