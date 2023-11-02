@@ -95,7 +95,7 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminClinicApprovalAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.adminApproveClinicButton = QPushButton(self.centralwidget)
-        self.adminApproveClinicButton.setGeometry(QRect(710, 545, 375, 100))
+        self.adminApproveClinicButton.setGeometry(QRect(790, 450, 280, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -106,12 +106,28 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminApproveClinicButton.raise_()
 
         self.adminApproveClinicLabel = QLabel(self.centralwidget)
-        self.adminApproveClinicLabel.setGeometry(QRect(730, 570, 50, 50))
+        self.adminApproveClinicLabel.setGeometry(QRect(810, 475, 50, 50))
         self.adminApproveClinicLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.adminApproveClinicIcon = QPixmap(filepath)
         self.adminApproveClinicIcon = self.adminApproveClinicIcon.scaled(50, 50)
         self.adminApproveClinicLabel.setPixmap(self.adminApproveClinicIcon)
+
+        self.adminDisapproveClinicButton = QPushButton(self.centralwidget)
+        self.adminDisapproveClinicButton.setGeometry(QRect(790, 565, 280, 100))
+        self.adminDisapproveClinicButton.setFont(font)
+        self.adminDisapproveClinicButton.setLayoutDirection(Qt.RightToLeft)
+        self.adminDisapproveClinicButton.setText("Request Cancel")
+        self.adminDisapproveClinicButton.clicked.connect(self.adminDisapproveClinicFunction)
+
+        self.adminDisapproveClinicLabel = QLabel(self.centralwidget)
+        self.adminDisapproveClinicLabel.setGeometry(QRect(810, 590, 50, 50))
+        self.adminDisapproveClinicLabel.setFrameShape(QtWidgets.QFrame.Box)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.adminDisapproveClinicIcon = QPixmap(filepath)
+        self.adminDisapproveClinicIcon = self.adminDisapproveClinicIcon.scaled(50, 50)
+        self.adminDisapproveClinicLabel.setPixmap(self.adminDisapproveClinicIcon)
+
 
         self.adminClinicApprovalContainer = QLabel(self.centralwidget)
         self.adminClinicApprovalContainer.setFixedSize(1000,500)
@@ -131,10 +147,19 @@ class AdminClinicApprovalWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def adminApproveClinicFunction(self):
-        adminClinicApproveDialogBox = QMessageBox.question(self.centralwidget, "Removal Confirmation", 
-                                                          "Are you sure you want to remove this Clinic?",
+        adminApproveClinicDialogBox = QMessageBox.question(self.centralwidget, "Approval Confirmation", 
+                                                          "Are you sure you want to Approve this Clinic?",
                                                QMessageBox.Yes | QMessageBox.No)
-        if adminClinicApproveDialogBox == QMessageBox.Yes:
+        if adminApproveClinicDialogBox == QMessageBox.Yes:
+            self.clinic.setApprovalStatus("Approved")
+            self.pageManager.goBack()
+
+    def adminDisapproveClinicFunction(self):
+        adminDisapproveClinicDialogBox = QMessageBox.question(self.centralWidget, "Disapproval Confirmation",
+                                                          "Are you sure you want to disapprove this Clinic?",
+                                                          QMessageBox.Yes | QMessageBox.No)
+        if adminDisapproveClinicDialogBox == QMessageBox.Yes:
+            self.clinic.setApprovalStatus("Disapproved")
             self.pageManager.goBack()
 
     def backButtonFunction(self):
