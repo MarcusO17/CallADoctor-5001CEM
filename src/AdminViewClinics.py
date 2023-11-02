@@ -13,9 +13,9 @@ from .PageManager import PageManager
 
 
 class AdminViewClinicsWindow(QMainWindow):
-    def __init__(self, clinic):
+    def __init__(self, adminID):
         super().__init__()
-        self.clinic = clinic
+        self.adminID = adminID
         self.pageManager = PageManager()
         self.setWindowTitle("View Clinics Under CaD")
         self.setFixedWidth(1280)
@@ -87,7 +87,7 @@ class AdminViewClinicsWindow(QMainWindow):
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
             self.clinicButton.setFixedSize(QSize(900,150))
-            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.clinic))
+            self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.adminID))
             buttonContainer.layout().addWidget(self.clinicButton)
 
         spacer = QWidget()
@@ -109,9 +109,9 @@ class AdminViewClinicsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def clinicButtonFunction(self, clinic):
+    def clinicButtonFunction(self, clinic, adminID):
 
-        self.adminClinicDetails = AdminViewClinicDetailsWindow(clinic)
+        self.adminClinicDetails = AdminViewClinicDetailsWindow(clinic, adminID)
         self.pageManager.add(self.adminClinicDetails)
 
     def backButtonFunction(self):

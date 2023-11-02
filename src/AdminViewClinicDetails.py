@@ -12,11 +12,12 @@ from .PageManager import PageManager
 
 class AdminViewClinicDetailsWindow(QMainWindow):
 
-    def __init__(self, clinicTemp):
+    def __init__(self, clinicTemp, adminID):
         super().__init__()
         #set the information here
         self.pageManager = PageManager()
         self.clinic = clinicTemp
+        self.adminID = adminID
         print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
         self.setWindowTitle("Clinic Details")
         self.setFixedWidth(1280)
@@ -80,7 +81,7 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.adminClinicDetailsDescriptionLabel.setFont(font)
-        self.adminClinicDetailsDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + self.clinic.getClinicContact()+ "\n" + self.clinic.getClinicID())
+        self.adminClinicDetailsDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \n Clinic Name: {self.clinic.getClinicName()} \n Clinic Status: {self.clinic.getClinicStatus()}")
         self.adminClinicDetailsDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.adminClinicDetailsAddressLabel = QLabel(self.centralwidget)

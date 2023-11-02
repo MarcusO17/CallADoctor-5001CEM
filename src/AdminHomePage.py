@@ -16,9 +16,9 @@ from .PageManager import PageManager
 
 
 class AdminHomepageWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, sessionID):
         super().__init__()
-
+        self.adminID = sessionID
 
         self.pageManager = PageManager()
         self.setWindowTitle("Homepage")
@@ -28,11 +28,11 @@ class AdminHomepageWindow(QMainWindow):
         self.setupUi(self)
 
     def goToViewClinics(self):
-        self.viewClinics = AdminViewClinicsWindow(self.clinic)
+        self.viewClinics = AdminViewClinicsWindow(self.adminID)
         self.pageManager.add(self.viewClinics)
 
     def goToViewApprovals(self):
-        self.viewApprovals = AdminViewApprovalsWindow(self.clinic)
+        self.viewApprovals = AdminViewApprovalsWindow(self.adminID)
         self.pageManager.add(self.viewApprovals)
 
     def setupUi(self, MainWindow):

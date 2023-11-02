@@ -12,12 +12,12 @@ from .PageManager import PageManager
 
 class AdminClinicApprovalWindow(QMainWindow):
 
-    def __init__(self, clinicTemp):
+    def __init__(self, clinicTemp, adminID):
         super().__init__()
         #set the information here
         self.pageManager = PageManager()
         self.clinic = clinicTemp
-        print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact(), self.clinic.getApprovalStatus())
+        self.adminID = adminID
         self.setWindowTitle("Clinic Details")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -80,7 +80,7 @@ class AdminClinicApprovalWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.adminClinicApprovalDescriptionLabel.setFont(font)
-        self.adminClinicApprovalDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + self.clinic.getClinicContact()+ "\n" + self.clinic.getClinicID())
+        self.adminClinicApprovalDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \n Clinic Name: {self.clinic.getClinicName()} \n Clinic Status: {self.clinic.getClinicStatus()}")
         self.adminClinicApprovalDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.adminClinicApprovalAddressLabel = QLabel(self.centralwidget)
@@ -141,6 +141,9 @@ class AdminClinicApprovalWindow(QMainWindow):
         mainLayout.addWidget(self.adminClinicApprovalContainer)
         mainLayout.setAlignment(Qt.AlignHCenter)
 
+        self.adminDisapproveClinicButton.raise_()
+        self.adminApproveClinicButton.raise_()
+
         self.centralwidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -151,7 +154,9 @@ class AdminClinicApprovalWindow(QMainWindow):
                                                           "Are you sure you want to Approve this Clinic?",
                                                QMessageBox.Yes | QMessageBox.No)
         if adminApproveClinicDialogBox == QMessageBox.Yes:
-            self.clinic.setApprovalStatus("Approved")
+            self.clinic.setClinicStatus("Approved")
+            print(self.clinic.getClinicStatus())
+            self.pageManager.getPreviousPage().generateViewApprovalButtons()
             self.pageManager.goBack()
 
     def adminDisapproveClinicFunction(self):
@@ -159,7 +164,9 @@ class AdminClinicApprovalWindow(QMainWindow):
                                                           "Are you sure you want to disapprove this Clinic?",
                                                           QMessageBox.Yes | QMessageBox.No)
         if adminDisapproveClinicDialogBox == QMessageBox.Yes:
-            self.clinic.setApprovalStatus("Disapproved")
+            self.clinic.setClinicStatus("Disapproved")
+            self.pageManager.getPreviousPage().generateViewApprovalButtons()
+            print(self.clinic.getClinicStatus())
             self.pageManager.goBack()
 
     def backButtonFunction(self):

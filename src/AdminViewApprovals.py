@@ -13,9 +13,9 @@ from .PageManager import PageManager
 
 
 class AdminViewApprovalsWindow(QMainWindow):
-    def __init__(self, clinic):
+    def __init__(self, adminID):
         super().__init__()
-        self.clinic = clinic
+        self.adminID = adminID
         self.pageManager = PageManager()
         self.setWindowTitle("View Clinics waiting for Approval")
         self.setFixedWidth(1280)
@@ -64,37 +64,18 @@ class AdminViewApprovalsWindow(QMainWindow):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        buttonContainer = QWidget()
-        button_layout = QVBoxLayout(buttonContainer)
-        buttonContainer.setContentsMargins(20,20,20,20)
+        self.buttonContainer = QWidget()
+        button_layout = QVBoxLayout(self.buttonContainer)
+        self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        #Get Clinics
-        clinicList = ClinicRepository.getClinicList()
+        self.clinicList = ClinicRepository.getClinicList()
 
-        buttonFont = QFont()
-        buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
+        self.generateViewApprovalButtons()
 
-        #Insert All the Clinics 
-        for count, clinic in enumerate(clinicList):
-            self.approvalClinicButton = QPushButton()
-            self.approvalClinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName() + " - " + clinic.getApprovalStatus())
-            self.approvalClinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName() + " - " + clinic.getApprovalStatus())
-            self.approvalClinicButton.setFont(buttonFont)
-            self.approvalClinicButton.setFixedSize(QSize(900,150))
-            self.approvalClinicButton.clicked.connect(lambda checked, clinic=clinic: self.approvalClinicButtonFunction(clinic, self.clinic))
-            buttonContainer.layout().addWidget(self.approvalClinicButton)
-
-        spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        buttonContainer.layout().addWidget(spacer)
-
-        boxScrollArea.setWidget(buttonContainer)
+        boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
@@ -109,10 +90,42 @@ class AdminViewApprovalsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-    def approvalClinicButtonFunction(self, clinic):
+    def approvalClinicButtonFunction(self, clinic, adminID):
 
-        self.AdminClinicApproval = AdminClinicApprovalWindow(clinic)
+        self.AdminClinicApproval = AdminClinicApprovalWindow(clinic, adminID)
         self.pageManager.add(self.AdminClinicApproval)
 
     def backButtonFunction(self):
         self.pageManager.goBack()
+    
+    def generateViewApprovalButtons(self):
+
+        for i in range(self.buttonContainer.layout().count()):
+            widget = self.buttonContainer.layout().itemAt(0).widget()
+            self.buttonContainer.layout().removeWidget(widget)
+            if widget is not None:
+                widget.deleteLater()
+
+        self.clinicList.clear()
+        
+        #Get Clinics with disapprove status
+        self.clinicList = ClinicRepository.getClinicList()
+
+        buttonFont = QFont()
+        buttonFont.setFamily("Arial")
+        buttonFont.setPointSize(28)
+        buttonFont.setBold(True)
+        buttonFont.setWeight(75)
+
+        #Insert All the Clinics 
+        for count, clinic in enumerate(self.clinicList):
+            self.approvalClinicButton = QPushButton()
+            self.approvalClinicButton.setText(f"{clinic.getClinicID()} - {clinic.getClinicName()} - {clinic.getClinicStatus()}")
+            self.approvalClinicButton.setFont(buttonFont)
+            self.approvalClinicButton.setFixedSize(QSize(900,150))
+            self.approvalClinicButton.clicked.connect(lambda checked, clinic=clinic: self.approvalClinicButtonFunction(clinic, self.adminID))
+            self.buttonContainer.layout().addWidget(self.approvalClinicButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.buttonContainer.layout().addWidget(spacer)
