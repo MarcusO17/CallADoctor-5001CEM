@@ -1,11 +1,12 @@
 class Request:
-    def __init__(self,requestID, requestType, clientID, approvalStatus, dateSubmitted, requestReason):
+    def __init__(self,requestID, requestType, clientID, approvalStatus, dateSubmitted, requestReason, appointmentID):
         self.requestID = requestID
         self.requestType = requestType
         self.clientID = clientID
         self.approvalStatus = approvalStatus
         self.dateSubmitted = dateSubmitted
         self.requestReason = requestReason
+        self.appointmentID = appointmentID
 
     def getRequestID(self):
         return self.requestID
@@ -42,3 +43,9 @@ class Request:
 
     def setRequestReason(self, requestReason):
         self.requestReason = requestReason
+
+    def getAppointmentID(self):
+        return self.appointmentID
+
+    def setAppointmentID(self, appointmentID):
+        self.appointmentID = appointmentID

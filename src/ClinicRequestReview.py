@@ -9,10 +9,11 @@ from PyQt5 import QtWidgets
 from .AccountPage import AccountPage
 from .ClinicCancellationDetails import ClinicCancellationDetails
 from .ClinicRequestDetails import ClinicRequestDetails
-from .model import Appointment
+from .model import Appointment, Request
 from .model.AppointmentRepo import AppointmentRepository
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from .PageManager import PageManager, FrameLayoutManager
+
 
 
 class ClinicRequestReview(QWidget):
@@ -68,7 +69,7 @@ class ClinicRequestReview(QWidget):
         self.appointmentCancellationboxScrollArea.setWidgetResizable(True)
 
         self.unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
-        self.appointmentCancellationList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
+        self.cancellationList = list()
 
         self.generateRequestButtons()
         self.generateCancellationButtons()
@@ -169,7 +170,7 @@ class ClinicRequestReview(QWidget):
             if widget is not None:
                 widget.deleteLater()
 
-        self.appointmentCancellationList.clear()
+        self.cancellationList.clear()
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -178,11 +179,21 @@ class ClinicRequestReview(QWidget):
         buttonFont.setWeight(75)
 
         # update this
-        self.appointmentCancellationList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
+        self.cancellationList = list()
 
-        for count, request in enumerate(self.appointmentCancellationList):
+        cancellation1 = Request("R0001", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0001")
+        cancellation2 = Request("R0002", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0002")
+        cancellation3 = Request("R0003", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0003")
+        cancellation4 = Request("R0004", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0004")
+
+        self.cancellationList.append(cancellation1)
+        self.cancellationList.append(cancellation2)
+        self.cancellationList.append(cancellation3)
+        self.cancellationList.append(cancellation4)
+
+        for count, request in enumerate(self.cancellationList):
             self.cancellationButton = QPushButton()
-            self.cancellationButton.setText(request.getPatientID() + " - " + request.getStartTime())
+            self.cancellationButton.setText(request.getRequestID() + " - " + request.getApprovalStatus())
             self.cancellationButton.setFont(buttonFont)
             self.cancellationButton.setFixedSize(QSize(900, 150))
             self.cancellationButton.clicked.connect(

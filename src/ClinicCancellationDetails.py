@@ -20,6 +20,7 @@ class ClinicCancellationDetails(QWidget):
         # set the information here
         self.request = request  # appointmentObject
         self.clinic = clinic
+        self.appointment = Appointment.getAppointmentfromID(self.request.getAppointmentID())
         self.setupUi()
 
     def setupUi(self):
@@ -35,7 +36,7 @@ class ClinicCancellationDetails(QWidget):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText(self.request.getAppointmentID())
+        self.headerTitle.setText(self.request.getRequestID())
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
@@ -51,33 +52,30 @@ class ClinicCancellationDetails(QWidget):
         self.backButton.setIcon(self.backIcon)
         self.backButton.clicked.connect(self.backButtonFunction)
 
-        self.patientLabel = QLabel(self.centralwidget)
-        self.patientLabel.setGeometry(QRect(180, 220, 400, 300))
-        self.patientLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.requestReasonLabel = QLabel(self.centralwidget)
+        self.requestReasonLabel.setGeometry(QRect(180, 220, 400, 300))
+        self.requestReasonLabel.setFrameShape(QtWidgets.QFrame.Box)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
         font.setBold(True)
         font.setWeight(75)
-        self.patientLabel.setFont(font)
-        self.patientLabel.setText(self.request.getPatientID())
-        self.patientLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.requestReasonLabel.setFont(font)
+        self.requestReasonLabel.setText(self.request.getRequestReason())
+        self.requestReasonLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.dateLabel = QLabel(self.centralwidget)
         self.dateLabel.setGeometry(QRect(700, 220, 150, 40))
         self.dateLabel.setFont(font)
-        self.dateLabel.setText(str(self.request.getAppointmentDate()))
+        self.dateLabel.setText(str(self.request.getDateSubmitted()))
         self.dateLabel.setFrameShape(QtWidgets.QFrame.Box)
 
-        self.timeLabel = QLabel(self.centralwidget)
-        self.timeLabel.setGeometry(QRect(700, 280, 150, 40))
-        self.timeLabel.setFont(font)
-        self.timeLabel.setText(self.request.getStartTime())
-        self.timeLabel.setFrameShape(QtWidgets.QFrame.Box)
-
-        self.assignedDoctorLabel = QLabel(self.centralwidget)
-        self.assignedDoctorLabel.setGeometry(QRect(700, 350, 150, 40))
-        self.assignedDoctorLabel.setText(self.request.getDoctorID())
+        self.appointmentLabel = QLabel(self.centralwidget)
+        self.appointmentLabel.setGeometry(QRect(700, 350, 250, 200))
+        self.appointmentLabel.setText(f"AppointmentID: {self.appointment.getAppointmentID()} \n"
+                                      f"Doctor Assigned: {self.appointment.getDoctorID()} \n"
+                                      f"Start Time: {self.appointment.getStartTime()} \n"
+                                      f"Status: {self.appointment.getAppointmentStatus()}")
 
         self.cancelButton = QPushButton(self.centralwidget)
         self.cancelButton.setGeometry(QRect(180, 545, 325, 100))
@@ -143,24 +141,25 @@ class ClinicCancellationDetails(QWidget):
                                                       "Are you sure you want to approve this request",
                                                       QMessageBox.Yes | QMessageBox.No)
         if acceptRequestDialogBox == QMessageBox.Yes:
-            self.request.cancelAppointment()
+            self.request.setApprovalStatus("Approved")
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
             self.frameLayoutManager.back()
-            self.frameLayout.widget(self.frameLayoutManager.top()).generateRequestButtons()
+            self.frameLayout.widget(self.frameLayoutManager.top()).generateCancellationButtons()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def cancelRequestFunction(self):
         cancelRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Cancel Confirmation",
-                                                      "Are you sure you want to cancel this request",
+                                                      "Are you sure you want to deny this request",
                                                       QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
+            self.request.setApprovalStatus("Deny")
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
             self.frameLayoutManager.back()
-            self.frameLayout.widget(self.frameLayoutManager.top()).generateRequestButtons()
+            self.frameLayout.widget(self.frameLayoutManager.top()).generateCancellationButtons()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
 
