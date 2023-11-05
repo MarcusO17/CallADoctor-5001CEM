@@ -3,15 +3,17 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy
+    QScrollArea, QSizePolicy, QStackedWidget
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
+from .ClinicCancellationDetails import ClinicCancellationDetails
 from .ClinicRequestDetails import ClinicRequestDetails
-from .model import Appointment
+from .model import Appointment, Request
 from .model.AppointmentRepo import AppointmentRepository
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from .PageManager import PageManager, FrameLayoutManager
+
 
 
 class ClinicRequestReview(QWidget):
@@ -19,12 +21,15 @@ class ClinicRequestReview(QWidget):
         super().__init__()
         self.clinic = clinic
         self.setupUi()
+        self.state = "Request Review"
 
     def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
         self.centralwidget = QWidget()
+        self.stackedWidget = QStackedWidget()
+        self.stackedWidget.setGeometry(QRect(200, 200, 1000, 500))
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -39,25 +44,69 @@ class ClinicRequestReview(QWidget):
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
+        self.appointmentCancellationButton = QPushButton(self.centralwidget)
+        self.appointmentCancellationButton.setGeometry(QRect(200, 120, 200, 40))
+        self.appointmentCancellationButton.setText("Cancellation Request")
+        self.appointmentCancellationButton.clicked.connect(self.appointmentCancellationFunction)
+
+        self.requestReviewButton = QPushButton(self.centralwidget)
+        self.requestReviewButton.setGeometry(QRect(600, 120, 200, 40))
+        self.requestReviewButton.setText("Request Review")
+        self.requestReviewButton.clicked.connect(self.requestReviewFunction)
+
         self.buttonContainer = QWidget()
         self.buttonContainer.setContentsMargins(20, 20, 20, 20)
-        button_layout = QVBoxLayout(self.buttonContainer)
-        boxScrollArea = QScrollArea()
-        boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        boxScrollArea.setWidgetResizable(True)
+        buttonLayout = QVBoxLayout(self.buttonContainer)
+        self.boxScrollArea = QScrollArea()
+        self.boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.boxScrollArea.setWidgetResizable(True)
+
+        self.appointmentCancellationButtonContainer = QWidget()
+        self.appointmentCancellationButtonContainer.setContentsMargins(20, 20, 20, 20)
+        appointmentCancellationButtonLayout = QVBoxLayout(self.appointmentCancellationButtonContainer)
+        self.appointmentCancellationboxScrollArea = QScrollArea()
+        self.appointmentCancellationboxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.appointmentCancellationboxScrollArea.setWidgetResizable(True)
 
         self.unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
+        self.cancellationList = list()
 
         self.generateRequestButtons()
+        self.generateCancellationButtons()
 
-        boxScrollArea.setWidget(self.buttonContainer)
-        boxScrollArea.setFixedSize(1000, 500)
+        self.boxScrollArea.setWidget(self.buttonContainer)
+        self.boxScrollArea.setFixedSize(1000, 500)
+        self.appointmentCancellationboxScrollArea.setWidget(self.appointmentCancellationButtonContainer)
+        self.appointmentCancellationboxScrollArea.setFixedSize(1000, 500)
+
+        self.stackedWidget.addWidget(self.boxScrollArea) # index 0
+        self.stackedWidget.addWidget(self.appointmentCancellationboxScrollArea)  # index 1
+
+        stackedWidgetLayout = QVBoxLayout()
+        stackedWidgetLayout.addWidget(self.stackedWidget, alignment=Qt.AlignCenter)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
-        mainLayout.addWidget(boxScrollArea)
+        mainLayout.addLayout(stackedWidgetLayout)
 
         self.setLayout(mainLayout)
 
+        self.stackedWidget.setCurrentIndex(0)
+
+    def appointmentCancellationFunction(self):
+        if self.state == "Request Cancellation":
+            pass
+        else:
+            self.state = "Request Cancellation"
+            print(self.state)
+            self.stackedWidget.setCurrentIndex(1)
+
+    def requestReviewFunction(self):
+        if self.state == "Request Review":
+            pass
+        else:
+            self.state = "Request Review"
+            print(self.state)
+            self.stackedWidget.setCurrentIndex(0)
 
     def requestButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click
@@ -89,6 +138,7 @@ class ClinicRequestReview(QWidget):
         self.unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
 
         for count, request in enumerate(self.unassignedAppointmentList):
+            print("generate request", count)
             self.requestButton = QPushButton()
             self.requestButton.setText(request.getAppointmentID() + " - " + request.getAppointmentStatus())
             self.requestButton.setFont(buttonFont)
@@ -100,5 +150,59 @@ class ClinicRequestReview(QWidget):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.buttonContainer.layout().addWidget(spacer)
+
+    def cancellationButtonFunction(self, request, clinic):
+        # update the clinic details page here according to button click
+        self.clinicCancellationDetails = ClinicCancellationDetails(request, clinic)
+
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+        self.frameLayout.addWidget(self.clinicCancellationDetails)
+        self.frameLayoutManager.add(self.frameLayout.count() - 1)
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+
+    def generateCancellationButtons(self):
+
+        for i in range(self.appointmentCancellationButtonContainer.layout().count()):
+            widget = self.appointmentCancellationButtonContainer.layout().itemAt(0).widget()
+            self.appointmentCancellationButtonContainer.layout().removeWidget(widget)
+            if widget is not None:
+                widget.deleteLater()
+
+        self.cancellationList.clear()
+
+        buttonFont = QFont()
+        buttonFont.setFamily("Arial")
+        buttonFont.setPointSize(28)
+        buttonFont.setBold(True)
+        buttonFont.setWeight(75)
+
+        # update this
+        self.cancellationList = list()
+
+        cancellation1 = Request("R0001", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0001")
+        cancellation2 = Request("R0002", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0002")
+        cancellation3 = Request("R0003", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0003")
+        cancellation4 = Request("R0004", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0004")
+
+        self.cancellationList.append(cancellation1)
+        self.cancellationList.append(cancellation2)
+        self.cancellationList.append(cancellation3)
+        self.cancellationList.append(cancellation4)
+
+        for count, request in enumerate(self.cancellationList):
+            self.cancellationButton = QPushButton()
+            self.cancellationButton.setText(request.getRequestID() + " - " + request.getApprovalStatus())
+            self.cancellationButton.setFont(buttonFont)
+            self.cancellationButton.setFixedSize(QSize(900, 150))
+            self.cancellationButton.clicked.connect(
+                lambda checked, request=request: self.cancellationButtonFunction(request, self.clinic))
+            self.appointmentCancellationButtonContainer.layout().addWidget(self.cancellationButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.appointmentCancellationButtonContainer.layout().addWidget(spacer)
+
 
 
