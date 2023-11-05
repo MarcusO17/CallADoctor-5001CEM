@@ -103,7 +103,7 @@ class DoctorHomepage(QMainWindow):
         self.myAppointmentButton.clicked.connect(self.gotoMyAppointment)
 
         self.topLeftLogo = QLabel()
-        self.topLeftLogo.setGeometry(QRect(20, 10, 70, 70))
+        self.topLeftLogo.setFixedSize(70, 70)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.topLeftLogoIcon = QPixmap(filepath)
         self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(70, 70)

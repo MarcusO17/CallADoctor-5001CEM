@@ -30,5 +30,8 @@ setup(
         'Werkzeug==2.3.7',
         'geopy'
         'folium'
+        'kaleido'
+        'plotly-express'
+        'pandas'
     ]
 )

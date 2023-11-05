@@ -5,6 +5,9 @@ from helper.geocoder import GeoHelper
 import os
 import requests
 import pymysql
+import pandas as pd 
+
+
 
 
 app = Flask(__name__)
@@ -544,6 +547,30 @@ def appointmentPatientID(patientID):
         if appointment is not None:
             return jsonify(appointment),200
 
+@app.route('/appointments/toDate',methods=['GET'])
+def appointmentToDate():
+    todayDate =datetime.today().date()
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM appointments where appointmentDate <= %s ", todayDate)
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200
+
+
 
 @app.route('/appointments/<string:aid>/assign/<string:did>',methods=['PATCH'])
 def appointmentDoctorAssign(aid,did):
@@ -904,7 +931,6 @@ def prescriptionDetails():
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
-
 @app.route('/requests',methods=['GET','POST'])
 def requests():
 
@@ -949,6 +975,19 @@ def requests():
         return'Successful POST', 201
 
         
+
+@app.route('/graph/users', methods=['GET'])
+def generateGraph():
+    appointments = requests.get(f"http://127.0.0.1:5000/appointments/toDate").json()
+    df = pd.DataFrame(columns=['dates','count'])
+    dateFormat = "%a, %d %b %Y %H:%M:%S %Z"
+    df['dates'] = [datetime.strptime(dates['appointmentDate'], dateFormat)
+                   .strftime("%d-%m-%Y") for dates in appointments]
+
+    uniqueDates = df['dates'].value_counts().reset_index()
+
+    return uniqueDates.to_json()
+
 
 @app.route('/users/auth')
 def userAuthentication():
