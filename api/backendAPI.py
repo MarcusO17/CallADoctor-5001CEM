@@ -645,6 +645,33 @@ def appointmentsWeek():
         ]
         if appointment is not None:
             return jsonify(appointment),200  
+        
+
+@app.route('/appointments/upcoming/<string:doctorID>',methods=['GET'])
+def appointmentsUpcoming(doctorID):
+    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+    if request.method == 'GET':
+        cursor.execute("""SELECT * FROM appointments where appointmentDate >= %s AND 
+                       doctorID = %s ORDER BY appointmentDate, startTime LIMIT 3"""
+                        ,(dateToday,doctorID))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200  
 
 @app.route('/appointments/<string:clinicID>/pending',methods=['GET'])
 def appointmentsPending(clinicID):
@@ -904,6 +931,50 @@ def prescriptionDetails():
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
     
+@app.route('/requests',methods=['GET','POST'])
+def requests():
+
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM requests")
+        requests = [
+            dict(
+                requestsID = row['requestsID'],
+                requestsType = row['requestsType'],
+                clientID  = row['clientID'],
+                approvalStatus = row['approvalStatus'],
+                dateSubmitted = row['dateSubmitted'],
+                requestReason = row['requestReason']
+            )
+            for row in cursor.fetchall()
+        ]
+        if requests  is not None:
+            return jsonify(requests),200
+        
+    if request.method == 'POST':
+        
+        contentJSON = request.get_json()
+
+        requestsID =  requests.get('http://127.0.0.1:5000/requests/idgen').text
+        requestsType = contentJSON['requestsType']
+        clientID = contentJSON['clientID']
+        approvalStatus = contentJSON['approvalStatus']
+        dateSubmitted = datetime.now().date() 
+        requestReason = contentJSON['requestReason']
+
+        insertQuery = """
+                        INSERT INTO requests (requestsID,requestsType,clientID,approvalStatus,
+                                             dateSubmitted,requestReason)
+                        VALUES (%s,%s,%s,%s,%s,%s)
+                    """
+        cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
+                                             dateSubmitted,requestReason)
+                                             )
+        conn.commit() #Commit Changes to db, like git commit
+        return'Successful POST', 201
+
+        
 
 @app.route('/graph/users', methods=['GET'])
 def generateGraph():
@@ -1023,6 +1094,23 @@ def getLastPrescriptionID():
     counter = cursor.fetchall()
     id = str(counter[0]['COUNT(*)'])
     id = f'PR{id.zfill(3)}'
+    
+    cursor.close()
+    conn.close()
+
+    if id is not None:
+            return id,200
+
+@app.route('/requests/idgen')
+def getLastPrescriptionID():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    
+    #Add Error Handling
+    cursor.execute("SELECT COUNT(*) FROM requests")
+    counter = cursor.fetchall()
+    id = str(counter[0]['COUNT(*)'])
+    id = f'REQ{id.zfill(3)}'
     
     cursor.close()
     conn.close()
