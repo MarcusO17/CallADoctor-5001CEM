@@ -47,7 +47,7 @@ class ClinicDashboard(QWidget):
         self.dateLayout.addWidget(spacer)
         self.dateWidget = QLabel(f"Date: {QDate.currentDate().toString('dd-MM-yyyy')}")
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(15)
         self.dateWidget.setFont(font)
         self.dateWidget.setFixedSize(220,75)
@@ -70,10 +70,6 @@ class ClinicDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
-        backgroundImage = QPixmap(filepath)
-        self.setStyleSheet(f"background-image: url({backgroundImage});")
-
     def generateDoctorWidgets(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -89,9 +85,8 @@ class ClinicDashboard(QWidget):
         self.doctorTitle = QLabel()
         self.doctorTitle.setFixedWidth(150)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(20)
-        font.setBold(True)
         font.setWeight(75)
         self.doctorTitle.setFont(font)
         self.doctorTitle.setText("Doctors")
@@ -107,9 +102,8 @@ class ClinicDashboard(QWidget):
         threeDoctorList = self.doctorList[:3]
 
         buttonFont = QFont()
-        buttonFont.setFamily("Arial")
+        buttonFont.setFamily("Montserrat")
         buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\doctor.png")
@@ -118,24 +112,31 @@ class ClinicDashboard(QWidget):
         for count, doctor in enumerate(threeDoctorList):
             doctorButton = QPushButton()
             doctorButton.setFixedSize(QSize(100, 100))
-            doctorButton.setIconSize(QSize(70, 70))
+            doctorButton.setIconSize(QSize(35, 35))
             doctorButton.setIcon(doctorIcon)
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
 
             font = QFont()
-            font.setFamily("Arial")
+            font.setFamily("Montserrat")
             font.setPointSize(12)
-            font.setBold(True)
             font.setWeight(75)
 
             doctorLabel = QLabel()
-            doctorLabel.setFixedSize(125, 25)
             doctorLabel.setFont(font)
-            doctorLabel.setText(f"{doctor.getDoctorName()}")
+            doctorNameSliced = doctor.getDoctorName()[:8]
+            doctorLabel.setText(f"{doctorNameSliced}..")
+            doctorLabel.setStyleSheet("color: white;")
 
             doctorWidget = QWidget()
             doctorWidget.setFixedSize(125, 125)
-            doctorWidget.setStyleSheet("background-color: white; border-radius: 10px;")
+            doctorWidget.setObjectName("doctorButton")
+            doctorWidget.setStyleSheet("""QWidget#doctorButton {
+                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                stop: 1 rgba(59, 41, 168, 255)
+                                            );
+                                            border-radius: 10px;
+                                        }""")
             doctorLayout = QVBoxLayout(doctorWidget)
             doctorLayout.addWidget(doctorButton)
             doctorLayout.addWidget(doctorLabel)
@@ -168,9 +169,8 @@ class ClinicDashboard(QWidget):
         self.requestReviewTitle = QLabel()
         self.requestReviewTitle.setFixedWidth(300)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(20)
-        font.setBold(True)
         font.setWeight(75)
         self.requestReviewTitle.setFont(font)
         self.requestReviewTitle.setText("Request Review")
@@ -183,9 +183,8 @@ class ClinicDashboard(QWidget):
 
         #get 3 reviews here
         buttonFont = QFont()
-        buttonFont.setFamily("Arial")
+        buttonFont.setFamily("Montserrat")
         buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
         self.unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
@@ -206,7 +205,14 @@ class ClinicDashboard(QWidget):
             for count, request in enumerate(threeAppointments):
                 self.requestButton = QPushButton()
                 self.requestButton.setText(request.getAppointmentID() + " - " + request.getAppointmentStatus())
-                self.requestButton.setStyleSheet("background-color: white; border-radius: 10px; margin-left: 30px;")
+                self.requestButton.setObjectName("requestButton")
+                self.requestButton.setStyleSheet("""QPushButton#requestButton {
+                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                stop: 1 rgba(59, 41, 168, 255)
+                                                            );
+                                                            border-radius: 10px; margin-left: 30px; color: white;
+                                                        }""")
                 self.requestButton.setFont(buttonFont)
                 self.requestButton.setFixedSize(QSize(400, 100))
                 self.requestButton.setIcon(requestIcon)
@@ -244,9 +250,8 @@ class ClinicDashboard(QWidget):
         self.widgetTitle = QLabel()
         self.widgetTitle.setFixedWidth(380)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(20)
-        font.setBold(True)
         font.setWeight(75)
         self.widgetTitle.setFont(font)
         self.widgetTitle.setText("ANALYTIC STUFF")
