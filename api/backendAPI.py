@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from helper.geocoder import GeoHelper
-import base64
+import io
 import os
 import requests
 import pymysql
@@ -988,7 +988,7 @@ def getLastPrescriptionID():
             return id,200
    
 @app.route('/clinics/image/upload/<string:id>', methods=['POST'])
-def uploadImage(id):
+def uploadClinicImage(id):
     conn = dbConnect()  
     cursor = conn.cursor()
    
@@ -1002,6 +1002,25 @@ def uploadImage(id):
             return jsonify({"Message": "Image uploaded and processed successfully"})
         except:
             return jsonify({'Error':'Image Error'})
+
+@app.route('/clinics/image/download/<string:id>', methods=['GET'])
+def downloadClinicImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'GET':
+        try:
+        
+            cursor.execute("SELECT verifiedDoc from clinics where clinicID = %s", id)
+            imgData = cursor.fetchone()
+            
+            conn.commit()
+            conn.close()
+
+            return send_file(io.BytesIO(imgData))
+        except:
+            return jsonify({'Error':'Image Error'})
+    
     
 if __name__ == "__main__":
     app.run(debug=True)
