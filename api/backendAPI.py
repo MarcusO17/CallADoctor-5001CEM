@@ -975,12 +975,12 @@ def requests():
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
 
-@app.route('/requests/<string:clinicID>',methods=['GET','POST'])
+@app.route('/requests/<string:clinicID>',methods=['GET'])
 def requestsByClinic(clinicID):
     conn = dbConnect()  
     cursor = conn.cursor()
     if request.method == 'GET':
-        cursor.execute("SELECT * FROM requests")
+        cursor.execute("SELECT * FROM requests where appointmentID in(SELECT appointmentID from clinics where clinicID = %s)",clinicID)
         requests = [
             dict(
                 requestsID = row['requestsID'],
