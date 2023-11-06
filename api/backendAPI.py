@@ -945,7 +945,8 @@ def requests():
                 clientID  = row['clientID'],
                 approvalStatus = row['approvalStatus'],
                 dateSubmitted = row['dateSubmitted'],
-                requestReason = row['requestReason']
+                requestReason = row['requestReason'],
+                appointmentID = row['appointmentID']
             )
             for row in cursor.fetchall()
         ]
@@ -965,15 +966,35 @@ def requests():
 
         insertQuery = """
                         INSERT INTO requests (requestsID,requestsType,clientID,approvalStatus,
-                                             dateSubmitted,requestReason)
-                        VALUES (%s,%s,%s,%s,%s,%s)
+                                             dateSubmitted,requestReason,appointmentID)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s)
                     """
         cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
-                                             dateSubmitted,requestReason)
+                                             dateSubmitted,requestReason,appointmentID)
                                              )
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
 
+@app.route('/requests/<string:clinicID>',methods=['GET','POST'])
+def requestsByClinic(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM requests")
+        requests = [
+            dict(
+                requestsID = row['requestsID'],
+                requestsType = row['requestsType'],
+                clientID  = row['clientID'],
+                approvalStatus = row['approvalStatus'],
+                dateSubmitted = row['dateSubmitted'],
+                requestReason = row['requestReason'],
+                appointmentID = row['appointmentID']
+            )
+            for row in cursor.fetchall()
+        ]
+        if requests  is not None:
+            return jsonify(requests),200
         
 
 @app.route('/graph/users', methods=['GET'])
