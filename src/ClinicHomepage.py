@@ -64,6 +64,22 @@ class ClinicHomepage(QMainWindow):
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
+        stylesheet = """
+                    QPushButton
+                    {
+                       background-color: #C2D9FF;
+                       border-radius: 10px;
+                    }
+                    QPushButton:pressed
+                    {
+                      background-color: #8E8FFA;     
+                    }
+                    QPushButton:hover
+                    {
+                      background-color: #7752FE;
+                    }
+                    """
+
         self.centralwidget = QWidget(MainWindow)
 
         self.mainLayout = QHBoxLayout()
@@ -80,7 +96,7 @@ class ClinicHomepage(QMainWindow):
         self.dashboardIcon = QIcon(filepath)
         self.dashboardButton.setIconSize(QSize(20, 20))
         self.dashboardButton.setIcon(self.dashboardIcon)
-        self.dashboardButton.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
+        self.dashboardButton.setStyleSheet(stylesheet)
         self.dashboardButton.clicked.connect(self.goToDashboard)
 
         self.manageScheduleButton = QPushButton(self.centralwidget)
@@ -89,7 +105,7 @@ class ClinicHomepage(QMainWindow):
         self.scheduleIcon = QIcon(filepath)
         self.manageScheduleButton.setIconSize(QSize(20, 20))
         self.manageScheduleButton.setIcon(self.scheduleIcon)
-        self.manageScheduleButton.setStyleSheet("border-radius: 10px;")
+        self.manageScheduleButton.setStyleSheet(stylesheet)
         self.manageScheduleButton.clicked.connect(self.goToManageSchedule)
 
         self.doctorListButton = QPushButton(self.centralwidget)
@@ -98,7 +114,7 @@ class ClinicHomepage(QMainWindow):
         self.doctorIcon = QIcon(filepath)
         self.doctorListButton.setIconSize(QSize(20, 20))
         self.doctorListButton.setIcon(self.doctorIcon)
-        self.doctorListButton.setStyleSheet("border-radius: 10px;")
+        self.doctorListButton.setStyleSheet(stylesheet)
         self.doctorListButton.clicked.connect(self.goToDoctorList)
 
         self.requestReviewButton = QPushButton(self.centralwidget)
@@ -107,7 +123,7 @@ class ClinicHomepage(QMainWindow):
         self.requestReviewIcon = QIcon(filepath)
         self.requestReviewButton.setIconSize(QSize(15, 15))
         self.requestReviewButton.setIcon(self.requestReviewIcon)
-        self.requestReviewButton.setStyleSheet("border-radius: 10px;")
+        self.requestReviewButton.setStyleSheet(stylesheet)
         self.requestReviewButton.clicked.connect(self.goToRequestReview)
 
         self.mapButton = QPushButton(self.centralwidget)
@@ -116,7 +132,7 @@ class ClinicHomepage(QMainWindow):
         self.mapIcon = QIcon(filepath)
         self.mapButton.setIconSize(QSize(20, 20))
         self.mapButton.setIcon(self.mapIcon)
-        self.mapButton.setStyleSheet("border-radius: 10px;")
+        self.mapButton.setStyleSheet(stylesheet)
         self.mapButton.clicked.connect(self.goToMapPage)
 
         self.topLeftLogo = QLabel()
@@ -131,7 +147,7 @@ class ClinicHomepage(QMainWindow):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\account.png")
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(20, 20))
-        self.myAccountButton.setStyleSheet("border-radius: 10px;")
+        self.myAccountButton.setStyleSheet(stylesheet)
         self.myAccountButton.setIcon(self.myAccountIcon)
         self.myAccountButton.clicked.connect(self.goToAccountPage)
 
@@ -142,7 +158,7 @@ class ClinicHomepage(QMainWindow):
         self.logoutIcon = QIcon(filepath)
         self.logoutButton.setIconSize(QSize(20, 20))
         self.logoutButton.setIcon(self.logoutIcon)
-        self.logoutButton.setStyleSheet("border-radius: 10px;")
+        self.logoutButton.setStyleSheet(stylesheet)
         self.logoutButton.clicked.connect(self.logout)
 
         self.highlightButtonList = list()
@@ -214,6 +230,20 @@ class ClinicHomepage(QMainWindow):
     def setButtonHighlight(self, button):
         for buttonTemp in self.highlightButtonList:
             if buttonTemp == button:
-                button.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
+                button.setStyleSheet("background-color: #8E8FFA; border-radius: 10px;")
             else:
-                buttonTemp.setStyleSheet("border-radius: 10px;")
+                buttonTemp.setStyleSheet("""
+                    QPushButton
+                    {
+                       background-color: #C2D9FF;
+                       border-radius: 10px;
+                    }
+                    QPushButton:pressed
+                    {
+                      background-color: #8E8FFA;     
+                    }
+                    QPushButton:hover
+                    {
+                      background-color: #7752FE;
+                    }
+                    """)
