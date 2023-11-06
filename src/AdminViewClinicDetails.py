@@ -12,11 +12,12 @@ from .PageManager import PageManager
 
 class AdminViewClinicDetailsWindow(QMainWindow):
 
-    def __init__(self, clinicTemp):
+    def __init__(self, clinicTemp, adminID):
         super().__init__()
         #set the information here
         self.pageManager = PageManager()
         self.clinic = clinicTemp
+        self.adminID = adminID
         print(self.clinic.getClinicID(), self.clinic.getClinicName(), self.clinic.getClinicAddress(), self.clinic.getClinicContact())
         self.setWindowTitle("Clinic Details")
         self.setFixedWidth(1280)
@@ -54,13 +55,6 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
 
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setFixedSize(70, 70)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70, 70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
@@ -87,7 +81,7 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.adminClinicDetailsDescriptionLabel.setFont(font)
-        self.adminClinicDetailsDescriptionLabel.setText(self.clinic.getClinicName()+ "\n" + self.clinic.getClinicContact()+ "\n" + self.clinic.getClinicID())
+        self.adminClinicDetailsDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \n Clinic Name: {self.clinic.getClinicName()} \n Clinic Status: {self.clinic.getClinicStatus()}")
         self.adminClinicDetailsDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
 
         self.adminClinicDetailsAddressLabel = QLabel(self.centralwidget)
@@ -108,7 +102,7 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         font.setPointSize(20)
         self.adminRemoveClinicButton.setFont(font)
         self.adminRemoveClinicButton.setLayoutDirection(Qt.LeftToRight)
-        self.adminRemoveClinicButton.setText("Send Request")
+        self.adminRemoveClinicButton.setText("Remove Clinic")
         self.adminRemoveClinicButton.clicked.connect(self.adminRemoveClinicFunction)
         self.adminRemoveClinicButton.raise_()
 
