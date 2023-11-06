@@ -7,10 +7,10 @@ from .ClinicDashboard import ClinicDashboard
 from .ClinicDoctorList import ClinicDoctorList
 from .ClinicRequestReview import ClinicRequestReview
 from .model import Clinic
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox, QHBoxLayout, \
-    QVBoxLayout, QSizePolicy, QStackedWidget
+    QVBoxLayout, QSizePolicy, QStackedWidget, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 from .ClinicManageSchedule import ClinicManageSchedule
 from .PageManager import PageManager, FrameLayoutManager
@@ -121,6 +121,10 @@ class ClinicHomepage(QMainWindow):
                                             }
                                             """)
         self.dashboardButton.clicked.connect(self.goToDashboard)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.dashboardButton.setGraphicsEffect(effect)
 
         self.manageScheduleButton = QPushButton(self.centralwidget)
         self.manageScheduleButton.setFixedSize(280, 70)
@@ -133,6 +137,11 @@ class ClinicHomepage(QMainWindow):
         self.manageScheduleButton.setStyleSheet(stylesheet)
         self.manageScheduleButton.clicked.connect(self.goToManageSchedule)
 
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.manageScheduleButton.setGraphicsEffect(effect)
+
         self.doctorListButton = QPushButton(self.centralwidget)
         self.doctorListButton.setFixedSize(280, 70)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-doctor-64.png")
@@ -144,6 +153,11 @@ class ClinicHomepage(QMainWindow):
         self.doctorListButton.setStyleSheet(stylesheet)
         self.doctorListButton.clicked.connect(self.goToDoctorList)
 
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.doctorListButton.setGraphicsEffect(effect)
+
         self.requestReviewButton = QPushButton(self.centralwidget)
         self.requestReviewButton.setFixedSize(280, 70)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-document-60.png")
@@ -154,6 +168,10 @@ class ClinicHomepage(QMainWindow):
         self.requestReviewButton.setText("Request Review")
         self.requestReviewButton.setStyleSheet(stylesheet)
         self.requestReviewButton.clicked.connect(self.goToRequestReview)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.requestReviewButton.setGraphicsEffect(effect)
 
         self.mapButton = QPushButton(self.centralwidget)
         self.mapButton.setFixedSize(280, 70)
@@ -165,6 +183,10 @@ class ClinicHomepage(QMainWindow):
         self.mapButton.setIcon(self.mapIcon)
         self.mapButton.setStyleSheet(stylesheet)
         self.mapButton.clicked.connect(self.goToMapPage)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.mapButton.setGraphicsEffect(effect)
 
         self.topLeftLogo = QLabel()
         self.topLeftLogo.setFixedSize(280, 150)
@@ -184,6 +206,10 @@ class ClinicHomepage(QMainWindow):
         self.myAccountButton.setText("My Account")
         self.myAccountButton.setIcon(self.myAccountIcon)
         self.myAccountButton.clicked.connect(self.goToAccountPage)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.myAccountButton.setGraphicsEffect(effect)
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
@@ -196,6 +222,10 @@ class ClinicHomepage(QMainWindow):
         self.logoutButton.setText("Log Out")
         self.logoutButton.setStyleSheet(stylesheet)
         self.logoutButton.clicked.connect(self.logout)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.logoutButton.setGraphicsEffect(effect)
 
         self.highlightButtonList = list()
         self.highlightButtonList.append(self.myAccountButton)

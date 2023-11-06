@@ -1,8 +1,8 @@
 import os
-from PyQt5.QtCore import QSize, QDate, Qt
-from PyQt5.QtGui import QFont, QIcon, QPixmap, QImage
-from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
-    QHBoxLayout,QSizePolicy
+from PyQt5.QtCore import QSize, QDate, Qt, QPoint
+from PyQt5.QtGui import QFont, QIcon, QPixmap, QImage, QColor
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, \
+    QHBoxLayout, QSizePolicy, QGraphicsDropShadowEffect
 
 from .AccountPage import AccountPage
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
@@ -43,7 +43,7 @@ class ClinicDashboard(QWidget):
 
         self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(230)
+        spacer.setFixedWidth(0)
         self.userInfoLayout.addWidget(spacer)
         self.userInfoWidget = QLabel(f"{self.clinic.getClinicName()}")
         self.userInfoWidget.setObjectName("userInfoWidget")
@@ -61,6 +61,11 @@ class ClinicDashboard(QWidget):
                                             text-align: center;
                                             color: white;
                                         }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.userInfoWidget.setGraphicsEffect(effect)
         self.userInfoWidget.setContentsMargins(10, 10, 10, 10)
 
         self.userInfoLayout.addWidget(self.userInfoWidget)
@@ -68,13 +73,13 @@ class ClinicDashboard(QWidget):
         self.rightLayout.addLayout(self.userInfoLayout)
 
         spacer = QWidget()
-        spacer.setFixedHeight(50)
+        spacer.setFixedHeight(20)
         spacer.setFixedWidth(0)
         self.rightLayout.addWidget(spacer)
-        self.requestReviewWidget.setFixedWidth(500)
+        #self.requestReviewWidget.setFixedWidth(500)
         self.rightLayout.addWidget(self.requestReviewWidget)
 
-        self.mainLayout.addLayout(self.leftLayout, 7)
+        self.mainLayout.addLayout(self.leftLayout, 10)
         self.mainLayout.addLayout(self.rightLayout, 5)
 
         self.setLayout(self.mainLayout)
@@ -96,7 +101,7 @@ class ClinicDashboard(QWidget):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.doctorTitle = QLabel()
-        self.doctorTitle.setFixedWidth(150)
+        self.doctorTitle.setFixedWidth(170)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -139,6 +144,10 @@ class ClinicDashboard(QWidget):
             doctorLabel.setStyleSheet("color: white;")
 
             doctorWidget = QWidget()
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            doctorWidget.setGraphicsEffect(effect)
             doctorWidget.setFixedSize(125, 125)
             doctorWidget.setObjectName("doctorButton")
             doctorWidget.setStyleSheet("""QWidget#doctorButton {
@@ -195,7 +204,7 @@ class ClinicDashboard(QWidget):
         #get 3 reviews here
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
-        buttonFont.setPointSize(20)
+        buttonFont.setPointSize(12)
 
         self.unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
 
@@ -229,11 +238,16 @@ class ClinicDashboard(QWidget):
                                                             border-radius: 10px; color: white;
                                                         }""")
                 self.requestButton.setFont(buttonFont)
-                self.requestButton.setFixedSize(QSize(350, 100))
+                self.requestButton.setFixedSize(QSize(250, 100))
                 self.requestButton.setIcon(requestIcon)
-                self.requestButton.setIconSize(QSize(70, 70))
+                self.requestButton.setIconSize(QSize(30, 30))
                 self.requestButton.clicked.connect(
                     lambda checked, request=request: self.requestButtonFunction(request, self.clinic))
+
+                effect = QGraphicsDropShadowEffect(
+                    offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+                )
+                self.requestButton.setGraphicsEffect(effect)
 
                 buttonRow.addWidget(self.requestButton)
                 self.requestReviewLayout.addLayout(buttonRow)
@@ -266,7 +280,7 @@ class ClinicDashboard(QWidget):
         self.graphWidgetLayout = QVBoxLayout(self.graphWidget)
 
         self.widgetTitle = QLabel()
-        self.widgetTitle.setFixedWidth(380)
+        self.widgetTitle.setFixedWidth(250)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -276,7 +290,7 @@ class ClinicDashboard(QWidget):
 
         headerRow = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(200)
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.widgetTitle)
 
@@ -286,10 +300,13 @@ class ClinicDashboard(QWidget):
         #generate your graph here
 
         self.graphLabel = QLabel()
-        self.graphLabel.setFixedSize(600,400)
+        self.graphLabel.setFixedSize(600,350)
         graphImage = graphGen.generateGraph()
         QgraphImage = QImage(graphImage.tobytes(),graphImage.width,graphImage.height, QImage.Format_RGBA8888)
         graphPixmap = QPixmap.fromImage(QgraphImage)
         self.graphLabel.setPixmap(graphPixmap)
 
         self.graphWidgetLayout.addWidget(self.graphLabel)
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.graphWidgetLayout.addWidget(spacer)
