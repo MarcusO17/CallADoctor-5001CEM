@@ -1,7 +1,6 @@
 import os
-
 from PyQt5.QtCore import QSize, QDate
-from PyQt5.QtGui import QFont, QIcon, QPixmap
+from PyQt5.QtGui import QFont, QIcon, QPixmap, QImage
 from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
     QHBoxLayout,QSizePolicy
 
@@ -11,6 +10,7 @@ from .ClinicRequestDetails import ClinicRequestDetails
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .model import Appointment, AppointmentRepo, Patient
+from .model import graphs
 from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager, FrameLayoutManager
 from .model.DoctorRepo import DoctorRepository
@@ -264,8 +264,9 @@ class ClinicDashboard(QWidget):
 
         self.graphLabel = QLabel()
         self.graphLabel.setFixedSize(600,400)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        graphPixmap = QPixmap(filepath)
+        graphImage = graphs.graphGen.generateGraph()
+        QgraphImage = QImage(graphImage.tobytes(),graphImage.width,graphImage.height, QImage.Format_RGBA8888)
+        graphPixmap = QPixmap.fromImage(QgraphImage)
         self.graphLabel.setPixmap(graphPixmap)
 
         self.graphWidgetLayout.addWidget(self.graphLabel)
