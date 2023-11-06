@@ -27,7 +27,7 @@ class ClinicHomepage(QMainWindow):
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
-        self.setStyleSheet(f"QMainWindow {{background-image: url(src/resources/6044355.jpg);}}")
+        self.setStyleSheet(f"QMainWindow {{background-color: #B6FFFA;}}")
         self.setupUi(self)
 
     def goToDashboard(self):
