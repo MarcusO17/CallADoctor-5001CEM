@@ -74,6 +74,8 @@ class ClinicHomepage(QMainWindow):
                     QPushButton:pressed
                     {
                       background-color: #190482;     
+                      text-align: left; 
+                      padding-left: 10px;
                     }
                     QPushButton:hover
                     {
@@ -165,11 +167,12 @@ class ClinicHomepage(QMainWindow):
         self.mapButton.clicked.connect(self.goToMapPage)
 
         self.topLeftLogo = QLabel()
-        self.topLeftLogo.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogo.setFixedSize(280, 150)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo.png")
         self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(70, 70)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(150, 150)
         self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.topLeftLogo.setStyleSheet("margin-left: 60px;")
 
         self.myAccountButton = QPushButton(self.centralwidget)
         self.myAccountButton.setFixedSize(280, 70)
@@ -263,7 +266,7 @@ class ClinicHomepage(QMainWindow):
     def setButtonHighlight(self, button):
         for buttonTemp in self.highlightButtonList:
             if buttonTemp == button:
-                button.setStyleSheet("background-color: #190482; border-radius: 10px;")
+                button.setStyleSheet("background-color: #190482; border-radius: 10px; text-align: left; padding-left: 10px;")
             else:
                 buttonTemp.setStyleSheet("""
                     QPushButton
@@ -276,7 +279,9 @@ class ClinicHomepage(QMainWindow):
                     }
                     QPushButton:pressed
                     {
-                      background-color: #190482;     
+                      background-color: #190482;    
+                      text-align: left; 
+                      padding-left: 10px; 
                     }
                     QPushButton:hover
                     {

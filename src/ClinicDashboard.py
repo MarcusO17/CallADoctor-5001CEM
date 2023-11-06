@@ -1,6 +1,6 @@
 import os
 
-from PyQt5.QtCore import QSize, QDate
+from PyQt5.QtCore import QSize, QDate, Qt
 from PyQt5.QtGui import QFont, QIcon, QPixmap
 from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
     QHBoxLayout,QSizePolicy
@@ -14,6 +14,7 @@ from .model import Appointment, AppointmentRepo, Patient
 from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager, FrameLayoutManager
 from .model.DoctorRepo import DoctorRepository
+from .model.graphs import graphGen
 
 
 class ClinicDashboard(QWidget):
@@ -41,22 +42,31 @@ class ClinicDashboard(QWidget):
         self.leftLayout.addWidget(spacer)
         self.leftLayout.addWidget(self.graphWidget, 7)
 
-        self.dateLayout = QHBoxLayout()
+        self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
         spacer.setFixedWidth(230)
-        self.dateLayout.addWidget(spacer)
-        self.dateWidget = QLabel(f"Date: {QDate.currentDate().toString('dd-MM-yyyy')}")
+        self.userInfoLayout.addWidget(spacer)
+        self.userInfoWidget = QLabel(f"{self.clinic.getClinicName()}")
+        self.userInfoWidget.setObjectName("userInfoWidget")
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(15)
-        self.dateWidget.setFont(font)
-        self.dateWidget.setFixedSize(220,75)
-        self.dateWidget.setStyleSheet("background-color: transparent;")
-        self.dateWidget.setContentsMargins(10, 10, 10, 10)
+        self.userInfoWidget.setFont(font)
+        self.userInfoWidget.setAlignment(Qt.AlignCenter)
+        self.userInfoWidget.setFixedSize(220,75)
+        self.userInfoWidget.setStyleSheet("""QLabel#userInfoWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                stop: 1 rgba(119, 82, 254, 255)
+                                            );
+                                            border-radius: 10px;
+                                            text-align: center;
+                                            color: white;
+                                        }""")
+        self.userInfoWidget.setContentsMargins(10, 10, 10, 10)
 
-        self.dateLayout.addWidget(self.dateWidget)
+        self.userInfoLayout.addWidget(self.userInfoWidget)
 
-        self.rightLayout.addLayout(self.dateLayout)
+        self.rightLayout.addLayout(self.userInfoLayout)
 
         spacer = QWidget()
         spacer.setFixedHeight(50)
@@ -103,23 +113,21 @@ class ClinicDashboard(QWidget):
 
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
-        buttonFont.setPointSize(28)
-        buttonFont.setWeight(75)
+        buttonFont.setPointSize(20)
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\doctor.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-doctor-64.png")
         doctorIcon = QIcon(filepath)
 
         for count, doctor in enumerate(threeDoctorList):
             doctorButton = QPushButton()
             doctorButton.setFixedSize(QSize(100, 100))
-            doctorButton.setIconSize(QSize(35, 35))
+            doctorButton.setIconSize(QSize(45, 45))
             doctorButton.setIcon(doctorIcon)
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
 
             font = QFont()
             font.setFamily("Montserrat")
             font.setPointSize(12)
-            font.setWeight(75)
 
             doctorLabel = QLabel()
             doctorLabel.setFont(font)
@@ -135,7 +143,7 @@ class ClinicDashboard(QWidget):
                                                 stop: 0 rgba(10, 2, 85, 255), 
                                                 stop: 1 rgba(59, 41, 168, 255)
                                             );
-                                            border-radius: 10px;
+                                            border-radius: 10px; padding-left: 5px; padding-bottom: 10px;
                                         }""")
             doctorLayout = QVBoxLayout(doctorWidget)
             doctorLayout.addWidget(doctorButton)
@@ -185,13 +193,12 @@ class ClinicDashboard(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
         buttonFont.setPointSize(20)
-        buttonFont.setWeight(75)
 
         self.unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
 
         threeAppointments = self.unassignedAppointmentList[:3]
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\request.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-document-60.png")
 
         requestIcon = QIcon(filepath)
 
@@ -203,6 +210,11 @@ class ClinicDashboard(QWidget):
             self.requestReviewLayout.addWidget(emptyReviews)
         else:
             for count, request in enumerate(threeAppointments):
+                buttonRow = QHBoxLayout()
+                spacer = QWidget()
+                spacer.setFixedWidth(0)
+                spacer.setFixedHeight(120)
+                buttonRow.addWidget(spacer)
                 self.requestButton = QPushButton()
                 self.requestButton.setText(request.getAppointmentID() + " - " + request.getAppointmentStatus())
                 self.requestButton.setObjectName("requestButton")
@@ -211,22 +223,25 @@ class ClinicDashboard(QWidget):
                                                                 stop: 0 rgba(10, 2, 85, 255), 
                                                                 stop: 1 rgba(59, 41, 168, 255)
                                                             );
-                                                            border-radius: 10px; margin-left: 30px; color: white;
+                                                            border-radius: 10px; color: white;
                                                         }""")
                 self.requestButton.setFont(buttonFont)
-                self.requestButton.setFixedSize(QSize(400, 100))
+                self.requestButton.setFixedSize(QSize(350, 100))
                 self.requestButton.setIcon(requestIcon)
                 self.requestButton.setIconSize(QSize(70, 70))
                 self.requestButton.clicked.connect(
                     lambda checked, request=request: self.requestButtonFunction(request, self.clinic))
-                self.requestReviewLayout.addWidget(self.requestButton)
+
+                buttonRow.addWidget(self.requestButton)
+                self.requestReviewLayout.addLayout(buttonRow)
+
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.requestReviewLayout.addWidget(spacer)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\appointment.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-document-60.png")
         self.appointmentButtonIcon = QIcon(filepath)
 
     def requestButtonFunction(self, request, clinic):
@@ -254,7 +269,7 @@ class ClinicDashboard(QWidget):
         font.setPointSize(20)
         font.setWeight(75)
         self.widgetTitle.setFont(font)
-        self.widgetTitle.setText("ANALYTIC STUFF")
+        self.widgetTitle.setText("Clinic Activity")
 
         headerRow = QHBoxLayout()
         spacer = QWidget()
@@ -269,6 +284,7 @@ class ClinicDashboard(QWidget):
 
         self.graphLabel = QLabel()
         self.graphLabel.setFixedSize(600,400)
+        #graphPixmap = graphGen.generateGraph()
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         graphPixmap = QPixmap(filepath)
         self.graphLabel.setPixmap(graphPixmap)
