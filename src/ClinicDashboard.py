@@ -284,9 +284,7 @@ class ClinicDashboard(QWidget):
 
         self.graphLabel = QLabel()
         self.graphLabel.setFixedSize(600,400)
-        #graphPixmap = graphGen.generateGraph()
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        graphPixmap = QPixmap(filepath)
+        graphPixmap = graphGen.generateGraph()
         self.graphLabel.setPixmap(graphPixmap)
 
         self.graphWidgetLayout.addWidget(self.graphLabel)
