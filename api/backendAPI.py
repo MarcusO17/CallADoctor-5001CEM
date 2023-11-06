@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from helper.geocoder import GeoHelper
-from PIL import Image
+import base64
 import os
 import requests
 import pymysql
@@ -185,12 +185,17 @@ def clinics():
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
                                             clinicContact,governmentApproved,lat,lon)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
                       """
         cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
                                             clinicContact,governmentApproved,lat,lon))
-        conn.commit() #Commit Changes to db, like git commit
-        return'Successful POST', 201
+        print('Success')
+        
+    requests.post(f'http://127.0.0.1:5000/clinics/image/upload/{clinicID}',json={'verifiedDoc': contentJSON['clinicDocument']})
+        
+    conn.commit() #Commit Changes to db, like git commit
+    
+    return'Successful POST', 201
     
     if request.method == 'DELETE':
         #cursor.execute("SET FOREIGN_KEY_CHECKS=0")
@@ -994,18 +999,23 @@ def getLastPrescriptionID():
 def uploadImage(id):
     conn = dbConnect()  
     cursor = conn.cursor()
+    contentJSON = request.get_json()
+    if request.method == 'POST':
+        try:
+            if 'verifiedDoc' in contentJSON:
+                verifiedDocB64 = contentJSON['verfiedDoc']
+                imgData = base64.b64decode(verifiedDocB64)
+                cursor.execute("UPDATE clinics SET verfiedDoc = %s WHERE clinicID = %s", (imgData,id))
 
-    imageFile = request.files['image']
-
-    if imageFile:
-        image = Image.open(imageFile)
+        except:
+            return jsonify({'Error':'Image Error'})
         
-        cursor.execute("UPDATE appointments SET verfiedDoc = %s WHERE appointmentID = %s", (api_data,id))
-        conn.commit()
-        conn.close()
+    
+    conn.commit()
+    conn.close()
 
 
-        return jsonify({"message": "Image uploaded and processed successfully"})
+    return jsonify({"Message": "Image uploaded and processed successfully"})
     
 if __name__ == "__main__":
     app.run(debug=True)
