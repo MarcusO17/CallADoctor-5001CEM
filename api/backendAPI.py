@@ -1102,7 +1102,7 @@ def getLastPrescriptionID():
             return id,200
 
 @app.route('/requests/idgen')
-def getLastPrescriptionID():
+def getLastRequestsID():
     conn = dbConnect()  
     cursor = conn.cursor()
     
