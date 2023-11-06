@@ -930,7 +930,7 @@ def prescriptionDetails():
         return'Successful POST', 201
     
 @app.route('/requests',methods=['GET','POST'])
-def requests():
+def allRequests():
 
     conn = dbConnect()  
     cursor = conn.cursor()
