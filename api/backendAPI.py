@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from helper.geocoder import GeoHelper
+import io
 import os
 import requests
 import pymysql
@@ -147,7 +148,7 @@ def patientID(id):
         conn.commit()
         return 'Successful DELETE', 200
     
-@app.route('/clinics',methods=['GET','POST','DELETE'])  
+@app.route('/clinics',methods=['GET','POST'])  
 def clinics():
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -175,13 +176,13 @@ def clinics():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        clinicID = contentJSON['clinicID']
+        clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
         clinicName = contentJSON['clinicName']
         clinicEmail = contentJSON['clinicEmail']
         clinicPassword = contentJSON['clinicPassword']
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
-        governmentApproved = contentJSON['governmentApproved']
+        governmentApproved = 'Unverified'
         lat,lon = GeoHelper.geocode(GeoHelper,address=address)
    
         insertQuery = """
@@ -191,15 +192,12 @@ def clinics():
                       """
         cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
                                             clinicContact,governmentApproved,lat,lon))
-        conn.commit() #Commit Changes to db, like git commit
-        return'Successful POST', 201
-    
-    if request.method == 'DELETE':
-        #cursor.execute("SET FOREIGN_KEY_CHECKS=0")
-        #cursor.execute("DROP TABLE clinics")
-        #cursor.execute("SET FOREIGN_KEY_CHECKS=1")
+        print('Success')    
         
-        return 'Successful DELETE', 200
+    conn.commit() #Commit Changes to db, like git commit
+    
+    return f'Successful POST : {clinicID}',201
+    
 
 @app.route('/clinics/<string:id>',methods=['GET','DELETE'])
 def clinicID(id):
@@ -932,7 +930,7 @@ def prescriptionDetails():
         return'Successful POST', 201
     
 @app.route('/requests',methods=['GET','POST'])
-def requests():
+def allRequests():
 
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -945,7 +943,8 @@ def requests():
                 clientID  = row['clientID'],
                 approvalStatus = row['approvalStatus'],
                 dateSubmitted = row['dateSubmitted'],
-                requestReason = row['requestReason']
+                requestReason = row['requestReason'],
+                appointmentID = row['appointmentID']
             )
             for row in cursor.fetchall()
         ]
@@ -965,15 +964,35 @@ def requests():
 
         insertQuery = """
                         INSERT INTO requests (requestsID,requestsType,clientID,approvalStatus,
-                                             dateSubmitted,requestReason)
-                        VALUES (%s,%s,%s,%s,%s,%s)
+                                             dateSubmitted,requestReason,appointmentID)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s)
                     """
         cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
-                                             dateSubmitted,requestReason)
+                                             dateSubmitted,requestReason,appointmentID)
                                              )
         conn.commit() #Commit Changes to db, like git commit
         return'Successful POST', 201
 
+@app.route('/requests/<string:clinicID>',methods=['GET'])
+def requestsByClinic(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM requests where appointmentID in(SELECT appointmentID from clinics where clinicID = %s)",clinicID)
+        requests = [
+            dict(
+                requestsID = row['requestsID'],
+                requestsType = row['requestsType'],
+                clientID  = row['clientID'],
+                approvalStatus = row['approvalStatus'],
+                dateSubmitted = row['dateSubmitted'],
+                requestReason = row['requestReason'],
+                appointmentID = row['appointmentID']
+            )
+            for row in cursor.fetchall()
+        ]
+        if requests  is not None:
+            return jsonify(requests),200
         
 
 @app.route('/graph/users', methods=['GET'])
@@ -1102,7 +1121,7 @@ def getLastPrescriptionID():
             return id,200
 
 @app.route('/requests/idgen')
-def getLastRequestID():
+def getLastRequestsID():
     conn = dbConnect()  
     cursor = conn.cursor()
     
@@ -1118,7 +1137,40 @@ def getLastRequestID():
     if id is not None:
             return id,200
    
+@app.route('/clinics/image/upload/<string:id>', methods=['POST'])
+def uploadClinicImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'POST':
+        try:
+            file = request.files['file']
+            imgData = file.read()
+            cursor.execute("UPDATE clinics SET verifiedDoc = %s WHERE clinicID = %s", (imgData, id))
+            conn.commit()
+            conn.close()
+            return jsonify({"Message": "Image uploaded and processed successfully"})
+        except:
+            return jsonify({'Error':'Image Error'})
 
+@app.route('/clinics/image/download/<string:id>', methods=['GET'])
+def downloadClinicImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'GET':
+        try:
+        
+            cursor.execute("SELECT verifiedDoc from clinics where clinicID = %s", id)
+            imgData = cursor.fetchone()
+            
+            conn.commit()
+            conn.close()
 
+            return send_file(io.BytesIO(imgData))
+        except:
+            return jsonify({'Error':'Image Error'})
+    
+    
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,11 +1,14 @@
 import os
 import sys
+import base64
+from PIL import Image
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from .PageManager import PageManager
+from .model import Registration
 
 class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
@@ -330,19 +333,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def clinicSaveData(self):
                 documentPath = self.clinicDocumentLineEdit.text()
 
-                documentData = None
-                with open(documentPath, "rb") as documentFile:
-                        documentData = documentFile.read()
-
-                data = {
-                "clinicAddressLineEdit": self.clinicAddressLineEdit.text(),
-                "clinicNameLineEdit": self.clinicNameLineEdit.text(),
-                "clinicContactLineEdit": self.clinicContactLineEdit.text(),
-                "clinicEmailLineEdit": self.clinicEmailLineEdit.text(),
-                "clinicPostCodeLineEdit": self.clinicPostCodeLineEdit.text(),
-                "clinicDocumentLineEdit": documentData,
-                "clinicPasswordLineEdit": self.clinicPasswordLineEdit.text()
-
+                files = {'file': ('clinicDoc.jpg', open(documentPath, 'rb'))}
+                 
+                clinicData = {
+                "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}',
+                "clinicName": self.clinicNameLineEdit.text(),
+                "clinicContact": self.clinicContactLineEdit.text(),
+                "clinicEmail": self.clinicEmailLineEdit.text(),
+                "clinicPassword": self.clinicPasswordLineEdit.text()
                 }
 
                 #Marcus post to Database here
@@ -351,6 +349,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                                                                 "Are you sure you all your details are correct?",
                                                         QMessageBox.Yes | QMessageBox.No)
                 if clinicGoRegisterDialogBox == QMessageBox.Yes:
+                        response,registerFlag = Registration.registerClinic(clinicData,files)
+                        if registerFlag:
+                                pass
+                        else:
+                                print(response)
                         self.pageManager.goBack()
 
         

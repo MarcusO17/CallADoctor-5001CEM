@@ -1,3 +1,5 @@
+import requests
+
 class Request:
     def __init__(self,requestID, requestType, clientID, approvalStatus, dateSubmitted, requestReason, appointmentID):
         self.requestID = requestID
@@ -49,3 +51,30 @@ class Request:
 
     def setAppointmentID(self, appointmentID):
         self.appointmentID = appointmentID
+    
+    def getRequests(clinicID):
+        requestList  =[]
+        try:
+            response = requests.get(f'http://127.0.0.1:5000/requests/{clinicID}')
+            recordsList = response.json()
+        
+        except requests.RequestException as e:
+            print(f'Error : {e}')
+            return []
+
+        for records in recordsList:
+            tempRequest= Request("","","","","","","","")
+            
+            tempRequest.setRequestID(records['requestID'])
+            tempRequest.setRequestType(records['requestType'])
+            tempRequest.setClientID(records['clientID'])
+            tempRequest.setApprovalStatus(records['approvalStatus'])
+            tempRequest.setDateSubmitted(records['dateSubmitted'])
+            tempRequest.setAppointmentID(records['appointmentID'])
+            
+            requestList.append(tempRequest)
+            
+        return requestList
+        
+
+

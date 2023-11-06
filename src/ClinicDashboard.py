@@ -1,7 +1,6 @@
 import os
-
 from PyQt5.QtCore import QSize, QDate, Qt
-from PyQt5.QtGui import QFont, QIcon, QPixmap
+from PyQt5.QtGui import QFont, QIcon, QPixmap, QImage
 from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
     QHBoxLayout,QSizePolicy
 
@@ -79,6 +78,10 @@ class ClinicDashboard(QWidget):
         self.mainLayout.addLayout(self.rightLayout, 5)
 
         self.setLayout(self.mainLayout)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
+        backgroundImage = QPixmap(filepath)
+        self.setStyleSheet(f"background-image: url({backgroundImage});")
 
     def generateDoctorWidgets(self):
 
@@ -284,7 +287,9 @@ class ClinicDashboard(QWidget):
 
         self.graphLabel = QLabel()
         self.graphLabel.setFixedSize(600,400)
-        graphPixmap = graphGen.generateGraph()
+        graphImage = graphGen.generateGraph()
+        QgraphImage = QImage(graphImage.tobytes(),graphImage.width,graphImage.height, QImage.Format_RGBA8888)
+        graphPixmap = QPixmap.fromImage(QgraphImage)
         self.graphLabel.setPixmap(graphPixmap)
 
         self.graphWidgetLayout.addWidget(self.graphLabel)

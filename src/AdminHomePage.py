@@ -9,14 +9,16 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
 from PyQt5 import QtWidgets
 from .ClinicManageSchedule import ClinicManageSchedule
+from .AdminViewApprovals import AdminViewApprovalsWindow
+from .AdminViewClinics import AdminViewClinicsWindow
 from .PageManager import PageManager
 
 
 
 class AdminHomepageWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, sessionID):
         super().__init__()
-
+        self.adminID = sessionID
 
         self.pageManager = PageManager()
         self.setWindowTitle("Homepage")
@@ -25,13 +27,13 @@ class AdminHomepageWindow(QMainWindow):
 
         self.setupUi(self)
 
-    # def goToViewClinics(self):
-    #     self.viewClinics = AdminViewClinicsWindow(self.clinic)
-    #     self.pageManager.add(self.viewClinics)
+    def goToViewClinics(self):
+        self.viewClinics = AdminViewClinicsWindow(self.adminID)
+        self.pageManager.add(self.viewClinics)
 
-    # def goToViewApprovals(self):
-    #     self.viewApprovals = AdminViewApprovalsWindow(self.clinic)
-    #     self.pageManager.add(self.viewApprovals)
+    def goToViewApprovals(self):
+        self.viewApprovals = AdminViewApprovalsWindow(self.adminID)
+        self.pageManager.add(self.viewApprovals)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage (Admin)")
@@ -49,7 +51,7 @@ class AdminHomepageWindow(QMainWindow):
         font.setWeight(50)
         self.viewClinicsButton.setFont(font)
         self.viewClinicsButton.setText("View Clinics")
-        # self.viewClinicsButton.clicked.connect(self.goToViewClinics)
+        self.viewClinicsButton.clicked.connect(self.goToViewClinics)
 
         self.viewClinicsLabel = QLabel(self.centralwidget)
         self.viewClinicsLabel.setGeometry(QRect(170, 225, 50, 50))
@@ -68,7 +70,7 @@ class AdminHomepageWindow(QMainWindow):
         self.viewApprovalsButton.setFont(font)
         self.viewApprovalsButton.setLayoutDirection(Qt.LeftToRight)
         self.viewApprovalsButton.setText("View Approvals")
-        # self.viewApprovalsButton.clicked.connect(self.goToViewApprovals)
+        self.viewApprovalsButton.clicked.connect(self.goToViewApprovals)
 
         self.viewApprovalsLabel = QLabel(self.centralwidget)
         self.viewApprovalsLabel.setGeometry(QRect(720, 225, 50, 50))
@@ -99,12 +101,6 @@ class AdminHomepageWindow(QMainWindow):
         self.homepageTitle.setText("Welcome Admin!")
         self.homepageTitle.setAlignment(Qt.AlignCenter)
 
-        self.myAccountButton = QPushButton(self.centralwidget)
-        self.myAccountButton.setGeometry(QRect(1050, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.myAccountIcon = QIcon(filepath)
-        self.myAccountButton.setIconSize(QSize(70,70))
-        self.myAccountButton.setIcon(self.myAccountIcon)
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
