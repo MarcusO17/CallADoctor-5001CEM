@@ -333,17 +333,16 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def clinicSaveData(self):
                 documentPath = self.clinicDocumentLineEdit.text()
 
-                with Image.open(documentPath) as img:
-                        imgBytes = img.tobytes()
-                        imgData  = base64.b64encode(imgBytes).decode()
-                
+                with open(documentPath, 'rb') as img:
+                        imgData = img.read()
 
+                files = {'file': ('clinicDoc.jpg', imgData)}
+                 
                 clinicData = {
                 "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}',
                 "clinicName": self.clinicNameLineEdit.text(),
                 "clinicContact": self.clinicContactLineEdit.text(),
                 "clinicEmail": self.clinicEmailLineEdit.text(),
-                "clinicDocument": imgData,
                 "clinicPassword": self.clinicPasswordLineEdit.text()
                 }
 
@@ -353,7 +352,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                                                                 "Are you sure you all your details are correct?",
                                                         QMessageBox.Yes | QMessageBox.No)
                 if clinicGoRegisterDialogBox == QMessageBox.Yes:
-                        response,registerFlag = Registration.registerClinic(clinicData)
+                        response,registerFlag = Registration.registerClinic(clinicData,files)
                         if registerFlag:
                                 pass
                         else:

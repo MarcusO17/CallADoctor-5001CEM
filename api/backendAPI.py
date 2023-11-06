@@ -145,7 +145,7 @@ def patientID(id):
         conn.commit()
         return 'Successful DELETE', 200
     
-@app.route('/clinics',methods=['GET','POST','DELETE'])  
+@app.route('/clinics',methods=['GET','POST'])  
 def clinics():
     conn = dbConnect()  
     cursor = conn.cursor()
@@ -189,20 +189,12 @@ def clinics():
                       """
         cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
                                             clinicContact,governmentApproved,lat,lon))
-        print('Success')
-        
-    requests.post(f'http://127.0.0.1:5000/clinics/image/upload/{clinicID}',json={'verifiedDoc': contentJSON['clinicDocument']})
+        print('Success')    
         
     conn.commit() #Commit Changes to db, like git commit
     
-    return'Successful POST', 201
+    return 'Successful POST',201
     
-    if request.method == 'DELETE':
-        #cursor.execute("SET FOREIGN_KEY_CHECKS=0")
-        #cursor.execute("DROP TABLE clinics")
-        #cursor.execute("SET FOREIGN_KEY_CHECKS=1")
-        
-        return 'Successful DELETE', 200
 
 @app.route('/clinics/<string:id>',methods=['GET','DELETE'])
 def clinicID(id):
@@ -999,23 +991,17 @@ def getLastPrescriptionID():
 def uploadImage(id):
     conn = dbConnect()  
     cursor = conn.cursor()
-    contentJSON = request.get_json()
+   
     if request.method == 'POST':
         try:
-            if 'verifiedDoc' in contentJSON:
-                verifiedDocB64 = contentJSON['verfiedDoc']
-                imgData = base64.b64decode(verifiedDocB64)
-                cursor.execute("UPDATE clinics SET verfiedDoc = %s WHERE clinicID = %s", (imgData,id))
-
+            file = request.files['file']
+            imgData = file.read()
+            cursor.execute("UPDATE clinics SET verifiedDoc = %s WHERE clinicID = %s", (imgData, id))
+            conn.commit()
+            conn.close()
+            return jsonify({"Message": "Image uploaded and processed successfully"})
         except:
             return jsonify({'Error':'Image Error'})
-        
-    
-    conn.commit()
-    conn.close()
-
-
-    return jsonify({"Message": "Image uploaded and processed successfully"})
     
 if __name__ == "__main__":
     app.run(debug=True)
