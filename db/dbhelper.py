@@ -99,6 +99,23 @@ createPrescriptionDetailsTable = '''CREATE TABLE prescription_details (
                      FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID)
                      )'''
 
+createAdminTable = '''CREATE TABLE admins (
+                     adminID VARCHAR(64) NOT NULL,
+                     adminEmail TEXT NOT NULL,
+                     adminPassword TEXT NOT NULL)       
+                    '''
+
+createRequestsTable = '''CREATE TABLE requests (
+                     requestsID VARCHAR(64) PRIMARY KEY,
+                     requestsType TEXT NOT NULL,
+                     clientID TEXT NOT NULL,
+                     approvalStatus TEXT NOT NULL,
+                     dateSubmitted DATE NOT NULL,
+                     requestReason TEXT NOT NULL,
+                     CONSTRAINT chk_approvalStatus CHECK (approvalStatus IN ('Pending', 'Approved', 'Rejected'))
+                     )       
+                    '''
+
 #Table Creation
 
 
@@ -116,9 +133,10 @@ userViewCreate = """ CREATE VIEW users AS
                      SELECT doctorID as ID, doctorEmail as email, doctorPassword as password, 'doctor' as role FROM doctors
                      UNION ALL
                      SELECT clinicID as ID, clinicEmail as email, clinicPassword as password, 'clinic' as role FROM clinics
+                     UNION ALL
+                     SELECT adminID as ID, adminEmail as email, adminPassword as password, 'admin' as role FROM admins
                 """
 
 #cursor.execute(userViewCreate)
-
 cursor.close()
 conn.close()

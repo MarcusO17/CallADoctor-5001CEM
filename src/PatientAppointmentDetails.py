@@ -1,15 +1,16 @@
 import os
 import sys
 import typing
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QTime
 from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton,QMessageBox, QHBoxLayout, QApplication, \
-    QScrollArea
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, \
+    QApplication, \
+    QScrollArea, QDialog, QLineEdit
 from PyQt5 import QtCore, QtWidgets
 
 from .AccountPage import AccountPage
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
-from .model import Appointment, Prescription, PrescriptionDetails, PrescriptionRepo
+from .model import Appointment, Prescription, PrescriptionDetails, PrescriptionRepo, Request
 from .model import Clinic
 from .model import Doctor
 from .PageManager import PageManager, FrameLayoutManager
@@ -104,7 +105,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         font.setPointSize(10)
         self.cancelAppointmentButton.setFont(font)
         self.cancelAppointmentButton.setLayoutDirection(Qt.RightToLeft)
-        self.cancelAppointmentButton.setText("Cancel Request")
+        self.cancelAppointmentButton.setText("Request Cancellation")
         self.cancelAppointmentButton.clicked.connect(self.cancelAppointmentFunction)
 
         self.cancelAppointmentLabel = QLabel(self.centralwidget)
@@ -166,16 +167,52 @@ class PatientAppointmentDetailsWindow(QWidget):
 
     
     def cancelAppointmentFunction(self):
-        cancelAppointmentDialogBox = QMessageBox.question(self, "Cancel Confirmation",
-                                                          "Are you sure you want to cancel Appointment?",
-                                                          QMessageBox.Yes | QMessageBox.No)
-        if cancelAppointmentDialogBox == QMessageBox.Yes:
-            self.frameLayoutManager = FrameLayoutManager()
-            self.frameLayout = self.frameLayoutManager.getFrameLayout()
-            #SET CANCELLATIONS
-            self.appointment.setAppointmentStatus("Cancelled")
-            self.frameLayoutManager.back()
-            self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+        self.requestCancellationDialog = QDialog(self)
+
+        self.requestCancellationDialog.move(350, 200)
+        self.requestCancellationDialog.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.requestCancellationDialog.setFixedSize(400, 400)
+
+        self.requestCancellationDialog.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)
+        self.requestCancellationDialog.setWindowFlag(Qt.FramelessWindowHint)
+        self.requestCancellationDialog.setWindowTitle("Request Cancellation")
+
+        self.layout = QVBoxLayout()
+
+        self.cancellationReasonLabel = QLineEdit()
+        self.cancellationReasonLabel.setFixedSize(300,300)
+        self.cancellationReasonLabel.setStyleSheet("background-color: white; border-radius: 10px;")
+        self.cancellationReasonLabel.setPlaceholderText("Enter your cancellation reason here")
+        self.layout.addWidget(self.cancellationReasonLabel)
+
+        confirmationButtonLayout = QHBoxLayout()
+
+        cancelButton = QPushButton()
+        cancelButton.setText("Cancel")
+        cancelButton.clicked.connect(lambda checked: self.requestCancellationDialog.close())
+        cancelButton.setStyleSheet("background-color: white; border-radius: 10px;")
+        confirmationButtonLayout.addWidget(cancelButton)
+
+        confirmationButton = QPushButton()
+        confirmationButton.setText("Confirm")
+        confirmationButton.clicked.connect(lambda checked: self.completeButtonConfirmationFunction(self.cancellationReasonLabel.text()))
+        confirmationButton.setStyleSheet("background-color: white; border-radius: 10px;")
+        confirmationButtonLayout.addWidget(confirmationButton)
+
+        self.layout.addLayout(confirmationButtonLayout)
+        self.requestCancellationDialog.setLayout(self.layout)
+        self.requestCancellationDialog.exec_()
+
+    def completeButtonConfirmationFunction(self, reason):
+
+        request = Request(None, "Cancellation", self.patient.getPatientID(), "Pending", QTime.currentTime().toString("hh:mm:ss"), reason, self.appointment.getAppointmentID())
+
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+        self.requestCancellationDialog.close()
+        self.frameLayoutManager.back()
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
@@ -218,3 +255,17 @@ class PatientAppointmentDetailsWindow(QWidget):
             self.cancelAppointmentLabel.show()
             self.completeAppointmentLabel.show()
             self.completeAppointmentButton.show()
+
+        self.cancelAppointmentShow()
+
+    def cancelAppointmentShow(self):
+        appointmentStartTime = self.appointment.getStartTime().split(":")
+
+        currentTime = QTime.currentTime()
+        startTime = QTime(int(appointmentStartTime[0]), int(appointmentStartTime[1]), int(appointmentStartTime[2]))
+
+        timeDiff = currentTime.secsTo(startTime)
+
+        if timeDiff < 7200 and timeDiff > 0:
+            self.cancelAppointmentButton.hide()
+            self.cancelAppointmentLabel.hide()

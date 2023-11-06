@@ -31,5 +31,8 @@ setup(
         'geopy'
         'folium'
         'Pillow'
+        'kaleido'
+        'plotly-express'
+        'pandas'
     ]
 )
