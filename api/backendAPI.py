@@ -193,7 +193,7 @@ def clinics():
         
     conn.commit() #Commit Changes to db, like git commit
     
-    return 'Successful POST',201
+    return f'Successful POST : {clinicID}',201
     
 
 @app.route('/clinics/<string:id>',methods=['GET','DELETE'])

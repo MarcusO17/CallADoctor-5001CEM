@@ -26,10 +26,12 @@ class Registration:
     
     def registerClinic(info,img):
         response = requests.post(f'http://127.0.0.1:5000/clinics',json=info)
-        responseUpload = requests.post(f'http://127.0.0.1:5000/clinics/image/upload/C005',files=img)
         registerStatus = response.text
-        print(responseUpload.text)
+       
         if response.status_code == 201:
+            clinicID = response.text.split(' : ')[1]
+            responseUpload = requests.post(f'http://127.0.0.1:5000/clinics/image/upload/{clinicID}',files=img)
+            print(responseUpload.text)
             return registerStatus, True
         else:
             return registerStatus, False                    

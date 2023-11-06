@@ -333,10 +333,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def clinicSaveData(self):
                 documentPath = self.clinicDocumentLineEdit.text()
 
-                with open(documentPath, 'rb') as img:
-                        imgData = img.read()
-
-                files = {'file': ('clinicDoc.jpg', imgData)}
+                files = {'file': ('clinicDoc.jpg', open(documentPath, 'rb'))}
                  
                 clinicData = {
                 "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}',
