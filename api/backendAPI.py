@@ -720,7 +720,35 @@ def appointmentsWeekID(doctorID):
             for row in cursor.fetchall()
         ]
         if appointment is not None:
-            return jsonify(appointment),200\
+            return jsonify(appointment),200
+
+@app.route('/appointments/week/<string:clinicID>',methods=['GET'])
+def appointmentsClinicWeek(clinicID):
+    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
+    dateEnd = dateToday + timedelta(days=6)
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+
+    if request.method == 'GET':
+        cursor.execute("""SELECT * FROM appointments where clinicID = %s AND
+                       appointmentDate BETWEEN %s AND %s """,(clinicID,dateToday,dateEnd))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200
+        
             
 @app.route('/appointments/doctor/<string:doctorID>',methods=['GET'])
 def appointmentsByDoctor(doctorID):

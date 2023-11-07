@@ -1,12 +1,14 @@
 import requests
 class Patient:
-    def __init__(self, patientID, patientName, patientAddress, patientDOB, patientBlood, patientRace):
+    def __init__(self, patientID, patientName, patientAddress, patientDOB, patientBlood, patientRace,lat,lon):
         self.patientID = patientID
         self.patientName = patientName
         self.patientAddress = patientAddress
         self.patientDOB = patientDOB
         self.patientBlood = patientBlood
         self.patientRace = patientRace
+        self.lat = lat
+        self.lon = lon
 
     def getPatientID(self):
         return self.patientID
@@ -43,6 +45,18 @@ class Patient:
     
     def setPatientRace(self, patientRace):
         self.patientRace = patientRace
+    
+    def getPatientLat(self):
+        return self.lat
+    
+    def setPatientLat(self, lat):
+        self.lat = lat
+    
+    def getPatientLon(self):
+        return self.lon
+    
+    def setPatientLon(self, lon):
+        self.lon = lon
 
     @classmethod
     def getPatientfromID(self,patientID):
@@ -51,10 +65,10 @@ class Patient:
             patient = response.json()[0]
         except Exception as e:
             print(e)
-            return Patient("","","","","","")
+            return Patient("","","","","","","","")
         
         if len(patient) == 0:
-            return Patient("","","","","","")
+            return Patient("","","","","","","","")
         
         return Patient(
             patient['patientID'],
@@ -62,7 +76,9 @@ class Patient:
             patient['address'],
             patient['dateOfBirth'],
             patient['bloodType'],
-            patient['race']
+            patient['race'],
+            patient['lat'],
+            patient['lon']
         )
         
     
