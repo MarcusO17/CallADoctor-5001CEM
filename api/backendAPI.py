@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from helper.geocoder import GeoHelper
+from src.model import geoHelper
 import io
 import os
 import requests
@@ -95,7 +95,7 @@ def patients():
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
         race = contentJSON['race']
-        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
+        lat,lon = geoHelper.geocode(address=address)
     
 
    
@@ -183,7 +183,7 @@ def clinics():
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
         governmentApproved = 'Unverified'
-        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
+        lat,lon = geoHelper.geocode(address=address)
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
