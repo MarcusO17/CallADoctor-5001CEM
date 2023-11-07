@@ -156,7 +156,12 @@ class ClinicDashboard(QWidget):
                                                 stop: 1 rgba(59, 41, 168, 255)
                                             );
                                             border-radius: 10px; padding-left: 5px; padding-bottom: 10px;
-                                        }""")
+                                        }
+                                        QWidget#doctorButton:hover
+                                            {
+                                              background-color: #7752FE;
+                                              text-align: left; 
+                                              padding-left: 20px;}""")
             doctorLayout = QVBoxLayout(doctorWidget)
             doctorLayout.addWidget(doctorButton)
             doctorLayout.addWidget(doctorLabel)
@@ -236,7 +241,10 @@ class ClinicDashboard(QWidget):
                                                                 stop: 1 rgba(59, 41, 168, 255)
                                                             );
                                                             border-radius: 10px; color: white;
-                                                        }""")
+                                                        }
+                                                        QPushButton#requestButton:hover
+                                                        {
+                                                          background-color: #7752FE;}""")
                 self.requestButton.setFont(buttonFont)
                 self.requestButton.setFixedSize(QSize(250, 100))
                 self.requestButton.setIcon(requestIcon)
