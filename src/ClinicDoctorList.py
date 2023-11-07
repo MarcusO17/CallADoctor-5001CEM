@@ -35,7 +35,6 @@ class ClinicDoctorList(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Doctor List")
         self.headerTitle.setObjectName("headerTitle")
-        #.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(80, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("""QLabel#headerTitle {
