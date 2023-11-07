@@ -1,5 +1,6 @@
 import os
 import sys
+import requests
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
@@ -40,6 +41,8 @@ class ClinicMap(QWidget):
 
         map = geoHelper.showMap(geoHelper.geocode('Penang')) #Return Folium Map
 
+        geoHelper.addMarker(map,(self.clinic.getClinicLat(),self.clinic.getClinicLon()),'We are here!')
+
         data = io.BytesIO()
         map.save(data,close_file=False)
         
@@ -50,3 +53,5 @@ class ClinicMap(QWidget):
         self.mapWidgetLayout.addWidget(webView)
 
 
+    def generatePatientMarkers(map):
+        response = requests.get()

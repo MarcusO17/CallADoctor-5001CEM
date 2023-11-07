@@ -2,12 +2,14 @@ import requests
 
 class Clinic:
     def __init__(self,clinicID, clinicName,clinicContact 
-                 ,clinicAddress,approvalStatus):
+                 ,clinicAddress,approvalStatus,lat,lon):
         self.clinicID = clinicID
         self.clinicName = clinicName
         self.clinicContact = clinicContact
         self.clinicAddress = clinicAddress
         self.approvalStatus = approvalStatus
+        self.lat = lat
+        self.lon = lon
 
     def getClinicID(self):
         return self.clinicID
@@ -39,6 +41,18 @@ class Clinic:
     def setClinicStatus(self, approvalStatus ):
         self.approvalStatus = approvalStatus
 
+    def getClinicLat(self):
+        return self.lat
+
+    def setClinicLat(self,lat):
+        self.lat = lat
+    
+    def getClinicLon(self):
+        return self.lon
+
+    def setClinicLon(self, lon):
+        self.lon = lon
+
     @classmethod
     def getClinicfromID(self,clinicID):
         try:
@@ -46,15 +60,17 @@ class Clinic:
             clinic = response.json()[0]
         except Exception as e:
             print(e)
-            return Clinic("","","","","")
+            return Clinic("","","","","","","")
         
         if len(clinic) == 0:
-            return Clinic("","","","","")
-        
+            return Clinic("","","","","","","")
+
         return Clinic(
             clinic['clinicID'],
             clinic['clinicName'],
             clinic['clinicContact'],
             clinic['address'],
             clinic['governmentApproved'],
+            clinic['lat'],
+            clinic['lon']
         )
