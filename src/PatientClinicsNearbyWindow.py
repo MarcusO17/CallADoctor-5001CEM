@@ -85,7 +85,7 @@ class PatientClinicsNearbyWindow(QWidget):
             updateMapButton.setText("update Map")
             updateMapButton.setFixedSize(QSize(100, 100))
             updateMapButton.clicked.connect(
-                lambda checked, clinic=clinic: self.updateMapButton(clinic, self.patient))
+                lambda checked, clinic=clinic: self.updateMapButton(clinic,clinicList))
 
             self.clinicButton = QPushButton()
             self.clinicButton.setText(clinic.getClinicName())
@@ -118,8 +118,25 @@ class PatientClinicsNearbyWindow(QWidget):
 
         self.setLayout(mainLayout)
 
-    def updateMapButton(self, clinic, patient):
-        pass
+    def updateMapButton(self,clinic,clinicList): 
+        map = geoHelper.recenterMap((clinic.getClinicLat(), clinic.getClinicLon()))  # Return Folium Map
+        geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
+        self.generateClinicMarkers(map, clinicList)
+
+
+        data = io.BytesIO()
+        map.save(data, close_file=False)
+
+
+        for i in reversed(range(self.mapWidgetLayout.count())):
+            widget = self.mapWidgetLayout.itemAt(i).widget()
+            if widget and isinstance(widget, QWebEngineView):
+                widget.deleteLater()
+
+        webView = QWebEngineView()
+        webView.setHtml(data.getvalue().decode())
+        self.mapWidgetLayout.addWidget(webView)
+    
 
     def clinicButtonFunction(self, clinic, patient):
         # update the clinic details page here according to button click
