@@ -104,7 +104,7 @@ class PatientClinicsNearbyWindow(QWidget):
 
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(500,500)
-        self.generateMapWidget()
+        self.generateMapWidget(clinicList)
 
         clinicNearbyLayout = QHBoxLayout()
         clinicNearbyLayout.addWidget(self.mapWidget, 5)
@@ -149,7 +149,7 @@ class PatientClinicsNearbyWindow(QWidget):
                 text = button.text().lower()
                 button.setVisible(searchedText in text)
 
-    def generateMapWidget(self):
+    def generateMapWidget(self,clinicList):
         self.mapWidget = QWidget()
         self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
@@ -157,7 +157,7 @@ class PatientClinicsNearbyWindow(QWidget):
         map = geoHelper.showMap(self.currLocation)  # Return Folium Map
 
         geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
-
+        self.generateClinicMarkers(map,clinicList)
         data = io.BytesIO()
         map.save(data, close_file=False)
 
@@ -166,3 +166,10 @@ class PatientClinicsNearbyWindow(QWidget):
 
         self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
         self.mapWidgetLayout.addWidget(webView)
+    
+    
+    def generateClinicMarkers(self,map,clinicList):
+        for clinics in clinicList:
+            geoHelper.addMarker(map,(clinics.getClinicLat(),clinics.getClinicLon()),clinics.getClinicName()
+                                ,'lightblue','home')
+        return map
