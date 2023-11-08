@@ -1,13 +1,16 @@
+import io
 import os
 import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
 from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
     QScrollArea, QSizePolicy, QLineEdit
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
 from .PatientClinicDetailsWindow import PatientClinicDetailsWindow
+from .model import geoHelper
 from .model.Clinic import Clinic
 from .model.ClinicRepo import ClinicRepository
 from .PatientClinicDetailsWindow import PatientClinicDetailsWindow
@@ -18,6 +21,7 @@ class PatientClinicsNearbyWindow(QWidget):
     def __init__(self, patient):
         super().__init__()
         self.patient = patient
+        self.currLocation = (self.patient.getPatientLat(), self.patient.getPatientLon())
         self.pageManager = PageManager()
         self.setupUi()
 
@@ -51,7 +55,7 @@ class PatientClinicsNearbyWindow(QWidget):
         self.backButton.clicked.connect(self.backButtonFunction)
 
         self.searchBar = QLineEdit(self.centralwidget)
-        self.searchBar.setGeometry(QRect(200, 130, 800, 40))
+        self.searchBar.setGeometry(QRect(500, 130, 450, 40))
         self.searchBar.setPlaceholderText("Search Bar")
         self.searchBar.textChanged.connect(self.filterButtons)
 
@@ -72,25 +76,50 @@ class PatientClinicsNearbyWindow(QWidget):
 
         #Insert All the Clinics 
         for count, clinic in enumerate(clinicList):
+
+            clinicRowWidget = QWidget()
+            clinicRow = QHBoxLayout(clinicRowWidget)
+
+
+            updateMapButton = QPushButton()
+            updateMapButton.setText("update Map")
+            updateMapButton.setFixedSize(QSize(100, 100))
+            updateMapButton.clicked.connect(
+                lambda checked, clinic=clinic: self.updateMapButton(clinic, self.patient))
+
             self.clinicButton = QPushButton()
-            self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
+            self.clinicButton.setText(clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
-            self.clinicButton.setFixedSize(QSize(900,150))
+            self.clinicButton.setFixedSize(QSize(300,100))
             self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.patient))
-            self.buttonContainer.layout().addWidget(self.clinicButton)
+
+            clinicRow.addWidget(self.clinicButton)
+            clinicRow.addWidget(updateMapButton)
+
+            self.buttonContainer.layout().addWidget(clinicRowWidget)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.buttonContainer.layout().addWidget(spacer)
 
         boxScrollArea.setWidget(self.buttonContainer)
-        boxScrollArea.setFixedSize(1000,500)
+        boxScrollArea.setFixedSize(500,500)
+        self.generateMapWidget()
+
+        clinicNearbyLayout = QHBoxLayout()
+        clinicNearbyLayout.addWidget(self.mapWidget, 5)
+        clinicNearbyLayout.addWidget(boxScrollArea, 5)
+
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
-        mainLayout.addWidget(boxScrollArea)
+        mainLayout.addLayout(clinicNearbyLayout)
+
+        self.searchBar.raise_()
 
         self.setLayout(mainLayout)
 
+    def updateMapButton(self, clinic, patient):
+        pass
 
     def clinicButtonFunction(self, clinic, patient):
         # update the clinic details page here according to button click
@@ -119,3 +148,21 @@ class PatientClinicsNearbyWindow(QWidget):
                 button = item.widget()
                 text = button.text().lower()
                 button.setVisible(searchedText in text)
+
+    def generateMapWidget(self):
+        self.mapWidget = QWidget()
+        self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
+
+        map = geoHelper.showMap(self.currLocation)  # Return Folium Map
+
+        geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
+
+        data = io.BytesIO()
+        map.save(data, close_file=False)
+
+        webView = QWebEngineView()
+        webView.setHtml(data.getvalue().decode())
+
+        self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
+        self.mapWidgetLayout.addWidget(webView)
