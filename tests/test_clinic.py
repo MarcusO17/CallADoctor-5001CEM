@@ -17,6 +17,8 @@ class TestClinic(unittest.TestCase):
             "clinicContact": "Contact Info",
             "address": "10-29B Main St",
             "governmentApproved": True,
+            "lat" : "123.2",
+            "lon" : "132"
         }
         mockResponse = Mock()
         mockResponse.json.return_value = [mockClinicData]
@@ -61,6 +63,8 @@ class TestClinic(unittest.TestCase):
                 "clinicContact": "124215",
                 "address": "123 Main St",
                 "governmentApproved": True,
+                "lat" : "123.2",
+                "lon" : "132"
             },
             {
                 "clinicID": 2,
@@ -68,6 +72,8 @@ class TestClinic(unittest.TestCase):
                 "clinicContact": "2222222",
                 "address": "456 Elm St",
                 "governmentApproved": False,
+                "lat" : "123.2",
+                "lon" : "132"
             }]
         
         mockResponse = Mock()

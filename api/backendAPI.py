@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from helper.geocoder import GeoHelper
+from src.model import geoHelper
 import io
 import os
 import requests
@@ -86,7 +86,7 @@ def patients():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        patientID = contentJSON['patientID']
+        patientID = requests.get('http://127.0.0.1:5000/patients/idgen').text
         patientName = contentJSON['patientName']
         patientEmail = contentJSON['patientEmail']
         patientPassword = contentJSON['patientPassword']
@@ -95,7 +95,7 @@ def patients():
         dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
         bloodType = contentJSON['bloodType']
         race = contentJSON['race']
-        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
+        lat,lon = geoHelper.geocode(address=address)
     
 
    
@@ -183,7 +183,7 @@ def clinics():
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
         governmentApproved = 'Unverified'
-        lat,lon = GeoHelper.geocode(GeoHelper,address=address)
+        lat,lon = geoHelper.geocode(address=address)
    
         insertQuery = """
                         INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
@@ -720,7 +720,35 @@ def appointmentsWeekID(doctorID):
             for row in cursor.fetchall()
         ]
         if appointment is not None:
-            return jsonify(appointment),200\
+            return jsonify(appointment),200
+
+@app.route('/appointments/today/<string:clinicID>',methods=['GET'])
+def appointmentsClinicWeek(clinicID):
+    dateToday = datetime.now().date()
+    print(dateToday)
+    conn = dbConnect()  
+    cursor = conn.cursor()
+
+
+    if request.method == 'GET':
+        cursor.execute("""SELECT * FROM appointments where clinicID = %s AND
+                       appointmentDate = %s""",(clinicID,dateToday))
+        appointment = [
+            dict(
+                appointmentID = row['appointmentID'],
+                doctorID  = row['doctorID'],
+                clinicID = row['clinicID'],
+                patientID = row['patientID'],
+                appointmentStatus = row['appointmentStatus'],
+                startTime = str(row['startTime']),
+                appointmentDate = row['appointmentDate'],
+                visitReasons= row['visitReasons']
+            )
+            for row in cursor.fetchall()
+        ]
+        if appointment is not None:
+            return jsonify(appointment),200
+        
             
 @app.route('/appointments/doctor/<string:doctorID>',methods=['GET'])
 def appointmentsByDoctor(doctorID):

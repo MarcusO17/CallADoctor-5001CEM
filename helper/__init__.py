@@ -1,1 +1,1 @@
-from .geocoder import GeoHelper
+import geoHelper

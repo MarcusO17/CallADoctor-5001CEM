@@ -17,7 +17,9 @@ class TestPatient(unittest.TestCase):
             "address": "12-B-A Malaysian Heights",
             "dateOfBirth": "1980-05-15",
             "bloodType": "A+",
-            "race": "Asian"
+            "race": "Asian",
+            "lat" : "123.2",
+            "lon" : "132"
             }
 
         mockResponse = Mock()

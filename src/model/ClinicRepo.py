@@ -16,13 +16,15 @@ class ClinicRepository():
                   print(f'Error : {e}')
                   return []
             for records in recordsList:
-                  tempClinic = Clinic("","","","","")
+                  tempClinic = Clinic("","","","","","","")
 
                   tempClinic.setClinicID(records['clinicID'])
                   tempClinic.setClinicName(records['clinicName'])
                   tempClinic.setClinicAddress(records['address'])
                   tempClinic.setClinicContact(records['clinicContact'])
                   tempClinic.setClinicStatus(records['governmentApproved'])
+                  tempClinic.setClinicLat(records['lat'])
+                  tempClinic.setClinicLon(records['lon'])
 
                   clinicList.append(tempClinic)
                   

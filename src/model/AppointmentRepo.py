@@ -1,4 +1,5 @@
 from .Appointment import Appointment
+from .Patient import Patient
 import requests
 from datetime import timedelta
 
@@ -134,6 +135,22 @@ class AppointmentRepository():
                 appointmentList.append(tempAppointment)
                   
             return appointmentList
+
+      def getPatientLocations(clinicID):
+            patientList = []
+            try:
+                  response = requests.get(f'http://127.0.0.1:5000/appointments/today/{clinicID}')
+                  recordsList = response.json()
+            except requests.RequestException as e:
+                  print(f'Error : {e}')
+                  return []
+
+            for records in recordsList:
+                 patientList.append(Patient.getPatientfromID(records['patientID']))
+          
+                  
+                  
+            return patientList
 
 
       
