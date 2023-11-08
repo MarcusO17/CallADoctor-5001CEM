@@ -86,7 +86,7 @@ def patients():
     if request.method == 'POST':
         contentJSON = request.get_json()
 
-        patientID = contentJSON['patientID']
+        patientID = requests.get('http://127.0.0.1:5000/patients/idgen').text
         patientName = contentJSON['patientName']
         patientEmail = contentJSON['patientEmail']
         patientPassword = contentJSON['patientPassword']
@@ -722,17 +722,17 @@ def appointmentsWeekID(doctorID):
         if appointment is not None:
             return jsonify(appointment),200
 
-@app.route('/appointments/week/<string:clinicID>',methods=['GET'])
+@app.route('/appointments/today/<string:clinicID>',methods=['GET'])
 def appointmentsClinicWeek(clinicID):
-    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
-    dateEnd = dateToday + timedelta(days=6)
+    dateToday = datetime.now().date()
+    print(dateToday)
     conn = dbConnect()  
     cursor = conn.cursor()
 
 
     if request.method == 'GET':
         cursor.execute("""SELECT * FROM appointments where clinicID = %s AND
-                       appointmentDate BETWEEN %s AND %s """,(clinicID,dateToday,dateEnd))
+                       appointmentDate = %s""",(clinicID,dateToday))
         appointment = [
             dict(
                 appointmentID = row['appointmentID'],

@@ -5,6 +5,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
+from .model import Registration
 from .PageManager import PageManager
 
 class PatientRegisterWindow(QtWidgets.QMainWindow):
@@ -336,7 +337,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientRegPushButton.setAutoFillBackground(False)
                 self.patientRegPushButton.setStyleSheet(stylesheet5)
                 self.patientRegPushButton.setObjectName("patientRegPushButton")
-                self.patientRegPushButton.clicked.connect(self.patient_save_data)
+                self.patientRegPushButton.clicked.connect(self.patientSaveData)
 
 
                 # Push Button for "Going Back to Login page" - 
@@ -379,19 +380,18 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setWindowTitle("Patient Register")
 
         # Creating Code for User (Patient) to save their data
-        def patient_save_data(self):
+        def patientSaveData(self):
 
-                patient_data = {
-                        "patientFirstNameLineEdit": self.patientFirstNameLineEdit.text(),
-                        "patientLastNameLineEdit": self.patientLastNameLineEdit.text(),
-                        "patientEmailLineEdit": self.patientEmailLineEdit.text(),
-                        "patientContactLineEdit": self.patientContactLineEdit.text(),
-                        "patientResidenceLineEdit": self.patientResidenceLineEdit.text(),
-                        "patientDOBDateEdit": self.patientDOBDateEdit.date().toString(Qt.ISODate),
-                        "patientPassportLineEdit": self.patientPassportLineEdit.text(),
-                        "patientPasswordLineEdit": self.patientPasswordLineEdit.text(),
-                        "patientBloodTypeLineEdit": self.patientBloodTypeLineEdit.text(),
-                        "patientRaceLineEdit": self.patientRaceLineEdit.text()
+                patientData = {
+                        "patientName": f'{self.patientFirstNameLineEdit.text()} {self.patientLastNameLineEdit.text()}',
+                        "patientEmail": self.patientEmailLineEdit.text(),
+                        "patientContact": self.patientContactLineEdit.text(),
+                        "address": self.patientResidenceLineEdit.text(),
+                        "dateOfBirth": self.patientDOBDateEdit.date().toString(Qt.ISODate),
+                        "patientICNumber": self.patientPassportLineEdit.text(),
+                        "patientPassword": self.patientPasswordLineEdit.text(),
+                        "bloodType": self.patientBloodTypeLineEdit.text(),
+                        "race": self.patientRaceLineEdit.text()
                 }
 
                 # marcus post to databasee here
@@ -401,6 +401,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                                                                 "Are you sure you all your details are correct?",
                                                         QMessageBox.Yes | QMessageBox.No)
                 if goRegisterDialogBox == QMessageBox.Yes:
+                        Registration.registerPatient(patientData)
                         self.pageManager.goBack()
 
         def goBackLogin(self):

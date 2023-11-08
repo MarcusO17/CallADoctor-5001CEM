@@ -9,6 +9,7 @@ from PyQt5 import QtWidgets
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .PageManager import FrameLayoutManager
 from src.model import geoHelper
+from .model.AppointmentRepo import AppointmentRepository
 import sys
 import io
 from PyQt5.QtCore import QUrl
@@ -41,7 +42,8 @@ class ClinicMap(QWidget):
 
         map = geoHelper.showMap(geoHelper.geocode('Penang')) #Return Folium Map
 
-        geoHelper.addMarker(map,(self.clinic.getClinicLat(),self.clinic.getClinicLon()),'We are here!')
+        geoHelper.addMarker(map,(self.clinic.getClinicLat(),self.clinic.getClinicLon()),'We are here!','red','star') # Current Loc
+        map = self.generatePatientMarkers(map=map)
 
         data = io.BytesIO()
         map.save(data,close_file=False)
@@ -53,5 +55,9 @@ class ClinicMap(QWidget):
         self.mapWidgetLayout.addWidget(webView)
 
 
-    def generatePatientMarkers(map):
-        response = requests.get()
+    def generatePatientMarkers(self,map):
+        patientsWeekly =  AppointmentRepository.getPatientLocations(self.clinic.getClinicID())
+        for patients in patientsWeekly:
+            geoHelper.addMarker(map,(patients.getPatientLat(),patients.getPatientLon()),patients.getPatientAddress()
+                                ,'lightblue','house')
+        return map

@@ -26,11 +26,11 @@ def showMap(coordinates):
     return map
     
 
-def addMarker(map,location,text):
+def addMarker(map,location,text,color,icon):
     folium.Marker(
         location=location,
         popup=text,
-        icon=folium.Icon(icon='star')
+        icon=folium.Icon(color=color, icon=icon)
     ).add_to(map)
 
 
