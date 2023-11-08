@@ -24,6 +24,11 @@ def geocode(address):
 def showMap(coordinates):
     map = folium.Map(location=coordinates,zoom_start=11.6)
     return map
+
+def recenterMap(coordinates):
+    map = folium.Map(location=coordinates,zoom_start=18)
+    return map
+    
     
 
 def addMarker(map,location,text,color,icon):

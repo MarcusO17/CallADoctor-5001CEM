@@ -22,6 +22,7 @@ class ClinicMap(QWidget):
     def __init__(self, clinic):
         super().__init__()
         self.clinic = clinic
+        self.currLocation = (self.clinic.getClinicLat(),self.clinic.getClinicLon())
         self.setupUi()
 
     def setupUi(self):
@@ -39,10 +40,11 @@ class ClinicMap(QWidget):
         self.mapWidget = QWidget()
         self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
+        
 
-        map = geoHelper.showMap(geoHelper.geocode('Penang')) #Return Folium Map
+        map = geoHelper.showMap(self.currLocation) #Return Folium Map
 
-        geoHelper.addMarker(map,(self.clinic.getClinicLat(),self.clinic.getClinicLon()),'We are here!','red','star') # Current Loc
+        geoHelper.addMarker(map,self.currLocation,'We are here!','red','star') # Current Loc
         map = self.generatePatientMarkers(map=map)
 
         data = io.BytesIO()
@@ -59,5 +61,5 @@ class ClinicMap(QWidget):
         patientsWeekly =  AppointmentRepository.getPatientLocations(self.clinic.getClinicID())
         for patients in patientsWeekly:
             geoHelper.addMarker(map,(patients.getPatientLat(),patients.getPatientLon()),patients.getPatientAddress()
-                                ,'lightblue','house')
+                                ,'lightblue','home')
         return map
