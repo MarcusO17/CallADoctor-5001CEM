@@ -127,7 +127,7 @@ class PatientClinicsNearbyWindow(QWidget):
         data = io.BytesIO()
         map.save(data, close_file=False)
 
-
+        #https://stackoverflow.com/questions/4528347/clear-all-widgets-in-a-layout-in-pyqt
         for i in reversed(range(self.mapWidgetLayout.count())):
             widget = self.mapWidgetLayout.itemAt(i).widget()
             if widget and isinstance(widget, QWebEngineView):
