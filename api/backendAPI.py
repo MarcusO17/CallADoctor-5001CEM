@@ -227,6 +227,31 @@ def clinicID(id):
     
         conn.commit()
         return 'Successful DELETE', 200
+
+@app.route('/clinics/unapproved',methods=['GET'])  
+def clinicsUnapproved():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM clinics where governmentApproved = 'Unverified'")
+    
+        clinics = [
+            dict(
+                clinicID = row['clinicID'],
+                clinicName = row['clinicName'],
+                clinicContact = row['clinicContact'],
+                address = row['address'],
+                governmentApproved = row['governmentApproved'],
+                lat = row['lat'],
+                lon = row['lon']
+            )
+            for row in cursor.fetchall()
+        ]
+        if clinics is not None:
+            return jsonify(clinics),200
+        
+        
       
 @app.route('/doctors', methods=['GET','POST','DELETE'])
 def doctors():

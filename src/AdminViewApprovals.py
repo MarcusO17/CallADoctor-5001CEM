@@ -109,7 +109,7 @@ class AdminViewApprovalsWindow(QMainWindow):
         self.clinicList.clear()
         
         #Get Clinics with disapprove status
-        self.clinicList = ClinicRepository.getClinicList()
+        self.clinicList = ClinicRepository.getClinicUnapprovedList()
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
