@@ -33,7 +33,7 @@ class ClinicRepository():
       def getClinicUnapprovedList():
             clinicList = []
             try:
-                  response = requests.get('http://127.0.0.1:5000/clinic/unapproved')
+                  response = requests.get('http://127.0.0.1:5000/clinics/unapproved')
                   recordsList = response.json()
             except requests.RequestException as e:
                   print(f'Error : {e}')
