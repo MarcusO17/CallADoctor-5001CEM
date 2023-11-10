@@ -1,7 +1,7 @@
 import os
 import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QImage
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
@@ -123,8 +123,7 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminDisapproveClinicLabel = QLabel(self.centralwidget)
         self.adminDisapproveClinicLabel.setGeometry(QRect(810, 590, 50, 50))
         self.adminDisapproveClinicLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.adminDisapproveClinicIcon = QPixmap(filepath)
+        self.adminDisapproveClinicIcon = QPixmap.fromImage(QImage.fromData(self.clinic.getCertification()))
         self.adminDisapproveClinicIcon = self.adminDisapproveClinicIcon.scaled(50, 50)
         self.adminDisapproveClinicLabel.setPixmap(self.adminDisapproveClinicIcon)
 

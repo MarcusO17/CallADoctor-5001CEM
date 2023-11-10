@@ -1213,10 +1213,9 @@ def downloadClinicImage(id):
    
     if request.method == 'GET':
         try:
-        
             cursor.execute("SELECT verifiedDoc from clinics where clinicID = %s", id)
             imgData = cursor.fetchone()
-            
+    
             conn.commit()
             conn.close()
 

@@ -1,7 +1,7 @@
 import os
 import sys
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QImage
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, QApplication, \
     QScrollArea
 from PyQt5 import QtWidgets
@@ -69,8 +69,7 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         self.adminClinicDetailsPictureLabel = QLabel(self.centralwidget)
         self.adminClinicDetailsPictureLabel.setGeometry(QRect(180, 220, 400, 200))
         self.adminClinicDetailsPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.adminClinicDetailsPicture = QPixmap(filepath)
+        self.adminClinicDetailsPicture = QPixmap.fromImage(QImage.fromData(self.clinic.getCertification()))
         self.adminClinicDetailsPictureLabel.setPixmap(self.adminClinicDetailsPicture)
 
         self.adminClinicDetailsDescriptionLabel = QLabel(self.centralwidget)
