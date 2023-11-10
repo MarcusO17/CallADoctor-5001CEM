@@ -46,7 +46,6 @@ class ClinicDoctorDetails(QWidget):
                                         }""")
 
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(800, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
