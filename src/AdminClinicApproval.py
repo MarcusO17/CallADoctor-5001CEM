@@ -68,8 +68,7 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminClinicApprovalPictureLabel = QLabel(self.centralwidget)
         self.adminClinicApprovalPictureLabel.setGeometry(QRect(180, 220, 400, 200))
         self.adminClinicApprovalPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.adminClinicApprovalPicture = QPixmap(filepath)
+        self.adminClinicApprovalPicture = QPixmap.fromImage(QImage.fromData(self.clinic.getCertification()))
         self.adminClinicApprovalPictureLabel.setPixmap(self.adminClinicApprovalPicture)
 
         self.adminClinicApprovalDescriptionLabel = QLabel(self.centralwidget)

@@ -182,7 +182,7 @@ def clinics():
         clinicPassword = contentJSON['clinicPassword']
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
-        governmentApproved = 'Unverified'
+        governmentApproved = 0
         lat,lon = geoHelper.geocode(address=address)
    
         insertQuery = """
@@ -1215,13 +1215,13 @@ def downloadClinicImage(id):
         try:
             cursor.execute("SELECT verifiedDoc from clinics where clinicID = %s", id)
             imgData = cursor.fetchone()
-    
+
             conn.commit()
             conn.close()
 
-            return send_file(io.BytesIO(imgData))
+            return imgData['verifiedDoc']
         except:
-            return jsonify({'Error':'Image Error'})
+            return None, jsonify({'Error':'Image Error'})
     
     
 if __name__ == "__main__":

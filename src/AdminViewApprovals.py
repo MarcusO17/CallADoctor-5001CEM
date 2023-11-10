@@ -71,7 +71,7 @@ class AdminViewApprovalsWindow(QMainWindow):
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        self.clinicList = ClinicRepository.getClinicList()
+        self.clinicList = ClinicRepository.getClinicUnapprovedList()
 
         self.generateViewApprovalButtons()
 

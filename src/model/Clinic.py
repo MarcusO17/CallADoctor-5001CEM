@@ -77,7 +77,6 @@ class Clinic:
 
     def getCertification(self):
         response =  requests.get(f'http://127.0.0.1:5000/clinics/image/download/{self.clinicID}')
-        print(response.content)
         if response.status_code == 200:
             print('Image Recieved')
             return response.content
