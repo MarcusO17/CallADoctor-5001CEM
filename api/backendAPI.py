@@ -251,7 +251,34 @@ def clinicsUnapproved():
         if clinics is not None:
             return jsonify(clinics),200
         
+
+@app.route('/clinics/approve/<string:clinicID>',methods=['PATCH'])
+def clinicApprove(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE clinics SET governmentApproved = 'Approved' where clinicID = %s",clinicID)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
         
+        return 'Successful PATCH', 200         
+
+@app.route('/clinics/cancel/<string:clinicID>',methods=['DELETE'])
+def clinicCancel(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("DELETE FROM clinics where clinicID = %s",clinicID)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200    
       
 @app.route('/doctors', methods=['GET','POST','DELETE'])
 def doctors():
