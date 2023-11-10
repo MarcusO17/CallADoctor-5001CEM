@@ -83,3 +83,17 @@ class Clinic:
         else:
             print(f'Error: {response.status_code}')
             return None
+    
+    def approve(self):
+        response =  requests.patch(f'http://127.0.0.1:5000/clinics/approve/{self.clinicID}')
+        if response.status_code == 200:         
+            return True
+        else:
+            return False
+
+    def cancel(self):
+        response =  requests.patch(f'http://127.0.0.1:5000/clinics/cancel/{self.clinicID}')
+        if response.status_code == 200:         
+            return True
+        else:
+            return False
