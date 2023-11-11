@@ -97,6 +97,7 @@ class ClinicRequestReview(QWidget):
                                                 border-radius: 10px;
                                                 }""")
         buttonLayout = QVBoxLayout(self.buttonContainer)
+        buttonLayout.setSpacing(20)
         self.boxScrollArea = QScrollArea()
         self.boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
                                             background: #D0BFFF;
@@ -113,6 +114,7 @@ class ClinicRequestReview(QWidget):
                                                                     border-radius: 10px;
                                                                     }""")
         appointmentCancellationButtonLayout = QVBoxLayout(self.appointmentCancellationButtonContainer)
+        appointmentCancellationButtonLayout.setSpacing(20)
         self.appointmentCancellationboxScrollArea = QScrollArea()
         self.appointmentCancellationboxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
                                                                     background: #D0BFFF;
