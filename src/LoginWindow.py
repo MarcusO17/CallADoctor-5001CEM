@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox
+from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush
+from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout,QHBoxLayout, QWidget, QMessageBox, QApplication
 from PyQt5 import QtCore
 from .PageManager import PageManager
 from .model import Login
@@ -20,17 +20,31 @@ from .PageManager import PageManager
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.setObjectName("LoginWindow")
         self.pageManager = PageManager()
         self.setWindowTitle("Login")
-        self.setFixedWidth(350)
-        self.setFixedHeight(500)
+        self.setFixedWidth(800)
+        self.setFixedHeight(600)
         self.initUI()
         self.pageManager.add(self)
 
     def initUI(self):
+
+        
+        
+       
+
+
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))  # Make the window background transparent
+        self.setPalette(palette)
+        self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
+
         loginFormLayout = QVBoxLayout()
         loginFormLayout.setSpacing(0)
-        loginFormLayout.setContentsMargins(20, 20, 20, 20)
+        loginFormLayout.setContentsMargins(100, 100, 100, 100)
 
         self.logoLabel = QLabel()
 
@@ -47,23 +61,31 @@ class LoginWindow(QWidget):
             print(e)
 
         field1Layout = QVBoxLayout()
+        field1HLayout = QHBoxLayout()
         field2Layout = QVBoxLayout()
 
         labelFont = QFont()
         labelFont.setFamily("Poppins")
         labelFont.setPointSize(12)
-
+        field1Layout.addSpacing(20)
         self.emailLabel = QLabel("Email:")
         self.emailLabel.setFont(labelFont)
         self.emailInput = QLineEdit()
+        self.emailInput.setFixedSize(200, 30)  
+
         field1Layout.addWidget(self.emailLabel)
         field1Layout.addWidget(self.emailInput)
         field1Layout.setContentsMargins(0,30,0,20)
+        field1HLayout.addWidget(self.emailInput)
+        field1HLayout.addWidget(self.emailLabel)
+        field1HLayout.setContentsMargins(30,0,20,0)
 
+        field2Layout.addSpacing(20)
         self.passwordLabel = QLabel("Password:")
         self.passwordLabel.setFont(labelFont)
         self.passwordInput = QLineEdit()
         self.passwordInput.setEchoMode(QLineEdit.Password)
+        self.passwordInput.setFixedSize(200, 30)
 
         field2Layout.addWidget(self.passwordLabel)
         field2Layout.addWidget(self.passwordInput)
@@ -72,10 +94,12 @@ class LoginWindow(QWidget):
         self.loginButton = QPushButton("Login")
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
+        self.loginButton.setFixedSize(200, 40) 
 
         self.goToRegistrationButton = QPushButton("Register Account")
         self.goToRegistrationButton.setDefault(True)
         self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
+        self.goToRegistrationButton.setFixedSize(200, 40)
 
         loginFormLayout.addWidget(self.logoLabel)
         loginFormLayout.addLayout(field1Layout)
