@@ -260,7 +260,7 @@ class ClinicDoctorDetails(QWidget):
         self.addDoctorLabel.hide()
 
         self.informationBox = QLabel(self.centralwidget)
-        self.informationBox.setGeometry(QRect(70, 120, 830, 550))
+        self.informationBox.setGeometry(QRect(50, 130, 850, 530))
         self.informationBox.setStyleSheet("""QLabel {
                                         background: #D0BFFF;
                                         border-radius: 10px;
