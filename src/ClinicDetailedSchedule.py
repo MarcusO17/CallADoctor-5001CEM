@@ -65,7 +65,7 @@ class ClinicDetailedSchedule(QWidget):
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         scheduleContainer = QLabel(self.centralwidget)
-        scheduleContainer.setGeometry(QRect(5, 135, 915, 520))
+        scheduleContainer.setGeometry(QRect(15, 135, 915, 520))
         scheduleContainer.setStyleSheet("""QLabel {
                                         background: #D0BFFF;
                                         border-radius: 10px;
@@ -73,7 +73,7 @@ class ClinicDetailedSchedule(QWidget):
         # header of the grid
         timeStart = 8
         timeEnd = 9
-        timeSlotLabelXStart = 125
+        timeSlotLabelXStart = 135
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
             timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,175,95,55))
@@ -90,7 +90,7 @@ class ClinicDetailedSchedule(QWidget):
         daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
-            dayCell.setGeometry(QRect(30, dayCellYStart, 95, 55))
+            dayCell.setGeometry(QRect(40, dayCellYStart, 95, 55))
             dayCell.setStyleSheet("border: 1px solid black; border-radius: 3px; text-align: center; background-color: white")
             dayCell.setAlignment(Qt.AlignCenter)
             dayCell.raise_()
@@ -99,7 +99,7 @@ class ClinicDetailedSchedule(QWidget):
 
         tempButtonYStart = 175
         for h in range(HEIGHT):
-            tempButtonXStart = 125
+            tempButtonXStart = 135
             tempButtonYStart = tempButtonYStart + 55
             for w in range(WIDTH):
                 timeSlotButton = QPushButton(self.centralwidget)
@@ -110,8 +110,8 @@ class ClinicDetailedSchedule(QWidget):
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
-        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
-        self.setSchedule(appointmentList)
+
+        self.setSchedule()
 
 
         mainLayout = QVBoxLayout()
@@ -129,7 +129,14 @@ class ClinicDetailedSchedule(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-    def setSchedule(self, appointmentList):
+    def setSchedule(self):
+
+        for row in self.timeSlotButtonList:
+            for button in row:
+                button.setStyleSheet(
+                    "border: 1px solid black; border-radius: 3px; text-align: center; background-color: white")
+
+        appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
 
         for appointment in appointmentList:
             row = 0
