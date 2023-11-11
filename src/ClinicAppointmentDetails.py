@@ -1,11 +1,11 @@
 import os
 import sys
 import typing
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, \
     QApplication, \
-    QScrollArea
+    QScrollArea, QGraphicsDropShadowEffect
 from PyQt5 import QtCore, QtWidgets
 
 from .AccountPage import AccountPage
@@ -43,6 +43,10 @@ class ClinicAppointmentDetails(QWidget):
                                             background: #D0BFFF;
                                             border-radius: 10px;
                                             }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(800, 40, 70, 70))
@@ -64,12 +68,21 @@ class ClinicAppointmentDetails(QWidget):
                                                   background-color: #7752FE;
                                                 }""")
 
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
+
         detailsContainer = QLabel(self.centralwidget)
         detailsContainer.setGeometry(QRect(20, 150, 900, 500))
         detailsContainer.setStyleSheet("""QLabel {
                                         background: #D0BFFF;
                                         border-radius: 10px;
                                         }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        detailsContainer.setGraphicsEffect(effect)
 
         self.appointmentPurposeTitle = QLabel(self.centralwidget)
         self.appointmentPurposeTitle.setGeometry(QRect(50, 190, 150, 40))

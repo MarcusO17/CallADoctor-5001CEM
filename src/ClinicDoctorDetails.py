@@ -1,11 +1,11 @@
 import os
 import sys
 import typing
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, \
     QApplication, \
-    QScrollArea
+    QScrollArea, QGraphicsDropShadowEffect
 from PyQt5 import QtCore, QtWidgets
 
 from .AccountPage import AccountPage
@@ -45,6 +45,11 @@ class ClinicDoctorDetails(QWidget):
                                         border-radius: 10px;
                                         }""")
 
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
+
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(800, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
@@ -64,6 +69,11 @@ class ClinicDoctorDetails(QWidget):
                                         {
                                           background-color: #7752FE;
                                         }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
 
         self.doctorNameTitle = QLabel(self.centralwidget)
         self.doctorNameTitle.setGeometry(QRect(80, 150, 400, 30))
@@ -250,11 +260,15 @@ class ClinicDoctorDetails(QWidget):
         self.addDoctorLabel.hide()
 
         self.informationBox = QLabel(self.centralwidget)
-        self.informationBox.setGeometry(QRect(50, 120, 850, 550))
+        self.informationBox.setGeometry(QRect(70, 120, 830, 550))
         self.informationBox.setStyleSheet("""QLabel {
                                         background: #D0BFFF;
                                         border-radius: 10px;
                                         }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.informationBox.setGraphicsEffect(effect)
 
         self.removeDoctorButton.raise_()
         self.scheduleButton.raise_()

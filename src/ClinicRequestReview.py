@@ -29,7 +29,12 @@ class ClinicRequestReview(QWidget):
         self.centralwidget = QWidget()
         self.stackedWidget = QStackedWidget(self.centralwidget)
         self.stackedWidget.setStyleSheet(f"QStackedWidget {{background-color: transparent;}}")
-        self.stackedWidget.setGeometry(QRect(50, 200, 850, 450))
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.stackedWidget.setGraphicsEffect(effect)
+
+        self.stackedWidget.setGeometry(QRect(80, 200, 800, 470))
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
@@ -72,6 +77,11 @@ class ClinicRequestReview(QWidget):
                                                   text-align: center; 
                                                 }""")
 
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.appointmentCancellationButton.setGraphicsEffect(effect)
+
         self.requestReviewButton = QPushButton(self.centralwidget)
         self.requestReviewButton.setGeometry(QRect(500, 120, 400, 70))
         self.requestReviewButton.setFont(font)
@@ -89,22 +99,34 @@ class ClinicRequestReview(QWidget):
                                                   text-align: center; 
                                                 }""")
 
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.requestReviewButton.setGraphicsEffect(effect)
+
         self.buttonContainer = QWidget()
         self.buttonContainer.setContentsMargins(20, 20, 20, 20)
         self.buttonContainer.setObjectName("buttonContainer")
         self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
                                                 background: #D0BFFF;
                                                 border-radius: 10px;
+                                                border: none;
                                                 }""")
+
         buttonLayout = QVBoxLayout(self.buttonContainer)
         buttonLayout.setSpacing(20)
         self.boxScrollArea = QScrollArea()
         self.boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
                                             background: #D0BFFF;
                                             border-radius: 10px;
+                                            border: none;
                                             }""")
         self.boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.boxScrollArea.setWidgetResizable(True)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.boxScrollArea.setGraphicsEffect(effect)
 
         self.appointmentCancellationButtonContainer = QWidget()
         self.appointmentCancellationButtonContainer.setContentsMargins(20, 20, 20, 20)
@@ -112,6 +134,7 @@ class ClinicRequestReview(QWidget):
         self.appointmentCancellationButtonContainer.setStyleSheet("""QWidget#appointmentCancellationButtonContainer {
                                                                     background: #D0BFFF;
                                                                     border-radius: 10px;
+                                                                    border: none;
                                                                     }""")
         appointmentCancellationButtonLayout = QVBoxLayout(self.appointmentCancellationButtonContainer)
         appointmentCancellationButtonLayout.setSpacing(20)
@@ -119,9 +142,14 @@ class ClinicRequestReview(QWidget):
         self.appointmentCancellationboxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
                                                                     background: #D0BFFF;
                                                                     border-radius: 10px;
+                                                                    border: none;
                                                                     }""")
         self.appointmentCancellationboxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.appointmentCancellationboxScrollArea.setWidgetResizable(True)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.appointmentCancellationboxScrollArea.setGraphicsEffect(effect)
 
         self.unassignedAppointmentList = AppointmentRepository.getAppointmentsPending(self.clinic.getClinicID())
         self.cancellationList = list()
@@ -130,9 +158,9 @@ class ClinicRequestReview(QWidget):
         self.generateCancellationButtons()
 
         self.boxScrollArea.setWidget(self.buttonContainer)
-        self.boxScrollArea.setFixedSize(850, 450)
+        self.boxScrollArea.setFixedSize(800, 470)
         self.appointmentCancellationboxScrollArea.setWidget(self.appointmentCancellationButtonContainer)
-        self.appointmentCancellationboxScrollArea.setFixedSize(850, 450)
+        self.appointmentCancellationboxScrollArea.setFixedSize(800, 470)
 
         self.highlightButtonList = list()
         self.highlightButtonList.append(self.requestReviewButton)

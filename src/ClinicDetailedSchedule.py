@@ -2,9 +2,10 @@ import os
 import sys
 from datetime import datetime
 
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QVBoxLayout
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QVBoxLayout, \
+    QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -41,6 +42,10 @@ class ClinicDetailedSchedule(QWidget):
                                                 background: #D0BFFF;
                                                 border-radius: 10px;
                                                 }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setGeometry(QRect(800, 40, 70, 70))
@@ -62,18 +67,28 @@ class ClinicDetailedSchedule(QWidget):
                                                   background-color: #7752FE;
                                                 }""")
 
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
+
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         scheduleContainer = QLabel(self.centralwidget)
-        scheduleContainer.setGeometry(QRect(15, 135, 915, 520))
+        scheduleContainer.setGeometry(QRect(5, 135, 915, 520))
         scheduleContainer.setStyleSheet("""QLabel {
                                         background: #D0BFFF;
                                         border-radius: 10px;
                                         }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=10, color=QColor("#120855")
+        )
+        scheduleContainer.setGraphicsEffect(effect)
         # header of the grid
         timeStart = 8
         timeEnd = 9
-        timeSlotLabelXStart = 135
+        timeSlotLabelXStart = 125
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
             timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,175,95,55))
@@ -90,7 +105,7 @@ class ClinicDetailedSchedule(QWidget):
         daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
-            dayCell.setGeometry(QRect(40, dayCellYStart, 95, 55))
+            dayCell.setGeometry(QRect(30, dayCellYStart, 95, 55))
             dayCell.setStyleSheet("border: 1px solid black; border-radius: 3px; text-align: center; background-color: white")
             dayCell.setAlignment(Qt.AlignCenter)
             dayCell.raise_()
@@ -99,7 +114,7 @@ class ClinicDetailedSchedule(QWidget):
 
         tempButtonYStart = 175
         for h in range(HEIGHT):
-            tempButtonXStart = 135
+            tempButtonXStart = 125
             tempButtonYStart = tempButtonYStart + 55
             for w in range(WIDTH):
                 timeSlotButton = QPushButton(self.centralwidget)
