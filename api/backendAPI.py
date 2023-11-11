@@ -234,7 +234,7 @@ def clinicsUnapproved():
     cursor = conn.cursor()
     if request.method == 'GET':
         #Add Error Handling
-        cursor.execute("SELECT * FROM clinics where governmentApproved = 'Unverified'")
+        cursor.execute("SELECT * FROM clinics where governmentApproved = '0'")
     
         clinics = [
             dict(
@@ -258,7 +258,7 @@ def clinicApprove(clinicID):
     cursor = conn.cursor()
     if request.method == 'PATCH':
         try:
-            cursor.execute("UPDATE clinics SET governmentApproved = 'Approved' where clinicID = %s",clinicID)
+            cursor.execute("UPDATE clinics SET governmentApproved = '1' where clinicID = %s",clinicID)
         except pymysql.MySQLError as e:
             return 'Error : ',e
     
@@ -270,7 +270,7 @@ def clinicApprove(clinicID):
 def clinicCancel(clinicID):
     conn = dbConnect()  
     cursor = conn.cursor()
-    if request.method == 'PATCH':
+    if request.method == 'DELETE':
         try:
             cursor.execute("DELETE FROM clinics where clinicID = %s",clinicID)
         except pymysql.MySQLError as e:
@@ -278,7 +278,7 @@ def clinicCancel(clinicID):
     
         conn.commit()
         
-        return 'Successful PATCH', 200    
+        return 'Successful DELETE', 200    
       
 @app.route('/doctors', methods=['GET','POST','DELETE'])
 def doctors():
