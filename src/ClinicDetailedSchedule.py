@@ -28,65 +28,91 @@ class ClinicDetailedSchedule(QWidget):
 
         self.centralwidget = QWidget()
 
-        self.homepageTitle = QLabel(self.centralwidget)
-        self.homepageTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
-        self.homepageTitle.setFont(font)
-        self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.homepageTitle.setText("Doctor Schedule")
-        self.homepageTitle.setAlignment(Qt.AlignCenter)
+        self.headerTitle.setFont(font)
+        self.headerTitle.setObjectName("headerTitle")
+        self.headerTitle.setText(f"{self.doctor.getDoctorName()} Schedule")
+        self.headerTitle.setGeometry(QRect(80, 40, 700, 70))
+        self.headerTitle.setAlignment(Qt.AlignCenter)
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                background: #D0BFFF;
+                                                border-radius: 10px;
+                                                }""")
 
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        self.backButton.setGeometry(QRect(800, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                        stop: 0 rgba(10, 2, 85, 255), 
+                                                                        stop: 1 rgba(59, 41, 168, 255));
+                                                border-radius: 10px; color: white;
+
+                                                }
+                                                QPushButton#backButton:hover
+                                                {
+                                                  background-color: #7752FE;
+                                                }""")
 
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
+        scheduleContainer = QLabel(self.centralwidget)
+        scheduleContainer.setGeometry(QRect(5, 135, 915, 520))
+        scheduleContainer.setStyleSheet("""QLabel {
+                                        background: #D0BFFF;
+                                        border-radius: 10px;
+                                        }""")
         # header of the grid
         timeStart = 8
         timeEnd = 9
-        timeSlotLabelXStart = 275
+        timeSlotLabelXStart = 125
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
-            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,150,100,60))
-            timeSlotLabel.setStyleSheet("border: 1px solid black;")
+            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,175,95,55))
+            timeSlotLabel.setStyleSheet("border: 1px solid black; border-radius: 3px; background-color: white;")
+            timeSlotLabel.setAlignment(Qt.AlignCenter)
             timeSlotLabel.setText(str(timeStart) + ":00 - " + str(timeEnd)+ ":00")
-            timeSlotLabelXStart = timeSlotLabelXStart + 100
+            timeSlotLabel.raise_()
+            timeSlotLabelXStart = timeSlotLabelXStart + 95
             timeStart = timeStart + 1
             timeEnd = timeStart + 1
 
-        dayCellYStart = 210
+        dayCellYStart = 230
         # side of the grid
         daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
-            dayCell.setGeometry(QRect(175, dayCellYStart, 100, 60))
-            dayCell.setStyleSheet("border: 1px solid black;")
+            dayCell.setGeometry(QRect(30, dayCellYStart, 95, 55))
+            dayCell.setStyleSheet("border: 1px solid black; border-radius: 3px; text-align: center; background-color: white")
+            dayCell.setAlignment(Qt.AlignCenter)
+            dayCell.raise_()
             dayCell.setText(daysOfTheWeek[i])
-            dayCellYStart = dayCellYStart + 60
+            dayCellYStart = dayCellYStart + 55
 
-        tempButtonYStart = 150
+        tempButtonYStart = 175
         for h in range(HEIGHT):
-            tempButtonXStart = 275
-            tempButtonYStart = tempButtonYStart + 60
+            tempButtonXStart = 125
+            tempButtonYStart = tempButtonYStart + 55
             for w in range(WIDTH):
                 timeSlotButton = QPushButton(self.centralwidget)
-                timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 100, 60))
-                timeSlotButton.setStyleSheet("border: 1px solid black;")
-                tempButtonXStart = tempButtonXStart + 100
+                timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 95, 55))
+                timeSlotButton.setStyleSheet("border: 1px solid black; border-radius: 3px; text-align: center; background-color: white;")
+                timeSlotButton.raise_()
+                tempButtonXStart = tempButtonXStart + 95
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
         appointmentList = AppointmentRepository.getAppointmentsWeekly(self.doctor.getDoctorID())
         self.setSchedule(appointmentList)
+
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
@@ -128,7 +154,7 @@ class ClinicDetailedSchedule(QWidget):
                 col = startTime - 7
                 for i in range(duration):
                     self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
-                    self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
+                    self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("border: 1px solid black; border-radius: 3px; text-align: center; background-color: green;")
                     self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
                     self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor, self.clinic))
 
