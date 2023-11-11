@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 from .PageManager import PageManager
 from .model import Login
 from .model import Clinic
+from .AdminHomePage  import AdminHomepageWindow
 from .PatientHomepage import PatientHomepage
 from .DoctorHomepage import DoctorHomepage
 from .ClinicHomepage import ClinicHomepage
@@ -132,6 +133,10 @@ class LoginWindow(QWidget):
         self.clinicHomepage = ClinicHomepage(sessionID)
         self.pageManager.add(self.clinicHomepage)
 
+    def adminLogin(self,sessionID):
+        self.adminHomepage = AdminHomepageWindow(sessionID)
+        self.pageManager.add(self.adminHomepage)
+
     def loginAuthorization(self):
         email = self.emailInput.text()
         password = self.passwordInput.text()
@@ -152,6 +157,8 @@ class LoginWindow(QWidget):
                 self.doctorLogin(sessionID)
             elif role == "clinic":
                 self.clinicLogin(sessionID)
+            elif role == "admin":
+                self.adminLogin(sessionID)
 
         else:
             print("login failed")

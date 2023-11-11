@@ -182,7 +182,7 @@ def clinics():
         clinicPassword = contentJSON['clinicPassword']
         clinicContact = contentJSON['clinicContact']
         address = contentJSON['address']
-        governmentApproved = 'Unverified'
+        governmentApproved = 0
         lat,lon = geoHelper.geocode(address=address)
    
         insertQuery = """
@@ -227,6 +227,58 @@ def clinicID(id):
     
         conn.commit()
         return 'Successful DELETE', 200
+
+@app.route('/clinics/unapproved',methods=['GET'])  
+def clinicsUnapproved():
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        #Add Error Handling
+        cursor.execute("SELECT * FROM clinics where governmentApproved = '0'")
+    
+        clinics = [
+            dict(
+                clinicID = row['clinicID'],
+                clinicName = row['clinicName'],
+                clinicContact = row['clinicContact'],
+                address = row['address'],
+                governmentApproved = row['governmentApproved'],
+                lat = row['lat'],
+                lon = row['lon']
+            )
+            for row in cursor.fetchall()
+        ]
+        if clinics is not None:
+            return jsonify(clinics),200
+        
+
+@app.route('/clinics/approve/<string:clinicID>',methods=['PATCH'])
+def clinicApprove(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'PATCH':
+        try:
+            cursor.execute("UPDATE clinics SET governmentApproved = '1' where clinicID = %s",clinicID)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful PATCH', 200         
+
+@app.route('/clinics/cancel/<string:clinicID>',methods=['DELETE'])
+def clinicCancel(clinicID):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+    if request.method == 'DELETE':
+        try:
+            cursor.execute("DELETE FROM clinics where clinicID = %s",clinicID)
+        except pymysql.MySQLError as e:
+            return 'Error : ',e
+    
+        conn.commit()
+        
+        return 'Successful DELETE', 200    
       
 @app.route('/doctors', methods=['GET','POST','DELETE'])
 def doctors():
@@ -1188,16 +1240,15 @@ def downloadClinicImage(id):
    
     if request.method == 'GET':
         try:
-        
             cursor.execute("SELECT verifiedDoc from clinics where clinicID = %s", id)
             imgData = cursor.fetchone()
-            
+
             conn.commit()
             conn.close()
 
-            return send_file(io.BytesIO(imgData))
+            return imgData['verifiedDoc']
         except:
-            return jsonify({'Error':'Image Error'})
+            return None, jsonify({'Error':'Image Error'})
     
     
 if __name__ == "__main__":

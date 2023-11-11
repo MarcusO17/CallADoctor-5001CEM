@@ -15,9 +15,11 @@ def geocode(address):
         except:
             print("No Location Found")
             return(None,None)
+    
+    if location[0] is not None and location[1] is not None:
+        lat=location.latitude
+        lon=location.longitude
         
-    lat=location.latitude
-    lon=location.longitude
     return lat,lon 
 
 
