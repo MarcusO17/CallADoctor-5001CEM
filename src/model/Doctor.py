@@ -68,7 +68,7 @@ class Doctor:
             doctor = response.json()[0]
         except Exception as e:
             print(e)
-            return Doctor("","","","","","","")
+            return Doctor("","","","","","","","")
         
         return Doctor(
                 doctor['doctorID'],
