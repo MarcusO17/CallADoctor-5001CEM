@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush
-from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout,QHBoxLayout, QWidget, QMessageBox, QApplication
+from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout,QHBoxLayout, QWidget, QMessageBox, QApplication, \
+QFrame
 from PyQt5 import QtCore
 from .PageManager import PageManager
 from .model import Login
@@ -37,6 +38,11 @@ class LoginWindow(QWidget):
         self.setPalette(palette)
         self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
 
+        self.borderFrame = QFrame(self)
+        self.borderFrame.setGeometry(40, 20, 220, 450)  # Adjust the geometry as needed
+        self.borderFrame.setFrameShape(QFrame.StyledPanel)
+        self.borderFrame.setLineWidth(2)
+        self.borderFrame.setStyleSheet("border: 2px dashed #000000; background: transparent;")
 
         self.logoLabel = QLabel(self)
 
