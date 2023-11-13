@@ -1,11 +1,11 @@
 import os
 import sys
 import typing
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, \
     QApplication, \
-    QScrollArea
+    QScrollArea, QGraphicsDropShadowEffect
 from PyQt5 import QtCore, QtWidgets
 
 from .AccountPage import AccountPage
@@ -35,80 +35,132 @@ class ClinicDoctorDetails(QWidget):
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setText(f"{self.doctor.getDoctorName()} Details")
-        self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(80, 40, 700, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                        background: #D0BFFF;
+                                        border-radius: 10px;
+                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        self.backButton.setGeometry(QRect(800, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                stop: 1 rgba(59, 41, 168, 255));
+                                        border-radius: 10px; color: white;
+
+                                        }
+                                        QPushButton#backButton:hover
+                                        {
+                                          background-color: #7752FE;
+                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
 
         self.doctorNameTitle = QLabel(self.centralwidget)
-        self.doctorNameTitle.setGeometry(QRect(180, 200, 400, 30))
+        self.doctorNameTitle.setGeometry(QRect(80, 150, 400, 30))
         self.doctorNameTitle.setText("Name: ")
 
         self.doctorNameLabel = QLabel(self.centralwidget)
-        self.doctorNameLabel.setGeometry(QRect(180, 230, 400, 50))
+        self.doctorNameLabel.setGeometry(QRect(80, 180, 400, 50))
         self.doctorNameLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.doctorNameLabel.setText(self.doctor.getDoctorName())
+        self.doctorNameLabel.setStyleSheet("""QLabel {
+                                            border-radius: 10px;
+                                            border: 1px solid black;
+                                            background: white;
+                                            }""")
 
         self.doctorIDTitle = QLabel(self.centralwidget)
-        self.doctorIDTitle.setGeometry(QRect(180, 280, 400, 30))
+        self.doctorIDTitle.setGeometry(QRect(80, 230, 400, 30))
         self.doctorIDTitle.setText("Doctor ID: ")
 
         self.doctorIDLabel = QLabel(self.centralwidget)
-        self.doctorIDLabel.setGeometry(QRect(180, 310, 400, 50))
+        self.doctorIDLabel.setGeometry(QRect(80, 260, 400, 50))
         self.doctorIDLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.doctorIDLabel.setText(self.doctor.getDoctorID())
+        self.doctorIDLabel.setStyleSheet("""QLabel {
+                                            border-radius: 10px;
+                                            border: 1px solid black;
+                                            background: white;
+                                            }""")
 
         self.doctorICNumberTitle = QLabel(self.centralwidget)
-        self.doctorICNumberTitle.setGeometry(QRect(180, 360, 400, 30))
+        self.doctorICNumberTitle.setGeometry(QRect(80, 310, 400, 30))
         self.doctorICNumberTitle.setText("Doctor IC: ")
 
         self.doctorICNumber = QLabel(self.centralwidget)
-        self.doctorICNumber.setGeometry(QRect(180, 390, 400, 50))
+        self.doctorICNumber.setGeometry(QRect(80, 340, 400, 50))
         self.doctorICNumber.setFrameShape(QtWidgets.QFrame.Box)
         self.doctorICNumber.setText(str(self.doctor.getDoctorICNumber()))
+        self.doctorICNumber.setStyleSheet("""QLabel {
+                                                border-radius: 10px;
+                                                border: 1px solid black;
+                                                background: white;
+                                                }""")
 
         self.doctorTypeTitle = QLabel(self.centralwidget)
-        self.doctorTypeTitle.setGeometry(QRect(180, 440, 400, 30))
+        self.doctorTypeTitle.setGeometry(QRect(80, 390, 400, 30))
         self.doctorTypeTitle.setText("Doctor Type: ")
 
         self.doctorTypeLabel = QLabel(self.centralwidget)
-        self.doctorTypeLabel.setGeometry(QRect(180, 470, 400, 50))
+        self.doctorTypeLabel.setGeometry(QRect(80, 420, 400, 50))
         self.doctorTypeLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.doctorTypeLabel.setText(self.doctor.getDoctorType())
+        self.doctorTypeLabel.setStyleSheet("""QLabel {
+                                            border-radius: 10px;
+                                            border: 1px solid black;
+                                            background: white;
+                                            }""")
 
         self.doctorContactTitle = QLabel(self.centralwidget)
-        self.doctorContactTitle.setGeometry(QRect(180, 520, 400, 30))
+        self.doctorContactTitle.setGeometry(QRect(80, 470, 400, 30))
         self.doctorContactTitle.setText("Doctor Contact: ")
 
         self.doctorContactLabel = QLabel(self.centralwidget)
-        self.doctorContactLabel.setGeometry(QRect(180, 550, 400, 50))
+        self.doctorContactLabel.setGeometry(QRect(80, 500, 400, 50))
         self.doctorContactLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.doctorContactLabel.setText(str(self.doctor.getDoctorContact()))
+        self.doctorContactLabel.setStyleSheet("""QLabel {
+                                                border-radius: 10px;
+                                                border: 1px solid black;
+                                                background: white;
+                                                }""")
 
         self.doctorYearOfExperienceTitle = QLabel(self.centralwidget)
-        self.doctorYearOfExperienceTitle.setGeometry(QRect(180, 600, 400, 30))
+        self.doctorYearOfExperienceTitle.setGeometry(QRect(80, 550, 400, 30))
         self.doctorYearOfExperienceTitle.setText("Years of Experience: ")
 
         self.doctorYearOfExperienceLabel = QLabel(self.centralwidget)
-        self.doctorYearOfExperienceLabel.setGeometry(QRect(180, 630, 400, 50))
+        self.doctorYearOfExperienceLabel.setGeometry(QRect(80, 580, 400, 50))
         self.doctorYearOfExperienceLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.doctorYearOfExperienceLabel.setText(f"{self.doctor.getYearsOfExperience()} Years")
+        self.doctorYearOfExperienceLabel.setStyleSheet("""QLabel {
+                                                        border-radius: 10px;
+                                                        border: 1px solid black;
+                                                        background: white;
+                                                        }""")
 
         self.scheduleButton = QPushButton(self.centralwidget)
-        self.scheduleButton.setGeometry(QRect(710, 400, 325, 100))
+        self.scheduleButton.setGeometry(QRect(550, 380, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
@@ -116,11 +168,24 @@ class ClinicDoctorDetails(QWidget):
         self.scheduleButton.setLayoutDirection(Qt.RightToLeft)
         self.scheduleButton.setText("Check Schedule")
         self.scheduleButton.clicked.connect(self.goToSchedule)
+        self.scheduleButton.setStyleSheet("""QPushButton {
+                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                stop: 1 rgba(59, 41, 168, 255));
+                                        border-radius: 10px; color: white;
+                                        text-align: center; 
+                                        color:white;
+                                        }
+                                        QPushButton:hover
+                                        {
+                                          background-color: #7752FE;
+                                          text-align: center; 
+                                          color:white;
+                                        }""")
 
         self.scheduleButtonLabel = QLabel(self.centralwidget)
-        self.scheduleButtonLabel.setGeometry(QRect(730, 425, 50, 50))
-        self.scheduleButtonLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.scheduleButtonLabel.setGeometry(QRect(570, 405, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-calendar-64.png")
         self.scheduleButtonIcon = QPixmap(filepath)
         self.scheduleButtonIcon = self.scheduleButtonIcon.scaled(50, 50)
         self.scheduleButtonLabel.setPixmap(self.scheduleButtonIcon)
@@ -129,7 +194,7 @@ class ClinicDoctorDetails(QWidget):
         self.scheduleButtonLabel.hide()
 
         self.removeDoctorButton = QPushButton(self.centralwidget)
-        self.removeDoctorButton.setGeometry(QRect(710, 545, 325, 100))
+        self.removeDoctorButton.setGeometry(QRect(550, 525, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
@@ -137,11 +202,24 @@ class ClinicDoctorDetails(QWidget):
         self.removeDoctorButton.setLayoutDirection(Qt.RightToLeft)
         self.removeDoctorButton.setText("Remove Doctor")
         self.removeDoctorButton.clicked.connect(self.removeDoctor)
+        self.removeDoctorButton.setStyleSheet("""QPushButton {
+                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                                    stop: 1 rgba(59, 41, 168, 255));
+                                            border-radius: 10px; color: white;
+                                            text-align: center; 
+                                            color:white;
+                                            }
+                                            QPushButton:hover
+                                            {
+                                              background-color: #7752FE;
+                                              text-align: center; 
+                                              color:white;
+                                            }""")
 
         self.removeDoctorLabel = QLabel(self.centralwidget)
-        self.removeDoctorLabel.setGeometry(QRect(730, 570, 50, 50))
-        self.removeDoctorLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.removeDoctorLabel.setGeometry(QRect(570, 550, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-remove-64.png")
         self.removeDoctorIcon = QPixmap(filepath)
         self.removeDoctorIcon = self.removeDoctorIcon.scaled(50, 50)
         self.removeDoctorLabel.setPixmap(self.removeDoctorIcon)
@@ -149,7 +227,7 @@ class ClinicDoctorDetails(QWidget):
         self.removeDoctorLabel.hide()
 
         self.addDoctorButton = QPushButton(self.centralwidget)
-        self.addDoctorButton.setGeometry(QRect(710, 545, 325, 100))
+        self.addDoctorButton.setGeometry(QRect(550, 525, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
@@ -157,16 +235,40 @@ class ClinicDoctorDetails(QWidget):
         self.addDoctorButton.setLayoutDirection(Qt.RightToLeft)
         self.addDoctorButton.setText("Add Doctor")
         self.addDoctorButton.clicked.connect(self.addDoctor)
+        self.addDoctorButton.setStyleSheet("""QPushButton {
+                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                        stop: 0 rgba(10, 2, 85, 255), 
+                                                                        stop: 1 rgba(59, 41, 168, 255));
+                                                border-radius: 10px; color: white;
+                                                text-align: center; 
+                                                color:white;
+                                                }
+                                                QPushButton:hover
+                                                {
+                                                  background-color: #7752FE;
+                                                  text-align: center; 
+                                                  color:white;
+                                                }""")
 
         self.addDoctorLabel = QLabel(self.centralwidget)
-        self.addDoctorLabel.setGeometry(QRect(730, 570, 50, 50))
-        self.addDoctorLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.addDoctorLabel.setGeometry(QRect(570, 550, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-add-64.png")
         self.addDoctorIcon = QPixmap(filepath)
         self.addDoctorIcon = self.addDoctorIcon.scaled(50, 50)
         self.addDoctorLabel.setPixmap(self.addDoctorIcon)
         self.addDoctorButton.hide()
         self.addDoctorLabel.hide()
+
+        self.informationBox = QLabel(self.centralwidget)
+        self.informationBox.setGeometry(QRect(50, 130, 850, 530))
+        self.informationBox.setStyleSheet("""QLabel {
+                                        background: #D0BFFF;
+                                        border-radius: 10px;
+                                        }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.informationBox.setGraphicsEffect(effect)
 
         self.removeDoctorButton.raise_()
         self.scheduleButton.raise_()
@@ -174,6 +276,18 @@ class ClinicDoctorDetails(QWidget):
         self.scheduleButtonLabel.raise_()
         self.addDoctorButton.raise_()
         self.addDoctorLabel.raise_()
+        self.doctorNameLabel.raise_()
+        self.doctorNameTitle.raise_()
+        self.doctorYearOfExperienceLabel.raise_()
+        self.doctorYearOfExperienceTitle.raise_()
+        self.doctorContactLabel.raise_()
+        self.doctorContactTitle.raise_()
+        self.doctorTypeLabel.raise_()
+        self.doctorTypeTitle.raise_()
+        self.doctorICNumberTitle.raise_()
+        self.doctorIDLabel.raise_()
+        self.doctorIDTitle.raise_()
+        self.doctorICNumber.raise_()
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)

@@ -1,8 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QScrollArea, QSizePolicy, QLineEdit
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QScrollArea, QSizePolicy, QLineEdit, \
+    QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -28,44 +29,88 @@ class ClinicAddDoctor(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Add Doctor")
-        self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setObjectName("headerTitle")
+        self.headerTitle.setGeometry(QRect(80, 40, 700, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        self.backButton.setGeometry(QRect(800, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                        stop: 0 rgba(10, 2, 85, 255), 
+                                                                        stop: 1 rgba(59, 41, 168, 255));
+                                                border-radius: 10px; color: white;
+
+                                                }
+                                                QPushButton#backButton:hover
+                                                {
+                                                  background-color: #7752FE;
+                                                }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
 
         self.searchBar = QLineEdit(self.centralwidget)
-        self.searchBar.setGeometry(QRect(100, 120, 800, 40))
-        self.searchBar.setPlaceholderText("Search Bar")
+        self.searchBar.setGeometry(QRect(80, 120, 800, 40))
+        self.searchBar.setPlaceholderText("   Search Bar")
         self.searchBar.textChanged.connect(self.filterButtons)
+        self.searchBar.setStyleSheet("""QLineEdit {
+                                                border-radius: 10px;
+                                                border: 1px solid black;
+                                                }""")
 
         self.buttonContainer = QWidget()
+        self.buttonContainer.setObjectName("buttonContainer")
+        self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    margin-left: 100px;
+                                                    }""")
         self.buttonContainer.setContentsMargins(20,20,20,20)
         self.buttonLayout = QVBoxLayout(self.buttonContainer)
+        self.buttonLayout.setSpacing(20)
 
         boxScrollArea = QScrollArea()
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
+        boxScrollArea.setObjectName("scrollArea")
 
         self.doctorList = list()
 
         self.generateDoctorButtons()
 
         boxScrollArea.setWidget(self.buttonContainer)
-        boxScrollArea.setFixedSize(1000,500)
+        boxScrollArea.setFixedSize(900, 500)
+        boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
+                                            background: #D0BFFF;
+                                            border-radius: 10px;
+                                            margin-left: 80px;
+                                            }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        boxScrollArea.setGraphicsEffect(effect)
+
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
@@ -106,6 +151,8 @@ class ClinicAddDoctor(QWidget):
 
     def generateDoctorButtons(self):
 
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+
         # delete and clear the buttons, generating back later
         for i in range(self.buttonContainer.layout().count()):
             widget = self.buttonContainer.layout().itemAt(0).widget()
@@ -121,17 +168,40 @@ class ClinicAddDoctor(QWidget):
         self.doctorList = DoctorRepository.getUnassignedDoctors()
 
         buttonFont = QFont()
-        buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
+        buttonFont.setFamily("Montserrat")
+        buttonFont.setPointSize(20)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-doctor-64.png")
+        doctorIcon = QIcon(filepath)
 
         for count, doctor in enumerate(self.doctorList):
             doctorButton = QPushButton()
-            doctorButton.setText(doctor.getDoctorID() + " - " + doctor.getDoctorName())
+            doctorButton.setText(f"    {doctor.getDoctorID()} - {doctor.getDoctorName()}")
             doctorButton.setFont(buttonFont)
-            doctorButton.setFixedSize(QSize(900, 150))
+            doctorButton.setIconSize(QSize(80, 80))
+            doctorButton.setFixedSize(QSize(700, 100))
+            doctorButton.setIcon(doctorIcon)
             doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
+            doctorButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: left; 
+                                                    padding-left: 20px;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: left; 
+                                                      padding-left: 20px;
+                                                    }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            doctorButton.setGraphicsEffect(effect)
+
             self.buttonLayout.addWidget(doctorButton)
 
         spacer = QWidget()
