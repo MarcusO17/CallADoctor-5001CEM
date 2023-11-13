@@ -61,7 +61,7 @@ class LoginWindow(QWidget):
 
         self.logoLabel = QLabel(self)
 
-        filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filename = os.path.join(CURRENT_DIRECTORY, "resources\\CaD-Logo.png")
 
         try:
             logoPixmap = QPixmap(filename)
