@@ -30,11 +30,6 @@ class LoginWindow(QWidget):
 
     def initUI(self):
 
-        
-        
-       
-
-
         self.setAutoFillBackground(True)
         palette = self.palette()
         gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
@@ -42,9 +37,6 @@ class LoginWindow(QWidget):
         self.setPalette(palette)
         self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
 
-        loginFormLayout = QVBoxLayout()
-        loginFormLayout.setSpacing(0)
-        loginFormLayout.setContentsMargins(100, 100, 100, 100)
 
         self.logoLabel = QLabel()
 
@@ -60,36 +52,22 @@ class LoginWindow(QWidget):
         except Exception as e:
             print(e)
 
-        field1Layout = QVBoxLayout()
-        field1HLayout = QHBoxLayout()
-        field2Layout = QVBoxLayout()
+
 
         labelFont = QFont()
         labelFont.setFamily("Poppins")
         labelFont.setPointSize(12)
-        field1Layout.addSpacing(20)
         self.emailLabel = QLabel("Email:")
         self.emailLabel.setFont(labelFont)
         self.emailInput = QLineEdit()
-        self.emailInput.setFixedSize(200, 30)  
+        self.emailInput.setFixedSize(200, 30) 
 
-        field1Layout.addWidget(self.emailLabel)
-        field1Layout.addWidget(self.emailInput)
-        field1Layout.setContentsMargins(0,30,0,20)
-        field1HLayout.addWidget(self.emailInput)
-        field1HLayout.addWidget(self.emailLabel)
-        field1HLayout.setContentsMargins(30,0,20,0)
-
-        field2Layout.addSpacing(20)
         self.passwordLabel = QLabel("Password:")
         self.passwordLabel.setFont(labelFont)
         self.passwordInput = QLineEdit()
         self.passwordInput.setEchoMode(QLineEdit.Password)
         self.passwordInput.setFixedSize(200, 30)
 
-        field2Layout.addWidget(self.passwordLabel)
-        field2Layout.addWidget(self.passwordInput)
-        field2Layout.setContentsMargins(0, 0, 0, 40)
 
         self.loginButton = QPushButton("Login")
         self.loginButton.setDefault(True)
@@ -101,14 +79,6 @@ class LoginWindow(QWidget):
         self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
         self.goToRegistrationButton.setFixedSize(200, 40)
 
-        loginFormLayout.addWidget(self.logoLabel)
-        loginFormLayout.addLayout(field1Layout)
-        loginFormLayout.addLayout(field2Layout)
-        loginFormLayout.addWidget(self.loginButton)
-        loginFormLayout.addWidget(self.goToRegistrationButton)
-        loginFormLayout.setContentsMargins(30,30,30,60)
-
-        self.setLayout(loginFormLayout)
 
     def selectRegisterPageFunction(self):
         self.messageBox = QMessageBox()
