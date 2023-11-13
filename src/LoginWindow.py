@@ -1,7 +1,7 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush, QLinearGradient
 from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout,QHBoxLayout, QWidget, QMessageBox, QApplication, \
-QFrame
+QFrame, QAction
 from PyQt5 import QtCore
 from .PageManager import PageManager
 from .model import Login
@@ -30,6 +30,7 @@ class LoginWindow(QWidget):
         self.pageManager.add(self)
 
     def initUI(self):
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.setAutoFillBackground(True)
         palette = self.palette()
@@ -39,7 +40,7 @@ class LoginWindow(QWidget):
         self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
 
         self.borderFrame = QFrame(self)
-        self.borderFrame.setGeometry(-10, 65, 310, 450)  # Adjusted geometry
+        self.borderFrame.setGeometry(-10, 75, 310, 450)  # Adjusted geometry
         self.borderFrame.setFrameShape(QFrame.StyledPanel)
         self.borderFrame.setLineWidth(2)
 
@@ -60,14 +61,13 @@ class LoginWindow(QWidget):
 
         self.logoLabel = QLabel(self)
 
-        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
 
         try:
             logoPixmap = QPixmap(filename)
             logoPixmap = logoPixmap.scaled(200,200)
             self.logoLabel.setPixmap(logoPixmap)
-            self.logoLabel.setGeometry(90, 50, 200, 200)
+            self.logoLabel.setGeometry(QRect(50, 60, 200, 200))
 
 
         except Exception as e:
@@ -80,36 +80,48 @@ class LoginWindow(QWidget):
         labelFont.setPointSize(12)
 
         self.emailLabel = QLabel("Email:", self)
+        self.emailLabel.setStyleSheet("color: white;")
         self.emailLabel.setFont(labelFont)
-        self.emailLabel.setGeometry(80, 220, 100, 30)
-
+        self.emailLabel.setGeometry(QRect(50, 230, 100, 30))
+        
         self.emailInput = QLineEdit(self)
-        self.emailInput.setFixedSize(200, 30)
-        self.emailInput.setGeometry(80, 250, 200, 30)
+        self.emailInput.setGeometry(QRect(50, 260, 220, 30))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\email.png")
+
+        emailIcon = QPixmap(filepath)
+        emailIcon = emailIcon.scaled(30, 30)
+        iconLabel = QLabel(self)
+        iconLabel.setPixmap(emailIcon)
+        iconLabel.setGeometry(QRect(20, 260, 30, 30))        
 
         self.passwordLabel = QLabel("Password:", self)
+        self.passwordLabel.setStyleSheet("color: white;")
         self.passwordLabel.setFont(labelFont)
-        self.passwordLabel.setGeometry(80, 300, 100, 30)
+        self.passwordLabel.setGeometry(QRect(50, 310, 100, 30))
 
         self.passwordInput = QLineEdit(self)
         self.passwordInput.setEchoMode(QLineEdit.Password)
-        self.passwordInput.setFixedSize(200, 30)
-        self.passwordInput.setGeometry(80, 330, 200, 30)
+        self.passwordInput.setGeometry(QRect(50, 340, 220, 30))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\password.png")
 
-
+        passwordIcon = QPixmap(filepath)
+        passwordIcon = passwordIcon.scaled(30, 30)
+        icon2Label = QLabel(self)
+        icon2Label.setPixmap(passwordIcon)
+        icon2Label.setGeometry(QRect(20, 340, 30, 30))
 
         self.loginButton = QPushButton("Login", self)
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
         self.loginButton.setFixedSize(150, 40) 
-        self.loginButton.setGeometry(105, 400, 200, 40)
+        self.loginButton.setGeometry(QRect(75, 410, 200, 40))
 
 
         self.goToRegistrationButton = QPushButton("Register Account", self)
         self.goToRegistrationButton.setDefault(True)
         self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
         self.goToRegistrationButton.setFixedSize(150, 40)
-        self.goToRegistrationButton.setGeometry(105, 450, 200, 40)
+        self.goToRegistrationButton.setGeometry(QRect(75, 460, 200, 40))
 
 
         self.show()
