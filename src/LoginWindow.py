@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush
+from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush, QLinearGradient
 from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout,QHBoxLayout, QWidget, QMessageBox, QApplication, \
 QFrame
 from PyQt5 import QtCore
@@ -34,15 +34,29 @@ class LoginWindow(QWidget):
         self.setAutoFillBackground(True)
         palette = self.palette()
         gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
-        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))  # Make the window background transparent
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
         self.setPalette(palette)
         self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
 
         self.borderFrame = QFrame(self)
-        self.borderFrame.setGeometry(-10, 65, 310, 450)  # Adjust the geometry as needed
+        self.borderFrame.setGeometry(-10, 65, 310, 450)  # Adjusted geometry
         self.borderFrame.setFrameShape(QFrame.StyledPanel)
         self.borderFrame.setLineWidth(2)
-        self.borderFrame.setStyleSheet("border: 2px dashed #000000; background: transparent;")
+
+        gradient = QLinearGradient(0, 0, 0, self.borderFrame.height())
+        gradient.setColorAt(0, QColor(25, 4, 130))
+        gradient.setColorAt(1, QColor(119, 82, 254))
+
+        self.borderFrame.setStyleSheet("""
+            QFrame {
+                border: 2px dashed ;
+                border-radius: 15px;  /* Adjust the radius as needed */
+                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1,
+                                            stop: 0 rgba(25, 4, 130, 255),
+                                            stop: 1 rgba(119, 82, 254, 255)
+                                            );
+            }
+        """)
 
         self.logoLabel = QLabel(self)
 
@@ -170,7 +184,3 @@ class LoginWindow(QWidget):
 
         else:
             print("login failed")
-
-
-
-
