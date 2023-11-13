@@ -38,7 +38,7 @@ class LoginWindow(QWidget):
         self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
 
 
-        self.logoLabel = QLabel()
+        self.logoLabel = QLabel(self)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
@@ -47,7 +47,8 @@ class LoginWindow(QWidget):
             logoPixmap = QPixmap(filename)
             logoPixmap = logoPixmap.scaled(200,200)
             self.logoLabel.setPixmap(logoPixmap)
-            self.logoLabel.setContentsMargins(45,0,0,0)
+            self.logoLabel.setGeometry(45, 0, 200, 200)
+
 
         except Exception as e:
             print(e)
@@ -57,27 +58,41 @@ class LoginWindow(QWidget):
         labelFont = QFont()
         labelFont.setFamily("Poppins")
         labelFont.setPointSize(12)
-        self.emailLabel = QLabel("Email:")
-        self.emailLabel.setFont(labelFont)
-        self.emailInput = QLineEdit()
-        self.emailInput.setFixedSize(200, 30) 
 
-        self.passwordLabel = QLabel("Password:")
+        self.emailLabel = QLabel("Email:", self)
+        self.emailLabel.setFont(labelFont)
+        self.emailLabel.setGeometry(50, 160, 100, 30)
+
+        self.emailInput = QLineEdit(self)
+        self.emailInput.setFixedSize(200, 30)
+        self.emailInput.setGeometry(50, 200, 200, 30)
+
+        self.passwordLabel = QLabel("Password:", self)
         self.passwordLabel.setFont(labelFont)
-        self.passwordInput = QLineEdit()
+        self.passwordLabel.setGeometry(50, 250, 100, 30)
+
+        self.passwordInput = QLineEdit(self)
         self.passwordInput.setEchoMode(QLineEdit.Password)
         self.passwordInput.setFixedSize(200, 30)
+        self.passwordInput.setGeometry(50, 280, 200, 30)
 
 
-        self.loginButton = QPushButton("Login")
+
+        self.loginButton = QPushButton("Login", self)
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
         self.loginButton.setFixedSize(200, 40) 
+        self.loginButton.setGeometry(50, 350, 200, 40)
 
-        self.goToRegistrationButton = QPushButton("Register Account")
+
+        self.goToRegistrationButton = QPushButton("Register Account", self)
         self.goToRegistrationButton.setDefault(True)
         self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
         self.goToRegistrationButton.setFixedSize(200, 40)
+        self.goToRegistrationButton.setGeometry(50, 400, 200, 40)
+
+
+        self.show()
 
 
     def selectRegisterPageFunction(self):
