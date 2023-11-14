@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush, QLinearGradient
+from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush, QLinearGradient, QMovie
 from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout,QHBoxLayout, QWidget, QMessageBox, QApplication, \
-QFrame, QAction
+QFrame, QAction, QSpacerItem, QSizePolicy
 from PyQt5 import QtCore
 from .PageManager import PageManager
 from .model import Login
@@ -14,8 +14,6 @@ from .ClinicRegister import ClinicRegisterWindow
 from .DoctorRegister import DoctorRegisterWindow
 from .DoctorMyAppointment import DoctorMyAppointmentWindow
 import os
-
-from .PageManager import PageManager
 
 
 class LoginWindow(QWidget):
@@ -31,6 +29,24 @@ class LoginWindow(QWidget):
 
     def initUI(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+
+        titleFont = QFont()
+        titleFont.setFamily("Poppins")
+        titleFont.setPointSize(40)
+
+        self.titleLabel = QLabel("Call-A-Doctor Application", self)
+        self.titleLabel.setStyleSheet("color: Black;")
+        self.titleLabel.setFont(titleFont)
+        self.titleLabel.setGeometry(110, 10, 700, 65)
+
+        subTitleFont = QFont()
+        subTitleFont.setFamily("Poppins")
+        subTitleFont.setPointSize(25)
+
+        self.subTitleLabel = QLabel("Can't go to the hospital? Call them at your doorstep!", self)
+        self.subTitleLabel.setStyleSheet("color: White;")
+        self.subTitleLabel.setFont(subTitleFont)
+        self.subTitleLabel.setGeometry(20, 530, 790, 65)
 
         self.setAutoFillBackground(True)
         palette = self.palette()
@@ -58,6 +74,33 @@ class LoginWindow(QWidget):
                                             );
             }
         """)
+        
+        
+        gifViewer = QLabel(self)
+
+        gifPath = os.path.join(CURRENT_DIRECTORY, "resources\\running-doctor1.gif")
+
+        movie = QMovie(gifPath)
+        gifViewer.setMovie(movie)
+
+        movie.start()
+
+        gifViewer.setScaledContents(True)
+        gifViewer.setFixedSize(400,400)
+
+
+        mainLayout=QVBoxLayout(self)
+
+        spacerItem = QWidget()
+        spacerItem.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        spacerItem.setFixedWidth(300)
+        horizontal_spacer_item = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        mainLayout.addItem(horizontal_spacer_item)
+        gifViewer.setGeometry(QRect(50, 60, 200, 200))
+        
+        mainLayout.addWidget(spacerItem)
+        mainLayout.addWidget(gifViewer)
+
 
         self.logoLabel = QLabel(self)
 
