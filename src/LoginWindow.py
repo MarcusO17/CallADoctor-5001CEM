@@ -48,6 +48,28 @@ class LoginWindow(QWidget):
         self.subTitleLabel.setFont(subTitleFont)
         self.subTitleLabel.setGeometry(20, 530, 790, 65)
 
+        gifViewer = QLabel(self)
+
+        gifPath = os.path.join(CURRENT_DIRECTORY, "resources\\ambulance.gif")
+
+        movie = QMovie(gifPath)
+        gifViewer.setMovie(movie)
+
+        movie.start()
+
+        gifViewer.setScaledContents(True)
+        gifViewer.setFixedSize(400,400)
+
+
+        mainLayout=QHBoxLayout(self)
+
+        spacerItem = QWidget()
+        spacerItem.setFixedWidth(100)
+ 
+        
+        mainLayout.addWidget(spacerItem)
+        mainLayout.addWidget(gifViewer)
+
         self.setAutoFillBackground(True)
         palette = self.palette()
         gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
@@ -76,30 +98,7 @@ class LoginWindow(QWidget):
         """)
         
         
-        gifViewer = QLabel(self)
-
-        gifPath = os.path.join(CURRENT_DIRECTORY, "resources\\running-doctor1.gif")
-
-        movie = QMovie(gifPath)
-        gifViewer.setMovie(movie)
-
-        movie.start()
-
-        gifViewer.setScaledContents(True)
-        gifViewer.setFixedSize(400,400)
-
-
-        mainLayout=QVBoxLayout(self)
-
-        spacerItem = QWidget()
-        spacerItem.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        spacerItem.setFixedWidth(300)
-        horizontal_spacer_item = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        mainLayout.addItem(horizontal_spacer_item)
-        gifViewer.setGeometry(QRect(50, 60, 200, 200))
         
-        mainLayout.addWidget(spacerItem)
-        mainLayout.addWidget(gifViewer)
 
 
         self.logoLabel = QLabel(self)
