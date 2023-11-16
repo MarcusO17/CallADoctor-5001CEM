@@ -1,6 +1,7 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox
+from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtGui import QFont, QPixmap, QPalette, QColor, QBrush, QLinearGradient, QMovie
+from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout,QHBoxLayout, QWidget, QMessageBox, QApplication, \
+QFrame, QAction, QSpacerItem, QSizePolicy
 from PyQt5 import QtCore
 from .PageManager import PageManager
 from .model import Login
@@ -15,77 +16,159 @@ from .DoctorRegister import DoctorRegisterWindow
 from .DoctorMyAppointment import DoctorMyAppointmentWindow
 import os
 
-from .PageManager import PageManager
-
 
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.setObjectName("LoginWindow")
         self.pageManager = PageManager()
         self.setWindowTitle("Login")
-        self.setFixedWidth(350)
-        self.setFixedHeight(500)
+        self.setFixedWidth(800)
+        self.setFixedHeight(600)
         self.initUI()
         self.pageManager.add(self)
 
     def initUI(self):
-        loginFormLayout = QVBoxLayout()
-        loginFormLayout.setSpacing(0)
-        loginFormLayout.setContentsMargins(20, 20, 20, 20)
-
-        self.logoLabel = QLabel()
-
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filename = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+
+        titleFont = QFont()
+        titleFont.setFamily("Poppins")
+        titleFont.setPointSize(40)
+
+        self.titleLabel = QLabel("Call-A-Doctor Application", self)
+        self.titleLabel.setStyleSheet("color: Black;")
+        self.titleLabel.setFont(titleFont)
+        self.titleLabel.setGeometry(110, 10, 700, 65)
+
+        subTitleFont = QFont()
+        subTitleFont.setFamily("Poppins")
+        subTitleFont.setPointSize(25)
+
+        self.subTitleLabel = QLabel("Can't go to the hospital? Call them at your doorstep!", self)
+        self.subTitleLabel.setStyleSheet("color: White;")
+        self.subTitleLabel.setFont(subTitleFont)
+        self.subTitleLabel.setGeometry(20, 530, 790, 65)
+
+        gifViewer = QLabel(self)
+
+        gifPath = os.path.join(CURRENT_DIRECTORY, "resources\\ambulance.gif")
+
+        movie = QMovie(gifPath)
+        gifViewer.setMovie(movie)
+
+        movie.start()
+
+        gifViewer.setScaledContents(True)
+        gifViewer.setFixedSize(400,400)
+
+
+        mainLayout=QHBoxLayout(self)
+
+        spacerItem = QWidget()
+        spacerItem.setFixedWidth(100)
+ 
+        
+        mainLayout.addWidget(spacerItem)
+        mainLayout.addWidget(gifViewer)
+
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
+        self.setPalette(palette)
+        self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
+
+        self.borderFrame = QFrame(self)
+        self.borderFrame.setGeometry(-10, 75, 310, 450)  # Adjusted geometry
+        self.borderFrame.setFrameShape(QFrame.StyledPanel)
+        self.borderFrame.setLineWidth(2)
+
+        gradient = QLinearGradient(0, 0, 0, self.borderFrame.height())
+        gradient.setColorAt(0, QColor(25, 4, 130))
+        gradient.setColorAt(1, QColor(119, 82, 254))
+
+        self.borderFrame.setStyleSheet("""
+            QFrame {
+                border: 2px dashed ;
+                border-radius: 15px;  /* Adjust the radius as needed */
+                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1,
+                                            stop: 0 rgba(25, 4, 130, 255),
+                                            stop: 1 rgba(119, 82, 254, 255)
+                                            );
+            }
+        """)
+        
+        
+        
+
+
+        self.logoLabel = QLabel(self)
+
+        filename = os.path.join(CURRENT_DIRECTORY, "resources\\CaD-Logo.png")
 
         try:
             logoPixmap = QPixmap(filename)
             logoPixmap = logoPixmap.scaled(200,200)
             self.logoLabel.setPixmap(logoPixmap)
-            self.logoLabel.setContentsMargins(45,0,0,0)
+            self.logoLabel.setGeometry(QRect(50, 60, 200, 200))
+
 
         except Exception as e:
             print(e)
 
-        field1Layout = QVBoxLayout()
-        field2Layout = QVBoxLayout()
+
 
         labelFont = QFont()
         labelFont.setFamily("Poppins")
         labelFont.setPointSize(12)
 
-        self.emailLabel = QLabel("Email:")
+        self.emailLabel = QLabel("Email:", self)
+        self.emailLabel.setStyleSheet("color: white;")
         self.emailLabel.setFont(labelFont)
-        self.emailInput = QLineEdit()
-        field1Layout.addWidget(self.emailLabel)
-        field1Layout.addWidget(self.emailInput)
-        field1Layout.setContentsMargins(0,30,0,20)
+        self.emailLabel.setGeometry(QRect(50, 230, 100, 30))
+        
+        self.emailInput = QLineEdit(self)
+        self.emailInput.setGeometry(QRect(50, 260, 220, 30))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\email.png")
 
-        self.passwordLabel = QLabel("Password:")
+        emailIcon = QPixmap(filepath)
+        emailIcon = emailIcon.scaled(30, 30)
+        iconLabel = QLabel(self)
+        iconLabel.setPixmap(emailIcon)
+        iconLabel.setGeometry(QRect(20, 260, 30, 30))        
+
+        self.passwordLabel = QLabel("Password:", self)
+        self.passwordLabel.setStyleSheet("color: white;")
         self.passwordLabel.setFont(labelFont)
-        self.passwordInput = QLineEdit()
+        self.passwordLabel.setGeometry(QRect(50, 310, 100, 30))
+
+        self.passwordInput = QLineEdit(self)
         self.passwordInput.setEchoMode(QLineEdit.Password)
+        self.passwordInput.setGeometry(QRect(50, 340, 220, 30))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\password.png")
 
-        field2Layout.addWidget(self.passwordLabel)
-        field2Layout.addWidget(self.passwordInput)
-        field2Layout.setContentsMargins(0, 0, 0, 40)
+        passwordIcon = QPixmap(filepath)
+        passwordIcon = passwordIcon.scaled(30, 30)
+        icon2Label = QLabel(self)
+        icon2Label.setPixmap(passwordIcon)
+        icon2Label.setGeometry(QRect(20, 340, 30, 30))
 
-        self.loginButton = QPushButton("Login")
+        self.loginButton = QPushButton("Login", self)
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
+        self.loginButton.setFixedSize(150, 40) 
+        self.loginButton.setGeometry(QRect(75, 410, 200, 40))
 
-        self.goToRegistrationButton = QPushButton("Register Account")
+
+        self.goToRegistrationButton = QPushButton("Register Account", self)
         self.goToRegistrationButton.setDefault(True)
         self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
+        self.goToRegistrationButton.setFixedSize(150, 40)
+        self.goToRegistrationButton.setGeometry(QRect(75, 460, 200, 40))
 
-        loginFormLayout.addWidget(self.logoLabel)
-        loginFormLayout.addLayout(field1Layout)
-        loginFormLayout.addLayout(field2Layout)
-        loginFormLayout.addWidget(self.loginButton)
-        loginFormLayout.addWidget(self.goToRegistrationButton)
-        loginFormLayout.setContentsMargins(30,30,30,60)
 
-        self.setLayout(loginFormLayout)
+        self.show()
+
 
     def selectRegisterPageFunction(self):
         self.messageBox = QMessageBox()
@@ -162,7 +245,3 @@ class LoginWindow(QWidget):
 
         else:
             print("login failed")
-
-
-
-
