@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QGraphicsDropShadowEffect, QSizePolicy
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -33,58 +33,125 @@ class DoctorPatientHistoryWindow(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Montserrat")
+        font.setPointSize(16)
         self.headerTitle.setFont(font)
         self.headerTitle.setText(f"{self.patient.getPatientName()} - Appointment History")
-        self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setObjectName("headerTitle")
+        self.headerTitle.setGeometry(QRect(80, 40, 700, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
-        self.backButtonIcon = QIcon(filepath)
+        self.backButton.setGeometry(QRect(800, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
+        self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
-        self.backButton.setIcon(self.backButtonIcon)
+        self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+
+                                                        }
+                                                        QPushButton#backButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
 
         self.buttonContainer = QWidget()
+        self.buttonContainer.setObjectName("buttonContainer")
+        self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    margin-left: 100px;
+                                                    }""")
         buttonLayout = QVBoxLayout(self.buttonContainer)
+        buttonLayout.setSpacing(20)
         self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setObjectName("scrollArea")
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         appointmentList = AppointmentRepo.AppointmentRepository.getAppointmentsByPatients(self.patient.getPatientID())
 
         buttonFont = QFont()
-        buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
+        buttonFont.setFamily("Montserrat")
+        buttonFont.setPointSize(20)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
+        appointmentIcon = QIcon(filepath)
 
         for count, appointment in enumerate(appointmentList):
             self.patientAppointmentButton = QPushButton()
             self.patientAppointmentButton.setText(f"{appointment.getAppointmentID()} -  {appointment.getAppointmentDate()}")
             self.patientAppointmentButton.setFont(buttonFont)
-            self.patientAppointmentButton.setFixedSize(QSize(900,150))
+            self.patientAppointmentButton.setIconSize(QSize(80, 80))
+            self.patientAppointmentButton.setFixedSize(QSize(700, 100))
+            self.patientAppointmentButton.setIcon(appointmentIcon)
             self.patientAppointmentButton.clicked.connect(lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment,self.doctor))
+            self.patientAppointmentButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: left; 
+                                                    padding-left: 20px;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: left; 
+                                                      padding-left: 20px;
+                                                    }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            self.patientAppointmentButton.setGraphicsEffect(effect)
             self.buttonContainer.layout().addWidget(self.patientAppointmentButton)
 
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.buttonContainer.layout().addWidget(spacer)
+
         boxScrollArea.setWidget(self.buttonContainer)
-        boxScrollArea.setFixedSize(1000,500)
-        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
+        boxScrollArea.setFixedSize(900, 500)
+        boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
+                                            background: #D0BFFF;
+                                            border-radius: 10px;
+                                            margin-left: 80px;
+                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        boxScrollArea.setGraphicsEffect(effect)
 
         mainLayout = QVBoxLayout()
+        mainLayout.setSpacing(0)
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
+        spacer = QWidget()
+        spacer.setFixedHeight(50)
 
+        mainLayout.addWidget(spacer)
         self.setLayout(mainLayout)
 
     def appointmentButtonFunction(self, appointment, doctor):
