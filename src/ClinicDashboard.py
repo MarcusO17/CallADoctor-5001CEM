@@ -84,10 +84,6 @@ class ClinicDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
-        backgroundImage = QPixmap(filepath)
-        self.setStyleSheet(f"background-image: url({backgroundImage});")
-
     def generateDoctorWidgets(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

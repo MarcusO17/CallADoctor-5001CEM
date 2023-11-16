@@ -1,9 +1,9 @@
 import os
 
-from PyQt5.QtCore import QSize, QDate
-from PyQt5.QtGui import QFont, QIcon
-from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
-    QHBoxLayout,QSizePolicy
+from PyQt5.QtCore import QSize, QDate, QPoint, Qt
+from PyQt5.QtGui import QFont, QIcon, QColor
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, \
+    QHBoxLayout, QSizePolicy, QGraphicsDropShadowEffect
 
 from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
@@ -36,28 +36,42 @@ class DoctorDashboard(QWidget):
 
         self.generateMapWidget()
 
-        self.leftLayout.addWidget(self.scheduleWidget, 3)
+        self.leftLayout.addWidget(self.mainScheduleWidget, 3)
         spacer = QWidget()
-        spacer.setFixedHeight(50)
+        spacer.setFixedHeight(0)
         self.leftLayout.addWidget(spacer)
-        self.leftLayout.addWidget(self.mapWidget, 7)
+        self.leftLayout.addWidget(self.mainMapWidget, 7)
 
-        self.dateLayout = QHBoxLayout()
+        self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(230)
-        self.dateLayout.addWidget(spacer)
-        self.dateWidget = QLabel(f"Date: {QDate.currentDate().toString('dd-MM-yyyy')}")
+        spacer.setFixedWidth(300)
+        self.userInfoLayout.addWidget(spacer)
+        self.userInfoWidget = QLabel(f"{self.doctor.getDoctorName()}")
+        self.userInfoWidget.setObjectName("userInfoWidget")
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(15)
-        self.dateWidget.setFont(font)
-        self.dateWidget.setFixedSize(220,75)
-        self.dateWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
-        self.dateWidget.setContentsMargins(10, 10, 10, 10)
+        self.userInfoWidget.setFont(font)
+        self.userInfoWidget.setAlignment(Qt.AlignCenter)
+        self.userInfoWidget.setFixedSize(220, 75)
+        self.userInfoWidget.setStyleSheet("""QLabel#userInfoWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                        stop: 0 rgba(25, 4, 130, 255), 
+                                                        stop: 1 rgba(119, 82, 254, 255)
+                                                    );
+                                                    border-radius: 10px;
+                                                    text-align: center;
+                                                    color: white;
+                                                }""")
 
-        self.dateLayout.addWidget(self.dateWidget)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.userInfoWidget.setGraphicsEffect(effect)
+        self.userInfoWidget.setContentsMargins(10, 10, 10, 10)
 
-        self.rightLayout.addLayout(self.dateLayout)
+        self.userInfoLayout.addWidget(self.userInfoWidget)
+
+        self.rightLayout.addLayout(self.userInfoLayout)
 
         spacer = QWidget()
         spacer.setFixedHeight(50)
@@ -108,8 +122,19 @@ class DoctorDashboard(QWidget):
 
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
+        self.mainScheduleWidget = QWidget()
+        self.mainScheduleLayout = QVBoxLayout(self.mainScheduleWidget)
+
         self.scheduleWidget = QWidget()
-        self.scheduleWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.scheduleWidget.setObjectName("ScheduleWidget")
+        self.scheduleWidget.setStyleSheet("""QWidget#ScheduleWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                                stop: 1 rgba(119, 82, 254, 255)
+                                                            );
+                                                            border-radius: 10px;
+                                                            text-align: center;
+                                                            color: white;
+                                                        }""")
         scheduleLayout = QVBoxLayout(self.scheduleWidget)
         scheduleLayout.setSpacing(0)
 
@@ -127,7 +152,7 @@ class DoctorDashboard(QWidget):
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         scheduleRowLayout.addWidget(spacer)
         scheduleRowLayout.addWidget(scheduleTitle)
-        scheduleLayout.addLayout(scheduleRowLayout)
+        self.mainScheduleLayout.addLayout(scheduleRowLayout)
 
         scheduleRowLayout = QHBoxLayout()
         spacer = QWidget()
@@ -149,6 +174,7 @@ class DoctorDashboard(QWidget):
         for i in range(WIDTH):
             timeSlotLabel = QLabel()
             timeSlotLabel.setFixedSize(50, 30)
+            timeSlotLabel.setAlignment(Qt.AlignCenter)
             scheduleRowLayout.addWidget(timeSlotLabel)
             timeSlotLabel.setStyleSheet("border: 1px solid black; background-color: white;")
             timeSlotLabel.setText(str(timeStart) + ":00")
@@ -189,10 +215,12 @@ class DoctorDashboard(QWidget):
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         scheduleLayout.addWidget(spacer)
 
+        self.mainScheduleLayout.addWidget(self.scheduleWidget)
+
     def generateUpcomingAppointments(self):
 
         self.upcomingAppointmentWidget = QWidget()
-        self.upcomingAppointmentWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px; margin-left: 20px;")
+        self.upcomingAppointmentWidget.setStyleSheet("background-color: transparent;")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
 
         spacer = QWidget()
@@ -217,27 +245,59 @@ class DoctorDashboard(QWidget):
 
         appointmentList = AppointmentRepository.getDashboardAppointments(self.doctor.getDoctorID())
 
+        threeAppointments = appointmentList[:3]
+
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
+        buttonFont.setPointSize(12)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\appointment.png")
-        self.appointmentButtonIcon = QIcon(filepath)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
+        appointmentButtonIcon = QIcon(filepath)
 
-        for count, appointment in enumerate(appointmentList):
-            self.appointmentButton = QPushButton()
-            self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
-            self.appointmentButton.setStyleSheet("background-color: white; border-radius: 10px; margin-left: 30px;")
-            self.appointmentButton.setFont(buttonFont)
-            self.appointmentButton.setFixedSize(QSize(400,100))
-            self.appointmentButton.setIconSize(QSize(70, 70))
-            self.appointmentButton.setIcon(self.appointmentButtonIcon)
-            self.appointmentButton.clicked.connect(
-                lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
-            self.upcomingAppointmentLayout.addWidget(self.appointmentButton)
+        if len(threeAppointments) == 0:
+            emptyAppointment = QLabel()
+            emptyAppointment.setFont(buttonFont)
+            emptyAppointment.setAlignment(Qt.AlignCenter)
+            emptyAppointment.setText("No Appointment")
+            emptyAppointment.setObjectName("emptyAppointment")
+            emptyAppointment.setFixedSize(440,470)
+            emptyAppointment.setStyleSheet("""QWidget#emptyAppointment {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                                stop: 1 rgba(119, 82, 254, 255)
+                                                            );
+                                                            border-radius: 10px;
+                                                            text-align: center;
+                                                            color: white;
+                                                        }""")
+            self.upcomingAppointmentLayout.addWidget(emptyAppointment)
+        else:
+            for count, appointment in enumerate(threeAppointments):
+                buttonRow = QHBoxLayout()
+                spacer = QWidget()
+                spacer.setFixedWidth(0)
+                spacer.setFixedHeight(120)
+                buttonRow.addWidget(spacer)
+                self.appointmentButton = QPushButton()
+                self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
+                self.appointmentButton.setObjectName("appointmentButton")
+                self.appointmentButton.setStyleSheet("""QPushButton#appointmentButton {
+                                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255)
+                                                                            );
+                                                                            border-radius: 10px; color: white;
+                                                                        }
+                                                                        QPushButton#requestButton:hover
+                                                                        {
+                                                                          background-color: #7752FE;}""")
+                self.appointmentButton.setFont(buttonFont)
+                self.appointmentButton.setFixedSize(QSize(250, 100))
+                self.appointmentButton.setIcon(appointmentButtonIcon)
+                self.appointmentButton.setIconSize(QSize(30, 30))
+                self.appointmentButton.clicked.connect(
+                    lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
+                self.upcomingAppointmentLayout.addWidget(self.appointmentButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -256,8 +316,19 @@ class DoctorDashboard(QWidget):
 
     def generateMapWidget(self):
 
+        self.mainMapWidget = QWidget()
+        self.mainMapLayout = QVBoxLayout(self.mainMapWidget)
+
         self.mapWidget = QWidget()
-        self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.mapWidget.setObjectName("mapWidget")
+        self.mapWidget.setStyleSheet("""QWidget#mapWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                        stop: 0 rgba(25, 4, 130, 255), 
+                                                                        stop: 1 rgba(119, 82, 254, 255)
+                                                                    );
+                                                                    border-radius: 10px;
+                                                                    text-align: center;
+                                                                    color: white;
+                                                                }""")
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
 
         self.widgetTitle = QLabel()
@@ -270,14 +341,17 @@ class DoctorDashboard(QWidget):
         self.widgetTitle.setFont(font)
         self.widgetTitle.setText("Map")
 
+
         headerRow = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(200)
+        spacer.setFixedWidth(300)
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.widgetTitle)
 
-        self.mapWidgetLayout.addLayout(headerRow)
         self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
+
+        self.mainMapLayout.addLayout(headerRow)
+        self.mainMapLayout.addLayout(self.mapWidgetLayout)
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
