@@ -88,11 +88,11 @@ class DoctorAppointmentDetails(QWidget):
         detailsContainer.setGraphicsEffect(effect)
 
         self.appointmentPurposeTitle = QLabel(self.centralwidget)
-        self.appointmentPurposeTitle.setGeometry(QRect(50, 190, 150, 40))
+        self.appointmentPurposeTitle.setGeometry(QRect(50, 160, 150, 40))
         self.appointmentPurposeTitle.setText("Appointment Purpose: ")
 
         self.appointmentPurposeLabel = QLabel(self.centralwidget)
-        self.appointmentPurposeLabel.setGeometry(QRect(50, 220, 400, 200))
+        self.appointmentPurposeLabel.setGeometry(QRect(50, 190, 400, 200))
         self.appointmentPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
         font = QFont()
         font.setFamily("Arial")
@@ -108,11 +108,11 @@ class DoctorAppointmentDetails(QWidget):
                                                                 }""")
 
         self.patientDetailsTitle = QLabel(self.centralwidget)
-        self.patientDetailsTitle.setGeometry(QRect(520, 190, 150, 40))
+        self.patientDetailsTitle.setGeometry(QRect(520, 160, 150, 40))
         self.patientDetailsTitle.setText("Patient Details: ")
 
         self.patientDetailsLabel = QLabel(self.centralwidget)
-        self.patientDetailsLabel.setGeometry(QRect(520, 220, 375, 200))
+        self.patientDetailsLabel.setGeometry(QRect(520, 190, 375, 200))
         self.patientDetailsLabel.setFont(font)
         self.patientDetailsLabel.setText(f"Patient ID: {self.patient.getPatientID()}\n"
                                         f"Patient Name: {self.patient.getPatientName()}\n"
@@ -129,11 +129,11 @@ class DoctorAppointmentDetails(QWidget):
         self.patientDetailsLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
 
         self.patientAddressTitle = QLabel(self.centralwidget)
-        self.patientAddressTitle.setGeometry(QRect(50, 470, 150, 40))
+        self.patientAddressTitle.setGeometry(QRect(50, 400, 150, 40))
         self.patientAddressTitle.setText("Patient Address: ")
 
         self.patientAddressLabel = QLabel(self.centralwidget)
-        self.patientAddressLabel.setGeometry(QRect(50, 500, 400, 200))
+        self.patientAddressLabel.setGeometry(QRect(50, 430, 400, 200))
         self.patientAddressLabel.setFont(font)
         self.patientAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.patientAddressLabel.setText(self.patient.getPatientAddress())
@@ -146,53 +146,89 @@ class DoctorAppointmentDetails(QWidget):
         self.patientAddressLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
 
         self.generatePrescriptionButton = QPushButton(self.centralwidget)
-        self.generatePrescriptionButton.setGeometry(QRect(690, 400, 280, 100))
+        self.generatePrescriptionButton.setGeometry(QRect(520, 420, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
         self.generatePrescriptionButton.setFont(font)
         self.generatePrescriptionButton.setLayoutDirection(Qt.RightToLeft)
         self.generatePrescriptionButton.setText("Generate Prescription")
-        self.generatePrescriptionButton.setStyleSheet("padding-right: 30px")
         self.generatePrescriptionButton.clicked.connect(self.generatePrescription)
+        self.generatePrescriptionButton.setStyleSheet("""QPushButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+                                                        text-align: center; 
+                                                        color:white;
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                          text-align: center; 
+                                                          color:white;
+                                                        }""")
 
         self.generatePrescriptionLabel = QLabel(self.centralwidget)
-        self.generatePrescriptionLabel.setGeometry(QRect(710, 425, 50, 50))
-        self.generatePrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.generatePrescriptionLabel.setGeometry(QRect(540, 445, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
         self.generatePrescriptionIcon = QPixmap(filepath)
         self.generatePrescriptionIcon = self.generatePrescriptionIcon.scaled(50, 50)
         self.generatePrescriptionLabel.setPixmap(self.generatePrescriptionIcon)
 
         self.requestCancelAppointmentButton = QPushButton(self.centralwidget)
-        self.requestCancelAppointmentButton.setGeometry(QRect(520, 510, 325, 100))
+        self.requestCancelAppointmentButton.setGeometry(QRect(520, 530, 325, 100))
         self.requestCancelAppointmentButton.setFont(font)
         self.requestCancelAppointmentButton.setLayoutDirection(Qt.RightToLeft)
         self.requestCancelAppointmentButton.setText("Request Cancel")
         self.requestCancelAppointmentButton.clicked.connect(self.requestCancelAppointmentFunction)
+        self.requestCancelAppointmentButton.setStyleSheet("""QPushButton {
+                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                                                    stop: 1 rgba(59, 41, 168, 255));
+                                                            border-radius: 10px; color: white;
+                                                            text-align: center; 
+                                                            color:white;
+                                                            }
+                                                            QPushButton:hover
+                                                            {
+                                                              background-color: #7752FE;
+                                                              text-align: center; 
+                                                              color:white;
+                                                            }""")
 
         self.requestCancelAppointmentLabel = QLabel(self.centralwidget)
-        self.requestCancelAppointmentLabel.setGeometry(QRect(540, 535, 50, 50))
-        self.requestCancelAppointmentLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.requestCancelAppointmentLabel.setGeometry(QRect(540, 555, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-remove-64.png")
         self.requestCancelAppointmentIcon = QPixmap(filepath)
         self.requestCancelAppointmentIcon = self.requestCancelAppointmentIcon.scaled(50, 50)
         self.requestCancelAppointmentLabel.setPixmap(self.requestCancelAppointmentIcon)
 
         self.viewPrescriptionButton = QPushButton(self.centralwidget)
-        self.viewPrescriptionButton.setGeometry(QRect(520, 510, 325, 100))
+        self.viewPrescriptionButton.setGeometry(QRect(520, 530, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
         self.viewPrescriptionButton.setFont(font)
         self.viewPrescriptionButton.setLayoutDirection(Qt.RightToLeft)
         self.viewPrescriptionButton.setText("View Prescription")
-        self.viewPrescriptionButton.setStyleSheet("padding-right: 30px")
-        self.viewPrescriptionButton.clicked.connect(self.viewPrescription)
+        self.viewPrescriptionButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: center; 
+                                                    color:white;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: center; 
+                                                      color:white;
+                                                    }""")
 
         self.viewPrescriptionLabel = QLabel(self.centralwidget)
-        self.viewPrescriptionLabel.setGeometry(QRect(540, 535, 50, 50))
-        self.viewPrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.viewPrescriptionLabel.setGeometry(QRect(540, 555, 50, 50))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.viewPrescriptionIcon = QPixmap(filepath)
         self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)

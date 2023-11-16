@@ -145,7 +145,7 @@ class DoctorHomepage(QMainWindow):
 
         self.myAppointmentButton = QPushButton()
         self.myAppointmentButton.setFixedSize(280, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-64.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
         self.myAppointmentIcon = QIcon(filepath)
         self.myAppointmentButton.setFont(font)
         self.myAppointmentButton.setText("My Appointment")
