@@ -31,7 +31,7 @@ class DoctorPatientRecordWindow(QWidget):
         font.setFamily("Montserrat")
         font.setPointSize(28)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Doctor List")
+        self.headerTitle.setText("Patient Record")
         self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setGeometry(QRect(80, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)

@@ -212,6 +212,7 @@ class DoctorAppointmentDetails(QWidget):
         self.viewPrescriptionButton.setFont(font)
         self.viewPrescriptionButton.setLayoutDirection(Qt.RightToLeft)
         self.viewPrescriptionButton.setText("View Prescription")
+        self.viewPrescriptionButton.clicked.connect(self.viewPrescription)
         self.viewPrescriptionButton.setStyleSheet("""QPushButton {
                                                     background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
                                                                             stop: 0 rgba(10, 2, 85, 255), 
@@ -319,7 +320,7 @@ class DoctorAppointmentDetails(QWidget):
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
         self.doctorViewPrescription = DoctorViewPrescription(self.patient, self.appointment, self.doctor)
-        self.frameLayout.addWidget(self.doctorGeneratePrescription)
+        self.frameLayout.addWidget(self.doctorViewPrescription)
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
