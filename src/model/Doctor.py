@@ -92,7 +92,7 @@ class Doctor:
                 return []
         
         for records in recordsList:
-                tempPatient = Patient("","","","","","",)
+                tempPatient = Patient("","","","","","","","",)
 
                 tempPatient.setPatientID(records['patientID'])
                 tempPatient.setPatientName(records['patientName'])
@@ -100,6 +100,8 @@ class Doctor:
                 tempPatient.setPatientDOB(records['dateOfBirth'])
                 tempPatient.setPatientBlood(records['bloodType'])
                 tempPatient.setPatientRace(records['race'])
+                tempPatient.setPatientLat(records['lat'])
+                tempPatient.setPatientLon(records['lon'])
 
                 patientList.append(tempPatient)
                 
