@@ -138,7 +138,7 @@ class DoctorViewPrescription(QWidget):
                                                     }""")
 
             prescriptionDosage = QLabel()
-            prescriptionDosage.setFixedSize(150,50)
+            prescriptionDosage.setFixedSize(130,50)
             prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
             prescriptionDosage.setFont(font)
             prescriptionDosage.setText(prescriptionDetails.getDosage())
