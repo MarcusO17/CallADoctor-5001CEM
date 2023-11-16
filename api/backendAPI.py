@@ -478,6 +478,8 @@ def doctorPastPatients(doctorID):
                 patientICNumber = row['patientICNumber'],
                 bloodType = row['bloodType'],
                 race = row['race'],  
+                lat = row['lat'],
+                lon= row['lon'],  
             )
             for row in cursor.fetchall()
         ]
