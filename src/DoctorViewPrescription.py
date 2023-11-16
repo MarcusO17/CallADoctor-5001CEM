@@ -97,7 +97,7 @@ class DoctorViewPrescription(QWidget):
         foodLabel.setText("Before/After Eating: ")
 
 
-        self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
+        self.prescriptionDetailsList = [prescription.getPrescriptionDetails for prescription in self.prescription]
 
         for count, prescriptionDetails in enumerate(self.prescriptionDetailsList):
             prescriptionMedicationName = QLabel()
