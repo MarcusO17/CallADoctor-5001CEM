@@ -241,11 +241,11 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentLayout.addLayout(headerRow)
         self.upcomingAppointmentLayout.setContentsMargins(20, 20, 20, 20)
 
-        #get 3 upcoming appointment here
+        #get 4 upcoming appointment here
 
         appointmentList = AppointmentRepository.getDashboardAppointments(self.doctor.getDoctorID())
 
-        threeAppointments = appointmentList[:3]
+        fourAppointments = appointmentList[:4]
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -255,7 +255,7 @@ class DoctorDashboard(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
         appointmentButtonIcon = QIcon(filepath)
 
-        if len(threeAppointments) == 0:
+        if len(fourAppointments) == 0:
             emptyAppointment = QLabel()
             emptyAppointment.setFont(buttonFont)
             emptyAppointment.setAlignment(Qt.AlignCenter)
@@ -272,7 +272,7 @@ class DoctorDashboard(QWidget):
                                                         }""")
             self.upcomingAppointmentLayout.addWidget(emptyAppointment)
         else:
-            for count, appointment in enumerate(threeAppointments):
+            for count, appointment in enumerate(fourAppointments):
                 buttonRow = QHBoxLayout()
                 spacer = QWidget()
                 spacer.setFixedWidth(0)

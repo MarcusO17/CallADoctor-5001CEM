@@ -218,8 +218,18 @@ class ClinicDashboard(QWidget):
         if len(threeAppointments) == 0:
             emptyReviews = QLabel()
             emptyReviews.setFont(buttonFont)
+            emptyReviews.setAlignment(Qt.AlignCenter)
             emptyReviews.setText("Empty Reviews")
-            emptyReviews.setStyleSheet("margin-left: 50px")
+            emptyReviews.setObjectName("emptyReviews")
+            emptyReviews.setFixedSize(440, 470)
+            emptyReviews.setStyleSheet("""QWidget#emptyReviews {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(25, 4, 130, 255), 
+                                                                            stop: 1 rgba(119, 82, 254, 255)
+                                                                        );
+                                                                        border-radius: 10px;
+                                                                        text-align: center;
+                                                                        color: white;
+                                                                    }""")
             self.requestReviewLayout.addWidget(emptyReviews)
         else:
             for count, request in enumerate(threeAppointments):
