@@ -111,7 +111,6 @@ class DoctorDashboard(QWidget):
                 duration = endTime - startTime
                 col = startTime - 7
                 for i in range(duration):
-                    self.timeSlotButtonList[row][col + (i - 1)].setText("Appointment")
                     self.timeSlotButtonList[row][col + (i - 1)].setStyleSheet("background-color: green;")
                     self.timeSlotButtonList[row][col + (i - 1)].setEnabled(True)
 

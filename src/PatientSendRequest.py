@@ -145,18 +145,24 @@ class PatientSendRequest(QWidget):
         self.timeList.clear()
         currentTime = QTime.currentTime()
         roundedTime = QTime(currentTime.hour(), 0)
+        print(roundedTime.toString())
         roundedTime = roundedTime.addSecs(10800)
-        timeDiff = roundedTime.secsTo(QTime(17, 0))
+
+        print(roundedTime.toString())
+        timeDiff = roundedTime.secsTo(QTime(15, 0))
+
+        print(timeDiff)
         hoursLeft = timeDiff // 3600
+        print(hoursLeft)
         startTime = QTime(8, 0)
        
 
         if self.preferredDate.date() == QDate.currentDate():
-            if roundedTime > QTime(17, 0):
+            if roundedTime > QTime(15, 0):
                 self.preferredDate.setDate(QDate.currentDate().addDays(1))
                 self.preferredDate.setMinimumDate(QDate.currentDate().addDays(1))
                 self.timeList.clear()
-                for hour in range(9):
+                for hour in range(8):
                     self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
                     print(self.timeList)
             else:
@@ -167,7 +173,7 @@ class PatientSendRequest(QWidget):
                     print(self.timeList)
         else:
             self.timeList.clear()
-            for hour in range(9):
+            for hour in range(8):
                 self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
 
 
