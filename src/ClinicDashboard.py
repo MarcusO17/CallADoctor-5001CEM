@@ -184,11 +184,12 @@ class ClinicDashboard(QWidget):
         self.requestReviewWidget = QWidget()
         self.requestReviewWidget.setStyleSheet("background-color: transparent;")
         self.requestReviewLayout = QVBoxLayout(self.requestReviewWidget)
+        self.requestReviewLayout.setSpacing(0)
 
         spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        spacer.setFixedWidth(30)
         self.requestReviewTitle = QLabel()
-        self.requestReviewTitle.setFixedWidth(300)
+        self.requestReviewTitle.setFixedSize(300,50)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -270,10 +271,6 @@ class ClinicDashboard(QWidget):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.requestReviewLayout.addWidget(spacer)
-
-        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-document-60.png")
-        self.appointmentButtonIcon = QIcon(filepath)
 
     def requestButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click

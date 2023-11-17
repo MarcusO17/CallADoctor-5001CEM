@@ -1,14 +1,16 @@
+import io
 import os
 
 from PyQt5.QtCore import QSize, QDate, QPoint, Qt
 from PyQt5.QtGui import QFont, QIcon, QColor
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, \
     QHBoxLayout, QSizePolicy, QGraphicsDropShadowEffect
 
 from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
-from .model import Appointment, AppointmentRepo, Patient
+from .model import Appointment, AppointmentRepo, Patient, Clinic, geoHelper
 from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager, FrameLayoutManager
 
@@ -17,6 +19,8 @@ class DoctorDashboard(QWidget):
     def __init__(self, doctor):
         super().__init__()
         self.doctor = doctor
+        self.clinic = Clinic.getClinicfromID(self.doctor.getClinicID())
+        self.currLocation = (self.clinic.getClinicLat(), self.clinic.getClinicLon())
         print(doctor.getDoctorID())
         self.setupUi()
 
@@ -37,14 +41,11 @@ class DoctorDashboard(QWidget):
         self.generateMapWidget()
 
         self.leftLayout.addWidget(self.mainScheduleWidget, 3)
-        spacer = QWidget()
-        spacer.setFixedHeight(0)
-        self.leftLayout.addWidget(spacer)
         self.leftLayout.addWidget(self.mainMapWidget, 7)
 
         self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(300)
+        spacer.setFixedWidth(230)
         self.userInfoLayout.addWidget(spacer)
         self.userInfoWidget = QLabel(f"{self.doctor.getDoctorName()}")
         self.userInfoWidget.setObjectName("userInfoWidget")
@@ -79,7 +80,7 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentWidget.setFixedWidth(500)
         self.rightLayout.addWidget(self.upcomingAppointmentWidget)
 
-        self.mainLayout.addLayout(self.leftLayout, 7)
+        self.mainLayout.addLayout(self.leftLayout, 20)
         self.mainLayout.addLayout(self.rightLayout, 5)
 
         self.setLayout(self.mainLayout)
@@ -221,11 +222,12 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentWidget = QWidget()
         self.upcomingAppointmentWidget.setStyleSheet("background-color: transparent;")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
+        self.upcomingAppointmentLayout.setSpacing(0)
 
         spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        spacer.setFixedWidth(70)
         self.upcomingAppointmentTitle = QLabel()
-        self.upcomingAppointmentTitle.setFixedWidth(420)
+        self.upcomingAppointmentTitle.setFixedSize(420, 50)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -274,8 +276,7 @@ class DoctorDashboard(QWidget):
             for count, appointment in enumerate(fourAppointments):
                 buttonRow = QHBoxLayout()
                 spacer = QWidget()
-                spacer.setFixedWidth(0)
-                spacer.setFixedHeight(120)
+                spacer.setFixedSize(60, 120)
                 buttonRow.addWidget(spacer)
                 self.appointmentButton = QPushButton()
                 self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
@@ -287,16 +288,18 @@ class DoctorDashboard(QWidget):
                                                                             );
                                                                             border-radius: 10px; color: white;
                                                                         }
-                                                                        QPushButton#requestButton:hover
+                                                                        QPushButton#appointmentButton:hover
                                                                         {
                                                                           background-color: #7752FE;}""")
                 self.appointmentButton.setFont(buttonFont)
-                self.appointmentButton.setFixedSize(QSize(250, 100))
+                self.appointmentButton.setFixedSize(QSize(350, 100))
                 self.appointmentButton.setIcon(appointmentButtonIcon)
                 self.appointmentButton.setIconSize(QSize(30, 30))
                 self.appointmentButton.clicked.connect(
                     lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
-                self.upcomingAppointmentLayout.addWidget(self.appointmentButton)
+
+                buttonRow.addWidget(self.appointmentButton)
+                self.upcomingAppointmentLayout.addLayout(buttonRow)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -331,7 +334,7 @@ class DoctorDashboard(QWidget):
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
 
         self.widgetTitle = QLabel()
-        self.widgetTitle.setFixedWidth(380)
+        self.widgetTitle.setFixedSize(80, 40)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -340,17 +343,36 @@ class DoctorDashboard(QWidget):
         self.widgetTitle.setFont(font)
         self.widgetTitle.setText("Map")
 
-
         headerRow = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(300)
+        spacer.setFixedSize(500,1)
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.widgetTitle)
 
         self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
 
         self.mainMapLayout.addLayout(headerRow)
-        self.mainMapLayout.addLayout(self.mapWidgetLayout)
+
+        map = geoHelper.showMap(self.currLocation)  # Return Folium Map
+
+        geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
+        map = self.generatePatientMarkers(map=map)
+
+        data = io.BytesIO()
+        map.save(data, close_file=False)
+
+        webView = QWebEngineView()
+        webView.setHtml(data.getvalue().decode())
+
+        self.mapWidgetLayout.addWidget(webView)
+        self.mainMapLayout.addWidget(self.mapWidget)
+
+    def generatePatientMarkers(self,map):
+        patientsWeekly =  AppointmentRepository.getPatientLocations(self.clinic.getClinicID())
+        for patients in patientsWeekly:
+            geoHelper.addMarker(map,(patients.getPatientLat(),patients.getPatientLon()),patients.getPatientAddress()
+                                ,'lightblue','home')
+        return map
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
