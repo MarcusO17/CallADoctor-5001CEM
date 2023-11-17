@@ -7,6 +7,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from .AccountPage import AccountPage
 from .DoctorDashboard import DoctorDashboard
+from .DoctorMap import DoctorMap
 from .DoctorScheduleWindow import DoctorScheduleWindow
 from .PageManager import PageManager, FrameLayoutManager
 from .model import Doctor
@@ -20,7 +21,7 @@ class DoctorHomepage(QMainWindow):
         self.frameLayoutManager = FrameLayoutManager()
         self.doctor = Doctor.getDoctorfromID(sessionID)
         self.frameLayoutManager.add(0)
-        self.frameLayoutManager.setBasePages(5)
+        self.frameLayoutManager.setBasePages(6)
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
@@ -49,10 +50,15 @@ class DoctorHomepage(QMainWindow):
         self.frameLayoutManager.backToBasePage(3)
         self.frameLayout.setCurrentIndex(3)
 
-    def goToAccountPage(self):
-        self.setButtonHighlight(self.myAccountButton)
+    def goToMapPage(self):
+        self.setButtonHighlight(self.mapButton)
         self.frameLayoutManager.backToBasePage(4)
         self.frameLayout.setCurrentIndex(4)
+
+    def goToAccountPage(self):
+        self.setButtonHighlight(self.myAccountButton)
+        self.frameLayoutManager.backToBasePage(5)
+        self.frameLayout.setCurrentIndex(5)
 
     def setupUi(self, MainWindow):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -158,6 +164,21 @@ class DoctorHomepage(QMainWindow):
         )
         self.myAppointmentButton.setGraphicsEffect(effect)
 
+        self.mapButton = QPushButton(self.centralwidget)
+        self.mapButton.setFixedSize(280, 70)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-location-48.png")
+        self.mapIcon = QIcon(filepath)
+        self.mapButton.setIconSize(QSize(35, 35))
+        self.mapButton.setText("Map")
+        self.mapButton.setFont(font)
+        self.mapButton.setIcon(self.mapIcon)
+        self.mapButton.setStyleSheet(stylesheet)
+        self.mapButton.clicked.connect(self.goToMapPage)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.mapButton.setGraphicsEffect(effect)
+
         self.topLeftLogo = QLabel()
         self.topLeftLogo.setFixedSize(280, 150)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo.png")
@@ -203,17 +224,19 @@ class DoctorHomepage(QMainWindow):
         self.highlightButtonList.append(self.scheduleButton)
         self.highlightButtonList.append(self.dashboardButton)
         self.highlightButtonList.append(self.patientRecordButton)
+        self.highlightButtonList.append(self.mapButton)
 
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
-        spacer1.setFixedHeight(100)
+        spacer1.setFixedHeight(50)
         self.sideLayout.addWidget(spacer1)
         self.sideLayout.addWidget(self.dashboardButton)
         self.sideLayout.addWidget(self.scheduleButton)
         self.sideLayout.addWidget(self.patientRecordButton)
         self.sideLayout.addWidget(self.myAppointmentButton)
+        self.sideLayout.addWidget(self.mapButton)
         spacer2 = QWidget()
-        spacer2.setFixedHeight(100)
+        spacer2.setFixedHeight(30)
         self.sideLayout.addWidget(spacer2)
         self.sideLayout.addWidget(self.myAccountButton)
         self.sideLayout.addWidget(self.logoutButton)
@@ -231,13 +254,15 @@ class DoctorHomepage(QMainWindow):
         self.doctorScheduleWindow = DoctorScheduleWindow(self.doctor) # index 1
         self.doctorPatientRecord = DoctorPatientRecordWindow(self.doctor) # index 2
         self.doctorMyAppointment = DoctorMyAppointmentWindow(self.doctor) # index 3
-        self.accountPage = AccountPage() # index 4
+        self.doctorMap = DoctorMap(self.doctor) # index 4
+        self.accountPage = AccountPage() # index 5
         self.accountPage.setUser("Doctor", self.doctor)
 
         self.frameLayout.addWidget(self.doctorDashboard)
         self.frameLayout.addWidget(self.doctorScheduleWindow)
         self.frameLayout.addWidget(self.doctorPatientRecord)
         self.frameLayout.addWidget(self.doctorMyAppointment)
+        self.frameLayout.addWidget(self.doctorMap)
         self.frameLayout.addWidget(self.accountPage)
 
         self.frameLayoutManager.setFrameLayout(self.frameLayout)
