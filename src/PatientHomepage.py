@@ -84,7 +84,7 @@ class PatientHomepage(QMainWindow):
 
         self.mainLayout = QHBoxLayout()
         self.sideLayoutWidget = QWidget()
-        self.sideLayoutWidget.setObjectName("SideBar")
+        self.sideLayoutWidget.setObjectName("sideBar")
         self.sideLayoutWidget.setStyleSheet("""QWidget#sideBar {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
                                                 stop: 0 rgba(25, 4, 130, 255), 
                                                 stop: 1 rgba(119, 82, 254, 255)
@@ -217,14 +217,14 @@ class PatientHomepage(QMainWindow):
 
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
-        spacer1.setFixedHeight(100)
+        spacer1.setFixedHeight(50)
         self.sideLayout.addWidget(spacer1)
         self.sideLayout.addWidget(self.dashboardButton)
         self.sideLayout.addWidget(self.clinicNearbyButton)
         self.sideLayout.addWidget(self.myAppointmentButton)
         self.sideLayout.addWidget(self.myPrescriptionButton)
         spacer2 = QWidget()
-        spacer2.setFixedHeight(100)
+        spacer2.setFixedHeight(30)
         self.sideLayout.addWidget(spacer2)
         self.sideLayout.addWidget(self.myAccountButton)
         self.sideLayout.addWidget(self.logoutButton)
@@ -232,10 +232,11 @@ class PatientHomepage(QMainWindow):
         bottomSpacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.sideLayout.addWidget(bottomSpacer)
 
-        self.mainLayout.addWidget(self.sideLayoutWidget, 1)
+        self.mainLayout.addWidget(self.sideLayoutWidget, 4)
 
         # THIS QSTACKEDWIDGET IS ONLY FOR QWIDGET SWITCHING
         self.frameLayout = QStackedWidget()
+        self.frameLayout.setStyleSheet(f"QStackedWidget {{background-color: transparent;}}")
         # start and set all pages to the framelayout
         self.patientDashboard = PatientDashboard(self.patient)  # index 0
         self.patientClinicsNearby = PatientClinicsNearbyWindow(self.patient)  # index 1
