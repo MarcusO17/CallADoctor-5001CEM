@@ -84,10 +84,6 @@ class ClinicDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
-        backgroundImage = QPixmap(filepath)
-        self.setStyleSheet(f"background-image: url({backgroundImage});")
-
     def generateDoctorWidgets(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -188,11 +184,12 @@ class ClinicDashboard(QWidget):
         self.requestReviewWidget = QWidget()
         self.requestReviewWidget.setStyleSheet("background-color: transparent;")
         self.requestReviewLayout = QVBoxLayout(self.requestReviewWidget)
+        self.requestReviewLayout.setSpacing(0)
 
         spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        spacer.setFixedWidth(30)
         self.requestReviewTitle = QLabel()
-        self.requestReviewTitle.setFixedWidth(300)
+        self.requestReviewTitle.setFixedSize(300,50)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -222,8 +219,18 @@ class ClinicDashboard(QWidget):
         if len(threeAppointments) == 0:
             emptyReviews = QLabel()
             emptyReviews.setFont(buttonFont)
+            emptyReviews.setAlignment(Qt.AlignCenter)
             emptyReviews.setText("Empty Reviews")
-            emptyReviews.setStyleSheet("margin-left: 50px")
+            emptyReviews.setObjectName("emptyReviews")
+            emptyReviews.setFixedSize(440, 470)
+            emptyReviews.setStyleSheet("""QWidget#emptyReviews {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(25, 4, 130, 255), 
+                                                                            stop: 1 rgba(119, 82, 254, 255)
+                                                                        );
+                                                                        border-radius: 10px;
+                                                                        text-align: center;
+                                                                        color: white;
+                                                                    }""")
             self.requestReviewLayout.addWidget(emptyReviews)
         else:
             for count, request in enumerate(threeAppointments):
@@ -264,10 +271,6 @@ class ClinicDashboard(QWidget):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.requestReviewLayout.addWidget(spacer)
-
-        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-document-60.png")
-        self.appointmentButtonIcon = QIcon(filepath)
 
     def requestButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click

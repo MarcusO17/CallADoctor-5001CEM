@@ -23,8 +23,8 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.appointment = appointment
         self.patient = patient
         # query the information here
-        self.doctor = Doctor("D0001", "Doctor1", "C0001", "Status", "DoctorType", "Doctor Contact", "IC number", 3)
-        self.clinic = Clinic("C0001", "clinicName","clinicContact" ,"clinicAddress","Approved")
+        self.doctor = Doctor.getDoctorfromID(self.appointment.getDoctorID())
+        self.clinic = Clinic.getClinicfromID(self.appointment.getClinicID())
         self.setupUi()
 
     def setupUi(self):
