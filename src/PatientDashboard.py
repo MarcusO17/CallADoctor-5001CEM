@@ -1,16 +1,19 @@
+import io
 import os
 
-from PyQt5.QtCore import QSize, QDate
-from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtCore import QSize, QDate, QPoint, Qt
+from PyQt5.QtGui import QFont, QIcon, QColor
 from PyQt5.QtWidgets import  QWidget, QLabel, QPushButton, QVBoxLayout, \
-    QHBoxLayout,QSizePolicy
+    QHBoxLayout,QSizePolicy, QGraphicsDropShadowEffect
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .DoctorPatientHistory import DoctorPatientHistoryWindow
 from .PatientAppointmentDetails import PatientAppointmentDetailsWindow
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
-from .model import Appointment, AppointmentRepo, Patient, PrescriptionRepo
+from .model import Appointment, AppointmentRepo, Patient, PrescriptionRepo, Clinic, geoHelper
+from .model.ClinicRepo import ClinicRepository
 from .model.AppointmentRepo import AppointmentRepository
 from .PageManager import PageManager, FrameLayoutManager
 
@@ -19,6 +22,8 @@ class PatientDashboard(QWidget):
     def __init__(self, patient):
         super().__init__()
         self.patient = patient
+        # self.currLocation = (self.patient.getPatientLat(), self.patient.getPatientLon())
+
         self.setupUi()
 
     def setupUi(self):
@@ -33,6 +38,8 @@ class PatientDashboard(QWidget):
 
         self.generateMapWidget()
 
+        # clinicList = ClinicRepository.getClinicList()
+
         self.generatePrescription()
 
         self.leftLayout.addWidget(self.welcomeTextWidget, 3)
@@ -46,12 +53,25 @@ class PatientDashboard(QWidget):
         spacer.setFixedWidth(230)
         self.dateLayout.addWidget(spacer)
         self.dateWidget = QLabel(f"Date: {QDate.currentDate().toString('dd-MM-yyyy')}")
+        self.dateWidget.setObjectName("dateWidget")
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(15)
         self.dateWidget.setFont(font)
+        self.dateWidget.setAlignment(Qt.AlignCenter)
         self.dateWidget.setFixedSize(220,75)
-        self.dateWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.dateWidget.setStyleSheet("""QLabel#dateWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                        stop: 0 rgba(25, 4, 130, 255), 
+                                                        stop: 1 rgba(119, 82, 254, 255)
+                                                    );
+                                                    border-radius: 10px;
+                                                    text-align: center;
+                                                    color: white;
+                                                }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.dateWidget.setGraphicsEffect(effect)
         self.dateWidget.setContentsMargins(10, 10, 10, 10)
 
         self.dateLayout.addWidget(self.dateWidget)
@@ -73,8 +93,16 @@ class PatientDashboard(QWidget):
 
     def generatePrescription(self):
         self.prescriptionWidget = QWidget()
+        self.prescriptionWidget.setObjectName("prescriptionWidget")
         self.prescriptionWidget.setStyleSheet(
-            "background-color: #BCCAE0; border-radius: 10px; margin-left: 20px;")
+            """QWidget#prescriptionWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                                stop: 1 rgba(119, 82, 254, 255)
+                                                            );
+                                                            border-radius: 10px;
+                                                            text-align: center;
+                                                            color: white;
+                                                        }""")
         self.prescriptionLayout = QVBoxLayout(self.prescriptionWidget)
 
         spacer = QWidget()
@@ -88,6 +116,7 @@ class PatientDashboard(QWidget):
         font.setWeight(75)
         self.prescriptionTitle.setFont(font)
         self.prescriptionTitle.setText("Prescription")
+        self.prescriptionTitle.setStyleSheet("color: white;")
         headerRow = QHBoxLayout()
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.prescriptionTitle)
@@ -106,16 +135,26 @@ class PatientDashboard(QWidget):
         buttonFont.setWeight(75)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\medical-prescription.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-pills-64.png")
         self.prescriptionButtonIcon = QIcon(filepath)
 
         for count, prescription in enumerate(prescriptionList):
             self.prescriptionButton = QPushButton()
+            self.prescriptionButton.setObjectName("prescriptionButton")
             self.prescriptionButton.setText(f"{prescription.getPrescriptionID()}")
-            self.prescriptionButton.setStyleSheet("background-color: white; border-radius: 10px;")
+            self.prescriptionButton.setStyleSheet("""QPushButton#prescriptionButton {
+                                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255)
+                                                                            );
+                                                                            border-radius: 10px; color: white;
+                                                                        }
+                                                                        QPushButton#prescriptionButton:hover
+                                                                        {
+                                                                          background-color: #7752FE;}""")
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setFixedSize(QSize(400,100))
-            self.prescriptionButton.setIconSize(QSize(70, 70))
+            self.prescriptionButton.setIconSize(QSize(30, 30))
             self.prescriptionButton.setIcon(self.prescriptionButtonIcon)
             self.prescriptionButton.clicked.connect(
                 lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
@@ -139,11 +178,20 @@ class PatientDashboard(QWidget):
     def generateWelcomeText(self):
 
         self.welcomeTextWidget = QWidget()
-        self.welcomeTextWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.welcomeTextWidget.setObjectName("welcomeTextWidget")
+        self.welcomeTextWidget.setStyleSheet("""QWidget#welcomeTextWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                                stop: 1 rgba(119, 82, 254, 255)
+                                                            );
+                                                            border-radius: 10px;
+                                                            text-align: center;
+                                                            color: white;
+                                                        }""")
         self.welcomeTextLayout = QVBoxLayout(self.welcomeTextWidget)
 
         welcomeTextLabel = QLabel()
         welcomeTextLabel.setText(f"Welcome {self.patient.getPatientName()}!")
+        welcomeTextLabel.setStyleSheet("color: white;")
         welcomeTextLabel.setStyleSheet("padding-left: 30px")
         font = QFont()
         font.setFamily("Arial")
@@ -159,7 +207,15 @@ class PatientDashboard(QWidget):
     def generateUpcomingAppointments(self):
 
         self.upcomingAppointmentWidget = QWidget()
-        self.upcomingAppointmentWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px; margin-left: 20px;")
+        self.upcomingAppointmentWidget.setObjectName("upcomingAppointmentWidget")
+        self.upcomingAppointmentWidget.setStyleSheet("""QWidget#upcomingAppointmentWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                                stop: 1 rgba(119, 82, 254, 255)
+                                                            );
+                                                            border-radius: 10px;
+                                                            text-align: center;
+                                                            color: white;
+                                                        }""")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
 
         spacer = QWidget()
@@ -173,6 +229,7 @@ class PatientDashboard(QWidget):
         font.setWeight(75)
         self.upcomingAppointmentTitle.setFont(font)
         self.upcomingAppointmentTitle.setText("Upcoming Appointment")
+        self.upcomingAppointmentTitle.setStyleSheet("color: white;")
         headerRow = QHBoxLayout()
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.upcomingAppointmentTitle)
@@ -196,16 +253,26 @@ class PatientDashboard(QWidget):
         buttonFont.setWeight(75)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\appointment.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-64.png")
         self.appointmentButtonIcon = QIcon(filepath)
 
         for count, appointment in enumerate(appointmentList):
             self.appointmentButton = QPushButton()
+            self.appointmentButton.setObjectName("appointmentButton")
             self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
-            self.appointmentButton.setStyleSheet("background-color: white; border-radius: 10px; margin-left: 30px;")
+            self.appointmentButton.setStyleSheet("""QPushButton#appointmentButton {
+                                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255)
+                                                                            );
+                                                                            border-radius: 10px; color: white;
+                                                                        }
+                                                                        QPushButton#appointmentButton:hover
+                                                                        {
+                                                                          background-color: #7752FE;}""")
             self.appointmentButton.setFont(buttonFont)
             self.appointmentButton.setFixedSize(QSize(400,100))
-            self.appointmentButton.setIconSize(QSize(70, 70))
+            self.appointmentButton.setIconSize(QSize(30, 30))
             self.appointmentButton.setIcon(self.appointmentButtonIcon)
             self.appointmentButton.clicked.connect(
                 lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.patient))
@@ -228,12 +295,23 @@ class PatientDashboard(QWidget):
 
     def generateMapWidget(self):
 
+        self.mainMapWidget = QWidget()
+        self.mainMapLayout = QVBoxLayout(self.mainMapWidget)
+
         self.mapWidget = QWidget()
-        self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.mapWidget.setObjectName("mapWidget")
+        self.mapWidget.setStyleSheet("""QWidget#mapWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                        stop: 0 rgba(25, 4, 130, 255), 
+                                                                        stop: 1 rgba(119, 82, 254, 255)
+                                                                    );
+                                                                    border-radius: 10px;
+                                                                    text-align: center;
+                                                                    color: white;
+                                                                }""")
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
 
         self.widgetTitle = QLabel()
-        self.widgetTitle.setFixedWidth(380)
+        self.widgetTitle.setFixedSize(80, 40)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -244,12 +322,33 @@ class PatientDashboard(QWidget):
 
         headerRow = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(200)
+        spacer.setFixedSize(500,1)
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.widgetTitle)
 
-        self.mapWidgetLayout.addLayout(headerRow)
         self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
+
+        self.mainMapLayout.addLayout(headerRow)
+
+        # map = geoHelper.showMap(self.currLocation)  # Return Folium Map
+
+        # geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
+        # map = self.generateClinicMarkers(map=map)
+
+        # data = io.BytesIO()
+        # map.save(data, close_file=False)
+
+        # webView = QWebEngineView()
+        # webView.setHtml(data.getvalue().decode())
+
+        # self.mapWidgetLayout.addWidget(webView)
+        # self.mainMapLayout.addWidget(self.mapWidget)
+
+    # def generateClinicMarkers(self,map,clinicList):
+    #     for clinics in clinicList:
+    #         geoHelper.addMarker(map,(clinics.getClinicLat(),clinics.getClinicLon()),clinics.getClinicName()
+    #                             ,'lightblue','home')
+    #     return map
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
