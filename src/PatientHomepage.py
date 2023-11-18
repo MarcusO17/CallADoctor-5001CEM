@@ -168,11 +168,12 @@ class PatientHomepage(QMainWindow):
         self.myAppointmentButton.setGraphicsEffect(effect)
 
         self.topLeftLogo = QLabel()
-        self.topLeftLogo.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogo.setFixedSize(280, 150)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo.png")
         self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(70, 70)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(150, 150)
         self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.topLeftLogo.setStyleSheet("margin-left: 60px;")
 
         self.myAccountButton = QPushButton()
         self.myAccountButton.setFixedSize(70, 70)
