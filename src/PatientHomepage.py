@@ -192,13 +192,19 @@ class PatientHomepage(QMainWindow):
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
-        self.logoutButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logout.png")
+        self.logoutButton.setFixedSize(280, 70)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-logout-64.png")
         self.logoutIcon = QIcon(filepath)
         self.logoutButton.setIconSize(QSize(35, 35))
+        self.logoutButton.setFont(font)
+        self.logoutButton.setText("Log Out")
         self.logoutButton.setIcon(self.logoutIcon)
-        self.logoutButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.logoutButton.setStyleSheet(stylesheet)
         self.logoutButton.clicked.connect(self.logout)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.logoutButton.setGraphicsEffect(effect)
         
 
         self.highlightButtonList = list()
