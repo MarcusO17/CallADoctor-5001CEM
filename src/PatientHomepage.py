@@ -239,6 +239,25 @@ class PatientHomepage(QMainWindow):
     def setButtonHighlight(self, button):
         for buttonTemp in self.highlightButtonList:
             if buttonTemp == button:
-                button.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
+                button.setStyleSheet("background-color: #190482; border-radius: 10px; text-align: left; padding-left: 10px; color: white;")
             else:
-                buttonTemp.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+                buttonTemp.setStyleSheet("""
+                    QPushButton
+                    {
+                       background-color: transparent;
+                       border-radius: 10px;
+                       color: white;
+                       text-align: left; 
+                       padding-left: 10px;
+                    }
+                    QPushButton:pressed
+                    {
+                      background-color: #190482;    
+                      text-align: left; 
+                      padding-left: 10px; 
+                    }
+                    QPushButton:hover
+                    {
+                      background-color: #7752FE;
+                    }
+                    """)
