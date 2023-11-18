@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox, QSizePolicy, \
-    QHBoxLayout, QVBoxLayout, QStackedWidget
+    QHBoxLayout, QVBoxLayout, QStackedWidget, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -82,14 +82,45 @@ class PatientHomepage(QMainWindow):
 
         self.centralwidget = QWidget(MainWindow)
 
+        self.mainLayout = QHBoxLayout()
+        self.sideLayoutWidget = QWidget()
+        self.sideLayoutWidget.setObjectName("SideBar")
+        self.sideLayoutWidget.setStyleSheet("""QWidget#sideBar {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                stop: 1 rgba(119, 82, 254, 255)
+                                            );
+                                            border-radius: 10px;
+                                        }""")
+        self.sideLayout = QVBoxLayout(self.sideLayoutWidget)
+        self.sideLayout.setContentsMargins(10, 10, 10, 10)
+
+        font = QFont()
+        font.setFamily("Montserrat")
+        font.setPointSize(15)
+
         self.dashboardButton = QPushButton()
-        self.dashboardButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\dashboard.png")
+        self.dashboardButton.setFixedSize(280, 70)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-house-64 (1).png")
         self.dashboardIcon = QIcon(filepath)
+        self.dashboardButton.setFont(font)
         self.dashboardButton.setIconSize(QSize(35, 35))
+        self.dashboardButton.setText("Dashboard")
         self.dashboardButton.setIcon(self.dashboardIcon)
-        self.dashboardButton.setStyleSheet("background-color: #3872E8; border-radius: 10px;")
+        self.dashboardButton.setStyleSheet("""
+                                            QPushButton
+                                            {
+                                               background-color: #190482;
+                                               border-radius: 10px;
+                                               color: white;
+                                               text-align: left; 
+                                               padding-left: 10px;
+                                            }
+                                            """)
         self.dashboardButton.clicked.connect(self.goToDashboard)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.dashboardButton.setGraphicsEffect(effect)
 
         self.clinicNearbyButton = QPushButton()
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\clinic.png")
@@ -151,11 +182,6 @@ class PatientHomepage(QMainWindow):
         self.highlightButtonList.append(self.dashboardButton)
         self.highlightButtonList.append(self.clinicNearbyButton)
 
-        self.mainLayout = QHBoxLayout()
-        self.sideLayoutWidget = QWidget()
-        self.sideLayoutWidget.setStyleSheet("background-color: #E6EBF5; border-radius: 10px;")
-        self.sideLayout = QVBoxLayout(self.sideLayoutWidget)
-        self.sideLayout.setContentsMargins(10, 10, 10, 10)
 
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
