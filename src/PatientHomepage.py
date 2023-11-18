@@ -123,13 +123,19 @@ class PatientHomepage(QMainWindow):
         self.dashboardButton.setGraphicsEffect(effect)
 
         self.clinicNearbyButton = QPushButton()
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\clinic.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-clinic-50.png")
         self.clinicNearbyIcon = QIcon(filepath)
-        self.clinicNearbyButton.setFixedSize(70, 70)
+        self.clinicNearbyButton.setFixedSize(280, 70)
         self.clinicNearbyButton.setIcon(self.clinicNearbyIcon)
-        self.clinicNearbyButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.clinicNearbyButton.setStyleSheet(stylesheet)
         self.clinicNearbyButton.setIconSize(QSize(35, 35))
+        self.clinicNearbyButton.setFont(font)
+        self.clinicNearbyButton.setText("Clinic Nearby")
         self.clinicNearbyButton.clicked.connect(self.goToClinicsNearby)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.clinicNearbyButton.setGraphicsEffect(effect)
 
         self.myPrescriptionButton = QPushButton()
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\medical-prescription.png")
