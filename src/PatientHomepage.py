@@ -24,9 +24,11 @@ class PatientHomepage(QMainWindow):
         self.pageManager = PageManager()
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayoutManager.add(0)
+        self.frameLayoutManager.setBasePages(5)
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
+        self.setStyleSheet(f"QMainWindow {{background-color: white;}}")
 
         self.setupUi(self)
 
@@ -56,7 +58,26 @@ class PatientHomepage(QMainWindow):
 
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("Homepage")
+        stylesheet = """
+                    QPushButton
+                    {
+                       background-color: transparent;
+                       border-radius: 10px;
+                       color: white;
+                       text-align: left; 
+                       padding-left: 10px;
+                    }
+                    QPushButton:pressed
+                    {
+                      background-color: #190482;     
+                      text-align: left; 
+                      padding-left: 10px;
+                    }
+                    QPushButton:hover
+                    {
+                      background-color: #7752FE;
+                    }
+                    """
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.centralwidget = QWidget(MainWindow)
