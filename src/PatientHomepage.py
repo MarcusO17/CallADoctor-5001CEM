@@ -176,13 +176,19 @@ class PatientHomepage(QMainWindow):
         self.topLeftLogo.setStyleSheet("margin-left: 60px;")
 
         self.myAccountButton = QPushButton()
-        self.myAccountButton.setFixedSize(70, 70)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\account.png")
+        self.myAccountButton.setFixedSize(280, 70)
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-customer-30.png")
         self.myAccountIcon = QIcon(filepath)
         self.myAccountButton.setIconSize(QSize(35, 35))
+        self.myAccountButton.setFont(font)
+        self.myAccountButton.setText("My Account")
         self.myAccountButton.setIcon(self.myAccountIcon)
-        self.myAccountButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
+        self.myAccountButton.setStyleSheet(stylesheet)
         self.myAccountButton.clicked.connect(self.goToAccountPage)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.myAccountButton.setGraphicsEffect(effect)
 
         # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
@@ -193,6 +199,7 @@ class PatientHomepage(QMainWindow):
         self.logoutButton.setIcon(self.logoutIcon)
         self.logoutButton.setStyleSheet("background-color: #9DB9F2; border-radius: 10px;")
         self.logoutButton.clicked.connect(self.logout)
+        
 
         self.highlightButtonList = list()
         self.highlightButtonList.append(self.myAccountButton)
