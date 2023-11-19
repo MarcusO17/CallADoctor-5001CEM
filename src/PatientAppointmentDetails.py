@@ -261,8 +261,9 @@ class PatientAppointmentDetailsWindow(QWidget):
     def cancelAppointmentShow(self):
         appointmentStartTime = self.appointment.getStartTime().split(":")
 
+        print(appointmentStartTime)
         currentTime = QTime.currentTime()
-        startTime = QTime(int(appointmentStartTime[0]), int(appointmentStartTime[1]), int(appointmentStartTime[2]))
+        startTime = QTime(int(appointmentStartTime[0]), int(appointmentStartTime[1]))
 
         timeDiff = currentTime.secsTo(startTime)
 
