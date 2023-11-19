@@ -1234,6 +1234,22 @@ def uploadClinicImage(id):
             return jsonify({"Message": "Image uploaded and processed successfully"})
         except:
             return jsonify({'Error':'Image Error'})
+        
+@app.route('/clinics/image/upload/<string:id>', methods=['POST'])
+def uploadClinicImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'POST':
+        try:
+            file = request.files['file']
+            imgData = file.read()
+            cursor.execute("UPDATE clinics SET verifiedDoc = %s WHERE clinicID = %s", (imgData, id))
+            conn.commit()
+            conn.close()
+            return jsonify({"Message": "Image uploaded and processed successfully"})
+        except:
+            return jsonify({'Error':'Image Error'})
 
 @app.route('/clinics/image/download/<string:id>', methods=['GET'])
 def downloadClinicImage(id):
@@ -1248,7 +1264,41 @@ def downloadClinicImage(id):
             conn.commit()
             conn.close()
 
-            return imgData['verifiedDoc']
+            return imgData['certifiedDoc']
+        except:
+            return None, jsonify({'Error':'Image Error'})
+    
+
+@app.route('/doctors/image/upload/<string:id>', methods=['POST'])
+def uploadDoctorsImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'POST':
+        try:
+            file = request.files['file']
+            imgData = file.read()
+            cursor.execute("UPDATE doctors SET certifiedDoc = %s WHERE doctorID = %s", (imgData, id))
+            conn.commit()
+            conn.close()
+            return jsonify({"Message": "Image uploaded and processed successfully"})
+        except:
+            return jsonify({'Error':'Image Error'})
+
+@app.route('/doctors/image/download/<string:id>', methods=['GET'])
+def downloadDoctorsImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'GET':
+        try:
+            cursor.execute("SELECT certifiedDoc from doctors where doctorID = %s", id)
+            imgData = cursor.fetchone()
+
+            conn.commit()
+            conn.close()
+
+            return imgData['certifiedDoc']
         except:
             return None, jsonify({'Error':'Image Error'})
     
