@@ -394,17 +394,13 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
 
         def saveData(self):
                 doctorDocumentPath = self.docAttachmentLineEdit.text()
-                doctorDocumentData = None
-                with open(doctorDocumentPath, "rb") as doctorDocumentFile:
-                        doctorDocumentData = doctorDocumentFile.read()
-
+                files = {'file': ('docCertification.jpg', open(doctorDocumentPath , 'rb'))}
 
                 doctorName  = f'{self.docFirstNameLineEdit.text()} {self.docLastNameLineEdit.text()}'
                 doctorEmail = self.docEmailLineEdit.text()
                 doctorPassword = self.docPasswordLineEdit.text()
                 doctorContact = self.docContactLineEdit.text()
                 doctorType = self.docSpecialtyLineEdit.text()
-                doctorDocument = doctorDocumentData
                 yearsOfExperience = self.docExpLineEdit.text()
                 doctorICNumber = self.docPassportLineEdit.text()
                 
@@ -414,7 +410,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         "doctorPassword": doctorPassword,
                         "doctorICNumber": doctorICNumber,
                         "doctorContact": doctorContact,
-                        "doctorDocument": doctorDocument,
                         "doctorType": doctorType,
                         "yearOfExperience": yearsOfExperience,
                         "doctorEmail": doctorEmail,
@@ -428,7 +423,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                                                         QMessageBox.Yes | QMessageBox.No)
                 if docGoRegisterDialogBox == QMessageBox.Yes:
                                 
-                        response,registerFlag = Registration.registerDoctor(doctorJSON)
+                        response,registerFlag = Registration.registerDoctor(doctorJSON,files)
                         if registerFlag:
                                 pass
                         else:
