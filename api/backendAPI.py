@@ -308,7 +308,7 @@ def doctors():
 
     if request.method == 'POST':
         contentJSON = request.get_json()
-
+        print(contentJSON)
         doctorID = requests.get('http://127.0.0.1:5000/doctors/idgen').text
         doctorName = contentJSON['doctorName']
         doctorPassword = contentJSON['doctorPassword']
@@ -334,7 +334,7 @@ def doctors():
         
         conn.commit() #Commit Changes to db, like git commit
     
-        return f'Successful POST : {clinicID}',201
+        return f'Successful POST : {doctorID}',201
 
 
     if request.method == 'DELETE':
@@ -1219,22 +1219,6 @@ def getLastRequestsID():
 
     if id is not None:
             return id,200
-   
-@app.route('/clinics/image/upload/<string:id>', methods=['POST'])
-def uploadClinicImage(id):
-    conn = dbConnect()  
-    cursor = conn.cursor()
-   
-    if request.method == 'POST':
-        try:
-            file = request.files['file']
-            imgData = file.read()
-            cursor.execute("UPDATE clinics SET verifiedDoc = %s WHERE clinicID = %s", (imgData, id))
-            conn.commit()
-            conn.close()
-            return jsonify({"Message": "Image uploaded and processed successfully"})
-        except:
-            return jsonify({'Error':'Image Error'})
         
 @app.route('/clinics/image/upload/<string:id>', methods=['POST'])
 def uploadClinicImage(id):

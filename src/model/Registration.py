@@ -11,6 +11,7 @@ class Registration:
 
         if response.status_code == 201:
             doctorID = response.text.split(' : ')[1]
+            print(doctorID)
             responseUpload = requests.post(f'http://127.0.0.1:5000/doctors/image/upload/{doctorID}',files=img)
             print(responseUpload.text)
             return registerStatus, True

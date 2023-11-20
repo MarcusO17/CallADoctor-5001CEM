@@ -345,7 +345,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docRegisterPushButton.setFont(font)
                 self.docRegisterPushButton.setAutoFillBackground(False)
                 self.docRegisterPushButton.setObjectName("Register")
-                self.docRegisterPushButton.clicked.connect(lambda checked: self.saveData)
+                self.docRegisterPushButton.clicked.connect(lambda checked: self.saveData())
 
 
 
@@ -414,7 +414,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         "yearOfExperience": yearsOfExperience,
                         "doctorEmail": doctorEmail,
                         "status": "Inactive",
-                        "clinicID": 0
                 }
 
 
