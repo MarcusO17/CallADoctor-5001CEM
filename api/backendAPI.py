@@ -1182,157 +1182,216 @@ def prescriptionID(id):
 @app.route('/prescriptions/appointments/<string:id>',methods=['GET','DELETE'])
 def prescriptionAppointmentID(id):
 
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute("SELECT * FROM prescriptions where appointmentID = %s",id)
-        prescription = [
-            dict(
-                prescriptionID = row['prescriptionID'],
-                appointmentID  = row['appointmentID'],
-                expiryDate = row['expiryDate']
-            )
-            for row in cursor.fetchall()
-        ]
-        if prescription is not None:
-            return jsonify(prescription),200
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM prescriptions where appointmentID = %s",id)
+            prescription = [
+                dict(
+                    prescriptionID = row['prescriptionID'],
+                    appointmentID  = row['appointmentID'],
+                    expiryDate = row['expiryDate']
+                )
+                for row in cursor.fetchall()
+            ]
+            if prescription is not None:
+                return jsonify(prescription),200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()
         
 @app.route('/prescriptions/patients/<string:id>',methods=['GET','DELETE'])
 def prescriptionPatientID(id):
-
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute("""SELECT * FROM prescriptions where appointmentID in (SELECT 
-                       appointmentID FROM appointments where patientID = %s)""",id)
-        prescription = [
-            dict(
-                prescriptionID = row['prescriptionID'],
-                appointmentID  = row['appointmentID'],
-                expiryDate = row['expiryDate']
-            )
-            for row in cursor.fetchall()
-        ]
-        if prescription is not None:
-            return jsonify(prescription),200
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("""SELECT * FROM prescriptions where appointmentID in (SELECT 
+                        appointmentID FROM appointments where patientID = %s)""",id)
+            prescription = [
+                dict(
+                    prescriptionID = row['prescriptionID'],
+                    appointmentID  = row['appointmentID'],
+                    expiryDate = row['expiryDate']
+                )
+                for row in cursor.fetchall()
+            ]
+            if prescription is not None:
+                return jsonify(prescription),200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()
 
     
 @app.route('/prescriptionDetails/<string:id>',methods=['GET','DELETE'])
 def prescriptionDetailsID(id):
-
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute("SELECT * FROM prescription_details where prescriptionID = %s",id)
-        prescription = [
-            dict(
-                medicationName = row['medicationName'],
-                pillsPerDay  = row['pillsPerDay'],
-                food = row['food'],
-                dosage = row['dosage']
-            )
-            for row in cursor.fetchall()
-        ]
-        if prescription is not None:
-            return jsonify(prescription),200
-    if request.method == 'DELETE':
-        try:
-            cursor.execute("DELETE FROM prescription_details WHERE prescriptionID = %s",id)
-        except pymysql.MySQLError as e:
-            return 'Error : ',e
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM prescription_details where prescriptionID = %s",id)
+            prescription = [
+                dict(
+                    medicationName = row['medicationName'],
+                    pillsPerDay  = row['pillsPerDay'],
+                    food = row['food'],
+                    dosage = row['dosage']
+                )
+                for row in cursor.fetchall()
+            ]
+            if prescription is not None:
+                return jsonify(prescription),200
+        if request.method == 'DELETE':
+            try:
+                cursor.execute("DELETE FROM prescription_details WHERE prescriptionID = %s",id)
+            except pymysql.MySQLError as e:
+                return 'Error : ',e
+        
+            conn.commit()
+            return 'Successful DELETE', 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
-        conn.commit()
-        return 'Successful DELETE', 200
+    finally:
+        if conn is not None:
+            conn.close()
+
     
 @app.route('/prescriptionDetails', methods=['POST'])
 def prescriptionDetails():
-    conn = dbConnect()  
-    cursor = conn.cursor()
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'POST':
+            contentJSON = request.get_json()
 
-    if request.method == 'POST':
-        contentJSON = request.get_json()
+            prescriptionID =contentJSON['prescriptionID']
+            appointmentID =  contentJSON['appointmentID']
+            medicationName = contentJSON['medicationName']
+            pillsPerDay = contentJSON['pillsPerDay']
+            food = contentJSON['food']
+            dosage = contentJSON['dosage']
 
-        prescriptionID =contentJSON['prescriptionID']
-        appointmentID =  contentJSON['appointmentID']
-        medicationName = contentJSON['medicationName']
-        pillsPerDay = contentJSON['pillsPerDay']
-        food = contentJSON['food']
-        dosage = contentJSON['dosage']
-
-        insertQuery = """
-                        INSERT INTO prescription_details (prescriptionID,appointmentID,medicationName
-                                                         ,pillsPerDay,food,dosage)
-                        VALUES (%s,%s,%s,%s,%s,%s)
-                    """
-        cursor = cursor.execute(insertQuery,(prescriptionID,appointmentID,medicationName
-                                            ,pillsPerDay,food,dosage))
-        conn.commit() #Commit Changes to db, like git commit
-        return'Successful POST', 201
+            insertQuery = """
+                            INSERT INTO prescription_details (prescriptionID,appointmentID,medicationName
+                                                            ,pillsPerDay,food,dosage)
+                            VALUES (%s,%s,%s,%s,%s,%s)
+                        """
+            cursor = cursor.execute(insertQuery,(prescriptionID,appointmentID,medicationName
+                                                ,pillsPerDay,food,dosage))
+            conn.commit() #Commit Changes to db, like git commit
+            return'Successful POST', 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()
     
 @app.route('/requests',methods=['GET','POST'])
 def allRequests():
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM requests")
+            requests = [
+                dict(
+                    requestsID = row['requestsID'],
+                    requestsType = row['requestsType'],
+                    clientID  = row['clientID'],
+                    approvalStatus = row['approvalStatus'],
+                    dateSubmitted = row['dateSubmitted'],
+                    requestReason = row['requestReason'],
+                    appointmentID = row['appointmentID']
+                )
+                for row in cursor.fetchall()
+            ]
+            if requests  is not None:
+                return jsonify(requests),200
+            
+        if request.method == 'POST':
+            
+            contentJSON = request.get_json()
 
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute("SELECT * FROM requests")
-        requests = [
-            dict(
-                requestsID = row['requestsID'],
-                requestsType = row['requestsType'],
-                clientID  = row['clientID'],
-                approvalStatus = row['approvalStatus'],
-                dateSubmitted = row['dateSubmitted'],
-                requestReason = row['requestReason'],
-                appointmentID = row['appointmentID']
-            )
-            for row in cursor.fetchall()
-        ]
-        if requests  is not None:
-            return jsonify(requests),200
-        
-    if request.method == 'POST':
-        
-        contentJSON = request.get_json()
+            requestsID =  requests.get('http://127.0.0.1:5000/requests/idgen').text
+            requestsType = contentJSON['requestsType']
+            clientID = contentJSON['clientID']
+            approvalStatus = contentJSON['approvalStatus']
+            dateSubmitted = datetime.now().date() 
+            requestReason = contentJSON['requestReason']
 
-        requestsID =  requests.get('http://127.0.0.1:5000/requests/idgen').text
-        requestsType = contentJSON['requestsType']
-        clientID = contentJSON['clientID']
-        approvalStatus = contentJSON['approvalStatus']
-        dateSubmitted = datetime.now().date() 
-        requestReason = contentJSON['requestReason']
-
-        insertQuery = """
-                        INSERT INTO requests (requestsID,requestsType,clientID,approvalStatus,
-                                             dateSubmitted,requestReason,appointmentID)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s)
-                    """
-        cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
-                                             dateSubmitted,requestReason,appointmentID)
-                                             )
-        conn.commit() #Commit Changes to db, like git commit
-        return'Successful POST', 201
+            insertQuery = """
+                            INSERT INTO requests (requestsID,requestsType,clientID,approvalStatus,
+                                                dateSubmitted,requestReason,appointmentID)
+                            VALUES (%s,%s,%s,%s,%s,%s,%s)
+                        """
+            cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
+                                                dateSubmitted,requestReason,appointmentID)
+                                                )
+            conn.commit() #Commit Changes to db, like git commit
+            return'Successful POST', 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()    
+    
 
 @app.route('/requests/<string:clinicID>',methods=['GET'])
 def requestsByClinic(clinicID):
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute("SELECT * FROM requests where appointmentID in(SELECT appointmentID from clinics where clinicID = %s)",clinicID)
-        requests = [
-            dict(
-                requestsID = row['requestsID'],
-                requestsType = row['requestsType'],
-                clientID  = row['clientID'],
-                approvalStatus = row['approvalStatus'],
-                dateSubmitted = row['dateSubmitted'],
-                requestReason = row['requestReason'],
-                appointmentID = row['appointmentID']
-            )
-            for row in cursor.fetchall()
-        ]
-        if requests  is not None:
-            return jsonify(requests),200
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM requests where appointmentID in(SELECT appointmentID from clinics where clinicID = %s)",clinicID)
+            requests = [
+                dict(
+                    requestsID = row['requestsID'],
+                    requestsType = row['requestsType'],
+                    clientID  = row['clientID'],
+                    approvalStatus = row['approvalStatus'],
+                    dateSubmitted = row['dateSubmitted'],
+                    requestReason = row['requestReason'],
+                    appointmentID = row['appointmentID']
+                )
+                for row in cursor.fetchall()
+            ]
+            if requests  is not None:
+                return jsonify(requests),200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()    
+    
         
 
 @app.route('/graph/users', methods=['GET'])
