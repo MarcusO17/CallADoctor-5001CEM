@@ -9,12 +9,12 @@ import pymysql
 import pandas as pd 
 
 
-
-
 app = Flask(__name__)
 
 
 def configure():
+    """Loads Secrets
+    """
     load_dotenv()
 
 def dbConnect():    
@@ -38,195 +38,225 @@ def index():
 
 @app.route('/users',methods=['GET'])
 def users():
-    conn = dbConnect()
-    if conn == None:
-        return None
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute('SELECT * FROM users')
-        users = [
-            dict(
-            ID = row['ID'],
-            email = row['email'],
-            password = row['password'],
-            role = row['role'],
-            )
-            for row in cursor.fetchall()
-        ]
-    if users is not None:
-        return jsonify(users), 200    
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
+    
+        cursor = conn.cursor()
+
+        if request.method == 'GET':
+            cursor.execute('SELECT * FROM users')
+            users = [
+                dict(
+                ID = row['ID'],
+                email = row['email'],
+                password = row['password'],
+                role = row['role'],
+                )
+                for row in cursor.fetchall()
+            ]
+        if users is not None:
+            return jsonify(users), 200    
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()
           
 @app.route('/patients',methods=['GET','POST','DELETE'])
 def patients():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        #Add Error Handling
-        cursor.execute("SELECT * FROM patients")
-    
-        patients = [
-            dict(
-                patientID = row['patientID'],
-                patientName = row['patientName'],
-                address = row['address'],
-                dateOfBirth = row['dateOfBirth'],
-                patientICNumber = row['patientICNumber'],
-                bloodType = row['bloodType'],
-                race = row['race'],  
-                lat = row['lat'],
-                lon = row['lon']
-            )
-            for row in cursor.fetchall()
-        ]
-        if patients is not None:
-            return jsonify(patients),200
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
         
+        cursor = conn.cursor()
+
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM patients")
+        
+            patients = [
+                dict(
+                    patientID = row['patientID'],
+                    patientName = row['patientName'],
+                    address = row['address'],
+                    dateOfBirth = row['dateOfBirth'],
+                    patientICNumber = row['patientICNumber'],
+                    bloodType = row['bloodType'],
+                    race = row['race'],  
+                    lat = row['lat'],
+                    lon = row['lon']
+                )
+                for row in cursor.fetchall()
+            ]
+            if patients is not None:
+                return jsonify(patients),200
+
+        if request.method == 'POST':
+            contentJSON = request.get_json()
+
+            patientID = requests.get('http://127.0.0.1:5000/patients/idgen').text
+            patientName = contentJSON['patientName']
+            patientEmail = contentJSON['patientEmail']
+            patientPassword = contentJSON['patientPassword']
+            patientICNumber = contentJSON['patientICNumber']
+            address = contentJSON['address']
+            dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
+            bloodType = contentJSON['bloodType']
+            race = contentJSON['race']
+            try:
+                lat,lon = geoHelper.geocode(address=address)
+            except Exception as e:
+                lat,lon = None,None
         
 
-    if request.method == 'POST':
-        contentJSON = request.get_json()
-
-        patientID = requests.get('http://127.0.0.1:5000/patients/idgen').text
-        patientName = contentJSON['patientName']
-        patientEmail = contentJSON['patientEmail']
-        patientPassword = contentJSON['patientPassword']
-        patientICNumber = contentJSON['patientICNumber']
-        address = contentJSON['address']
-        dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
-        bloodType = contentJSON['bloodType']
-        race = contentJSON['race']
-        lat,lon = geoHelper.geocode(address=address)
     
-
+            insertQuery = """
+                            INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
+                                                patientICNumber,dateOfBirth,bloodType,race,lat,lon)
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        """
+            cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
+                                                patientICNumber,dateOfBirth,bloodType,race,lat,lon))
+            conn.commit() #Commit Changes to db, like git commit
+            return'Successful POST', 201
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()
    
-        insertQuery = """
-                        INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
-                                            patientICNumber,dateOfBirth,bloodType,race,lat,lon)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                      """
-        cursor = cursor.execute(insertQuery,(patientID,patientName,address,patientEmail,patientPassword,
-                                             patientICNumber,dateOfBirth,bloodType,race,lat,lon))
-        conn.commit() #Commit Changes to db, like git commit
-        return'Successful POST', 201
-    
-    if request.method == 'DELETE':
-        try:
-            pass
-            #cursor.execute("DELETE FROM patients")
-        except pymysql.MySQLError as e:
-            return 'Error : ',e
-        return 'Successful DELETE', 200
-    
 @app.route('/patients/<string:id>',methods=['GET','DELETE'])
 def patientID(id):
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute("SELECT * FROM patients where patientID = %s",id)
-        patient = [
-            dict(
-                patientID = row['patientID'],
-                patientName = row['patientName'],
-                address = row['address'],
-                dateOfBirth = row['dateOfBirth'],
-                patientICNumber = row['patientICNumber'],
-                bloodType = row['bloodType'],
-                race = row['race'],  
-                lat = row['lat'],
-                lon = row['lon']
-            )
-            for row in cursor.fetchall()
-        ]
-        if patients is not None:
-            return jsonify(patient),200
-    if request.method == 'DELETE':
-        try:
-            cursor.execute("DELETE FROM patients WHERE patientID = %s",id)
-        except pymysql.MySQLError as e:
-            return 'Error : ',e
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
+        
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM patients where patientID = %s",id)
+            patient = [
+                dict(
+                    patientID = row['patientID'],
+                    patientName = row['patientName'],
+                    address = row['address'],
+                    dateOfBirth = row['dateOfBirth'],
+                    patientICNumber = row['patientICNumber'],
+                    bloodType = row['bloodType'],
+                    race = row['race'],  
+                    lat = row['lat'],
+                    lon = row['lon']
+                )
+                for row in cursor.fetchall()
+            ]
+            if patients is not None:
+                return jsonify(patient),200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
-        conn.commit()
-        return 'Successful DELETE', 200
-    
+    finally:
+        if conn is not None:
+            conn.close()
+          
+        
 @app.route('/clinics',methods=['GET','POST'])  
 def clinics():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        #Add Error Handling
-        cursor.execute("SELECT * FROM clinics")
-    
-        clinics = [
-            dict(
-                clinicID = row['clinicID'],
-                clinicName = row['clinicName'],
-                clinicContact = row['clinicContact'],
-                address = row['address'],
-                governmentApproved = row['governmentApproved'],
-                lat = row['lat'],
-                lon = row['lon']
-            )
-            for row in cursor.fetchall()
-        ]
-        if clinics is not None:
-            return jsonify(clinics),200
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
         
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            #Add Error Handling
+            cursor.execute("SELECT * FROM clinics")
         
+            clinics = [
+                dict(
+                    clinicID = row['clinicID'],
+                    clinicName = row['clinicName'],
+                    clinicContact = row['clinicContact'],
+                    address = row['address'],
+                    governmentApproved = row['governmentApproved'],
+                    lat = row['lat'],
+                    lon = row['lon']
+                )
+                for row in cursor.fetchall()
+            ]
+            if clinics is not None:
+                return jsonify(clinics),200
+            
 
-    if request.method == 'POST':
-        contentJSON = request.get_json()
+        if request.method == 'POST':
+            contentJSON = request.get_json()
 
-        clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
-        clinicName = contentJSON['clinicName']
-        clinicEmail = contentJSON['clinicEmail']
-        clinicPassword = contentJSON['clinicPassword']
-        clinicContact = contentJSON['clinicContact']
-        address = contentJSON['address']
-        governmentApproved = 0
-        lat,lon = geoHelper.geocode(address=address)
-   
-        insertQuery = """
-                        INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                      """
-        cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon))
-        print('Success')    
-        
-    conn.commit() #Commit Changes to db, like git commit
+            clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
+            clinicName = contentJSON['clinicName']
+            clinicEmail = contentJSON['clinicEmail']
+            clinicPassword = contentJSON['clinicPassword']
+            clinicContact = contentJSON['clinicContact']
+            address = contentJSON['address']
+            governmentApproved = 0
+            lat,lon = geoHelper.geocode(address=address)
     
-    return f'Successful POST : {clinicID}',201
+            insertQuery = """
+                            INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
+                                                clinicContact,governmentApproved,lat,lon)
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        """
+            cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
+                                                clinicContact,governmentApproved,lat,lon))
+            print('Success')    
+            
+        conn.commit() #Commit Changes to db, like git commit
+        
+        return f'Successful POST : {clinicID}',201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()
     
 
 @app.route('/clinics/<string:id>',methods=['GET','DELETE'])
 def clinicID(id):
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    if request.method == 'GET':
-        cursor.execute("SELECT * FROM clinics where clinicID = %s",id)
-        clinic = [
-            dict(
-                clinicID = row['clinicID'],
-                clinicName = row['clinicName'],
-                clinicContact = row['clinicContact'],
-                address = row['address'],
-                governmentApproved = row['governmentApproved'],
-                lat = row['lat'],
-                lon = row['lon']
-            )
-            for row in cursor.fetchall()
-        ]
-        if clinics is not None:
-            return jsonify(clinic),200
-    if request.method == 'DELETE':
-        try:
-            cursor.execute("DELETE FROM clinics WHERE clinicID = %s",id)
-        except pymysql.MySQLError as e:
-            return 'Error : ',e
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
+        
+        cursor = conn.cursor()
+
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM clinics where clinicID = %s",id)
+            clinic = [
+                dict(
+                    clinicID = row['clinicID'],
+                    clinicName = row['clinicName'],
+                    clinicContact = row['clinicContact'],
+                    address = row['address'],
+                    governmentApproved = row['governmentApproved'],
+                    lat = row['lat'],
+                    lon = row['lon']
+                )
+                for row in cursor.fetchall()
+            ]
+            if clinics is not None:
+                return jsonify(clinic),200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
-        conn.commit()
-        return 'Successful DELETE', 200
+    finally:
+        if conn is not None:
+            conn.close()
 
 @app.route('/clinics/unapproved',methods=['GET'])  
 def clinicsUnapproved():
