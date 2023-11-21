@@ -87,28 +87,28 @@ class PatientClinicDetailsWindow(QWidget):
         )
         detailsContainer.setGraphicsEffect(effect)
 
-        self.clinicPictureTitle = QLabel(self.centralwidget)
-        self.clinicPictureTitle.setGeometry(QRect(50, 160, 150, 40))
-        self.clinicPictureTitle.setText("Clinic Picture")
+        # self.clinicPictureTitle = QLabel(self.centralwidget)
+        # self.clinicPictureTitle.setGeometry(QRect(50, 160, 150, 40))
+        # self.clinicPictureTitle.setText("Clinic Picture")
 
-        self.clinicPictureLabel = QLabel(self.centralwidget)
-        self.clinicPictureLabel.setGeometry(QRect(50, 190, 400, 200))
-        self.clinicPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.clinicPicture = QPixmap(filepath)
-        self.clinicPictureLabel.setPixmap(self.clinicPicture)
-        self.clinicPictureLabel.setStyleSheet("""QLabel {
-                                                                border-radius: 10px;
-                                                                border: 1px solid black;
-                                                                background: white;
-                                                                }""")
+        # self.clinicPictureLabel = QLabel(self.centralwidget)
+        # self.clinicPictureLabel.setGeometry(QRect(50, 190, 400, 200))
+        # self.clinicPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
+        # filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        # self.clinicPicture = QPixmap(filepath)
+        # self.clinicPictureLabel.setPixmap(self.clinicPicture)
+        # self.clinicPictureLabel.setStyleSheet("""QLabel {
+        #                                                         border-radius: 10px;
+        #                                                         border: 1px solid black;
+        #                                                         background: white;
+        #                                                         }""")
 
         self.clinicDescriptionTitle = QLabel(self.centralwidget)
-        self.clinicDescriptionTitle.setGeometry(QRect(520, 160, 150, 40))
+        self.clinicDescriptionTitle.setGeometry(QRect(50, 160, 150, 40))
         self.clinicDescriptionTitle.setText("Clinic Description: ")
 
         self.clinicDescriptionLabel = QLabel(self.centralwidget)
-        self.clinicDescriptionLabel.setGeometry(QRect(520, 190, 375, 200))
+        self.clinicDescriptionLabel.setGeometry(QRect(50, 190, 400, 200))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
@@ -148,7 +148,7 @@ class PatientClinicDetailsWindow(QWidget):
         self.clinicAddressLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
 
         self.sendRequestButton = QPushButton(self.centralwidget)
-        self.sendRequestButton.setGeometry(QRect(520, 420, 325, 100))
+        self.sendRequestButton.setGeometry(QRect(520, 500, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -156,7 +156,7 @@ class PatientClinicDetailsWindow(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-send-file-30.png")
         self.sendRequestIcon = QIcon(filepath)
         self.sendRequestButton.setLayoutDirection(Qt.LeftToRight)
-        self.sendRequestButton.setText("Send Request")
+        self.sendRequestButton.setText("  Send Request")
         self.sendRequestButton.setIconSize(QSize(50, 50))
         self.sendRequestButton.clicked.connect(self.sendRequestFunction)
         self.sendRequestButton.setIcon(self.sendRequestIcon)
