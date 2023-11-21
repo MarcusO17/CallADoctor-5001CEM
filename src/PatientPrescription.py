@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy
+    QScrollArea, QSizePolicy, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -27,21 +27,37 @@ class PatientPrescriptionWindow(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
-        self.headerTitle.setText("Welcome! [name]")
+        self.headerTitle.setText("My Prescriptions")
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         buttonContainer = QWidget()
-        button_layout = QVBoxLayout(buttonContainer)
+        buttonContainer.setObjectName("buttonContainer")
+        buttonContainer.setStyleSheet("""QWidget#buttonContainer {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            margin-left: 100px;
+                                                            }""")
+        buttonLayout = QVBoxLayout(buttonContainer)
         buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setObjectName("scrollArea")
+
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         
@@ -50,15 +66,39 @@ class PatientPrescriptionWindow(QWidget):
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(28)
+        buttonFont.setPointSize(25)
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
+        prescriptionIcon = QIcon(filepath)
 
         for count, prescription in enumerate(prescriptionList):
             self.prescriptionButton = QPushButton()
             self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getExpiryDate())
             self.prescriptionButton.setFont(buttonFont)
-            self.prescriptionButton.setFixedSize(QSize(950,150))
+            self.prescriptionButton.setIconSize(QSize(80, 80))
+            self.prescriptionButton.setFixedSize(QSize(750,100))
+            self.prescriptionButton.setIcon(prescriptionIcon)
+            self.prescriptionButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: left; 
+                                                    padding-left: 20px;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: left; 
+                                                      padding-left: 20px;
+                                                    }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            self.prescriptionButton.setGraphicsEffect(effect)
             self.prescriptionButton.clicked.connect(lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
             buttonContainer.layout().addWidget(self.prescriptionButton)
 
@@ -67,7 +107,17 @@ class PatientPrescriptionWindow(QWidget):
         buttonContainer.layout().addWidget(spacer)
 
         boxScrollArea.setWidget(buttonContainer)
-        boxScrollArea.setFixedSize(1000,500)
+        boxScrollArea.setFixedSize(900,500)
+        boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    margin-left: 80px;
+                                                    }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        boxScrollArea.setGraphicsEffect(effect)
+
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)

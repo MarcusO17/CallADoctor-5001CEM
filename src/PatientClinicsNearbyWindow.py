@@ -1,11 +1,11 @@
 import io
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy, QLineEdit
+    QScrollArea, QSizePolicy, QLineEdit, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -33,44 +33,49 @@ class PatientClinicsNearbyWindow(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Clinics Nearby")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(30, 40, 800, 70))
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
-
-        # Push Button 5 (Log Out)
-        self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
-        self.backIcon = QIcon(filepath)
-        self.backButton.setIconSize(QSize(70, 70))
-        self.backButton.setIcon(self.backIcon)
-        self.backButton.clicked.connect(self.backButtonFunction)
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         self.searchBar = QLineEdit(self.centralwidget)
-        self.searchBar.setGeometry(QRect(500, 130, 450, 40))
+        self.searchBar.setGeometry(QRect(450, 130, 450, 40))
         self.searchBar.setPlaceholderText("Search Bar")
         self.searchBar.textChanged.connect(self.filterButtons)
 
         self.buttonContainer = QWidget()
         button_layout = QVBoxLayout(self.buttonContainer)
+        self.buttonContainer.setObjectName("buttonContainer")
+        self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            margin-left: 100px;
+                                                            }""")
         self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setWidgetResizable(True)
+        boxScrollArea.setObjectName("boxScrollArea")
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         #Get Clinics
         clinicList = ClinicRepository.getClinicList()
 
         buttonFont = QFont()
-        buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(28)
+        buttonFont.setFamily("Montserrat")
+        buttonFont.setPointSize(20)
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
@@ -84,13 +89,51 @@ class PatientClinicsNearbyWindow(QWidget):
             updateMapButton = QPushButton()
             updateMapButton.setText("update Map")
             updateMapButton.setFixedSize(QSize(100, 100))
+            updateMapButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: left; 
+                                                    padding-left: 20px;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: left; 
+                                                      padding-left: 20px;
+                                                    }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            updateMapButton.setGraphicsEffect(effect)
             updateMapButton.clicked.connect(
                 lambda checked, clinic=clinic: self.updateMapButton(clinic,clinicList))
 
             self.clinicButton = QPushButton()
             self.clinicButton.setText(clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
-            self.clinicButton.setFixedSize(QSize(300,100))
+            self.clinicButton.setFixedSize(QSize(200,100))
+            self.clinicButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: left; 
+                                                    padding-left: 20px;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: left; 
+                                                      padding-left: 20px;
+                                                    }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            self.clinicButton.setGraphicsEffect(effect)
             self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.patient))
 
             clinicRow.addWidget(self.clinicButton)
@@ -104,6 +147,15 @@ class PatientClinicsNearbyWindow(QWidget):
 
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(500,500)
+        boxScrollArea.setStyleSheet("""QScrollArea#boxScrollArea {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    margin-left: 80px;
+                                                    }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        boxScrollArea.setGraphicsEffect(effect)
         self.generateMapWidget(clinicList)
 
         clinicNearbyLayout = QHBoxLayout()
@@ -149,12 +201,6 @@ class PatientClinicsNearbyWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-    def backButtonFunction(self):
-        self.frameLayoutManager = FrameLayoutManager()
-        self.frameLayout = self.frameLayoutManager.getFrameLayout()
-
-        self.frameLayoutManager.back()
-        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()

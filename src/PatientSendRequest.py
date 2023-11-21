@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QDate, QTime
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QDate, QTime, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QLineEdit, QComboBox, QDateEdit, QMessageBox
+    QScrollArea, QLineEdit, QComboBox, QDateEdit, QMessageBox, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -36,65 +36,118 @@ class PatientSendRequest(QWidget):
         font.setBold(True)
         font.setWeight(75)
         self.headerTitle.setFont(font)
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setText(self.clinic.getClinicName() + " - Send Request")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(80, 40, 700, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        self.backButton.setGeometry(QRect(800, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+
+                                                        }
+                                                        QPushButton#backButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
+
+        detailsContainer = QLabel(self.centralwidget)
+        detailsContainer.setGeometry(QRect(20, 150, 900, 500))
+        detailsContainer.setStyleSheet("""QLabel {
+                                                background: #D0BFFF;
+                                                border-radius: 10px;
+                                                }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        detailsContainer.setGraphicsEffect(effect)
+
+        self.requestPurposeTitle = QLabel(self.centralwidget)
+        self.requestPurposeTitle.setGeometry(QRect(50, 160, 150, 40))
+        self.requestPurposeTitle.setText("Request Purpose: ")
 
         self.requestPurpose = QLineEdit(self.centralwidget)
-        self.requestPurpose.setGeometry(QRect(180, 220, 400, 200))
+        self.requestPurpose.setGeometry(QRect(50, 190, 400, 200))
         self.requestPurpose.setAlignment(Qt.AlignTop)
         self.requestPurpose.setPlaceholderText("Enter the Purpose of Request")
 
         self.dateLabel = QLabel(self.centralwidget)
         self.dateLabel.setText("Date: ")
-        self.dateLabel.setGeometry(QRect(180, 450, 150, 40))
+        self.dateLabel.setGeometry(QRect(50, 450, 150, 40))
         self.preferredDate = QDateEdit(self.centralwidget)
         self.preferredDate.setDate(QDate.currentDate())
         self.preferredDate.setDisplayFormat("yyyy-MM-dd")
         self.preferredDate.setMinimumDate(QDate.currentDate())
-        self.preferredDate.setGeometry(QRect(180, 490, 150, 40))
+        self.preferredDate.setGeometry(QRect(50, 490, 150, 40))
         self.preferredDate.dateChanged.connect(self.updateTimeslot)
         self.maxDate = QDate.currentDate().addMonths(1)
         self.preferredDate.setMaximumDate(self.maxDate)
 
         self.timeLabel = QLabel(self.centralwidget)
         self.timeLabel.setText("Time: ")
-        self.timeLabel.setGeometry(QRect(400, 450, 150, 40))
+        self.timeLabel.setGeometry(QRect(300, 450, 150, 40))
         self.preferredTimeComboBox = QComboBox(self.centralwidget)
 
         self.preferredTimeComboBox.addItems(self.timeList)
-        self.preferredTimeComboBox.setGeometry(QRect(400, 490, 150, 40))
+        self.preferredTimeComboBox.setGeometry(QRect(300, 490, 150, 40))
         self.updateTimeslot()
 
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-send-file-30.png")
+        self.submitButtonIcon = QIcon(filepath)
+
         self.submitButton = QPushButton(self.centralwidget)
-        self.submitButton.setGeometry(QRect(710, 545, 375, 100))
+        self.submitButton.setGeometry(QRect(520, 545, 275, 100))
         font = QFont()
         font.setFamily("Arial")
-        font.setPointSize(20)
+        font.setPointSize(28)
         self.submitButton.setFont(font)
         self.submitButton.setLayoutDirection(Qt.LeftToRight)
-        self.submitButton.setText("Submit")
+        self.submitButton.setText("    Submit")
+        self.submitButton.setIconSize(QSize(50, 50))
+        self.submitButton.setIcon(self.submitButtonIcon)
         self.submitButton.clicked.connect(self.sendRequestFunction)
+        self.submitButton.setStyleSheet("""QPushButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+                                                        text-align: center; 
+                                                        color:white;
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                          text-align: center; 
+                                                          color:white;
+                                                        }""")
 
-        self.submitButtonLabel = QLabel(self.centralwidget)
-        self.submitButtonLabel.setGeometry(QRect(730, 570, 50, 50))
-        self.submitButtonLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.submitButtonIcon = QPixmap(filepath)
-        self.submitButtonIcon = self.submitButtonIcon.scaled(50, 50)
-        self.submitButtonLabel.setPixmap(self.submitButtonIcon)
+        # self.submitButtonLabel.setGeometry(QRect(540, 570, 50, 50))
         self.requestPurpose.raise_()
         self.preferredTimeComboBox.raise_()
         self.preferredDate.raise_()
