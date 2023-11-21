@@ -169,7 +169,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.clinicDetailsLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
 
         self.cancelAppointmentButton = QPushButton(self.centralwidget)
-        self.cancelAppointmentButton.setGeometry(QRect(790, 545, 280, 100))
+        self.cancelAppointmentButton.setGeometry(QRect(520, 530, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
@@ -194,7 +194,7 @@ class PatientAppointmentDetailsWindow(QWidget):
                                                         
 
         self.cancelAppointmentLabel = QLabel(self.centralwidget)
-        self.cancelAppointmentLabel.setGeometry(QRect(810, 570, 50, 50))
+        self.cancelAppointmentLabel.setGeometry(QRect(540, 555, 50, 50))
         self.cancelAppointmentLabel.setFrameShape(QtWidgets.QFrame.Box)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
         self.cancelAppointmentIcon = QPixmap(filepath)
@@ -202,31 +202,59 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.cancelAppointmentLabel.setPixmap(self.cancelAppointmentIcon)
 
         self.viewPrescriptionButton = QPushButton(self.centralwidget)
-        self.viewPrescriptionButton.setGeometry(QRect(790, 545, 280, 100))
+        self.viewPrescriptionButton.setGeometry(QRect(520, 420, 325, 100))
         self.viewPrescriptionButton.setFont(font)
         self.viewPrescriptionButton.setLayoutDirection(Qt.RightToLeft)
         self.viewPrescriptionButton.setText("View Prescription")
         self.viewPrescriptionButton.clicked.connect(self.viewPrescription)
+        self.viewPrescriptionButton.setStyleSheet("""QPushButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+                                                        text-align: center; 
+                                                        color:white;
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                          text-align: center; 
+                                                          color:white;
+                                                        }""")
 
         self.viewPrescriptionLabel = QLabel(self.centralwidget)
-        self.viewPrescriptionLabel.setGeometry(QRect(810, 570, 50, 50))
+        self.viewPrescriptionLabel.setGeometry(QRect(540, 445, 50, 50))
         self.viewPrescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
         self.viewPrescriptionIcon = QPixmap(filepath)
         self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)
         self.viewPrescriptionLabel.setPixmap(self.viewPrescriptionIcon)
 
         self.completeAppointmentButton = QPushButton(self.centralwidget)
-        self.completeAppointmentButton.setGeometry(QRect(790, 445, 280, 100))
+        self.completeAppointmentButton.setGeometry(QRect(520, 420, 325, 100))
         self.completeAppointmentButton.setFont(font)
         self.completeAppointmentButton.setLayoutDirection(Qt.RightToLeft)
         self.completeAppointmentButton.setText("Complete Appointment")
         self.completeAppointmentButton.clicked.connect(self.completeAppointment)
+        self.completeAppointmentButton.setStyleSheet("""QPushButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+                                                        text-align: center; 
+                                                        color:white;
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                          text-align: center; 
+                                                          color:white;
+                                                        }""")
 
         self.completeAppointmentLabel = QLabel(self.centralwidget)
-        self.completeAppointmentLabel.setGeometry(QRect(810, 470, 50, 50))
+        self.completeAppointmentLabel.setGeometry(QRect(540, 445, 50, 50))
         self.completeAppointmentLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-paid-bill-50.png")
         self.completeAppointmentIcon = QPixmap(filepath)
         self.completeAppointmentIcon = self.completeAppointmentIcon.scaled(50, 50)
         self.completeAppointmentLabel.setPixmap(self.completeAppointmentIcon)
