@@ -94,15 +94,7 @@ class PatientDashboard(QWidget):
     def generatePrescription(self):
         self.prescriptionWidget = QWidget()
         self.prescriptionWidget.setObjectName("prescriptionWidget")
-        self.prescriptionWidget.setStyleSheet(
-            """QWidget#prescriptionWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                stop: 0 rgba(25, 4, 130, 255), 
-                                                                stop: 1 rgba(119, 82, 254, 255)
-                                                            );
-                                                            border-radius: 10px;
-                                                            text-align: center;
-                                                            color: white;
-                                                        }""")
+        self.prescriptionWidget.setStyleSheet("background-color: transparent;")
         self.prescriptionLayout = QVBoxLayout(self.prescriptionWidget)
 
         spacer = QWidget()
@@ -116,7 +108,7 @@ class PatientDashboard(QWidget):
         font.setWeight(75)
         self.prescriptionTitle.setFont(font)
         self.prescriptionTitle.setText("Prescription")
-        self.prescriptionTitle.setStyleSheet("color: white;")
+        self.prescriptionTitle.setStyleSheet("color: black;")
         headerRow = QHBoxLayout()
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.prescriptionTitle)
@@ -152,6 +144,10 @@ class PatientDashboard(QWidget):
                                                                         QPushButton#prescriptionButton:hover
                                                                         {
                                                                           background-color: #7752FE;}""")
+            effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            self.prescriptionButton.setGraphicsEffect(effect)
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setFixedSize(QSize(400,100))
             self.prescriptionButton.setIconSize(QSize(30, 30))
@@ -180,19 +176,22 @@ class PatientDashboard(QWidget):
         self.welcomeTextWidget = QWidget()
         self.welcomeTextWidget.setObjectName("welcomeTextWidget")
         self.welcomeTextWidget.setStyleSheet("""QWidget#welcomeTextWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                stop: 0 rgba(25, 4, 130, 255), 
-                                                                stop: 1 rgba(119, 82, 254, 255)
-                                                            );
-                                                            border-radius: 10px;
-                                                            text-align: center;
-                                                            color: white;
-                                                        }""")
+                                                        stop: 0 rgba(25, 4, 130, 255), 
+                                                        stop: 1 rgba(119, 82, 254, 255)
+                                                    );
+                                                    border-radius: 10px;
+                                                    text-align: center;
+                                                    color: white;
+                                                }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.welcomeTextWidget.setGraphicsEffect(effect)
         self.welcomeTextLayout = QVBoxLayout(self.welcomeTextWidget)
 
         welcomeTextLabel = QLabel()
         welcomeTextLabel.setText(f"Welcome {self.patient.getPatientName()}!")
-        welcomeTextLabel.setStyleSheet("color: white;")
-        welcomeTextLabel.setStyleSheet("padding-left: 30px")
+        welcomeTextLabel.setStyleSheet("color: white; padding-left: 30px;")
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -203,25 +202,26 @@ class PatientDashboard(QWidget):
 
         self.welcomeTextLayout.addWidget(welcomeTextLabel)
 
+        self.welcomeTextWidget.setFixedHeight(75)
+        self.welcomeTextWidget.setFixedWidth(700)
+        # Center the content vertically and horizontally
+        self.welcomeTextLayout.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+        # spacerLeft = QWidget()
+        # spacerLeft.setFixedWidth(300)  # Adjust the width as needed
+        # self.welcomeTextLayout.addWidget(spacerLeft)
 
     def generateUpcomingAppointments(self):
 
         self.upcomingAppointmentWidget = QWidget()
         self.upcomingAppointmentWidget.setObjectName("upcomingAppointmentWidget")
-        self.upcomingAppointmentWidget.setStyleSheet("""QWidget#upcomingAppointmentWidget {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                stop: 0 rgba(25, 4, 130, 255), 
-                                                                stop: 1 rgba(119, 82, 254, 255)
-                                                            );
-                                                            border-radius: 10px;
-                                                            text-align: center;
-                                                            color: white;
-                                                        }""")
+        self.upcomingAppointmentWidget.setStyleSheet("background-color: transparent;")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.upcomingAppointmentTitle = QLabel()
-        self.upcomingAppointmentTitle.setFixedWidth(420)
+        self.upcomingAppointmentTitle.setFixedWidth(380)
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -229,7 +229,7 @@ class PatientDashboard(QWidget):
         font.setWeight(75)
         self.upcomingAppointmentTitle.setFont(font)
         self.upcomingAppointmentTitle.setText("Upcoming Appointment")
-        self.upcomingAppointmentTitle.setStyleSheet("color: white;")
+        self.upcomingAppointmentTitle.setStyleSheet("color: black;")
         headerRow = QHBoxLayout()
         headerRow.addWidget(spacer)
         headerRow.addWidget(self.upcomingAppointmentTitle)
@@ -270,6 +270,10 @@ class PatientDashboard(QWidget):
                                                                         QPushButton#appointmentButton:hover
                                                                         {
                                                                           background-color: #7752FE;}""")
+            effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            self.appointmentButton.setGraphicsEffect(effect)
             self.appointmentButton.setFont(buttonFont)
             self.appointmentButton.setFixedSize(QSize(400,100))
             self.appointmentButton.setIconSize(QSize(30, 30))
