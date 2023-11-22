@@ -1454,7 +1454,7 @@ def getLastDoctorID():
         if id == 0:
             id = f'D{id.zfill(3)}'
         else:
-            cursor.execute("SELECT MAX(id) FROM doctors")
+            cursor.execute("SELECT MAX(doctorID)) FROM doctors")
             id  = cursor.fetchone()[0]
             id = str(id.strip('D'))+1
             id = f'D{id.zfill(3)}'
@@ -1472,73 +1472,117 @@ def getLastDoctorID():
 
 @app.route('/patients/idgen')
 def getLastPatientID():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    
-    #Add Error Handling
-    cursor.execute("SELECT COUNT(*) FROM patients")
-    counter = cursor.fetchall()
-    id = str(counter[0]['COUNT(*)'])
-    id = f'P{id.zfill(3)}'
-    
-    cursor.close()
-    conn.close()
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+          
+        cursor = conn.cursor()
+        #Add Error Handling
+        cursor.execute("SELECT COUNT(*) FROM patients")
+        counter = cursor.fetchall()
+        id = counter[0]['COUNT(*)']
+        if id == 0:
+            id = f'P{id.zfill(3)}'
+        else:
+            cursor.execute("SELECT MAX(patientID) FROM patients")
+            id  = cursor.fetchone()[0]
+            id = str(id.strip('P'))+1
+            id = f'P{id.zfill(3)}'
 
-    if id is not None:
-            return id,200
+        if id is not None:
+                return id,200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
+    finally:
+        if conn is not None:
+            conn.close()  
+
 
 @app.route('/clinics/idgen')
 def getLastClinicID():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    
-    #Add Error Handling
-    cursor.execute("SELECT COUNT(*) FROM clinics")
-    counter = cursor.fetchall()
-    id = str(counter[0]['COUNT(*)'])
-    id = f'C{id.zfill(3)}'
-    
-    cursor.close()
-    conn.close()
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+          
+        cursor = conn.cursor()
+        #Add Error Handling
+        cursor.execute("SELECT COUNT(*) FROM clinics")
+        counter = cursor.fetchall()
+        id = counter[0]['COUNT(*)']
+        if id == 0:
+            id = f'C{id.zfill(3)}'
+        else:
+            cursor.execute("SELECT MAX(clinicID) FROM clinics")
+            id  = cursor.fetchone()[0]
+            id = str(id.strip('C'))+1
+            id = f'C{id.zfill(3)}'
 
-    if id is not None:
-            return id,200
+        if id is not None:
+                return id,200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
    
 @app.route('/appointments/idgen')
 def getLastAppointmentsID():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    
-    #Add Error Handling
-    cursor.execute("SELECT COUNT(*) FROM appointments")
-    counter = cursor.fetchall()
-    id = str(counter[0]['COUNT(*)'])
-    id = f'A{id.zfill(3)}'
-    
-    cursor.close()
-    conn.close()
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+          
+        cursor = conn.cursor()
+        #Add Error Handling
+        cursor.execute("SELECT COUNT(*) FROM patients")
+        counter = cursor.fetchall()
+        id = counter[0]['COUNT(*)']
+        if id == 0:
+            id = f'A{id.zfill(3)}'
+        else:
+            cursor.execute("SELECT MAX(appointmentID) FROM patients")
+            id  = cursor.fetchone()[0]
+            id = str(id.strip('A'))+1
+            id = f'A{id.zfill(3)}'
 
-    if id is not None:
-            return id,200
+        if id is not None:
+                return id,200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
 
 @app.route('/prescriptions/idgen')
 def getLastPrescriptionID():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    
-    #Add Error Handling
-    cursor.execute("SELECT COUNT(*) FROM prescriptions")
-    counter = cursor.fetchall()
-    id = str(counter[0]['COUNT(*)'])
-    id = f'PR{id.zfill(3)}'
-    
-    cursor.close()
-    conn.close()
+     try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+          
+        cursor = conn.cursor()
+        #Add Error Handling
+        cursor.execute("SELECT COUNT(*) FROM patients")
+        counter = cursor.fetchall()
+        id = counter[0]['COUNT(*)']
+        if id == 0:
+            id = f'PR{id.zfill(3)}'
+        else:
+            cursor.execute("SELECT MAX(prescriptionID) FROM patients")
+            id  = cursor.fetchone()[0]
+            id = str(id.strip('PR'))+1
+            id = f'PR{id.zfill(3)}'
 
-    if id is not None:
-            return id,200
-
+        if id is not None:
+                return id,200
 @app.route('/requests/idgen')
 def getLastRequestsID():
     conn = dbConnect()  
