@@ -4,9 +4,9 @@ import sys
 #Need to Import the pages for buttons as per what I create
 
 from .model import Clinic
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QBrush, QColor, QLinearGradient
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QMessageBox, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 from .ClinicManageSchedule import ClinicManageSchedule
 from .AdminViewApprovals import AdminViewApprovalsWindow
@@ -37,10 +37,34 @@ class AdminHomepageWindow(QMainWindow):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage (Admin)")
+
+        stylesheet = """
+                            QPushButton
+                            {
+                               background-color: #610C9F;
+                               border-radius: 10px;
+                               color: white;
+                               text-align: centre; 
+                               padding-left: 10px;
+                            }
+                            
+                            QPushButton:hover
+                            {
+                              background-color: #7752FE;
+                            }
+                            """
+
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
+        self.setPalette(palette)
+        self.setStyleSheet(f"QWidget#centralwidget {{background: {gradient}}};")
 
         self.viewClinicsButton = QPushButton(self.centralwidget)
         self.viewClinicsButton.setGeometry(QRect(150, 200, 400, 100))
@@ -52,11 +76,15 @@ class AdminHomepageWindow(QMainWindow):
         self.viewClinicsButton.setFont(font)
         self.viewClinicsButton.setText("View Clinics")
         self.viewClinicsButton.clicked.connect(self.goToViewClinics)
+        self.viewClinicsButton.setStyleSheet(stylesheet)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.viewClinicsButton.setGraphicsEffect(effect)
 
         self.viewClinicsLabel = QLabel(self.centralwidget)
         self.viewClinicsLabel.setGeometry(QRect(170, 225, 50, 50))
-        self.viewClinicsLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-clinic-50.png")
         self.viewClinicsIcon = QPixmap(filepath)
         self.viewClinicsIcon = self.viewClinicsIcon.scaled(50, 50)
         self.viewClinicsLabel.setPixmap(self.viewClinicsIcon)
@@ -68,46 +96,65 @@ class AdminHomepageWindow(QMainWindow):
         font.setFamily("Arial")
         font.setPointSize(20)
         self.viewApprovalsButton.setFont(font)
-        self.viewApprovalsButton.setLayoutDirection(Qt.LeftToRight)
         self.viewApprovalsButton.setText("View Approvals")
         self.viewApprovalsButton.clicked.connect(self.goToViewApprovals)
+        self.viewApprovalsButton.setStyleSheet(stylesheet)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.viewApprovalsButton.setGraphicsEffect(effect)
 
         self.viewApprovalsLabel = QLabel(self.centralwidget)
         self.viewApprovalsLabel.setGeometry(QRect(720, 225, 50, 50))
-        self.viewApprovalsLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-view-32.png")
         self.viewApprovalsIcon = QPixmap(filepath)
         self.viewApprovalsIcon = self.viewApprovalsIcon.scaled(50, 50)
         self.viewApprovalsLabel.setPixmap(self.viewApprovalsIcon)
 
 
         self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.topLeftLogo.setGeometry(QRect(5, 0, 200, 200))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo.png")
         self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
+        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(200, 200)
         self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
 
         self.homepageTitle = QLabel(self.centralwidget)
         self.homepageTitle.setGeometry(QRect(200, 40, 800, 70))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
         font.setBold(True)
         font.setWeight(75)
         self.homepageTitle.setFont(font)
         self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
         self.homepageTitle.setText("Welcome Admin!")
+        self.homepageTitle.setObjectName("headerTitle") 
         self.homepageTitle.setAlignment(Qt.AlignCenter)
 
+        effect = QGraphicsDropShadowEffect(offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855"))
+        self.homepageTitle.setGraphicsEffect(effect)
+        self.homepageTitle.setStyleSheet("""QLabel#headerTitle {
+                                                background: #D0BFFF;
+                                                border-radius: 10px;
+                                            }""")
 
-        # Push Button 5 (Log Out)
         self.logoutButton = QPushButton(self.centralwidget)
-        self.logoutButton.setGeometry(QRect(1150, 40, 70, 70))
-        self.logoutButton.setIconSize(QSize(70, 70))
-        self.logoutButton.setText("Log out")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-logout-64.png")
+        self.logoutIcon = QIcon(filepath)
+        self.logoutButton.setGeometry(QRect(1050, 40, 200, 70))
+        self.logoutButton.setIconSize(QSize(50, 50))
+        font.setPointSize(20)
+        self.logoutButton.setFont(font)
+        self.logoutButton.setText("Log Out")
+        self.logoutButton.setStyleSheet(stylesheet)
+        self.logoutButton.setIcon(self.logoutIcon)
         self.logoutButton.clicked.connect(self.logout)
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.logoutButton.setGraphicsEffect(effect)
+
 
         MainWindow.setCentralWidget(self.centralwidget)
 
