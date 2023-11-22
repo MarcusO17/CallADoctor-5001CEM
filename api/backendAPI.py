@@ -1609,7 +1609,7 @@ def getLastRequestsID():
         else:
             cursor.execute("SELECT MAX(requestID) FROM requests")
             id  = cursor.fetchone()[0]['MAX(requestID)']
-            id = str(int(id.strip('REQ'))+1s)
+            id = str(int(id.strip('REQ'))+1)
             id = f'REQ{id.zfill(3)}'
 
         if id is not None:
