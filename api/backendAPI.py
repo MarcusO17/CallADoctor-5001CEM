@@ -1409,45 +1409,65 @@ def generateGraph():
 
 @app.route('/users/auth')
 def userAuthentication():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    
-    contentJSON = request.get_json()
-
-    email = contentJSON['email']
-    password = contentJSON['password']
-
-    cursor.execute('SELECT ID,role from users where email = %s AND password = %s',(email,password))
-
     try:
-        sessionInfo = cursor.fetchone()
-    except:
-        sessionInfo = None;
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+    
+        contentJSON = request.get_json()
 
-    cursor.close()
-    conn.close()
+        email = contentJSON['email']
+        password = contentJSON['password']
 
-    if sessionInfo != None:
-        return jsonify(sessionInfo), 200
-    else:
-        return {'ID': 'DENIED', 'role':'DENIED'}, 401
+        cursor.execute('SELECT ID,role from users where email = %s AND password = %s',(email,password))
+
+        try:
+            sessionInfo = cursor.fetchone()
+        except:
+            sessionInfo = None;
+
+        if sessionInfo != None:
+            return jsonify(sessionInfo), 200
+        else:
+            return {'ID': 'DENIED', 'role':'DENIED'}, 401
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
 
 @app.route('/doctors/idgen')
 def getLastDoctorID():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    
-    #Add Error Handling
-    cursor.execute("SELECT COUNT(*) FROM doctors")
-    counter = cursor.fetchall()
-    id = str(counter[0]['COUNT(*)'])
-    id = f'D{id.zfill(3)}'
-    
-    cursor.close()
-    conn.close()
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+          
+        cursor = conn.cursor()
+        #Add Error Handling
+        cursor.execute("SELECT COUNT(*) FROM doctors")
+        counter = cursor.fetchall()
+        id = counter[0]['COUNT(*)']
+        if id == 0:
+            id = f'D{id.zfill(3)}'
+        else:
+            cursor.execute("SELECT MAX(id) FROM doctors")
+            id  = cursor.fetchone()[0]
+            id = str(id.strip('D'))+1
+            id = f'D{id.zfill(3)}'
 
-    if id is not None:
-            return id,200
+        if id is not None:
+                return id,200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
 
 
 @app.route('/patients/idgen')
