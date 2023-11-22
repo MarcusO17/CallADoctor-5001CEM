@@ -1454,9 +1454,10 @@ def getLastDoctorID():
         if id == 0:
             id = f'D{id.zfill(3)}'
         else:
-            cursor.execute("SELECT MAX(doctorID)) FROM doctors")
-            id  = cursor.fetchone()[0]
-            id = str(id.strip('D'))+1
+            cursor.execute("SELECT MAX(doctorID) FROM doctors")
+            id  = cursor.fetchall()[0]['MAX(doctorID)']
+            print(id)
+            id = str(int(id.strip('D'))+1)
             id = f'D{id.zfill(3)}'
 
         if id is not None:
@@ -1486,8 +1487,8 @@ def getLastPatientID():
             id = f'P{id.zfill(3)}'
         else:
             cursor.execute("SELECT MAX(patientID) FROM patients")
-            id  = cursor.fetchone()[0]
-            id = str(id.strip('P'))+1
+            id  = cursor.fetchall()[0]['MAX(patientID)']
+            id = str(int(id.strip('P'))+1)
             id = f'P{id.zfill(3)}'
 
         if id is not None:
@@ -1517,8 +1518,8 @@ def getLastClinicID():
             id = f'C{id.zfill(3)}'
         else:
             cursor.execute("SELECT MAX(clinicID) FROM clinics")
-            id  = cursor.fetchone()[0]
-            id = str(id.strip('C'))+1
+            id  = cursor.fetchone()[0]['MAX(clinicID)']
+            id = str(int(id.strip('C'))+1)
             id = f'C{id.zfill(3)}'
 
         if id is not None:
@@ -1540,15 +1541,15 @@ def getLastAppointmentsID():
           
         cursor = conn.cursor()
         #Add Error Handling
-        cursor.execute("SELECT COUNT(*) FROM patients")
+        cursor.execute("SELECT COUNT(*) FROM appointments")
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
         if id == 0:
             id = f'A{id.zfill(3)}'
         else:
             cursor.execute("SELECT MAX(appointmentID) FROM patients")
-            id  = cursor.fetchone()[0]
-            id = str(id.strip('A'))+1
+            id  = cursor.fetchone()[0]['MAX(appointmentID)']
+            id = str(int(id.strip('A'))+1)
             id = f'A{id.zfill(3)}'
 
         if id is not None:
@@ -1563,42 +1564,63 @@ def getLastAppointmentsID():
 
 @app.route('/prescriptions/idgen')
 def getLastPrescriptionID():
-     try:
+    try:
         conn = dbConnect()
         if conn is None:
              return jsonify({'Error': 'Failed to connect to the database'}), 500
           
         cursor = conn.cursor()
         #Add Error Handling
-        cursor.execute("SELECT COUNT(*) FROM patients")
+        cursor.execute("SELECT COUNT(*) FROM prescription")
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
         if id == 0:
             id = f'PR{id.zfill(3)}'
         else:
-            cursor.execute("SELECT MAX(prescriptionID) FROM patients")
-            id  = cursor.fetchone()[0]
-            id = str(id.strip('PR'))+1
+            cursor.execute("SELECT MAX(prescriptionID) FROM prescription")
+            id  = cursor.fetchone()[0]['MAX(prescriptionID)']
+            id = str(int(id.strip('PR'))+1)
             id = f'PR{id.zfill(3)}'
 
         if id is not None:
                 return id,200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
+
 @app.route('/requests/idgen')
 def getLastRequestsID():
-    conn = dbConnect()  
-    cursor = conn.cursor()
-    
-    #Add Error Handling
-    cursor.execute("SELECT COUNT(*) FROM requests")
-    counter = cursor.fetchall()
-    id = str(counter[0]['COUNT(*)'])
-    id = f'REQ{id.zfill(3)}'
-    
-    cursor.close()
-    conn.close()
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+          
+        cursor = conn.cursor()
+        #Add Error Handling
+        cursor.execute("SELECT COUNT(*) FROM requests")
+        counter = cursor.fetchall()
+        id = counter[0]['COUNT(*)']
+        if id == 0:
+            id = f'REQ{id.zfill(3)}'
+        else:
+            cursor.execute("SELECT MAX(requestID) FROM requests")
+            id  = cursor.fetchone()[0]['MAX(requestID)']
+            id = str(int(id.strip('REQ'))+1s)
+            id = f'REQ{id.zfill(3)}'
 
-    if id is not None:
-            return id,200
+        if id is not None:
+                return id,200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
    
 @app.route('/clinics/image/upload/<string:id>', methods=['POST'])
 def uploadClinicImage(id):
