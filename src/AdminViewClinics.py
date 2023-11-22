@@ -35,15 +35,6 @@ class AdminViewClinicsWindow(QMainWindow):
         self.setPalette(palette)
         self.setStyleSheet(f"QWidget#centralwidget {{background: {gradient}}};")
 
-        # header (probably reused in most files)
-        # self.topLeftLogo = QLabel(self.centralwidget)
-        # self.topLeftLogo.setGeometry(QRect(20, 10, 200, 200))
-
-        # filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo.png")
-        # self.topLeftLogoIcon = QPixmap(filepath)
-        # self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(200, 200)
-        # self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
-
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
         font.setFamily("Montserrat")

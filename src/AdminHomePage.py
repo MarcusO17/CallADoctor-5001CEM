@@ -1,8 +1,6 @@
 import os
 import sys
 
-#Need to Import the pages for buttons as per what I create
-
 from .model import Clinic
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
 from PyQt5.QtGui import QFont, QPixmap, QIcon, QBrush, QColor, QLinearGradient
