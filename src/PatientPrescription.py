@@ -33,7 +33,7 @@ class PatientPrescriptionWindow(QWidget):
         self.headerTitle.setText("My Prescriptions")
         self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(80, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("""QLabel#headerTitle {
                                                             background: #D0BFFF;

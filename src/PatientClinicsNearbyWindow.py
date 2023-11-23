@@ -38,7 +38,7 @@ class PatientClinicsNearbyWindow(QWidget):
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Clinics Nearby")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(30, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(80, 40, 800, 70))
         self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("""QLabel#headerTitle {
