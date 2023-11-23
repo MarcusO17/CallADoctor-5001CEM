@@ -34,8 +34,6 @@ class PatientPrescriptionDetailsWindow(QWidget):
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText(f"{self.patient.getPatientName()} - Prescription Details")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
