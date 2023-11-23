@@ -29,8 +29,6 @@ class PatientPrescriptionWindow(QWidget):
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("My Prescriptions")
         self.headerTitle.setObjectName("headerTitle")
@@ -55,6 +53,7 @@ class PatientPrescriptionWindow(QWidget):
                                                             }""")
         buttonLayout = QVBoxLayout(buttonContainer)
         buttonContainer.setContentsMargins(20,20,20,20)
+        buttonLayout.setSpacing(20)
         boxScrollArea = QScrollArea()
         boxScrollArea.setObjectName("scrollArea")
 
@@ -78,7 +77,7 @@ class PatientPrescriptionWindow(QWidget):
             self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getExpiryDate())
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setIconSize(QSize(80, 80))
-            self.prescriptionButton.setFixedSize(QSize(750,100))
+            self.prescriptionButton.setFixedSize(QSize(700,100))
             self.prescriptionButton.setIcon(prescriptionIcon)
             self.prescriptionButton.setStyleSheet("""QPushButton {
                                                     background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -121,6 +120,9 @@ class PatientPrescriptionWindow(QWidget):
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
+        spacer = QWidget()
+        spacer.setFixedHeight(30)
+        mainLayout.addWidget(spacer)
 
         self.setLayout(mainLayout)
 
