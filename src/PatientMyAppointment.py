@@ -51,6 +51,7 @@ class PatientMyAppointmentWindow(QWidget):
 
         self.buttonContainer = QWidget()
         buttonLayout = QVBoxLayout(self.buttonContainer)
+        buttonLayout.setSpacing(20)
         self.buttonContainer.setObjectName("buttonContainer")
         self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
                                                             background: #D0BFFF;
@@ -82,6 +83,11 @@ class PatientMyAppointmentWindow(QWidget):
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
+
+        spacer = QWidget()
+        spacer.setFixedHeight(30)
+        
+        mainLayout.addWidget(spacer)
 
         self.setLayout(mainLayout)
 
