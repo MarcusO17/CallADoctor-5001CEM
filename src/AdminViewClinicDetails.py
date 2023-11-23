@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon, QImage
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QImage, QBrush, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 from .model import Clinic
 from .PageManager import PageManager
@@ -31,17 +31,14 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         # this is the header (logo, title, my back button
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
+        self.setPalette(palette)
+        self.setStyleSheet(f"QWidget#centralwidget {{background: {gradient}}};")
 
         # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
-
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
         font.setFamily("Arial")
@@ -50,30 +47,63 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText(self.clinic.getClinicName())
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(225, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
 
-        self.adminClinicDetailsPictureLabel = QLabel(self.centralwidget)
-        self.adminClinicDetailsPictureLabel.setGeometry(QRect(180, 220, 400, 200))
-        self.adminClinicDetailsPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
-        self.adminClinicDetailsPicture = QPixmap.fromImage(QImage.fromData(self.clinic.getCertification()))
-        self.adminClinicDetailsPictureLabel.setPixmap(self.adminClinicDetailsPicture)
+                                                        }
+                                                        QPushButton#backButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
+
+        
+        self.adminClinicDetailsContainer = QLabel(self.centralwidget)
+        self.adminClinicDetailsContainer.setFixedSize(1000,500)
+        self.adminClinicDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
+        self.adminClinicDetailsContainer.setObjectName("detailsContainer")
+        self.adminClinicDetailsContainer.setStyleSheet("""QLabel#detailsContainer {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+
+        self.adminClinicDetailsDescriptionTitle = QLabel(self.centralwidget)
+        self.adminClinicDetailsDescriptionTitle.setGeometry(QRect(180, 190, 150, 40))
+        self.adminClinicDetailsDescriptionTitle.setText("Clinic Description: ")
 
         self.adminClinicDetailsDescriptionLabel = QLabel(self.centralwidget)
-        self.adminClinicDetailsDescriptionLabel.setGeometry(QRect(700, 220, 375, 200))
+        self.adminClinicDetailsDescriptionLabel.setGeometry(QRect(180, 220, 400, 200))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
@@ -82,6 +112,16 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         self.adminClinicDetailsDescriptionLabel.setFont(font)
         self.adminClinicDetailsDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \n Clinic Name: {self.clinic.getClinicName()} \n Clinic Status: {self.clinic.getClinicStatus()}")
         self.adminClinicDetailsDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.adminClinicDetailsDescriptionLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicDetailsDescriptionLabel.setStyleSheet("""QLabel {
+                                                                border-radius: 10px;
+                                                                border: 1px solid black;
+                                                                background: white;
+                                                                }""")
+        
+        self.adminClinicDetailsAddressTitle = QLabel(self.centralwidget)
+        self.adminClinicDetailsAddressTitle.setGeometry(QRect(180, 420, 150, 40))
+        self.adminClinicDetailsAddressTitle.setText("Clinic Address: ")
 
         self.adminClinicDetailsAddressLabel = QLabel(self.centralwidget)
         self.adminClinicDetailsAddressLabel.setGeometry(QRect(180, 450, 350, 200))
@@ -93,6 +133,12 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         self.adminClinicDetailsAddressLabel.setFont(font)
         self.adminClinicDetailsAddressLabel.setText(self.clinic.getClinicAddress())
         self.adminClinicDetailsAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.adminClinicDetailsAddressLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicDetailsAddressLabel.setStyleSheet("""QLabel {
+                                                                border-radius: 10px;
+                                                                border: 1px solid black;
+                                                                background: white;
+                                                                }""")
 
         self.adminRemoveClinicButton = QPushButton(self.centralwidget)
         self.adminRemoveClinicButton.setGeometry(QRect(710, 545, 375, 100))
@@ -103,19 +149,28 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         self.adminRemoveClinicButton.setLayoutDirection(Qt.LeftToRight)
         self.adminRemoveClinicButton.setText("Remove Clinic")
         self.adminRemoveClinicButton.clicked.connect(self.adminRemoveClinicFunction)
+        self.adminRemoveClinicButton.setStyleSheet("""QPushButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+                                                        text-align: center; 
+                                                        color:white;
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                          text-align: center; 
+                                                          color:white;
+                                                        }""")
         self.adminRemoveClinicButton.raise_()
 
         self.adminRemoveClinicLabel = QLabel(self.centralwidget)
         self.adminRemoveClinicLabel.setGeometry(QRect(730, 570, 50, 50))
-        self.adminRemoveClinicLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-remove-64.png")
         self.adminRemoveClinicIcon = QPixmap(filepath)
         self.adminRemoveClinicIcon = self.adminRemoveClinicIcon.scaled(50, 50)
         self.adminRemoveClinicLabel.setPixmap(self.adminRemoveClinicIcon)
-
-        self.adminClinicDetailsContainer = QLabel(self.centralwidget)
-        self.adminClinicDetailsContainer.setFixedSize(1000,500)
-        self.adminClinicDetailsContainer.setFrameShape(QtWidgets.QFrame.Box)
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)

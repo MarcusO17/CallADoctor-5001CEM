@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor, QBrush
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy
+    QScrollArea, QSizePolicy, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 from .AdminClinicApproval import AdminClinicApprovalWindow
 from .model.Clinic import Clinic
@@ -30,16 +30,14 @@ class AdminViewApprovalsWindow(QMainWindow):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
+        self.setPalette(palette)
+        self.setStyleSheet(f"QWidget#centralwidget {{background: {gradient}}};")
+
         # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
-
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
         font.setFamily("Arial")
@@ -48,28 +46,61 @@ class AdminViewApprovalsWindow(QMainWindow):
         font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Clinics waiting approval")
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(230, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+
+                                                        }
+                                                        QPushButton#backButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
 
         self.buttonContainer = QWidget()
-        button_layout = QVBoxLayout(self.buttonContainer)
+        self.buttonContainer.setObjectName("buttonContainer")
+        self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        buttonLayout = QVBoxLayout(self.buttonContainer)
+        buttonLayout.setSpacing(20)
         self.buttonContainer.setContentsMargins(20,20,20,20)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setObjectName("scrollArea")
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        
 
         self.clinicList = ClinicRepository.getClinicUnapprovedList()
 
@@ -77,6 +108,10 @@ class AdminViewApprovalsWindow(QMainWindow):
 
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(1000,500)
+        boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    }""")
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
@@ -125,6 +160,20 @@ class AdminViewApprovalsWindow(QMainWindow):
             self.approvalClinicButton.setFixedSize(QSize(900,150))
             self.approvalClinicButton.clicked.connect(lambda checked, clinic=clinic: self.approvalClinicButtonFunction(clinic, self.adminID))
             self.buttonContainer.layout().addWidget(self.approvalClinicButton)
+            self.approvalClinicButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: center; 
+                                                    padding-left: 20px;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: center; 
+                                                      padding-left: 20px;
+                                                    }""")
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
