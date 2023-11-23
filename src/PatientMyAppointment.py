@@ -34,8 +34,6 @@ class PatientMyAppointmentWindow(QWidget):
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("My Appointment")
         self.headerTitle.setObjectName("headerTitle")
