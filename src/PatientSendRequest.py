@@ -31,10 +31,8 @@ class PatientSendRequest(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setText(self.clinic.getClinicName() + " - Send Request")
