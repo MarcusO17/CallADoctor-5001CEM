@@ -35,8 +35,6 @@ class PatientClinicsNearbyWindow(QWidget):
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Clinics Nearby")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
