@@ -6,11 +6,11 @@ from src.model.Registration import Registration
 class TestRegistration(unittest.TestCase):
     @patch('requests.post')
     def test_registerDoctor_Success(self, mock_get):
-        response_data = ('Successful POST', 201),True
-        mock_get.return_value = Mock(status_code=201, text=response_data)
+        response_data = 'Successful POST : C001',201
+        mock_get.return_value = Mock(status_code=201, text=response_data[0])
 
        
-        expectedResult = ('Successful POST', 201),True
+        expectedResult = 'Successful POST : C001',201
 
         jsonDetails = {
                         "doctorName": "Dr. John Doe",
@@ -21,11 +21,12 @@ class TestRegistration(unittest.TestCase):
                         "yearOfExperience": 10,
                         "doctorEmail": "johndoe@example.com",
                         "status": "Active",
-                        "clinicID": "CLINIC001"
+                        "clinicID": "C001"
                       }
 
+        doctorImage = {'image': 'fakeImageData'}
         
-        result,status = Registration.registerDoctor(jsonDetails)
+        result,status = Registration.registerDoctor(jsonDetails, doctorImage)
         self.assertEqual(result[0][0], expectedResult[0][0])
         self.assertTrue(status)
     
@@ -47,7 +48,8 @@ class TestRegistration(unittest.TestCase):
                         "clinicID": "CLINIC001"
                       }
 
-        
-        result, status = Registration.registerDoctor(jsonDetails)
+        doctorImage = {'image': 'fakeImageData'}
+
+        result, status = Registration.registerDoctor(jsonDetails, doctorImage)
         self.assertEqual(result, expectedResult)
         self.assertFalse(status)

@@ -308,7 +308,7 @@ def doctors():
 
     if request.method == 'POST':
         contentJSON = request.get_json()
-
+        print(contentJSON)
         doctorID = requests.get('http://127.0.0.1:5000/doctors/idgen').text
         doctorName = contentJSON['doctorName']
         doctorPassword = contentJSON['doctorPassword']
@@ -330,10 +330,11 @@ def doctors():
                                             doctorICNumber,doctorContact,yearOfExperience,status,clinicID))
         except Exception as e:
             return {'error': e}
+        print('Success')    
+        
         conn.commit() #Commit Changes to db, like git commit
-
-        return'Successful POST', 201
     
+        return f'Successful POST : {doctorID}',201
 
 
     if request.method == 'DELETE':
@@ -1218,7 +1219,7 @@ def getLastRequestsID():
 
     if id is not None:
             return id,200
-   
+        
 @app.route('/clinics/image/upload/<string:id>', methods=['POST'])
 def uploadClinicImage(id):
     conn = dbConnect()  
@@ -1248,7 +1249,41 @@ def downloadClinicImage(id):
             conn.commit()
             conn.close()
 
-            return imgData['verifiedDoc']
+            return imgData['certifiedDoc']
+        except:
+            return None, jsonify({'Error':'Image Error'})
+    
+
+@app.route('/doctors/image/upload/<string:id>', methods=['POST'])
+def uploadDoctorsImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'POST':
+        try:
+            file = request.files['file']
+            imgData = file.read()
+            cursor.execute("UPDATE doctors SET certifiedDoc = %s WHERE doctorID = %s", (imgData, id))
+            conn.commit()
+            conn.close()
+            return jsonify({"Message": "Image uploaded and processed successfully"})
+        except:
+            return jsonify({'Error':'Image Error'})
+
+@app.route('/doctors/image/download/<string:id>', methods=['GET'])
+def downloadDoctorsImage(id):
+    conn = dbConnect()  
+    cursor = conn.cursor()
+   
+    if request.method == 'GET':
+        try:
+            cursor.execute("SELECT certifiedDoc from doctors where doctorID = %s", id)
+            imgData = cursor.fetchone()
+
+            conn.commit()
+            conn.close()
+
+            return imgData['certifiedDoc']
         except:
             return None, jsonify({'Error':'Image Error'})
     
