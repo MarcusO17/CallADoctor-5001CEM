@@ -33,21 +33,21 @@ class LoginWindow(QWidget):
 
         titleFont = QFont()
         titleFont.setFamily("Poppins")
-        titleFont.setPointSize(40)
+        titleFont.setPointSize(35)
 
         self.titleLabel = QLabel("Call-A-Doctor Application", self)
         self.titleLabel.setStyleSheet("color: Black;")
         self.titleLabel.setFont(titleFont)
-        self.titleLabel.setGeometry(110, 10, 700, 65)
+        self.titleLabel.setGeometry(150, 10, 550, 65)
 
         subTitleFont = QFont()
         subTitleFont.setFamily("Poppins")
-        subTitleFont.setPointSize(25)
+        subTitleFont.setPointSize(20)
 
         self.subTitleLabel = QLabel("Can't go to the hospital? Call them at your doorstep!", self)
         self.subTitleLabel.setStyleSheet("color: White;")
         self.subTitleLabel.setFont(subTitleFont)
-        self.subTitleLabel.setGeometry(20, 530, 790, 65)
+        self.subTitleLabel.setGeometry(90, 530, 620, 65)
 
         gifViewer = QLabel(self)
 
