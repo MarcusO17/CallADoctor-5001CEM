@@ -85,22 +85,33 @@ class PatientClinicsNearbyWindow(QWidget):
 
 
             updateMapButton = QPushButton()
-            updateMapButton.setText("update Map")
             updateMapButton.setFixedSize(QSize(100, 100))
+
+            updateMapLabel = QLabel("Update \nMap")
+            updateButtonFont = QFont()
+            updateButtonFont.setFamily("Montserrat")
+            updateButtonFont.setPointSize(13)
+            updateMapLabel.setFont(updateButtonFont)
+            updateMapLabel.setAlignment(Qt.AlignCenter)
+            updateMapLabel.setWordWrap(True)
+            updateMapLabel.setStyleSheet("color: white")
+
+            layout = QVBoxLayout()
+            layout.addWidget(updateMapLabel)
+            layout.setAlignment(Qt.AlignCenter)
+            layout.setContentsMargins(10, 10, 10, 10)
+            updateMapButton.setLayout(layout)
+
             updateMapButton.setStyleSheet("""QPushButton {
-                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                            stop: 0 rgba(10, 2, 85, 255), 
-                                                                            stop: 1 rgba(59, 41, 168, 255));
-                                                    border-radius: 10px; color: white;
-                                                    text-align: left; 
-                                                    padding-left: 20px;
-                                                    }
-                                                    QPushButton:hover
-                                                    {
-                                                      background-color: #7752FE;
-                                                      text-align: left; 
-                                                      padding-left: 20px;
-                                                    }""")
+                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                        stop: 0 rgba(10, 2, 85, 255), 
+                                                                        stop: 1 rgba(59, 41, 168, 255));
+                                                border-radius: 10px; color: white;
+                                            }
+                                            QPushButton:hover
+                                            {
+                                                background-color: #7752FE;
+                                            }""")
 
             effect = QGraphicsDropShadowEffect(
                 offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
@@ -212,7 +223,11 @@ class PatientClinicsNearbyWindow(QWidget):
 
     def generateMapWidget(self,clinicList):
         self.mapWidget = QWidget()
-        self.mapWidget.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.mapWidget.setObjectName("mapWidget")
+        self.mapWidget.setStyleSheet("""QWidget#mapWidget {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
 
         map = geoHelper.showMap(self.currLocation)  # Return Folium Map
