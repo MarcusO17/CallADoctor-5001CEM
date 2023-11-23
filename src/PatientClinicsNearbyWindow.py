@@ -51,7 +51,7 @@ class PatientClinicsNearbyWindow(QWidget):
         self.headerTitle.setGraphicsEffect(effect)
 
         self.searchBar = QLineEdit(self.centralwidget)
-        self.searchBar.setGeometry(QRect(450, 130, 450, 40))
+        self.searchBar.setGeometry(QRect(520, 130, 410, 40))
         self.searchBar.setPlaceholderText("Search Bar")
         self.searchBar.textChanged.connect(self.filterButtons)
 
