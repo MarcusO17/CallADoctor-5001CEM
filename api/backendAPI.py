@@ -97,7 +97,6 @@ def patients():
         race = contentJSON['race']
         lat,lon = geoHelper.geocode(address=address)
     
-
    
         insertQuery = """
                         INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
