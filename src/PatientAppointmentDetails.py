@@ -333,6 +333,7 @@ class PatientAppointmentDetailsWindow(QWidget):
 
         self.requestCancellationDialog.close()
         self.frameLayoutManager.back()
+        self.frameLayout.widget(self.frameLayoutManager.top()).generateAppointmentButtons()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def backButtonFunction(self):
