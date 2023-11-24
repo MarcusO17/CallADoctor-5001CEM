@@ -63,7 +63,7 @@ createDoctorTable = '''CREATE TABLE doctors (
                      certifiedDoc BLOB,
                      yearOfExperience INTEGER,
                      status TEXT NOT NULL,
-                     FOREIGN KEY (clinicID) REFERENCES clinics(clinicID)
+                     FOREIGN KEY (clinicID) REFERENCES clinics(clinicID) ON DELETE CASCADE
                      )'''
 
 
@@ -78,14 +78,14 @@ createAppointmentTable = '''CREATE TABLE appointments (
                      appointmentDate DATE NOT NULL,
                      status TEXT NOT NULL,
                      visitReasons TEXT,
-                     FOREIGN KEY (patientID) REFERENCES patients(patientID)
+                     FOREIGN KEY (patientID) REFERENCES patients(patientID) ON DELETE CASCADE
                      )'''
 
 createPrescriptionTable = '''CREATE TABLE prescriptions (
                      prescriptionID VARCHAR(64) PRIMARY KEY,
                      appointmentID VARCHAR(64) NOT NULL,
                      expiryDate DATE NOT NULL,
-                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID)
+                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID) ON DELETE CASCADE
                      )'''
 
 createPrescriptionDetailsTable = '''CREATE TABLE prescription_details (
@@ -95,8 +95,8 @@ createPrescriptionDetailsTable = '''CREATE TABLE prescription_details (
                      pillsPerDay INTEGER NOT NULL,
                      food TEXT,
                      dosage INT,
-                     FOREIGN KEY (prescriptionID) REFERENCES prescriptions(prescriptionID),
-                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID)
+                     FOREIGN KEY (prescriptionID) REFERENCES prescriptions(prescriptionID) ON DELETE CASCADE,
+                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID) ON DELETE CASCADE
                      )'''
 
 createAdminTable = '''CREATE TABLE admins (
@@ -113,7 +113,7 @@ createRequestsTable = '''CREATE TABLE requests (
                      dateSubmitted DATE NOT NULL,
                      requestReason TEXT NOT NULL,
                      appointmentID TEXT NOT NULL
-                     FOREIGN KEY (appointmentID) references appointments(appointmentID)
+                     FOREIGN KEY (appointmentID) references appointments(appointmentID) ON DELETE CASCADE
                      CONSTRAINT chk_approvalStatus CHECK (approvalStatus IN ('Pending', 'Approved', 'Rejected'))
                      )       
                     '''
