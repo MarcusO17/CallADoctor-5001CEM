@@ -11,7 +11,7 @@ from .AccountPage import AccountPage
 from .DoctorGeneratePrescription import DoctorGeneratePrescription
 from .DoctorViewPrescription import DoctorViewPrescription
 from .PageManager import PageManager, FrameLayoutManager
-from .model import Patient, Request
+from .model import Patient, Request, PrescriptionRepo
 
 
 class DoctorAppointmentDetails(QWidget):
@@ -206,7 +206,7 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancelAppointmentLabel.setPixmap(self.requestCancelAppointmentIcon)
 
         self.viewPrescriptionButton = QPushButton(self.centralwidget)
-        self.viewPrescriptionButton.setGeometry(QRect(520, 530, 325, 100))
+        self.viewPrescriptionButton.setGeometry(QRect(520, 420, 325, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
@@ -230,7 +230,7 @@ class DoctorAppointmentDetails(QWidget):
                                                     }""")
 
         self.viewPrescriptionLabel = QLabel(self.centralwidget)
-        self.viewPrescriptionLabel.setGeometry(QRect(540, 555, 50, 50))
+        self.viewPrescriptionLabel.setGeometry(QRect(540, 445, 50, 50))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
         self.viewPrescriptionIcon = QPixmap(filepath)
         self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)
@@ -251,8 +251,8 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancelAppointmentLabel.raise_()
         self.generatePrescriptionButton.raise_()
         self.generatePrescriptionLabel.raise_()
-        self.viewPrescriptionLabel.raise_()
         self.viewPrescriptionButton.raise_()
+        self.viewPrescriptionLabel.raise_()
 
         self.setLayout(mainLayout)
 
@@ -340,14 +340,29 @@ class DoctorAppointmentDetails(QWidget):
         self.frameLayoutManager.back()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    def completePrescription(self):
+        self.generatePrescriptionButton.hide()
+        self.generatePrescriptionLabel.hide()
+        self.viewPrescriptionLabel.show()
+        self.viewPrescriptionButton.show()
 
     def setMode(self, mode):
         if mode == "Completed":
             self.viewPrescriptionLabel.show()
             self.viewPrescriptionButton.show()
         elif mode == "Approved":
-            self.generatePrescriptionButton.show()
-            self.generatePrescriptionLabel.show()
+            prescription = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByAppointment(
+                self.appointment.getAppointmentID())
+
+            if len(prescription) == 0:
+                self.generatePrescriptionButton.show()
+                self.generatePrescriptionLabel.show()
+            else:
+                self.generatePrescriptionButton.hide()
+                self.generatePrescriptionLabel.hide()
+                self.viewPrescriptionLabel.show()
+                self.viewPrescriptionButton.show()
+
             self.requestCancelAppointmentLabel.show()
             self.requestCancelAppointmentButton.show()
 

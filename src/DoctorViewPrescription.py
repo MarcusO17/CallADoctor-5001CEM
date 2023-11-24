@@ -28,7 +28,7 @@ class DoctorViewPrescription(QWidget):
 
         # use appointmentID to get prescriptionID
         self.prescription = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByAppointment(
-                            self.appointment.getAppointmentID())
+                            self.appointment.getAppointmentID())[0]
 
         self.setupUi()
 
@@ -120,7 +120,7 @@ class DoctorViewPrescription(QWidget):
         foodLabel.setText("Before/After Eating: ")
 
 
-        self.prescriptionDetailsList = [prescription.getPrescriptionDetails for prescription in self.prescription]
+        self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
 
         for count, prescriptionDetails in enumerate(self.prescriptionDetailsList):
             prescriptionMedicationName = QLabel()
@@ -141,7 +141,7 @@ class DoctorViewPrescription(QWidget):
             prescriptionDosage.setFixedSize(130,50)
             prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
             prescriptionDosage.setFont(font)
-            prescriptionDosage.setText(prescriptionDetails.getDosage())
+            prescriptionDosage.setText(str(prescriptionDetails.getDosage()))
             prescriptionDosage.setStyleSheet("""QLabel {
                                                 border-radius: 10px;
                                                 border: 1px solid black;
