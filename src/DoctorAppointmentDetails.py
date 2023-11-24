@@ -1,4 +1,5 @@
 import os
+import requests
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QTime, QPoint
 from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, \
@@ -297,8 +298,16 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancellationDialog.exec_()
 
     def completeButtonConfirmationFunction(self, reason):
+        requestJSON = {
+            'requestsType' : 'Cancellation',
+            'clientID' : self.patient.getPatientID(),
+            'requestReason' : reason,
+            'appointmentID' : self.appointment.getAppointmentID()
 
-        request = Request(None, "Cancellation", self.doctor.getDoctorID(), "Pending", QTime.currentTime().toString("hh:mm:ss"), reason, self.appointment.getAppointmentID())
+        }
+
+        request = requests.post('http://127.0.0.1:5000/requests',json=requestJSON)
+        print(request.text)
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
 

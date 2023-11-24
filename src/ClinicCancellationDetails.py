@@ -224,7 +224,7 @@ class ClinicCancellationDetails(QWidget):
                                                       "Are you sure you want to approve this request",
                                                       QMessageBox.Yes | QMessageBox.No)
         if acceptRequestDialogBox == QMessageBox.Yes:
-            self.request.setApprovalStatus("Approved")
+            self.request.approveRequest()
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
@@ -237,7 +237,7 @@ class ClinicCancellationDetails(QWidget):
                                                       "Are you sure you want to deny this request",
                                                       QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
-            self.request.setApprovalStatus("Deny")
+            self.request.cancelRequest(self.request.getRequestID())
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()
 

@@ -296,18 +296,7 @@ class ClinicRequestReview(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-document-60.png")
         requestIcon = QIcon(filepath)
 
-        # update this
-        self.cancellationList = list()
-
-        cancellation1 = Request("R0001", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0001")
-        cancellation2 = Request("R0002", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0002")
-        cancellation3 = Request("R0003", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0003")
-        cancellation4 = Request("R0004", "Cancellation", "clientID", "approvalStatus", "dateSubmitted", "requestReason", "A0004")
-
-        self.cancellationList.append(cancellation1)
-        self.cancellationList.append(cancellation2)
-        self.cancellationList.append(cancellation3)
-        self.cancellationList.append(cancellation4)
+        self.cancellationList = Request.getRequests(self.clinic.getClinicID())
 
         for count, request in enumerate(self.cancellationList):
             self.cancellationButton = QPushButton()
