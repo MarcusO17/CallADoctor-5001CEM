@@ -231,6 +231,10 @@ class PatientSendRequest(QWidget):
                 for hour in range(8):
                     self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
                     print(self.timeList)
+            elif roundedTime < QTime(8, 0):
+                for hour in range(8):
+                    self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+                    print(self.timeList)
             else:
                 self.timeList.clear()
                 for hour in range(hoursLeft):
