@@ -1475,8 +1475,9 @@ def requestsApprove(requestsID):
 @app.route('/graph/users', methods=['GET'])
 def generateGraph():
     appointments = requests.get(f"http://127.0.0.1:5000/appointments/toDate").json()
-    df = pd.DataFrame(columns=['dates','count'])
-    dateFormat = "%a, %d %b %Y %H:%M:%S %Z"ntDate'], dateFormat)
+    df = pd.DataFrame(columns=['dates', 'count'])
+    dateFormat = "%a, %d %b %Y %H:%M:%S %Z"
+    df['dates'] = [datetime.strptime(dates['appointmentDate'], dateFormat)
                    .strftime("%d-%m-%Y") for dates in appointments]
 
     uniqueDates = df['dates'].value_counts().reset_index()
