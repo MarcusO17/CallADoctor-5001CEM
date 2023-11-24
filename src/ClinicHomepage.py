@@ -32,6 +32,7 @@ class ClinicHomepage(QMainWindow):
 
     def goToDashboard(self):
         self.setButtonHighlight(self.dashboardButton)
+        self.clinicDashboard.generateRequestReview()
         self.frameLayoutManager.backToBasePage(0)
         self.frameLayout.setCurrentIndex(0)
     def goToManageSchedule(self):
