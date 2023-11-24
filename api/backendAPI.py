@@ -1342,7 +1342,7 @@ def allRequests():
             requestsID =  requests.get('http://127.0.0.1:5000/requests/idgen').text
             requestsType = contentJSON['requestsType']
             clientID = contentJSON['clientID']
-            approvalStatus = contentJSON['approvalStatus']
+            approvalStatus = 'Pending'
             dateSubmitted = datetime.now().date() 
             requestReason = contentJSON['requestReason']
 
@@ -1395,7 +1395,55 @@ def requestsByClinic(clinicID):
         if conn is not None:
             conn.close()    
     
+@app.route('/requests/cancel/<string:requestsID>',methods=['PATCH'])
+def requestsCancel(requestsID):
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
         
+        cursor = conn.cursor()
+        if request.method == 'PATCH':
+            try:
+                cursor.execute("UPDATE requests SET requestsID = %s, approvalStatus = 'Rejected' where requestsID = %s",
+                            (None,requestsID))
+            except pymysql.MySQLError as e:
+                return 'Error : ',e
+        
+            conn.commit()
+            
+            return 'Successful PATCH', 200  
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
+
+@app.route('/requests/approve/<string:requestsID>',methods=['PATCH'])
+def requestsApprove(requestsID):
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
+        
+        cursor = conn.cursor()
+        if request.method == 'PATCH':
+            try:
+                cursor.execute("UPDATE requests SET requestsID = %s, approvalStatus = 'Approved' where requestsID = %s",
+                            (None,requestsID))
+            except pymysql.MySQLError as e:
+                return 'Error : ',e
+        
+            conn.commit()
+            
+            return 'Successful PATCH', 200  
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
 
 @app.route('/graph/users', methods=['GET'])
 def generateGraph():

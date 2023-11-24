@@ -75,6 +75,9 @@ class Request:
             requestList.append(tempRequest)
             
         return requestList
+    
+    def cancel():
+        pass
         
 
 
