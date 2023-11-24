@@ -799,7 +799,7 @@ def appointmentDoctorAssign(aid,did):
 
 
 @app.route('/appointments/<string:aid>/deny',methods=['PATCH'])
-def appointmentDeny(aid):
+def appointmentCancel(aid):
     try:
         conn = dbConnect()
         if conn is None:
@@ -822,7 +822,30 @@ def appointmentDeny(aid):
         if conn is not None:
             conn.close()  
 
+@app.route('/appointments/<string:aid>/approve',methods=['PATCH'])
+def appointmentApprove(aid):
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'PATCH':
+            try:
+                cursor.execute("UPDATE appointments SET appointmentStatus = 'Approved' where appointmentID = %s",aid)
+            except pymysql.MySQLError as e:
+                return 'Error : ',e
+        
+            conn.commit()
+            
+            return 'Successful PATCH', 200  
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
+    finally:
+        if conn is not None:
+            conn.close()  
+
 @app.route('/appointments/<string:aid>/complete',methods=['PATCH'])
 def appointmentComplete(aid):
     try:
@@ -1320,7 +1343,7 @@ def allRequests():
         cursor = conn.cursor()
         if request.method == 'GET':
             cursor.execute("SELECT * FROM requests")
-            requests = [
+            reqs = [
                 dict(
                     requestsID = row['requestsID'],
                     requestsType = row['requestsType'],
@@ -1332,26 +1355,27 @@ def allRequests():
                 )
                 for row in cursor.fetchall()
             ]
-            if requests  is not None:
-                return jsonify(requests),200
+            if reqs is not None:
+                return jsonify(reqs),200
             
         if request.method == 'POST':
             
             contentJSON = request.get_json()
 
-            requestsID =  requests.get('http://127.0.0.1:5000/requests/idgen').text
-            requestsType = contentJSON['requestsType']
+            reqsID =  requests.get('http://127.0.0.1:5000/requests/idgen').text
+            reqsType = contentJSON['requestsType']
             clientID = contentJSON['clientID']
             approvalStatus = 'Pending'
             dateSubmitted = datetime.now().date() 
             requestReason = contentJSON['requestReason']
+            appointmentID = contentJSON['appointmentID']
 
             insertQuery = """
                             INSERT INTO requests (requestsID,requestsType,clientID,approvalStatus,
                                                 dateSubmitted,requestReason,appointmentID)
                             VALUES (%s,%s,%s,%s,%s,%s,%s)
                         """
-            cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
+            cursor = cursor.execute(insertQuery,(reqsID,reqsType,clientID,approvalStatus,
                                                 dateSubmitted,requestReason,appointmentID)
                                                 )
             conn.commit() #Commit Changes to db, like git commit
@@ -1503,10 +1527,10 @@ def getLastDoctorID():
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
         if id == 0:
-            id = f'D{id.zfill(3)}'
+            id = f'D{str(id).zfill(3)}'
         else:
             cursor.execute("SELECT MAX(doctorID) FROM doctors")
-            id  = cursor.fetchall()[0]['MAX(doctorID)']
+            id  = cursor.fetchone()['MAX(doctorID)']
             print(id)
             id = str(int(id.strip('D'))+1)
             id = f'D{id.zfill(3)}'
@@ -1535,10 +1559,10 @@ def getLastPatientID():
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
         if id == 0:
-            id = f'P{id.zfill(3)}'
+            id = f'P{str(id).zfill(3)}'
         else:
             cursor.execute("SELECT MAX(patientID) FROM patients")
-            id  = cursor.fetchall()[0]['MAX(patientID)']
+            id  = cursor.fetchall()['MAX(patientID)']
             id = str(int(id.strip('P'))+1)
             id = f'P{id.zfill(3)}'
 
@@ -1566,10 +1590,10 @@ def getLastClinicID():
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
         if id == 0:
-            id = f'C{id.zfill(3)}'
+            id = f'C{str(id).zfill(3)}'
         else:
             cursor.execute("SELECT MAX(clinicID) FROM clinics")
-            id  = cursor.fetchone()[0]['MAX(clinicID)']
+            id  = cursor.fetchone()['MAX(clinicID)']
             id = str(int(id.strip('C'))+1)
             id = f'C{id.zfill(3)}'
 
@@ -1595,11 +1619,13 @@ def getLastAppointmentsID():
         cursor.execute("SELECT COUNT(*) FROM appointments")
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
+        print(id)
         if id == 0:
-            id = f'A{id.zfill(3)}'
+            id = f'A{str(id).zfill(3)}'
         else:
-            cursor.execute("SELECT MAX(appointmentID) FROM patients")
-            id  = cursor.fetchone()[0]['MAX(appointmentID)']
+            cursor.execute("SELECT MAX(appointmentID) FROM appointments")
+            id  = cursor.fetchone()['MAX(appointmentID)']
+            print(id)
             id = str(int(id.strip('A'))+1)
             id = f'A{id.zfill(3)}'
 
@@ -1622,14 +1648,14 @@ def getLastPrescriptionID():
           
         cursor = conn.cursor()
         #Add Error Handling
-        cursor.execute("SELECT COUNT(*) FROM prescription")
+        cursor.execute("SELECT COUNT(*) FROM prescriptions")
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
         if id == 0:
-            id = f'PR{id.zfill(3)}'
+            id = f'PR{str(id).zfill(3)}'
         else:
-            cursor.execute("SELECT MAX(prescriptionID) FROM prescription")
-            id  = cursor.fetchone()[0]['MAX(prescriptionID)']
+            cursor.execute("SELECT MAX(prescriptionID) FROM prescriptions")
+            id  = cursor.fetchone()['MAX(prescriptionID)']
             id = str(int(id.strip('PR'))+1)
             id = f'PR{id.zfill(3)}'
 
@@ -1656,10 +1682,10 @@ def getLastRequestsID():
         counter = cursor.fetchall()
         id = counter[0]['COUNT(*)']
         if id == 0:
-            id = f'REQ{id.zfill(3)}'
+            id = f'REQ{str(id).zfill(3)}'
         else:
-            cursor.execute("SELECT MAX(requestID) FROM requests")
-            id  = cursor.fetchone()[0]['MAX(requestID)']
+            cursor.execute("SELECT MAX(requestsID) FROM requests")
+            id  = cursor.fetchone()['MAX(requestsID)']
             id = str(int(id.strip('REQ'))+1)
             id = f'REQ{id.zfill(3)}'
 
