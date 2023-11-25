@@ -34,8 +34,6 @@ class PatientMyAppointmentWindow(QWidget):
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("My Appointment")
         self.headerTitle.setObjectName("headerTitle")
@@ -53,6 +51,7 @@ class PatientMyAppointmentWindow(QWidget):
 
         self.buttonContainer = QWidget()
         buttonLayout = QVBoxLayout(self.buttonContainer)
+        buttonLayout.setSpacing(20)
         self.buttonContainer.setObjectName("buttonContainer")
         self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
                                                             background: #D0BFFF;
@@ -84,6 +83,11 @@ class PatientMyAppointmentWindow(QWidget):
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
+
+        spacer = QWidget()
+        spacer.setFixedHeight(30)
+        
+        mainLayout.addWidget(spacer)
 
         self.setLayout(mainLayout)
 
@@ -118,8 +122,6 @@ class PatientMyAppointmentWindow(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
         patientAppointmentIcon = QIcon(filepath)

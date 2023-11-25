@@ -10,7 +10,7 @@ from .AccountPage import AccountPage
 from .model import Prescription, PrescriptionRepo
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from .PageManager import PageManager, FrameLayoutManager
-
+from datetime import datetime
 
 class PatientPrescriptionWindow(QWidget):
     def __init__(self, patient):
@@ -28,13 +28,11 @@ class PatientPrescriptionWindow(QWidget):
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("My Prescriptions")
         self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(80, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
         self.headerTitle.setStyleSheet("""QLabel#headerTitle {
                                                             background: #D0BFFF;
@@ -52,13 +50,16 @@ class PatientPrescriptionWindow(QWidget):
                                                             border-radius: 10px;
                                                             margin-left: 100px;
                                                             }""")
-        buttonLayout = QVBoxLayout(self.buttonContainer)
-        self.buttonContainer.setContentsMargins(20,20,20,20)
+        buttonLayout = QVBoxLayout(buttonContainer)
+        buttonContainer.setContentsMargins(20,20,20,20)
+        buttonLayout.setSpacing(20)
+
         boxScrollArea = QScrollArea()
         boxScrollArea.setObjectName("scrollArea")
 
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+
 
         self.generatePrescription()
 
@@ -77,6 +78,9 @@ class PatientPrescriptionWindow(QWidget):
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.centralwidget)
         mainLayout.addWidget(boxScrollArea)
+        spacer = QWidget()
+        spacer.setFixedHeight(30)
+        mainLayout.addWidget(spacer)
 
         self.setLayout(mainLayout)
 

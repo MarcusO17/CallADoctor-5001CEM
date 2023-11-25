@@ -22,7 +22,7 @@ class PatientDashboard(QWidget):
     def __init__(self, patient):
         super().__init__()
         self.patient = patient
-        # self.currLocation = (self.patient.getPatientLat(), self.patient.getPatientLon())
+        self.currLocation = (self.patient.getPatientLat(), self.patient.getPatientLon())
 
         self.setupUi()
 
@@ -36,9 +36,9 @@ class PatientDashboard(QWidget):
 
         self.generateUpcomingAppointments()
 
-        self.generateMapWidget()
+        clinicList = ClinicRepository.getClinicList()
+        self.generateMapWidget(clinicList)
 
-        # clinicList = ClinicRepository.getClinicList()
 
         self.generatePrescription()
 
@@ -123,8 +123,6 @@ class PatientDashboard(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-pills-64.png")
@@ -247,8 +245,6 @@ class PatientDashboard(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-64.png")
@@ -295,7 +291,7 @@ class PatientDashboard(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count()-1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-    def generateMapWidget(self):
+    def generateMapWidget(self, clinicList):
 
         self.mainMapWidget = QWidget()
         self.mainMapLayout = QVBoxLayout(self.mainMapWidget)
@@ -332,25 +328,25 @@ class PatientDashboard(QWidget):
 
         self.mainMapLayout.addLayout(headerRow)
 
-        # map = geoHelper.showMap(self.currLocation)  # Return Folium Map
+        map = geoHelper.showMap(self.currLocation)  # Return Folium Map
 
-        # geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
-        # map = self.generateClinicMarkers(map=map)
+        geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
+        map = self.generateClinicMarkers(map,clinicList)
 
-        # data = io.BytesIO()
-        # map.save(data, close_file=False)
+        data = io.BytesIO()
+        map.save(data, close_file=False)
 
-        # webView = QWebEngineView()
-        # webView.setHtml(data.getvalue().decode())
+        webView = QWebEngineView()
+        webView.setHtml(data.getvalue().decode())
 
-        # self.mapWidgetLayout.addWidget(webView)
-        # self.mainMapLayout.addWidget(self.mapWidget)
+        self.mapWidgetLayout.addWidget(webView)
+        self.mainMapLayout.addWidget(self.mapWidget)
 
-    # def generateClinicMarkers(self,map,clinicList):
-    #     for clinics in clinicList:
-    #         geoHelper.addMarker(map,(clinics.getClinicLat(),clinics.getClinicLon()),clinics.getClinicName()
-    #                             ,'lightblue','home')
-    #     return map
+    def generateClinicMarkers(self,map,clinicList):
+        for clinics in clinicList:
+            geoHelper.addMarker(map,(clinics.getClinicLat(),clinics.getClinicLon()),clinics.getClinicName()
+                                ,'lightblue','home')
+        return map
 
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click

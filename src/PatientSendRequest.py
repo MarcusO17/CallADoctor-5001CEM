@@ -31,10 +31,8 @@ class PatientSendRequest(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setText(self.clinic.getClinicName() + " - Send Request")
@@ -118,19 +116,15 @@ class PatientSendRequest(QWidget):
         self.preferredTimeComboBox.setGeometry(QRect(300, 490, 150, 40))
         self.updateTimeslot()
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-send-file-30.png")
-        self.submitButtonIcon = QIcon(filepath)
 
         self.submitButton = QPushButton(self.centralwidget)
-        self.submitButton.setGeometry(QRect(520, 545, 275, 100))
+        self.submitButton.setGeometry(QRect(520, 530, 275, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(28)
         self.submitButton.setFont(font)
         self.submitButton.setLayoutDirection(Qt.LeftToRight)
-        self.submitButton.setText("    Submit")
-        self.submitButton.setIconSize(QSize(50, 50))
-        self.submitButton.setIcon(self.submitButtonIcon)
+        self.submitButton.setText("Submit")
         self.submitButton.clicked.connect(self.sendRequestFunction)
         self.submitButton.setStyleSheet("""QPushButton {
                                                         background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -146,15 +140,26 @@ class PatientSendRequest(QWidget):
                                                           text-align: center; 
                                                           color:white;
                                                         }""")
+        
+        self.submitButtonLabel = QLabel(self.centralwidget)
+        self.submitButtonLabel.setGeometry(QRect(540, 555, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-send-file-30.png")
+        self.submitButtonIcon = QPixmap(filepath)
+        self.submitButtonIcon = self.submitButtonIcon.scaled(50, 50)
+        self.submitButtonLabel.setPixmap(self.submitButtonIcon)
+        self.submitButtonLabel.raise_()
 
         # self.submitButtonLabel.setGeometry(QRect(540, 570, 50, 50))
+        
+
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.centralwidget)
+
         self.requestPurpose.raise_()
         self.preferredTimeComboBox.raise_()
         self.preferredDate.raise_()
         self.submitButton.raise_()
-
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.centralwidget)
+        self.submitButtonLabel.raise_()
 
         self.setLayout(mainLayout)
 

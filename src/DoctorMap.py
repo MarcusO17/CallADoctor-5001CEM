@@ -49,10 +49,14 @@ class DoctorMap(QWidget):
                                                                         }""")
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
 
-        map = geoHelper.showMap(self.currLocation)  # Return Folium Map
+        if self.currLocation == ('',''):
+            #Center of world
+            map = geoHelper.showMap((32.7502,114.7655))
+        else:
+            map = geoHelper.showMap(self.currLocation)  # Return Folium Map
 
-        geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
-        map = self.generatePatientMarkers(map=map)
+            geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
+            map = self.generatePatientMarkers(map=map)
 
         data = io.BytesIO()
         map.save(data, close_file=False)
