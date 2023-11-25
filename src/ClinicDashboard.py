@@ -28,6 +28,10 @@ class ClinicDashboard(QWidget):
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
+        self.doctorList = list()
+        self.unassignedAppointmentList = list()
+        self.requestReviewButtons = QVBoxLayout()
+        self.doctorWidgetsRow = QHBoxLayout()
 
         self.generateDoctorWidgets()
 
@@ -92,7 +96,16 @@ class ClinicDashboard(QWidget):
         self.doctorWidgets.setStyleSheet("background-color: transparent;")
         doctorWidgetsLayout = QVBoxLayout(self.doctorWidgets)
 
-        doctorWidgetsRow = QHBoxLayout()
+        print(self.doctorWidgetsRow.count())
+        for i in range(self.doctorWidgetsRow.count()):
+            widget = self.doctorWidgetsRow.takeAt(0).widget()
+            self.doctorWidgetsRow.removeWidget(widget)
+            print("in the loop doctor widget ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 doctor widget")
+
+        self.doctorList.clear()
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -128,16 +141,16 @@ class ClinicDashboard(QWidget):
             emptyDoctor.setAlignment(Qt.AlignCenter)
             emptyDoctor.setText("No Doctors")
             emptyDoctor.setObjectName("emptyDoctor")
-            emptyDoctor.setFixedSize(400, 100)
+            emptyDoctor.setFixedSize(450, 100)
             emptyDoctor.setStyleSheet("""QLabel#emptyDoctor {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                        stop: 0 rgba(25, 4, 130, 255), 
-                                                                        stop: 1 rgba(119, 82, 254, 255)
-                                                                    );
-                                                                    border-radius: 10px;
-                                                                    text-align: center;
-                                                                    color: white;
-                                                                }""")
-            doctorWidgetsLayout.addWidget(emptyDoctor)
+                                                                                            stop: 0 rgba(25, 4, 130, 255), 
+                                                                                            stop: 1 rgba(119, 82, 254, 255)
+                                                                                        );
+                                                                                        border-radius: 10px;
+                                                                                        text-align: center;
+                                                                                        color: white;
+                                                                                    }""")
+            self.doctorWidgetsRow.addWidget(emptyDoctor)
 
         else:
             for count, doctor in enumerate(threeDoctorList):
@@ -180,9 +193,9 @@ class ClinicDashboard(QWidget):
                 doctorLayout.addWidget(doctorButton)
                 doctorLayout.addWidget(doctorLabel)
 
-                doctorWidgetsRow.addWidget(doctorWidget)
+                self.doctorWidgetsRow.addWidget(doctorWidget)
 
-            doctorWidgetsLayout.addLayout(doctorWidgetsRow)
+            doctorWidgetsLayout.addLayout(self.doctorWidgetsRow)
 
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorSchedule = ClinicDetailedSchedule(doctor, clinic)
@@ -204,6 +217,16 @@ class ClinicDashboard(QWidget):
         self.requestReviewLayout = QVBoxLayout(self.requestReviewWidget)
         self.requestReviewLayout.setSpacing(0)
 
+        for i in range(self.requestReviewButtons.count()):
+            widget = self.requestReviewButtons.itemAt(0).widget()
+            self.requestReviewButtons.removeWidget(widget)
+            print("in the loop request review ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget request review")
+
+        self.unassignedAppointmentList.clear()
+
         spacer = QWidget()
         spacer.setFixedWidth(110)
         self.requestReviewTitle = QLabel()
@@ -220,6 +243,8 @@ class ClinicDashboard(QWidget):
 
         self.requestReviewLayout.addLayout(headerRow)
         self.requestReviewLayout.setContentsMargins(20, 20, 20, 20)
+
+        self.unassignedAppointmentList.clear()
 
         #get 3 reviews here
         buttonFont = QFont()
@@ -249,10 +274,13 @@ class ClinicDashboard(QWidget):
                                                                         text-align: center;
                                                                         color: white;
                                                                     }""")
-            self.requestReviewLayout.addWidget(emptyReviews)
+
+            self.requestReviewButtons.addWidget(emptyReviews)
         else:
             for count, request in enumerate(threeAppointments):
-                buttonRow = QHBoxLayout()
+
+                buttonRowWidget = QWidget()
+                buttonRow = QHBoxLayout(buttonRowWidget)
                 spacer = QWidget()
                 spacer.setFixedWidth(0)
                 spacer.setFixedHeight(120)
@@ -283,12 +311,13 @@ class ClinicDashboard(QWidget):
                 self.requestButton.setGraphicsEffect(effect)
 
                 buttonRow.addWidget(self.requestButton)
-                self.requestReviewLayout.addLayout(buttonRow)
-
+                self.requestReviewButtons.addWidget(buttonRowWidget)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.requestReviewLayout.addWidget(spacer)
+        self.requestReviewButtons.addWidget(spacer)
+
+        self.requestReviewLayout.addLayout(self.requestReviewButtons)
 
     def requestButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click
