@@ -29,6 +29,8 @@ class DoctorDashboard(QWidget):
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
+        self.upcomingAppointmentButtons = QVBoxLayout()
+        self.appointmentList = []
 
         self.generateSchedule()
 
@@ -224,6 +226,14 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
         self.upcomingAppointmentLayout.setSpacing(0)
 
+        for i in range(self.upcomingAppointmentButtons.count()):
+            widget = self.upcomingAppointmentButtons.itemAt(0).widget()
+            self.upcomingAppointmentButtons.removeWidget(widget)
+            print("in the loop upcoming appointment ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget upcoming appointment")
+
         spacer = QWidget()
         spacer.setFixedWidth(40)
         self.upcomingAppointmentTitle = QLabel()
@@ -244,9 +254,11 @@ class DoctorDashboard(QWidget):
 
         #get 4 upcoming appointment here
 
-        appointmentList = AppointmentRepository.getDoctorDashboardAppointments(self.doctor.getDoctorID())
+        self.appointmentList.clear()
 
-        fourAppointments = appointmentList[:4]
+        self.appointmentList = AppointmentRepository.getDoctorDashboardAppointments(self.doctor.getDoctorID())
+
+        fourAppointments = self.appointmentList[:4]
 
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
@@ -271,7 +283,7 @@ class DoctorDashboard(QWidget):
                                                             text-align: center;
                                                             color: white;
                                                         }""")
-            self.upcomingAppointmentLayout.addWidget(emptyAppointment)
+            self.upcomingAppointmentButtons.addWidget(emptyAppointment)
         else:
             for count, appointment in enumerate(fourAppointments):
                 buttonRow = QHBoxLayout()
@@ -299,11 +311,12 @@ class DoctorDashboard(QWidget):
                     lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.doctor))
 
                 buttonRow.addWidget(self.appointmentButton)
-                self.upcomingAppointmentLayout.addLayout(buttonRow)
+                self.upcomingAppointmentButtons.addLayout(buttonRow)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.upcomingAppointmentLayout.addWidget(spacer)
+        self.upcomingAppointmentButtons.addWidget(spacer)
+        self.upcomingAppointmentLayout.addLayout(self.upcomingAppointmentButtons)
 
     def appointmentButtonFunction(self, appointment, doctor):
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
