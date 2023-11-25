@@ -202,14 +202,17 @@ class LoginWindow(QWidget):
             self.openDoctorRegisterWindow()
            
     def openClinicRegisterWindow(self):
+        self.resetFieldStyles()
         self.clinicRegister = ClinicRegisterWindow()
         self.pageManager.add(self.clinicRegister)
 
     def openPatientRegisterWindow(self):
+        self.resetFieldStyles()
         self.patientRegister = PatientRegisterWindow()
         self.pageManager.add(self.patientRegister)
 
     def openDoctorRegisterWindow(self):
+        self.resetFieldStyles()
         self.DoctorRegister = DoctorRegisterWindow()
         self.pageManager.add(self.DoctorRegister)
 
@@ -232,7 +235,29 @@ class LoginWindow(QWidget):
         self.adminHomepage = AdminHomepageWindow(sessionID)
         self.pageManager.add(self.adminHomepage)
 
+    def highlightEmptyFields(self):
+        emptyFields = []
+        
+        if self.emailInput.text().strip() == "":
+            emptyFields.append(self.emailInput)
+        if self.passwordInput.text().strip() == "":
+            emptyFields.append(self.passwordInput)
+        
+        for field in emptyFields:
+            field.setStyleSheet("border: 2px solid red;")
+
+        return not emptyFields
+
+    def resetFieldStyles(self):
+        self.emailInput.setStyleSheet("")
+        self.passwordInput.setStyleSheet("")
+
     def loginAuthorization(self):
+        self.resetFieldStyles()  # I am Resetting the styles before checking again
+        if not self.highlightEmptyFields():
+            QMessageBox.critical(self, "Invalid Login", "Please fill in all details")
+            return
+
         email = self.emailInput.text()
         password = self.passwordInput.text()
 
