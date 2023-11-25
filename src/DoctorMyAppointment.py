@@ -110,6 +110,8 @@ class DoctorMyAppointmentWindow(QWidget):
         self.appointmentList.clear()
 
         self.appointmentList = AppointmentRepo.AppointmentRepository.getAppointmentsByDoctor(self.doctor.getDoctorID())
+        self.appointmentList = [appointment for appointment in self.appointmentList if appointment.getAppointmentStatus() != 'Cancelled']
+
 
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
