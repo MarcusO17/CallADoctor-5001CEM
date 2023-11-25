@@ -1729,7 +1729,7 @@ def downloadClinicImage(id):
             conn.commit()
             conn.close()
 
-            return imgData['certifiedDoc']
+            return imgData['verifiedDoc']
         except:
             return jsonify({'Error':'Image Error'})
     
