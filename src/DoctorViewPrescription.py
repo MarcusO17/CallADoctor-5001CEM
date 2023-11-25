@@ -99,7 +99,7 @@ class DoctorViewPrescription(QWidget):
         medicationNameLabel = QLabel(self.centralwidget)
         medicationNameLabel.setGeometry(QRect(40, 120, 300, 50))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(10)
         medicationNameLabel.setFont(font)
         medicationNameLabel.setText("Medication Name: ")

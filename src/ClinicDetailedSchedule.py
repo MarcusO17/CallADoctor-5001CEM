@@ -31,7 +31,7 @@ class ClinicDetailedSchedule(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
         self.headerTitle.setFont(font)
         self.headerTitle.setObjectName("headerTitle")
