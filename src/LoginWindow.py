@@ -224,24 +224,35 @@ class LoginWindow(QWidget):
         email = self.emailInput.text()
         password = self.passwordInput.text()
 
-        loginJSON = {
-            "email" : email,
-            "password" : password
-        }
-
-        sessionInfo,isValid = Login.userValidLogin(credentials=loginJSON)
-
-        if isValid:
-            sessionID = sessionInfo['ID']
-            role = sessionInfo['role']
-            if role == "patient":
-                self.patientLogin(sessionID)
-            elif role == "doctor":
-                self.doctorLogin(sessionID)
-            elif role == "clinic":
-                self.clinicLogin(sessionID)
-            elif role == "admin":
-                self.adminLogin(sessionID)
-
+        if email == "" or password == "" or len(email) == 0 or len(password) == 0:
+            errorMessage = QMessageBox()
+            errorMessage.setIcon(QMessageBox.Critical)
+            errorMessage.setWindowTitle("Invalid Login")
+            errorMessage.setText("Invalid Credentials")
+            errorMessage.exec_()
         else:
-            print("login failed")
+            loginJSON = {
+                "email" : email,
+                "password" : password
+            }
+
+            sessionInfo,isValid = Login.userValidLogin(credentials=loginJSON)
+
+            if isValid:
+                sessionID = sessionInfo['ID']
+                role = sessionInfo['role']
+                if role == "patient":
+                    self.patientLogin(sessionID)
+                elif role == "doctor":
+                    self.doctorLogin(sessionID)
+                elif role == "clinic":
+                    self.clinicLogin(sessionID)
+                elif role == "admin":
+                    self.adminLogin(sessionID)
+
+            else:
+                errorMessage = QMessageBox()
+                errorMessage.setIcon(QMessageBox.Critical)
+                errorMessage.setWindowTitle("Invalid Login")
+                errorMessage.setText("Invalid Credentials")
+                errorMessage.exec_()
