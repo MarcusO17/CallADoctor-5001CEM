@@ -244,6 +244,12 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.showRePasswordCheckbox.stateChanged.connect(self.toggleReEnterPasswordVisibility)
 
 
+                self.clinicNameLineEdit.textChanged.connect(self.removeHighlight)
+                self.clinicAddressLineEdit.textChanged.connect(self.removeHighlight)
+                self.clinicContactLineEdit.textChanged.connect(self.removeHighlight)
+                self.clinicEmailLineEdit.textChanged.connect(self.removeHighlight)
+                self.clinicPasswordLineEdit.textChanged.connect(self.removeHighlight)
+                self.clinicReEnterPassLineEdit.textChanged.connect(self.removeHighlight)
                 
         # Register PushButton For Registering Account - Saves the Data
                 self.clinicRegisterPushButton = QtWidgets.QPushButton(self.centralwidget)
@@ -319,9 +325,52 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.statusbar.setObjectName("statusbar")
                 MainWindow.setStatusBar(self.statusbar)
 
+        def removeHighlight(self):
+                sender = self.sender()  # Get the object that triggered the signal
+                sender.setStyleSheet("")
+
+        def highlightEmptyFields(self):
+                emptyFields = []
+
+                if self.clinicNameLineEdit.text().strip() == "":
+                        emptyFields.append(self.clinicNameLineEdit)
+                if self.clinicAddressLineEdit.text().strip() == "":
+                        emptyFields.append(self.clinicAddressLineEdit)
+                if self.clinicContactLineEdit.text().strip() == "":
+                        emptyFields.append(self.clinicContactLineEdit)
+                if self.clinicEmailLineEdit.text().strip() == "":
+                        emptyFields.append(self.clinicEmailLineEdit)
+                if self.clinicPasswordLineEdit.text().strip() == "":
+                        emptyFields.append(self.clinicPasswordLineEdit)
+                if self.clinicReEnterPassLineEdit.text().strip() == "":
+                        emptyFields.append(self.clinicReEnterPassLineEdit)
+
+                for field in emptyFields:
+                        field.setStyleSheet("border: 2px solid red;")
+
+                return not emptyFields
+
+        def resetFieldStyles(self):
+                self.clinicNameLineEdit.setStyleSheet("")
+                self.clinicAddressLineEdit.setStyleSheet("")
+                self.clinicContactLineEdit.setStyleSheet("")
+                self.clinicEmailLineEdit.setStyleSheet("")
+                self.clinicPasswordLineEdit.setStyleSheet("")
+                self.clinicReEnterPassLineEdit.setStyleSheet("")
+
 
 
         def clinicSaveData(self):
+                self.resetFieldStyles()
+
+                if not self.highlightEmptyFields():
+                        QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
+                        return
+                
+                if not self.validatePasswordMatch():
+                        QMessageBox.critical(self.centralwidget, "Password Mismatch", "Passwords do not match.")
+                        return
+
                 documentPath = self.clinicDocumentLineEdit.text()
 
                 files = {'file': ('clinicDoc.jpg', open(documentPath, 'rb'))}
@@ -374,12 +423,14 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 password = self.clinicPasswordLineEdit.text()
                 reenterPassword = self.clinicReEnterPassLineEdit.text()
 
-                if password == reenterPassword:
+                if password != reenterPassword:
                         # Passwords match, Color of the field will be green
-                        self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                        self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+                        return False
                 else:
                         # Passwords do not match, indicate an error, Color of the field will be red
-                        self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+                        self.clinicReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                        return True
         
 
         def uploadDocument(self):
