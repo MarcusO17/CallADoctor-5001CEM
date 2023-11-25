@@ -100,8 +100,6 @@ class PatientAppointmentDetailsWindow(QWidget):
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
         self.visitPurposeLabel.setFont(font)
         self.visitPurposeLabel.setText((f"{self.appointment.getVisitReason()} \n"
                                         f"Date: {self.appointment.getAppointmentDate()} \n"
@@ -124,8 +122,6 @@ class PatientAppointmentDetailsWindow(QWidget):
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
         self.doctorDetailsLabel.setFont(font)
         self.doctorDetailsLabel.setText(f"Doctor Name: {self.doctor.getDoctorName()} \n"
                                         f"Doctor ID: {self.doctor.getDoctorID()} \n"
@@ -150,8 +146,6 @@ class PatientAppointmentDetailsWindow(QWidget):
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
         self.clinicDetailsLabel.setFont(font)
         self.clinicDetailsLabel.setText(f"Clinic Name: {self.clinic.getClinicName()} \n"
                                         f"Clinic ID: {self.clinic.getClinicID()} \n"

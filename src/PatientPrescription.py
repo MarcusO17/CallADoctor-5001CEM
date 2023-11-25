@@ -66,8 +66,6 @@ class PatientPrescriptionWindow(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(25)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
         prescriptionIcon = QIcon(filepath)

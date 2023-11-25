@@ -100,7 +100,6 @@ class PatientPrescriptionDetailsWindow(QWidget):
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(10)
-        font.setWeight(75)
         medicationNameLabel.setFont(font)
         medicationNameLabel.setText("Medication Name: ")
 
@@ -127,8 +126,6 @@ class PatientPrescriptionDetailsWindow(QWidget):
             font = QFont()
             font.setFamily("Arial")
             font.setPointSize(16)
-            font.setBold(True)
-            font.setWeight(75)
             prescriptionMedicationName.setFont(font)
             prescriptionMedicationName.setText(prescriptionDetails.getMedicationName())
             prescriptionMedicationName.setStyleSheet("""QLabel {

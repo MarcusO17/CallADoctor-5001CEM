@@ -116,8 +116,6 @@ class PatientSendRequest(QWidget):
         self.preferredTimeComboBox.setGeometry(QRect(300, 490, 150, 40))
         self.updateTimeslot()
 
-        # filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-send-file-30.png")
-        # self.submitButtonIcon = QIcon(filepath)
 
         self.submitButton = QPushButton(self.centralwidget)
         self.submitButton.setGeometry(QRect(520, 530, 275, 100))
@@ -127,8 +125,6 @@ class PatientSendRequest(QWidget):
         self.submitButton.setFont(font)
         self.submitButton.setLayoutDirection(Qt.LeftToRight)
         self.submitButton.setText("Submit")
-        # self.submitButton.setIconSize(QSize(50, 50))
-        # self.submitButton.setIcon(self.submitButtonIcon)
         self.submitButton.clicked.connect(self.sendRequestFunction)
         self.submitButton.setStyleSheet("""QPushButton {
                                                         background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 

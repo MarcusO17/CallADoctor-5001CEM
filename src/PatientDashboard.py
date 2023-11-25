@@ -123,8 +123,6 @@ class PatientDashboard(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-pills-64.png")
@@ -249,8 +247,6 @@ class PatientDashboard(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-64.png")

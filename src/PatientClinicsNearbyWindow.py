@@ -74,8 +74,6 @@ class PatientClinicsNearbyWindow(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
         buttonFont.setPointSize(20)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         #Insert All the Clinics 
         for count, clinic in enumerate(clinicList):

@@ -121,8 +121,6 @@ class PatientMyAppointmentWindow(QWidget):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
         patientAppointmentIcon = QIcon(filepath)
