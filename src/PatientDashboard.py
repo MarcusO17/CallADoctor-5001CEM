@@ -118,7 +118,7 @@ class PatientDashboard(QWidget):
 
 
         prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(self.patient.getPatientID())
-        prescriptionList = prescriptionList[:1]
+        twoPrescriptionList = prescriptionList[:2]
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -128,31 +128,48 @@ class PatientDashboard(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-pills-64.png")
         self.prescriptionButtonIcon = QIcon(filepath)
 
-        for count, prescription in enumerate(prescriptionList):
-            self.prescriptionButton = QPushButton()
-            self.prescriptionButton.setObjectName("prescriptionButton")
-            self.prescriptionButton.setText(f"{prescription.getPrescriptionID()}")
-            self.prescriptionButton.setStyleSheet("""QPushButton#prescriptionButton {
-                                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                                stop: 0 rgba(10, 2, 85, 255), 
-                                                                                stop: 1 rgba(59, 41, 168, 255)
-                                                                            );
-                                                                            border-radius: 10px; color: white;
-                                                                        }
-                                                                        QPushButton#prescriptionButton:hover
-                                                                        {
-                                                                          background-color: #7752FE;}""")
-            effect = QGraphicsDropShadowEffect(
-            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
-            )
-            self.prescriptionButton.setGraphicsEffect(effect)
-            self.prescriptionButton.setFont(buttonFont)
-            self.prescriptionButton.setFixedSize(QSize(400,100))
-            self.prescriptionButton.setIconSize(QSize(30, 30))
-            self.prescriptionButton.setIcon(self.prescriptionButtonIcon)
-            self.prescriptionButton.clicked.connect(
-                lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
-            self.prescriptionLayout.addWidget(self.prescriptionButton)
+        if len(twoPrescriptionList) == 0:
+            emptyPrescription = QLabel()
+            emptyPrescription.setFont(buttonFont)
+            emptyPrescription.setAlignment(Qt.AlignCenter)
+            emptyPrescription.setText("No Prescriptions")
+            emptyPrescription.setObjectName("emptyPrescription")
+            emptyPrescription.setFixedSize(440,250)
+            emptyPrescription.setStyleSheet("""QWidget#emptyPrescription {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                                stop: 1 rgba(119, 82, 254, 255)
+                                                            );
+                                                            border-radius: 10px;
+                                                            text-align: center;
+                                                            color: white;
+                                                        }""")
+            self.prescriptionLayout.addWidget(emptyPrescription)
+        else:
+            for count, prescription in enumerate(twoPrescriptionList):
+                self.prescriptionButton = QPushButton()
+                self.prescriptionButton.setObjectName("prescriptionButton")
+                self.prescriptionButton.setText(f"{prescription.getPrescriptionID()}")
+                self.prescriptionButton.setStyleSheet("""QPushButton#prescriptionButton {
+                                                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                                                    stop: 1 rgba(59, 41, 168, 255)
+                                                                                );
+                                                                                border-radius: 10px; color: white;
+                                                                            }
+                                                                            QPushButton#prescriptionButton:hover
+                                                                            {
+                                                                            background-color: #7752FE;}""")
+                effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+                )
+                self.prescriptionButton.setGraphicsEffect(effect)
+                self.prescriptionButton.setFont(buttonFont)
+                self.prescriptionButton.setFixedSize(QSize(400,100))
+                self.prescriptionButton.setIconSize(QSize(30, 30))
+                self.prescriptionButton.setIcon(self.prescriptionButtonIcon)
+                self.prescriptionButton.clicked.connect(
+                    lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
+                self.prescriptionLayout.addWidget(self.prescriptionButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -240,7 +257,7 @@ class PatientDashboard(QWidget):
         appointmentList = AppointmentRepo.AppointmentRepository.getPatientDashboardAppointments(self.patient.getPatientID())
 
 
-        appointmentList = appointmentList[:1]
+        twoAppointmentList = appointmentList[:2]
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -250,31 +267,48 @@ class PatientDashboard(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-64.png")
         self.appointmentButtonIcon = QIcon(filepath)
 
-        for count, appointment in enumerate(appointmentList):
-            self.appointmentButton = QPushButton()
-            self.appointmentButton.setObjectName("appointmentButton")
-            self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
-            self.appointmentButton.setStyleSheet("""QPushButton#appointmentButton {
-                                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                                stop: 0 rgba(10, 2, 85, 255), 
-                                                                                stop: 1 rgba(59, 41, 168, 255)
-                                                                            );
-                                                                            border-radius: 10px; color: white;
-                                                                        }
-                                                                        QPushButton#appointmentButton:hover
-                                                                        {
-                                                                          background-color: #7752FE;}""")
-            effect = QGraphicsDropShadowEffect(
-            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
-            )
-            self.appointmentButton.setGraphicsEffect(effect)
-            self.appointmentButton.setFont(buttonFont)
-            self.appointmentButton.setFixedSize(QSize(400,100))
-            self.appointmentButton.setIconSize(QSize(30, 30))
-            self.appointmentButton.setIcon(self.appointmentButtonIcon)
-            self.appointmentButton.clicked.connect(
-                lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.patient))
-            self.upcomingAppointmentLayout.addWidget(self.appointmentButton)
+        if len(twoAppointmentList) == 0:
+            emptyAppointment = QLabel()
+            emptyAppointment.setFont(buttonFont)
+            emptyAppointment.setAlignment(Qt.AlignCenter)
+            emptyAppointment.setText("No Appointment")
+            emptyAppointment.setObjectName("emptyAppointment")
+            emptyAppointment.setFixedSize(440,250)
+            emptyAppointment.setStyleSheet("""QWidget#emptyAppointment {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                                stop: 1 rgba(119, 82, 254, 255)
+                                                            );
+                                                            border-radius: 10px;
+                                                            text-align: center;
+                                                            color: white;
+                                                        }""")
+            self.upcomingAppointmentLayout.addWidget(twoAppointmentList)
+        else:
+            for count, appointment in enumerate(twoAppointmentList):
+                self.appointmentButton = QPushButton()
+                self.appointmentButton.setObjectName("appointmentButton")
+                self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
+                self.appointmentButton.setStyleSheet("""QPushButton#appointmentButton {
+                                                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                                                    stop: 1 rgba(59, 41, 168, 255)
+                                                                                );
+                                                                                border-radius: 10px; color: white;
+                                                                            }
+                                                                            QPushButton#appointmentButton:hover
+                                                                            {
+                                                                            background-color: #7752FE;}""")
+                effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+                )
+                self.appointmentButton.setGraphicsEffect(effect)
+                self.appointmentButton.setFont(buttonFont)
+                self.appointmentButton.setFixedSize(QSize(400,100))
+                self.appointmentButton.setIconSize(QSize(30, 30))
+                self.appointmentButton.setIcon(self.appointmentButtonIcon)
+                self.appointmentButton.clicked.connect(
+                    lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.patient))
+                self.upcomingAppointmentLayout.addWidget(self.appointmentButton)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
