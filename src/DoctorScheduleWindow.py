@@ -79,7 +79,7 @@ class DoctorScheduleWindow(QWidget):
 
         dayCellYStart = 230
         # side of the grid
-        daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
             dayCell.setGeometry(QRect(30, dayCellYStart, 95, 55))
@@ -141,7 +141,7 @@ class DoctorScheduleWindow(QWidget):
             #print(date)
             #dateTemp = dateTemp.split("-") #YYYY-MM-DD
 
-            row = date.weekday()+1
+            row = date.weekday()
             if endTime - startTime >= 1:
                 duration = endTime - startTime
                 col = startTime - 7

@@ -107,7 +107,7 @@ class DoctorDashboard(QWidget):
             # print(date)
             # dateTemp = dateTemp.split("-") #YYYY-MM-DD
 
-            row = date.weekday() + 1
+            row = date.weekday()
             if endTime - startTime >= 1:
                 duration = endTime - startTime
                 col = startTime - 7
@@ -186,7 +186,7 @@ class DoctorDashboard(QWidget):
         scheduleLayout.addLayout(scheduleRowLayout)
 
         # side of the grid
-        daysOfTheWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
+        daysOfTheWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]
 
         for h in range(HEIGHT):
             scheduleRowLayout = QHBoxLayout()
@@ -244,7 +244,7 @@ class DoctorDashboard(QWidget):
 
         #get 4 upcoming appointment here
 
-        appointmentList = AppointmentRepository.getDashboardAppointments(self.doctor.getDoctorID())
+        appointmentList = AppointmentRepository.getDoctorDashboardAppointments(self.doctor.getDoctorID())
 
         fourAppointments = appointmentList[:4]
 
