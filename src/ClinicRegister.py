@@ -373,6 +373,10 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
 
                 documentPath = self.clinicDocumentLineEdit.text()
 
+                if not documentPath:
+                        QMessageBox.critical(self.centralwidget, "Missing Document", "Please attach a document.")
+                        return
+
                 files = {'file': ('clinicDoc.jpg', open(documentPath, 'rb'))}
                  
                 clinicData = {
