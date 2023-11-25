@@ -31,7 +31,7 @@ class ClinicDetailedSchedule(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
         self.headerTitle.setFont(font)
         self.headerTitle.setObjectName("headerTitle")
@@ -75,7 +75,7 @@ class ClinicDetailedSchedule(QWidget):
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         scheduleContainer = QLabel(self.centralwidget)
-        scheduleContainer.setGeometry(QRect(5, 135, 915, 520))
+        scheduleContainer.setGeometry(QRect(5, 145, 915, 520))
         scheduleContainer.setStyleSheet("""QLabel {
                                         background: #D0BFFF;
                                         border-radius: 10px;
@@ -91,7 +91,7 @@ class ClinicDetailedSchedule(QWidget):
         timeSlotLabelXStart = 125
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
-            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,175,95,55))
+            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,185,95,55))
             timeSlotLabel.setStyleSheet("border: 1px solid black; border-radius: 3px; background-color: white;")
             timeSlotLabel.setAlignment(Qt.AlignCenter)
             timeSlotLabel.setText(str(timeStart) + ":00 - " + str(timeEnd)+ ":00")
@@ -100,7 +100,7 @@ class ClinicDetailedSchedule(QWidget):
             timeStart = timeStart + 1
             timeEnd = timeStart + 1
 
-        dayCellYStart = 230
+        dayCellYStart = 240
         # side of the grid
         daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         for i in range(HEIGHT):
@@ -112,7 +112,7 @@ class ClinicDetailedSchedule(QWidget):
             dayCell.setText(daysOfTheWeek[i])
             dayCellYStart = dayCellYStart + 55
 
-        tempButtonYStart = 175
+        tempButtonYStart = 185
         for h in range(HEIGHT):
             tempButtonXStart = 125
             tempButtonYStart = tempButtonYStart + 55

@@ -214,6 +214,7 @@ class AccountPage(QWidget):
         self.editButtonState = True
 
         self.editButton.raise_()
+        self.editButtonLabel.raise_()
         self.addressLabel.raise_()
 
         mainLayout = QVBoxLayout()
@@ -233,6 +234,8 @@ class AccountPage(QWidget):
             self.editButton.setText("Edit")
             if self.mode == "Patient":
                 self.addressLabel.setEnabled(False)
+
+                # implement here
                 self.user.setPatientAddress(self.addressLabel.text())
 
     def setUser(self, mode, user):
@@ -295,3 +298,5 @@ class AccountPage(QWidget):
             self.flexLabel5.show()
             self.statusLabel.setText(self.user.getStatus())
             self.statusLabel.show()
+            self.editButtonLabel.hide()
+            self.editButton.hide()
