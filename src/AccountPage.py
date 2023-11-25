@@ -1,5 +1,6 @@
 import os
 import sys
+import requests
 import typing
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
 from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
@@ -236,7 +237,13 @@ class AccountPage(QWidget):
                 self.addressLabel.setEnabled(False)
 
                 # implement here
-                self.user.setPatientAddress(self.addressLabel.text())
+                editedDetailsJSON = {
+                    'address' : self.addressLabel.text(),
+                    'patientID' : self.user.getPatientID()
+                }
+                
+                requests.patch('http://127.0.0.1:5000/patient/geocode/address', json=editedDetailsJSON)
+
 
     def setUser(self, mode, user):
         self.user = user
