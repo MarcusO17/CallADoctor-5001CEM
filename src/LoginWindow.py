@@ -165,6 +165,9 @@ class LoginWindow(QWidget):
         icon2Label.setPixmap(passwordIcon)
         icon2Label.setGeometry(QRect(60, 377, 40, 40))
 
+        self.emailInput.textChanged.connect(self.removeHighlight)
+        self.passwordInput.textChanged.connect(self.removeHighlight)
+
         self.loginButton = QPushButton("Login", self)
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
@@ -234,6 +237,10 @@ class LoginWindow(QWidget):
     def adminLogin(self,sessionID):
         self.adminHomepage = AdminHomepageWindow(sessionID)
         self.pageManager.add(self.adminHomepage)
+
+    def removeHighlight(self):
+        sender = self.sender()  # Get the object that triggered the signal
+        sender.setStyleSheet("")
 
     def highlightEmptyFields(self):
         emptyFields = []
