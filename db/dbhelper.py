@@ -47,7 +47,7 @@ createClinicTable = '''CREATE TABLE clinics (
                      address TEXT NOT NULL,
                      lat FLOAT,
                      lon FLOAT,
-                     governmentApproved BOOLEAN NOT NULL
+                     governmentApproved TEXT NOT NULL
                      )
                     '''
 

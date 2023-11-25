@@ -203,7 +203,7 @@ def clinics():
             clinicPassword = contentJSON['clinicPassword']
             clinicContact = contentJSON['clinicContact']
             address = contentJSON['address']
-            governmentApproved = 0
+            governmentApproved = 'Pending'
             lat,lon = geoHelper.geocode(address=address)
     
             insertQuery = """
@@ -268,7 +268,7 @@ def clinicsUnapproved():
         cursor = conn.cursor()
         if request.method == 'GET':
             #Add Error Handling
-            cursor.execute("SELECT * FROM clinics where governmentApproved = '0'")
+            cursor.execute("SELECT * FROM clinics where governmentApproved = 'Pending'")
         
             clinics = [
                 dict(
@@ -302,7 +302,7 @@ def clinicApprove(clinicID):
         cursor = conn.cursor()
         if request.method == 'PATCH':
             try:
-                cursor.execute("UPDATE clinics SET governmentApproved = '1' where clinicID = %s",clinicID)
+                cursor.execute("UPDATE clinics SET governmentApproved = 'Approved' where clinicID = %s",clinicID)
             except pymysql.MySQLError as e:
                 return 'Error : ',e
         
@@ -909,8 +909,8 @@ def appointmentsWeek():
             conn.close()  
         
 
-@app.route('/appointments/upcoming/<string:doctorID>',methods=['GET'])
-def appointmentsUpcoming(doctorID):
+@app.route('/appointments/upcoming/doctor/<string:doctorID>',methods=['GET'])
+def appointmentsDoctorUpcoming(doctorID):
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
     try:
         conn = dbConnect()
@@ -943,6 +943,43 @@ def appointmentsUpcoming(doctorID):
     finally:
         if conn is not None:
             conn.close()  
+
+
+@app.route('/appointments/upcoming/patient/<string:patientID>',methods=['GET'])
+def appointmentsPatientUpcoming(patientID):
+    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("""SELECT * FROM appointments where appointmentDate >= %s AND 
+                        patientID = %s ORDER BY appointmentDate, startTime LIMIT 3"""
+                            ,(dateToday,patientID))
+            appointment = [
+                dict(
+                    appointmentID = row['appointmentID'],
+                    doctorID  = row['doctorID'],
+                    clinicID = row['clinicID'],
+                    patientID = row['patientID'],
+                    appointmentStatus = row['appointmentStatus'],
+                    startTime = str(row['startTime']),
+                    appointmentDate = row['appointmentDate'],
+                    visitReasons= row['visitReasons']
+                )
+                for row in cursor.fetchall()
+            ]
+            if appointment is not None:
+                return jsonify(appointment),200  
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
+
 
 @app.route('/appointments/<string:clinicID>/pending',methods=['GET'])
 def appointmentsPending(clinicID):
@@ -1738,9 +1775,9 @@ def downloadClinicImage(id):
             conn.commit()
             conn.close()
 
-            return imgData['certifiedDoc']
+            return imgData['verifiedDoc']
         except:
-            return None, jsonify({'Error':'Image Error'})
+            return jsonify({'Error':'Image Error'})
     
 
 @app.route('/doctors/image/upload/<string:id>', methods=['POST'])

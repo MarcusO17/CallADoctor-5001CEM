@@ -177,7 +177,7 @@ class ClinicDashboard(QWidget):
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
 
-    def generateRequestReview(self):
+    def generateRequestButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
