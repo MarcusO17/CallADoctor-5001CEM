@@ -165,6 +165,37 @@ def patientID(id):
         if conn is not None:
             conn.close()
           
+@app.route('/patient/geocode/address',methods=['PATCH'])
+def reGeocode():
+    try:
+        conn = dbConnect()
+        if conn is None:
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
+        
+        cursor = conn.cursor()
+        if request.method == 'PATCH':
+            try:
+                newDetailsEditJSON = request.get_json()
+                address = newDetailsEditJSON['address']
+                patientID = newDetailsEditJSON['patientID']
+                try:
+                    lat,lon = geoHelper.geocode(address=address)
+                except Exception as e:
+                    lat,lon = None,None
+
+                cursor.execute("UPDATE patients SET address = %s, lat= %s, lon= %s where patientID = %s",(address,lat,lon,patientID))
+            except pymysql.MySQLError as e:
+                return 'Error : ',e
+        
+            conn.commit()
+            
+            return 'Successful PATCH', 200  
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()   
         
 @app.route('/clinics',methods=['GET','POST'])  
 def clinics():
