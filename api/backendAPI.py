@@ -203,7 +203,7 @@ def clinics():
             clinicPassword = contentJSON['clinicPassword']
             clinicContact = contentJSON['clinicContact']
             address = contentJSON['address']
-            governmentApproved = 0
+            governmentApproved = 'Pending'
             lat,lon = geoHelper.geocode(address=address)
     
             insertQuery = """
@@ -268,7 +268,7 @@ def clinicsUnapproved():
         cursor = conn.cursor()
         if request.method == 'GET':
             #Add Error Handling
-            cursor.execute("SELECT * FROM clinics where governmentApproved = '0'")
+            cursor.execute("SELECT * FROM clinics where governmentApproved = 'Pending'")
         
             clinics = [
                 dict(
@@ -302,7 +302,7 @@ def clinicApprove(clinicID):
         cursor = conn.cursor()
         if request.method == 'PATCH':
             try:
-                cursor.execute("UPDATE clinics SET governmentApproved = '1' where clinicID = %s",clinicID)
+                cursor.execute("UPDATE clinics SET governmentApproved = 'Approved' where clinicID = %s",clinicID)
             except pymysql.MySQLError as e:
                 return 'Error : ',e
         
@@ -1731,7 +1731,7 @@ def downloadClinicImage(id):
 
             return imgData['certifiedDoc']
         except:
-            return None, jsonify({'Error':'Image Error'})
+            return jsonify({'Error':'Image Error'})
     
 
 @app.route('/doctors/image/upload/<string:id>', methods=['POST'])

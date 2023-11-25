@@ -72,6 +72,8 @@ class PatientClinicsNearbyWindow(QWidget):
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         #Get Clinics
         clinicList = ClinicRepository.getClinicList()
+        #Get Approved Clinics
+        clinicList = [clinic for clinic in clinicList if clinic.getClinicStatus() == 'Approved']
 
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
