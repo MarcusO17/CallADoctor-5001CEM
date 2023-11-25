@@ -118,7 +118,7 @@ class PatientDashboard(QWidget):
 
 
         prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(self.patient.getPatientID())
-        twoPrescriptionList = prescriptionList[:2]
+        twoPrescriptionList = prescriptionList[:1]
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -222,10 +222,6 @@ class PatientDashboard(QWidget):
         # Center the content vertically and horizontally
         self.welcomeTextLayout.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-        # spacerLeft = QWidget()
-        # spacerLeft.setFixedWidth(300)  # Adjust the width as needed
-        # self.welcomeTextLayout.addWidget(spacerLeft)
-
     def generateUpcomingAppointments(self):
 
         self.upcomingAppointmentWidget = QWidget()
@@ -252,12 +248,12 @@ class PatientDashboard(QWidget):
         self.upcomingAppointmentLayout.addLayout(headerRow)
         self.upcomingAppointmentLayout.setContentsMargins(20, 20, 20, 20)
 
-        #get 3 upcoming appointment here
+        #get 1 upcoming appointment here
 
         appointmentList = AppointmentRepo.AppointmentRepository.getPatientDashboardAppointments(self.patient.getPatientID())
 
 
-        twoAppointmentList = appointmentList[:2]
+        twoAppointmentList = appointmentList[:1]
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -273,7 +269,7 @@ class PatientDashboard(QWidget):
             emptyAppointment.setAlignment(Qt.AlignCenter)
             emptyAppointment.setText("No Appointment")
             emptyAppointment.setObjectName("emptyAppointment")
-            emptyAppointment.setFixedSize(440,250)
+            emptyAppointment.setFixedSize(440,140)
             emptyAppointment.setStyleSheet("""QWidget#emptyAppointment {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
                                                                 stop: 0 rgba(25, 4, 130, 255), 
                                                                 stop: 1 rgba(119, 82, 254, 255)
