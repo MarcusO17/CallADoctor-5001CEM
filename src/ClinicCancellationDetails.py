@@ -237,7 +237,7 @@ class ClinicCancellationDetails(QWidget):
                                                       "Are you sure you want to deny this request",
                                                       QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
-            self.request.cancelRequest(self.request.getRequestID())
+            self.request.cancelRequest()
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()
 

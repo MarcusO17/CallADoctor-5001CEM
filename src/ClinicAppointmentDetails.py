@@ -212,7 +212,7 @@ class ClinicAppointmentDetails(QWidget):
                                                           "Are you sure you want to cancel Appointment?",
                                                           QMessageBox.Yes | QMessageBox.No)
         if cancelAppointmentDialogBox == QMessageBox.Yes:
-            self.appointment.setAppointmentStatus("Cancelled")
+            self.appointment.cancelAppointment()
             # implement back end stuff here
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()
