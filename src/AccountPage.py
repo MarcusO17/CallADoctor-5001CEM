@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import sys
 import requests
@@ -253,7 +254,9 @@ class AccountPage(QWidget):
             self.iDLabel.setText(self.user.getPatientID())
             self.flexTitle1.setText("Date of Birth: ")
             self.flexTitle1.show()
-            self.flexLabel1.setText(self.user.getPatientDOB())
+            date = datetime.strptime(user.getPatientDOB(), '%a, %d %b %Y %H:%M:%S %Z')
+            formattedDate = date.strftime('%d/%m/%Y')
+            self.flexLabel1.setText(formattedDate)
             self.flexLabel1.show()
             self.flexTitle2.setText("Blood Type: ")
             self.flexTitle2.show()
