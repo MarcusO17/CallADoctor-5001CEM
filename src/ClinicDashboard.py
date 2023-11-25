@@ -122,49 +122,67 @@ class ClinicDashboard(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-doctor-64.png")
         doctorIcon = QIcon(filepath)
 
-        for count, doctor in enumerate(threeDoctorList):
-            doctorButton = QPushButton()
-            doctorButton.setFixedSize(QSize(100, 100))
-            doctorButton.setIconSize(QSize(45, 45))
-            doctorButton.setIcon(doctorIcon)
-            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
+        if len(threeDoctorList) == 0:
+            emptyDoctor = QLabel()
+            emptyDoctor.setFont(buttonFont)
+            emptyDoctor.setAlignment(Qt.AlignCenter)
+            emptyDoctor.setText("No Doctors")
+            emptyDoctor.setObjectName("emptyDoctor")
+            emptyDoctor.setFixedSize(400, 100)
+            emptyDoctor.setStyleSheet("""QLabel#emptyDoctor {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                        stop: 0 rgba(25, 4, 130, 255), 
+                                                                        stop: 1 rgba(119, 82, 254, 255)
+                                                                    );
+                                                                    border-radius: 10px;
+                                                                    text-align: center;
+                                                                    color: white;
+                                                                }""")
+            doctorWidgetsLayout.addWidget(emptyDoctor)
 
-            font = QFont()
-            font.setFamily("Montserrat")
-            font.setPointSize(12)
+        else:
+            for count, doctor in enumerate(threeDoctorList):
+                doctorButton = QPushButton()
+                doctorButton.setFixedSize(QSize(100, 100))
+                doctorButton.setIconSize(QSize(45, 45))
+                doctorButton.setIcon(doctorIcon)
+                doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
 
-            doctorLabel = QLabel()
-            doctorLabel.setFont(font)
-            doctorNameSliced = doctor.getDoctorName()[:8]
-            doctorLabel.setText(f"{doctorNameSliced}..")
-            doctorLabel.setStyleSheet("color: white;")
+                font = QFont()
+                font.setFamily("Montserrat")
+                font.setPointSize(12)
 
-            doctorWidget = QWidget()
-            effect = QGraphicsDropShadowEffect(
-                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
-            )
-            doctorWidget.setGraphicsEffect(effect)
-            doctorWidget.setFixedSize(125, 125)
-            doctorWidget.setObjectName("doctorButton")
-            doctorWidget.setStyleSheet("""QWidget#doctorButton {
-                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                stop: 0 rgba(10, 2, 85, 255), 
-                                                stop: 1 rgba(59, 41, 168, 255)
-                                            );
-                                            border-radius: 10px; padding-left: 5px; padding-bottom: 10px;
-                                        }
-                                        QWidget#doctorButton:hover
-                                            {
-                                              background-color: #7752FE;
-                                              text-align: left; 
-                                              padding-left: 20px;}""")
-            doctorLayout = QVBoxLayout(doctorWidget)
-            doctorLayout.addWidget(doctorButton)
-            doctorLayout.addWidget(doctorLabel)
+                doctorLabel = QLabel()
+                doctorLabel.setFont(font)
+                doctorNameSliced = doctor.getDoctorName()[:8]
+                doctorLabel.setText(f"{doctorNameSliced}..")
+                doctorLabel.setStyleSheet("color: white;")
 
-            doctorWidgetsRow.addWidget(doctorWidget)
+                doctorWidget = QWidget()
+                effect = QGraphicsDropShadowEffect(
+                    offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+                )
+                doctorWidget.setGraphicsEffect(effect)
+                doctorWidget.setFixedSize(125, 125)
+                doctorWidget.setObjectName("doctorButton")
+                doctorWidget.setStyleSheet("""QWidget#doctorButton {
+                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                    stop: 1 rgba(59, 41, 168, 255)
+                                                );
+                                                border-radius: 10px; padding-left: 5px; padding-bottom: 10px;
+                                            }
+                                            QWidget#doctorButton:hover
+                                                {
+                                                  background-color: #7752FE;
+                                                  text-align: left; 
+                                                  padding-left: 20px;}""")
+                doctorLayout = QVBoxLayout(doctorWidget)
+                doctorLayout.addWidget(doctorButton)
+                doctorLayout.addWidget(doctorLabel)
 
-        doctorWidgetsLayout.addLayout(doctorWidgetsRow)
+                doctorWidgetsRow.addWidget(doctorWidget)
+
+            doctorWidgetsLayout.addLayout(doctorWidgetsRow)
 
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorSchedule = ClinicDetailedSchedule(doctor, clinic)

@@ -50,8 +50,8 @@ class PatientPrescriptionWindow(QWidget):
                                                             border-radius: 10px;
                                                             margin-left: 100px;
                                                             }""")
-        buttonLayout = QVBoxLayout(buttonContainer)
-        buttonContainer.setContentsMargins(20,20,20,20)
+        buttonLayout = QVBoxLayout(self.buttonContainer)
+        self.buttonContainer.setContentsMargins(20,20,20,20)
         buttonLayout.setSpacing(20)
 
         boxScrollArea = QScrollArea()
