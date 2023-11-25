@@ -62,6 +62,10 @@ class Request:
             print(f'Error : {e}')
             return []
 
+        if response.status_code == 500:
+            print(recordsList)
+            return requestList
+
         for records in recordsList:
             tempRequest= Request("","","","","","","")
             
