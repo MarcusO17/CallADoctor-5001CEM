@@ -336,7 +336,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 files = {'file': ('clinicDoc.jpg', open(documentPath, 'rb'))}
                  
                 clinicData = {
-                "address": f'{self.clinicPostCodeLineEdit.text()} {self.clinicAddressLineEdit.text()}',
+                "address": f'{self.clinicAddressLineEdit.text()}',
                 "clinicName": self.clinicNameLineEdit.text(),
                 "clinicContact": self.clinicContactLineEdit.text(),
                 "clinicEmail": self.clinicEmailLineEdit.text(),
