@@ -21,7 +21,6 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
    
                 MainWindow.setObjectName("MainWindow")
-                MainWindow.resize(800, 600)
                 MainWindow.setFixedWidth(1080)
                 MainWindow.setFixedHeight(720)
 
