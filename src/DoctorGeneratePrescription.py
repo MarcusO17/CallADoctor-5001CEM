@@ -265,6 +265,7 @@ class DoctorGeneratePrescription(QWidget):
 
         self.expiryDateDialog.close()
         self.frameLayoutManager.back()
+        self.frameLayout.widget(self.frameLayoutManager.top()).completePrescription()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def addNewRow(self):

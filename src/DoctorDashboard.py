@@ -107,7 +107,7 @@ class DoctorDashboard(QWidget):
             # print(date)
             # dateTemp = dateTemp.split("-") #YYYY-MM-DD
 
-            row = date.weekday() + 1
+            row = date.weekday()
             if endTime - startTime >= 1:
                 duration = endTime - startTime
                 col = startTime - 7
@@ -142,7 +142,7 @@ class DoctorDashboard(QWidget):
         scheduleTitle = QLabel()
         scheduleTitle.setFixedWidth(150)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
@@ -186,7 +186,7 @@ class DoctorDashboard(QWidget):
         scheduleLayout.addLayout(scheduleRowLayout)
 
         # side of the grid
-        daysOfTheWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
+        daysOfTheWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]
 
         for h in range(HEIGHT):
             scheduleRowLayout = QHBoxLayout()
@@ -225,11 +225,11 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentLayout.setSpacing(0)
 
         spacer = QWidget()
-        spacer.setFixedWidth(70)
+        spacer.setFixedWidth(40)
         self.upcomingAppointmentTitle = QLabel()
-        self.upcomingAppointmentTitle.setFixedSize(420, 50)
+        self.upcomingAppointmentTitle.setFixedSize(415, 50)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
@@ -244,12 +244,12 @@ class DoctorDashboard(QWidget):
 
         #get 4 upcoming appointment here
 
-        appointmentList = AppointmentRepository.getDashboardAppointments(self.doctor.getDoctorID())
+        appointmentList = AppointmentRepository.getDoctorDashboardAppointments(self.doctor.getDoctorID())
 
         fourAppointments = appointmentList[:4]
 
         buttonFont = QFont()
-        buttonFont.setFamily("Arial")
+        buttonFont.setFamily("Montserrat")
         buttonFont.setPointSize(12)
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -336,7 +336,7 @@ class DoctorDashboard(QWidget):
         self.widgetTitle = QLabel()
         self.widgetTitle.setFixedSize(80, 40)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)

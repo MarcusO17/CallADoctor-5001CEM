@@ -49,7 +49,7 @@ class DoctorScheduleWindow(QWidget):
         self.headerTitle.setGraphicsEffect(effect)
 
         scheduleContainer = QLabel(self.centralwidget)
-        scheduleContainer.setGeometry(QRect(5, 135, 915, 520))
+        scheduleContainer.setGeometry(QRect(5, 145, 915, 520))
         scheduleContainer.setStyleSheet("""QLabel {
                                                 background: #D0BFFF;
                                                 border-radius: 10px;
@@ -68,7 +68,7 @@ class DoctorScheduleWindow(QWidget):
         timeSlotLabelXStart = 125
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
-            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart, 175, 95, 55))
+            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart, 185, 95, 55))
             timeSlotLabel.setStyleSheet("border: 1px solid black; border-radius: 3px; background-color: white;")
             timeSlotLabel.setAlignment(Qt.AlignCenter)
             timeSlotLabel.setText(str(timeStart) + ":00 - " + str(timeEnd) + ":00")
@@ -77,9 +77,9 @@ class DoctorScheduleWindow(QWidget):
             timeStart = timeStart + 1
             timeEnd = timeStart + 1
 
-        dayCellYStart = 230
+        dayCellYStart = 240
         # side of the grid
-        daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
             dayCell.setGeometry(QRect(30, dayCellYStart, 95, 55))
@@ -90,7 +90,7 @@ class DoctorScheduleWindow(QWidget):
             dayCell.setText(daysOfTheWeek[i])
             dayCellYStart = dayCellYStart + 55
 
-        tempButtonYStart = 175
+        tempButtonYStart = 185
         for h in range(HEIGHT):
             tempButtonXStart = 125
             tempButtonYStart = tempButtonYStart + 55
@@ -141,7 +141,7 @@ class DoctorScheduleWindow(QWidget):
             #print(date)
             #dateTemp = dateTemp.split("-") #YYYY-MM-DD
 
-            row = date.weekday()+1
+            row = date.weekday()
             if endTime - startTime >= 1:
                 duration = endTime - startTime
                 col = startTime - 7

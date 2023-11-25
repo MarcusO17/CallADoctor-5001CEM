@@ -1,5 +1,7 @@
+from datetime import datetime
 import os
 import sys
+import requests
 import typing
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
 from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
@@ -214,6 +216,7 @@ class AccountPage(QWidget):
         self.editButtonState = True
 
         self.editButton.raise_()
+        self.editButtonLabel.raise_()
         self.addressLabel.raise_()
 
         mainLayout = QVBoxLayout()
@@ -233,7 +236,15 @@ class AccountPage(QWidget):
             self.editButton.setText("Edit")
             if self.mode == "Patient":
                 self.addressLabel.setEnabled(False)
-                self.user.setPatientAddress(self.addressLabel.text())
+
+                # implement here
+                editedDetailsJSON = {
+                    'address' : self.addressLabel.text(),
+                    'patientID' : self.user.getPatientID()
+                }
+                
+                requests.patch('http://127.0.0.1:5000/patient/geocode/address', json=editedDetailsJSON)
+
 
     def setUser(self, mode, user):
         self.user = user
@@ -243,7 +254,9 @@ class AccountPage(QWidget):
             self.iDLabel.setText(self.user.getPatientID())
             self.flexTitle1.setText("Date of Birth: ")
             self.flexTitle1.show()
-            self.flexLabel1.setText(self.user.getPatientDOB())
+            date = datetime.strptime(user.getPatientDOB(), '%a, %d %b %Y %H:%M:%S %Z')
+            formattedDate = date.strftime('%d/%m/%Y')
+            self.flexLabel1.setText(formattedDate)
             self.flexLabel1.show()
             self.flexTitle2.setText("Blood Type: ")
             self.flexTitle2.show()
@@ -295,3 +308,5 @@ class AccountPage(QWidget):
             self.flexLabel5.show()
             self.statusLabel.setText(self.user.getStatus())
             self.statusLabel.show()
+            self.editButtonLabel.hide()
+            self.editButton.hide()

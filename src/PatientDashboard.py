@@ -116,9 +116,9 @@ class PatientDashboard(QWidget):
         self.prescriptionLayout.addLayout(headerRow)
         self.prescriptionLayout.setContentsMargins(20, 20, 20, 20)
 
-        # get 3 upcoming appointment here
 
         prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(self.patient.getPatientID())
+        prescriptionList = prescriptionList[:1]
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
@@ -237,12 +237,10 @@ class PatientDashboard(QWidget):
 
         #get 3 upcoming appointment here
 
-        appointmentList = list()
+        appointmentList = AppointmentRepo.AppointmentRepository.getPatientDashboardAppointments(self.patient.getPatientID())
 
-        appointment1 = Appointment("A0001", "D00001", "C0001", "P0001", "Approved", "8:00", "9:00", "appointmentDate",
-                                   "visitReason")
 
-        appointmentList.append(appointment1)
+        appointmentList = appointmentList[:1]
 
         buttonFont = QFont()
         buttonFont.setFamily("Arial")

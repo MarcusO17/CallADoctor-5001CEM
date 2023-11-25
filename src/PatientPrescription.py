@@ -19,7 +19,6 @@ class PatientPrescriptionWindow(QWidget):
         self.setupUi()
 
     def setupUi(self):
-        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         # this is the header (logo, title, my back button
         self.centralwidget = QWidget()
@@ -44,9 +43,9 @@ class PatientPrescriptionWindow(QWidget):
         )
         self.headerTitle.setGraphicsEffect(effect)
 
-        buttonContainer = QWidget()
-        buttonContainer.setObjectName("buttonContainer")
-        buttonContainer.setStyleSheet("""QWidget#buttonContainer {
+        self.buttonContainer = QWidget()
+        self.buttonContainer.setObjectName("buttonContainer")
+        self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
                                                             background: #D0BFFF;
                                                             border-radius: 10px;
                                                             margin-left: 100px;
@@ -54,58 +53,17 @@ class PatientPrescriptionWindow(QWidget):
         buttonLayout = QVBoxLayout(buttonContainer)
         buttonContainer.setContentsMargins(20,20,20,20)
         buttonLayout.setSpacing(20)
+
         boxScrollArea = QScrollArea()
         boxScrollArea.setObjectName("scrollArea")
 
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        
-        #INSERT HEREE
-        prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(self.patient.getPatientID())
 
-        buttonFont = QFont()
-        buttonFont.setFamily("Arial")
-        buttonFont.setPointSize(25)
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
-        prescriptionIcon = QIcon(filepath)
+        self.generatePrescription()
 
-        for count, prescription in enumerate(prescriptionList):
-            self.prescriptionButton = QPushButton()
-            date = datetime.strptime(prescription.getExpiryDate(), '%a, %d %b %Y %H:%M:%S %Z')
-            formattedDate = date.strftime('%d/%m/%Y')
-            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + formattedDate)
-            self.prescriptionButton.setFont(buttonFont)
-            self.prescriptionButton.setIconSize(QSize(80, 80))
-            self.prescriptionButton.setFixedSize(QSize(700,100))
-            self.prescriptionButton.setIcon(prescriptionIcon)
-            self.prescriptionButton.setStyleSheet("""QPushButton {
-                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                            stop: 0 rgba(10, 2, 85, 255), 
-                                                                            stop: 1 rgba(59, 41, 168, 255));
-                                                    border-radius: 10px; color: white;
-                                                    text-align: left; 
-                                                    padding-left: 20px;
-                                                    }
-                                                    QPushButton:hover
-                                                    {
-                                                      background-color: #7752FE;
-                                                      text-align: left; 
-                                                      padding-left: 20px;
-                                                    }""")
-
-            effect = QGraphicsDropShadowEffect(
-                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
-            )
-            self.prescriptionButton.setGraphicsEffect(effect)
-            self.prescriptionButton.clicked.connect(lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
-            buttonContainer.layout().addWidget(self.prescriptionButton)
-
-        spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        buttonContainer.layout().addWidget(spacer)
-
-        boxScrollArea.setWidget(buttonContainer)
+        boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(900,500)
         boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
                                                     background: #D0BFFF;
@@ -137,4 +95,52 @@ class PatientPrescriptionWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    def generatePrescription(self):
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+
+        prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(
+            self.patient.getPatientID())
+
+        buttonFont = QFont()
+        buttonFont.setFamily("Arial")
+        buttonFont.setPointSize(25)
+        buttonFont.setBold(True)
+        buttonFont.setWeight(75)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
+        prescriptionIcon = QIcon(filepath)
+
+        for count, prescription in enumerate(prescriptionList):
+            self.prescriptionButton = QPushButton()
+            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getExpiryDate())
+            self.prescriptionButton.setFont(buttonFont)
+            self.prescriptionButton.setIconSize(QSize(80, 80))
+            self.prescriptionButton.setFixedSize(QSize(750, 100))
+            self.prescriptionButton.setIcon(prescriptionIcon)
+            self.prescriptionButton.setStyleSheet("""QPushButton {
+                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                                                    stop: 1 rgba(59, 41, 168, 255));
+                                                            border-radius: 10px; color: white;
+                                                            text-align: left; 
+                                                            padding-left: 20px;
+                                                            }
+                                                            QPushButton:hover
+                                                            {
+                                                              background-color: #7752FE;
+                                                              text-align: left; 
+                                                              padding-left: 20px;
+                                                            }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            self.prescriptionButton.setGraphicsEffect(effect)
+            self.prescriptionButton.clicked.connect(
+                lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
+            self.buttonContainer.layout().addWidget(self.prescriptionButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.buttonContainer.layout().addWidget(spacer)
 

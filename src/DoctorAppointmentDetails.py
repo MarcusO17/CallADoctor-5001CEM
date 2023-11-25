@@ -1,4 +1,6 @@
+from datetime import datetime
 import os
+import requests
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QTime, QPoint
 from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, \
@@ -10,7 +12,7 @@ from .AccountPage import AccountPage
 from .DoctorGeneratePrescription import DoctorGeneratePrescription
 from .DoctorViewPrescription import DoctorViewPrescription
 from .PageManager import PageManager, FrameLayoutManager
-from .model import Patient, Request
+from .model import Patient, Request, PrescriptionRepo
 
 
 class DoctorAppointmentDetails(QWidget):
@@ -35,7 +37,7 @@ class DoctorAppointmentDetails(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
         self.headerTitle.setFont(font)
         self.headerTitle.setObjectName("headerTitle")
@@ -95,7 +97,7 @@ class DoctorAppointmentDetails(QWidget):
         self.appointmentPurposeLabel.setGeometry(QRect(50, 190, 400, 200))
         self.appointmentPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(12)
         self.appointmentPurposeLabel.setFont(font)
         self.appointmentPurposeLabel.setText(f"{self.appointment.getVisitReason()}")
@@ -114,11 +116,13 @@ class DoctorAppointmentDetails(QWidget):
         self.patientDetailsLabel = QLabel(self.centralwidget)
         self.patientDetailsLabel.setGeometry(QRect(520, 190, 375, 200))
         self.patientDetailsLabel.setFont(font)
+        date = datetime.strptime(self.patient.getPatientDOB(), '%a, %d %b %Y %H:%M:%S %Z')
+        formattedDate = date.strftime('%d/%m/%Y')
         self.patientDetailsLabel.setText(f"Patient ID: {self.patient.getPatientID()}\n"
                                         f"Patient Name: {self.patient.getPatientName()}\n"
                                         f"Patient Blood: {self.patient.getPatientBlood()}\n"
                                         f"Patient Race: {self.patient.getPatientRace()}\n"
-                                        f"Date of Birth: {self.patient.getPatientDOB()}\n")
+                                        f"Date of Birth: {formattedDate}\n")
         self.patientDetailsLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.patientDetailsLabel.setStyleSheet("""QLabel {
                                                         border-radius: 10px;
@@ -148,7 +152,7 @@ class DoctorAppointmentDetails(QWidget):
         self.generatePrescriptionButton = QPushButton(self.centralwidget)
         self.generatePrescriptionButton.setGeometry(QRect(520, 420, 325, 100))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(10)
         self.generatePrescriptionButton.setFont(font)
         self.generatePrescriptionButton.setLayoutDirection(Qt.RightToLeft)
@@ -205,9 +209,9 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancelAppointmentLabel.setPixmap(self.requestCancelAppointmentIcon)
 
         self.viewPrescriptionButton = QPushButton(self.centralwidget)
-        self.viewPrescriptionButton.setGeometry(QRect(520, 530, 325, 100))
+        self.viewPrescriptionButton.setGeometry(QRect(520, 420, 325, 100))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(10)
         self.viewPrescriptionButton.setFont(font)
         self.viewPrescriptionButton.setLayoutDirection(Qt.RightToLeft)
@@ -229,8 +233,8 @@ class DoctorAppointmentDetails(QWidget):
                                                     }""")
 
         self.viewPrescriptionLabel = QLabel(self.centralwidget)
-        self.viewPrescriptionLabel.setGeometry(QRect(540, 555, 50, 50))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.viewPrescriptionLabel.setGeometry(QRect(540, 445, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
         self.viewPrescriptionIcon = QPixmap(filepath)
         self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)
         self.viewPrescriptionLabel.setPixmap(self.viewPrescriptionIcon)
@@ -250,8 +254,8 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancelAppointmentLabel.raise_()
         self.generatePrescriptionButton.raise_()
         self.generatePrescriptionLabel.raise_()
-        self.viewPrescriptionLabel.raise_()
         self.viewPrescriptionButton.raise_()
+        self.viewPrescriptionLabel.raise_()
 
         self.setLayout(mainLayout)
 
@@ -297,8 +301,16 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancellationDialog.exec_()
 
     def completeButtonConfirmationFunction(self, reason):
+        requestJSON = {
+            'requestsType' : 'Cancellation',
+            'clientID' : self.patient.getPatientID(),
+            'requestReason' : reason,
+            'appointmentID' : self.appointment.getAppointmentID()
 
-        request = Request(None, "Cancellation", self.doctor.getDoctorID(), "Pending", QTime.currentTime().toString("hh:mm:ss"), reason, self.appointment.getAppointmentID())
+        }
+
+        request = requests.post('http://127.0.0.1:5000/requests',json=requestJSON)
+        print(request.text)
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
@@ -331,14 +343,29 @@ class DoctorAppointmentDetails(QWidget):
         self.frameLayoutManager.back()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    def completePrescription(self):
+        self.generatePrescriptionButton.hide()
+        self.generatePrescriptionLabel.hide()
+        self.viewPrescriptionLabel.show()
+        self.viewPrescriptionButton.show()
 
     def setMode(self, mode):
         if mode == "Completed":
             self.viewPrescriptionLabel.show()
             self.viewPrescriptionButton.show()
         elif mode == "Approved":
-            self.generatePrescriptionButton.show()
-            self.generatePrescriptionLabel.show()
+            prescription = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByAppointment(
+                self.appointment.getAppointmentID())
+
+            if len(prescription) == 0:
+                self.generatePrescriptionButton.show()
+                self.generatePrescriptionLabel.show()
+            else:
+                self.generatePrescriptionButton.hide()
+                self.generatePrescriptionLabel.hide()
+                self.viewPrescriptionLabel.show()
+                self.viewPrescriptionButton.show()
+
             self.requestCancelAppointmentLabel.show()
             self.requestCancelAppointmentButton.show()
 

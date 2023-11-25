@@ -32,7 +32,7 @@ class ClinicAppointmentDetails(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
         self.headerTitle.setFont(font)
         self.headerTitle.setObjectName("headerTitle")
@@ -92,7 +92,7 @@ class ClinicAppointmentDetails(QWidget):
         self.appointmentPurposeLabel.setGeometry(QRect(50, 220, 400, 200))
         self.appointmentPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(12)
         self.appointmentPurposeLabel.setFont(font)
         self.appointmentPurposeLabel.setText(str(self.appointment.getVisitReason()))
@@ -112,7 +112,7 @@ class ClinicAppointmentDetails(QWidget):
         self.doctorDetailsLabel = QLabel(self.centralwidget)
         self.doctorDetailsLabel.setGeometry(QRect(520, 220, 375, 200))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(12)
         self.doctorDetailsLabel.setFont(font)
         self.doctorDetailsLabel.setText(f"Doctor ID: {self.doctor.getDoctorID()}\n"
@@ -172,7 +172,7 @@ class ClinicAppointmentDetails(QWidget):
         self.cancelAppointmentButton = QPushButton(self.centralwidget)
         self.cancelAppointmentButton.setGeometry(QRect(520, 510, 325, 100))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(10)
         self.cancelAppointmentButton.setFont(font)
         self.cancelAppointmentButton.setLayoutDirection(Qt.RightToLeft)
@@ -212,7 +212,7 @@ class ClinicAppointmentDetails(QWidget):
                                                           "Are you sure you want to cancel Appointment?",
                                                           QMessageBox.Yes | QMessageBox.No)
         if cancelAppointmentDialogBox == QMessageBox.Yes:
-            self.appointment.setAppointmentStatus("Cancelled")
+            self.appointment.cancelAppointment()
             # implement back end stuff here
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()

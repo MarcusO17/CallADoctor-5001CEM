@@ -199,12 +199,17 @@ class PatientSendRequest(QWidget):
 
     def updateTimeslot(self):
         # rounding current time + adding 3 hours to current time
+        nextDay = False
         print("running updatetimeslot")
         self.timeList.clear()
         currentTime = QTime.currentTime()
         roundedTime = QTime(currentTime.hour(), 0)
         print(roundedTime.toString())
         roundedTime = roundedTime.addSecs(10800)
+
+        # check if the added 3 hours made it go to the next day
+        if roundedTime.hour() < currentTime.hour():
+            nextDay = True
 
         print(roundedTime.toString())
         timeDiff = roundedTime.secsTo(QTime(15, 0))
@@ -215,7 +220,15 @@ class PatientSendRequest(QWidget):
         startTime = QTime(8, 0)
        
 
-        if self.preferredDate.date() == QDate.currentDate():
+        if nextDay == True:
+            self.preferredDate.setDate(QDate.currentDate().addDays(1))
+            self.preferredDate.setMinimumDate(QDate.currentDate().addDays(1))
+            self.timeList.clear()
+            for hour in range(8):
+                self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+                print(self.timeList)
+
+        elif self.preferredDate.date() == QDate.currentDate():
             if roundedTime > QTime(15, 0):
                 self.preferredDate.setDate(QDate.currentDate().addDays(1))
                 self.preferredDate.setMinimumDate(QDate.currentDate().addDays(1))
@@ -223,9 +236,12 @@ class PatientSendRequest(QWidget):
                 for hour in range(8):
                     self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
                     print(self.timeList)
+            elif roundedTime < QTime(8, 0):
+                for hour in range(8):
+                    self.timeList.append(startTime.addSecs(3600 * hour).toString("hh:mm"))
+                    print(self.timeList)
             else:
                 self.timeList.clear()
-                self.timeList.append(roundedTime.toString("hh:mm"))
                 for hour in range(hoursLeft):
                     self.timeList.append(roundedTime.addSecs(3600 * hour).toString("hh:mm"))
                     print(self.timeList)

@@ -31,7 +31,7 @@ class ClinicDashboard(QWidget):
 
         self.generateDoctorWidgets()
 
-        self.generateRequestReview()
+        self.generateRequestButtons()
 
         self.generateGraphWidget()
 
@@ -43,7 +43,7 @@ class ClinicDashboard(QWidget):
 
         self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(0)
+        spacer.setFixedWidth(180)
         self.userInfoLayout.addWidget(spacer)
         self.userInfoWidget = QLabel(f"{self.clinic.getClinicName()}")
         self.userInfoWidget.setObjectName("userInfoWidget")
@@ -97,7 +97,7 @@ class ClinicDashboard(QWidget):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.doctorTitle = QLabel()
-        self.doctorTitle.setFixedWidth(170)
+        self.doctorTitle.setFixedWidth(140)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -177,7 +177,7 @@ class ClinicDashboard(QWidget):
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
 
-    def generateRequestReview(self):
+    def generateRequestButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
@@ -187,9 +187,9 @@ class ClinicDashboard(QWidget):
         self.requestReviewLayout.setSpacing(0)
 
         spacer = QWidget()
-        spacer.setFixedWidth(30)
+        spacer.setFixedWidth(110)
         self.requestReviewTitle = QLabel()
-        self.requestReviewTitle.setFixedSize(300,50)
+        self.requestReviewTitle.setFixedSize(270,50)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -291,7 +291,7 @@ class ClinicDashboard(QWidget):
         self.graphWidgetLayout = QVBoxLayout(self.graphWidget)
 
         self.widgetTitle = QLabel()
-        self.widgetTitle.setFixedWidth(250)
+        self.widgetTitle.setFixedWidth(225)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
