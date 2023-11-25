@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import requests
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QTime, QPoint
@@ -115,11 +116,13 @@ class DoctorAppointmentDetails(QWidget):
         self.patientDetailsLabel = QLabel(self.centralwidget)
         self.patientDetailsLabel.setGeometry(QRect(520, 190, 375, 200))
         self.patientDetailsLabel.setFont(font)
+        date = datetime.strptime(self.patient.getPatientDOB(), '%a, %d %b %Y %H:%M:%S %Z')
+        formattedDate = date.strftime('%d/%m/%Y')
         self.patientDetailsLabel.setText(f"Patient ID: {self.patient.getPatientID()}\n"
                                         f"Patient Name: {self.patient.getPatientName()}\n"
                                         f"Patient Blood: {self.patient.getPatientBlood()}\n"
                                         f"Patient Race: {self.patient.getPatientRace()}\n"
-                                        f"Date of Birth: {self.patient.getPatientDOB()}\n")
+                                        f"Date of Birth: {formattedDate}\n")
         self.patientDetailsLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.patientDetailsLabel.setStyleSheet("""QLabel {
                                                         border-radius: 10px;
@@ -231,7 +234,7 @@ class DoctorAppointmentDetails(QWidget):
 
         self.viewPrescriptionLabel = QLabel(self.centralwidget)
         self.viewPrescriptionLabel.setGeometry(QRect(540, 445, 50, 50))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-prescription-50.png")
         self.viewPrescriptionIcon = QPixmap(filepath)
         self.viewPrescriptionIcon = self.viewPrescriptionIcon.scaled(50, 50)
         self.viewPrescriptionLabel.setPixmap(self.viewPrescriptionIcon)

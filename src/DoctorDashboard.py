@@ -225,9 +225,9 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentLayout.setSpacing(0)
 
         spacer = QWidget()
-        spacer.setFixedWidth(70)
+        spacer.setFixedWidth(40)
         self.upcomingAppointmentTitle = QLabel()
-        self.upcomingAppointmentTitle.setFixedSize(420, 50)
+        self.upcomingAppointmentTitle.setFixedSize(415, 50)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
