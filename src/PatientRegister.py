@@ -320,6 +320,17 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.showPatientRePasswordCheckbox.stateChanged.connect(self.togglePatientReEnterPasswordVisibility)
 
 
+                self.patientFirstNameLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientLastNameLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientEmailLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientContactLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientResidenceLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientPassportLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientRaceLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientBloodTypeLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientPasswordLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientReEnterPassLineEdit.textChanged.connect(self.removeHighlight)
+
                 # Register PushButton for Registering Account - (Saves the Data)
                 self.patientRegPushButton = QtWidgets.QPushButton(self.centralwidget)
                 self.patientRegPushButton.setGeometry(410, 580, 250, 41)
@@ -359,7 +370,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 stylesheet6 = """
                 QPushButton {
                         background-color: rgba(255, 255, 255, 10);
-                        color: rgb(225, 225, 25);
+                        color: rgb(225, 225, 225);
                         text-decoration: underline;
                 }
 
@@ -393,8 +404,64 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setStatusBar(self.statusbar)
                 MainWindow.setWindowTitle("Patient Register")
 
+        def removeHighlight(self):
+                sender = self.sender()  # Get the object that triggered the signal
+                sender.setStyleSheet("")
+
+        def highlightEmptyFields(self):
+                emptyFields = []
+
+                if self.patientFirstNameLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientFirstNameLineEdit)
+                if self.patientLastNameLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientLastNameLineEdit)
+                if self.patientEmailLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientEmailLineEdit)
+                if self.patientContactLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientContactLineEdit)
+                if self.patientResidenceLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientResidenceLineEdit)
+                if self.patientPassportLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientPassportLineEdit)
+                if self.patientRaceLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientRaceLineEdit)
+                if self.patientBloodTypeLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientBloodTypeLineEdit)
+                if self.patientPasswordLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientPasswordLineEdit)
+                if self.patientReEnterPassLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientReEnterPassLineEdit)
+                
+
+                for field in emptyFields:
+                        field.setStyleSheet("border: 2px solid red;")
+
+                return not emptyFields
+        
+        def resetFieldStyles(self):
+                self.patientFirstNameLineEdit.setStyleSheet("")
+                self.patientLastNameLineEdit.setStyleSheet("")
+                self.patientEmailLineEdit.setStyleSheet("")
+                self.patientContactLineEdit.setStyleSheet("")
+                self.patientResidenceLineEdit.setStyleSheet("")
+                self.patientPassportLineEdit.setStyleSheet("")
+                self.patientRaceLineEdit.setStyleSheet("")
+                self.patientBloodTypeLineEdit.setStyleSheet("")
+                self.patientPasswordLineEdit.setStyleSheet("")
+                self.patientReEnterPassLineEdit.setStyleSheet("")
+
         # Creating Code for User (Patient) to save their data
         def patientSaveData(self):
+
+                self.resetFieldStyles()
+
+                if not self.highlightEmptyFields():
+                        QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
+                        return
+                
+                if not self.validatePatientPasswordMatch():
+                        QMessageBox.critical(self.centralwidget, "Password Mismatch", "Passwords do not match.")
+                        return
 
                 patientData = {
                         "patientName": f'{self.patientFirstNameLineEdit.text()} {self.patientLastNameLineEdit.text()}',
@@ -442,11 +509,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
         
         def validatePatientPasswordMatch(self):
                 password = self.patientPasswordLineEdit.text()
-                reenter_password = self.patientReEnterPassLineEdit.text()
+                reenterPassword = self.patientReEnterPassLineEdit.text()
 
-                if password == reenter_password:
+                if password != reenterPassword:
                         # Passwords match, Color of the field will be green
-                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+                        return False
                 else:
                         # Passwords do not match, indicate an error, Color of the field will be red
-                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                        return True
