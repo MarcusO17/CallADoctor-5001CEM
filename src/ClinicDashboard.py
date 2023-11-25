@@ -31,7 +31,7 @@ class ClinicDashboard(QWidget):
 
         self.generateDoctorWidgets()
 
-        self.generateRequestReview()
+        self.generateRequestButtons()
 
         self.generateGraphWidget()
 
