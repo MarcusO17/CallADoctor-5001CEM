@@ -10,7 +10,7 @@ from .AccountPage import AccountPage
 from .model import Prescription, PrescriptionRepo
 from .PatientPrescriptionDetails import PatientPrescriptionDetailsWindow
 from .PageManager import PageManager, FrameLayoutManager
-
+from datetime import datetime
 
 class PatientPrescriptionWindow(QWidget):
     def __init__(self, patient):
@@ -74,7 +74,9 @@ class PatientPrescriptionWindow(QWidget):
 
         for count, prescription in enumerate(prescriptionList):
             self.prescriptionButton = QPushButton()
-            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getExpiryDate())
+            date = datetime.strptime(prescription.getExpiryDate(), '%a, %d %b %Y %H:%M:%S %Z')
+            formattedDate = date.strftime('%d/%m/%Y')
+            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + formattedDate)
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setIconSize(QSize(80, 80))
             self.prescriptionButton.setFixedSize(QSize(700,100))

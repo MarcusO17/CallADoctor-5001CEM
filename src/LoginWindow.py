@@ -23,8 +23,8 @@ class LoginWindow(QWidget):
         self.setObjectName("LoginWindow")
         self.pageManager = PageManager()
         self.setWindowTitle("Login")
-        self.setFixedWidth(800)
-        self.setFixedHeight(600)
+        self.setFixedWidth(1080)
+        self.setFixedHeight(720)
         self.initUI()
         self.pageManager.add(self)
 
@@ -33,21 +33,21 @@ class LoginWindow(QWidget):
 
         titleFont = QFont()
         titleFont.setFamily("Poppins")
-        titleFont.setPointSize(35)
+        titleFont.setPointSize(40)
 
         self.titleLabel = QLabel("Call-A-Doctor Application", self)
         self.titleLabel.setStyleSheet("color: Black;")
         self.titleLabel.setFont(titleFont)
-        self.titleLabel.setGeometry(150, 10, 550, 65)
+        self.titleLabel.setGeometry(250, 10, 600, 65)
 
         subTitleFont = QFont()
         subTitleFont.setFamily("Poppins")
-        subTitleFont.setPointSize(20)
+        subTitleFont.setPointSize(30)
 
         self.subTitleLabel = QLabel("Can't go to the hospital? Call them at your doorstep!", self)
         self.subTitleLabel.setStyleSheet("color: White;")
         self.subTitleLabel.setFont(subTitleFont)
-        self.subTitleLabel.setGeometry(90, 530, 620, 65)
+        self.subTitleLabel.setGeometry(80, 650, 950, 65)
 
         gifViewer = QLabel(self)
 
@@ -59,13 +59,25 @@ class LoginWindow(QWidget):
         movie.start()
 
         gifViewer.setScaledContents(True)
-        gifViewer.setFixedSize(400,400)
+        gifViewer.setFixedSize(600,600)
 
 
         mainLayout=QHBoxLayout(self)
 
+        leftSpacer = QWidget()
+        leftSpacer.setFixedWidth(1)
+        leftSpacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        mainLayout.addWidget(leftSpacer)
+
+        mainLayout.addWidget(gifViewer)
+
+        rightSpacer = QWidget()
+        rightSpacer.setFixedWidth(120)
+        rightSpacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        mainLayout.addWidget(rightSpacer)
+
         spacerItem = QWidget()
-        spacerItem.setFixedWidth(100)
+        spacerItem.setFixedWidth(10)
  
         
         mainLayout.addWidget(spacerItem)
@@ -79,7 +91,7 @@ class LoginWindow(QWidget):
         self.setStyleSheet(f"QWidget#LoginWindow {{background: {gradient}}};")
 
         self.borderFrame = QFrame(self)
-        self.borderFrame.setGeometry(-10, 75, 310, 450)  # Adjusted geometry
+        self.borderFrame.setGeometry(-10, 90, 410, 550)  # Adjusted geometry - previously used 310, 450
         self.borderFrame.setFrameShape(QFrame.StyledPanel)
         self.borderFrame.setLineWidth(2)
 
@@ -108,9 +120,9 @@ class LoginWindow(QWidget):
 
         try:
             logoPixmap = QPixmap(filename)
-            logoPixmap = logoPixmap.scaled(200,200)
+            logoPixmap = logoPixmap.scaled(300,300)
             self.logoLabel.setPixmap(logoPixmap)
-            self.logoLabel.setGeometry(QRect(50, 60, 200, 200))
+            self.logoLabel.setGeometry(QRect(50, 40, 300, 300))
 
 
         except Exception as e:
@@ -120,51 +132,51 @@ class LoginWindow(QWidget):
 
         labelFont = QFont()
         labelFont.setFamily("Poppins")
-        labelFont.setPointSize(12)
+        labelFont.setPointSize(18)
 
         self.emailLabel = QLabel("Email:", self)
         self.emailLabel.setStyleSheet("color: white;")
         self.emailLabel.setFont(labelFont)
-        self.emailLabel.setGeometry(QRect(50, 230, 100, 30))
+        self.emailLabel.setGeometry(QRect(100, 220, 200, 130))
         
         self.emailInput = QLineEdit(self)
-        self.emailInput.setGeometry(QRect(50, 260, 220, 30))
+        self.emailInput.setGeometry(QRect(100, 300, 220, 30))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\email.png")
 
         emailIcon = QPixmap(filepath)
-        emailIcon = emailIcon.scaled(30, 30)
+        emailIcon = emailIcon.scaled(40, 40)
         iconLabel = QLabel(self)
         iconLabel.setPixmap(emailIcon)
-        iconLabel.setGeometry(QRect(20, 260, 30, 30))        
+        iconLabel.setGeometry(QRect(60, 297, 40, 40))        
 
         self.passwordLabel = QLabel("Password:", self)
         self.passwordLabel.setStyleSheet("color: white;")
         self.passwordLabel.setFont(labelFont)
-        self.passwordLabel.setGeometry(QRect(50, 310, 100, 30))
+        self.passwordLabel.setGeometry(QRect(100, 350, 200, 30))
 
         self.passwordInput = QLineEdit(self)
         self.passwordInput.setEchoMode(QLineEdit.Password)
-        self.passwordInput.setGeometry(QRect(50, 340, 220, 30))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\password.png")
+        self.passwordInput.setGeometry(QRect(100, 380, 220, 30))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-password-64.png")
 
         passwordIcon = QPixmap(filepath)
-        passwordIcon = passwordIcon.scaled(30, 30)
+        passwordIcon = passwordIcon.scaled(40, 40)
         icon2Label = QLabel(self)
         icon2Label.setPixmap(passwordIcon)
-        icon2Label.setGeometry(QRect(20, 340, 30, 30))
+        icon2Label.setGeometry(QRect(60, 377, 40, 40))
 
         self.loginButton = QPushButton("Login", self)
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
         self.loginButton.setFixedSize(150, 40) 
-        self.loginButton.setGeometry(QRect(75, 410, 200, 40))
+        self.loginButton.setGeometry(QRect(125, 460, 200, 40))
 
 
         self.goToRegistrationButton = QPushButton("Register Account", self)
         self.goToRegistrationButton.setDefault(True)
         self.goToRegistrationButton.clicked.connect(self.selectRegisterPageFunction)
         self.goToRegistrationButton.setFixedSize(150, 40)
-        self.goToRegistrationButton.setGeometry(QRect(75, 460, 200, 40))
+        self.goToRegistrationButton.setGeometry(QRect(125, 500, 200, 40))
 
 
         self.show()
