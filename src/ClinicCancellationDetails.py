@@ -106,10 +106,14 @@ class ClinicCancellationDetails(QWidget):
                                                 background: white;
                                                 }""")
 
+        self.dateSubmittedTitle = QLabel(self.centralwidget)
+        self.dateSubmittedTitle.setGeometry(QRect(50, 430, 150, 40))
+        self.dateSubmittedTitle.setText("Date Submitted: ")
+
         self.dateLabel = QLabel(self.centralwidget)
-        self.dateLabel.setGeometry(QRect(730, 170, 150, 40))
+        self.dateLabel.setGeometry(QRect(50, 460, 300, 40))
         self.dateLabel.setFont(font)
-        self.dateLabel.setText(f"Date Submitted: {self.request.getDateSubmitted()}")
+        self.dateLabel.setText(f"{self.request.getDateSubmitted()}")
         self.dateLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.dateLabel.setStyleSheet("""QLabel {
                                                 border-radius: 10px;
@@ -237,7 +241,7 @@ class ClinicCancellationDetails(QWidget):
                                                       "Are you sure you want to deny this request",
                                                       QMessageBox.Yes | QMessageBox.No)
         if cancelRequestDialogBox == QMessageBox.Yes:
-            self.request.cancelRequest(self.request.getRequestID())
+            self.request.cancelRequest()
             self.frameLayoutManager = FrameLayoutManager()
             self.frameLayout = self.frameLayoutManager.getFrameLayout()
 

@@ -31,6 +31,7 @@ class DoctorHomepage(QMainWindow):
     def goToDashboard(self):
         self.setButtonHighlight(self.dashboardButton)
         self.doctorDashboard.setSchedule()
+        self.doctorDashboard.generateUpcomingAppointments()
         self.frameLayoutManager.backToBasePage(0)
         self.frameLayout.setCurrentIndex(0)
 

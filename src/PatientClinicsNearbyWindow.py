@@ -79,6 +79,8 @@ class PatientClinicsNearbyWindow(QWidget):
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
+        self.clinicButtonList = list()
+
         #Insert All the Clinics 
         for count, clinic in enumerate(clinicList):
 
@@ -138,6 +140,8 @@ class PatientClinicsNearbyWindow(QWidget):
 
             clinicRow.addWidget(self.clinicButton)
             clinicRow.addWidget(updateMapButton)
+
+            self.clinicButtonList.append(clinicRow)
 
             self.buttonContainer.layout().addWidget(clinicRowWidget)
 
@@ -205,12 +209,11 @@ class PatientClinicsNearbyWindow(QWidget):
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
 
-        for i in range(self.buttonContainer.layout().count()):
-            item = self.buttonContainer.layout().itemAt(i)
-            if item and isinstance(item.widget(), QPushButton):
-                button = item.widget()
-                text = button.text().lower()
-                button.setVisible(searchedText in text)
+        for clinicRow in self.clinicButtonList:
+            button = clinicRow.itemAt(0).widget()
+            text = button.text().lower()
+            for i in range(clinicRow.count()):
+                clinicRow.itemAt(i).widget().setVisible(searchedText in text)
 
     def generateMapWidget(self,clinicList):
         self.mapWidget = QWidget()
