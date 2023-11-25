@@ -328,6 +328,15 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docShowRePasswordCheckbox.setGeometry(720, 450, 250, 40)
                 self.docShowRePasswordCheckbox.stateChanged.connect(self.docToggleReEnterPasswordVisibility)
 
+                self.docFirstNameLineEdit.textChanged.connect(self.removeHighlight)
+                self.docLastNameLineEdit.textChanged.connect(self.removeHighlight)
+                self.docEmailLineEdit.textChanged.connect(self.removeHighlight)
+                self.docContactLineEdit.textChanged.connect(self.removeHighlight)
+                self.docSpecialtyLineEdit.textChanged.connect(self.removeHighlight)
+                self.docPassportLineEdit.textChanged.connect(self.removeHighlight)
+                self.docExpLineEdit.textChanged.connect(self.removeHighlight)
+                self.docPasswordLineEdit.textChanged.connect(self.removeHighlight)
+                self.docReEnterPassLineEdit.textChanged.connect(self.removeHighlight)
                 
         # PushButton for registering - Saves Data of Doctor        
                 self.docRegisterPushButton = QtWidgets.QPushButton(self.centralwidget)
@@ -405,8 +414,67 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setStatusBar(self.statusbar)
 
 
+        def removeHighlight(self):
+                sender = self.sender()  # Get the object that triggered the signal
+                sender.setStyleSheet("")
+
+        def highlightEmptyFields(self):
+                emptyFields = []
+
+                if self.docFirstNameLineEdit.text().strip() == "":
+                        emptyFields.append(self.docFirstNameLineEdit)
+                if self.docLastNameLineEdit.text().strip() == "":
+                        emptyFields.append(self.docLastNameLineEdit)
+                if self.docEmailLineEdit.text().strip() == "":
+                        emptyFields.append(self.docEmailLineEdit)
+                if self.docContactLineEdit.text().strip() == "":
+                        emptyFields.append(self.docContactLineEdit)
+                if self.docSpecialtyLineEdit.text().strip() == "":
+                        emptyFields.append(self.docSpecialtyLineEdit)
+                if self.docPassportLineEdit.text().strip() == "":
+                        emptyFields.append(self.docPassportLineEdit)
+                if self.docExpLineEdit.text().strip() == "":
+                        emptyFields.append(self.docExpLineEdit)
+                if self.docPasswordLineEdit.text().strip() == "":
+                        emptyFields.append(self.docPasswordLineEdit)
+                if self.docReEnterPassLineEdit.text().strip() == "":
+                        emptyFields.append(self.docReEnterPassLineEdit)
+
+                for field in emptyFields:
+                        field.setStyleSheet("border: 2px solid red;")
+
+                return not emptyFields
+
+        def resetFieldStyles(self):
+                self.docFirstNameLineEdit.setStyleSheet("")
+                self.docLastNameLineEdit.setStyleSheet("")
+                self.docEmailLineEdit.setStyleSheet("")
+                self.docContactLineEdit.setStyleSheet("")
+                self.docSpecialtyLineEdit.setStyleSheet("")
+                self.docPassportLineEdit.setStyleSheet("")
+                self.docExpLineEdit.setStyleSheet("")
+                self.docPasswordLineEdit.setStyleSheet("")
+                self.docReEnterPassLineEdit.setStyleSheet("")
+
+
         def saveData(self):
+
+                self.resetFieldStyles()
+
+                if not self.highlightEmptyFields():
+                        QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
+                        return
+                
+                if not self.docValidatePasswordMatch():
+                        QMessageBox.critical(self.centralwidget, "Password Mismatch", "Passwords do not match.")
+                        return
+
                 doctorDocumentPath = self.docAttachmentLineEdit.text()
+
+                if not doctorDocumentPath:
+                        QMessageBox.critical(self.centralwidget, "Missing Document", "Please attach a document.")
+                        return
+                
                 files = {'file': ('docCertification.jpg', open(doctorDocumentPath , 'rb'))}
 
                 doctorName  = f'{self.docFirstNameLineEdit.text()} {self.docLastNameLineEdit.text()}'
@@ -484,7 +552,9 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 doctorPassword = self.docPasswordLineEdit.text()
                 doctorReEnterPassword = self.docReEnterPassLineEdit.text()
 
-                if doctorPassword == doctorReEnterPassword:
-                        self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
-                else:
+                if doctorPassword != doctorReEnterPassword:
                         self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+                        return False
+                else:
+                        self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                        return True
