@@ -909,8 +909,8 @@ def appointmentsWeek():
             conn.close()  
         
 
-@app.route('/appointments/upcoming/<string:doctorID>',methods=['GET'])
-def appointmentsUpcoming(doctorID):
+@app.route('/appointments/upcoming/doctor/<string:doctorID>',methods=['GET'])
+def appointmentsDoctorUpcoming(doctorID):
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
     try:
         conn = dbConnect()
@@ -943,6 +943,43 @@ def appointmentsUpcoming(doctorID):
     finally:
         if conn is not None:
             conn.close()  
+
+
+@app.route('/appointments/upcoming/patient/<string:patientID>',methods=['GET'])
+def appointmentsPatientUpcoming(patientID):
+    dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("""SELECT * FROM appointments where appointmentDate >= %s AND 
+                        patientID = %s ORDER BY appointmentDate, startTime LIMIT 3"""
+                            ,(dateToday,patientID))
+            appointment = [
+                dict(
+                    appointmentID = row['appointmentID'],
+                    doctorID  = row['doctorID'],
+                    clinicID = row['clinicID'],
+                    patientID = row['patientID'],
+                    appointmentStatus = row['appointmentStatus'],
+                    startTime = str(row['startTime']),
+                    appointmentDate = row['appointmentDate'],
+                    visitReasons= row['visitReasons']
+                )
+                for row in cursor.fetchall()
+            ]
+            if appointment is not None:
+                return jsonify(appointment),200  
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        if conn is not None:
+            conn.close()  
+
 
 @app.route('/appointments/<string:clinicID>/pending',methods=['GET'])
 def appointmentsPending(clinicID):
