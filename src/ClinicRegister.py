@@ -1,9 +1,10 @@
 import os
 import sys
 import base64
+import re
 from PIL import Image
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QBrush, QColor, QPixmap
+from PyQt5.QtGui import QFont, QBrush, QColor, QPixmap, QPalette
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
@@ -14,6 +15,7 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
                 super().__init__()
                 self.setupUi(self)
+                self.setupPasswordLineEdit()
                 self.pageManager = PageManager()
 
 
@@ -325,6 +327,18 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 self.statusbar.setObjectName("statusbar")
                 MainWindow.setStatusBar(self.statusbar)
 
+        def setupPasswordLineEdit(self):
+                self.clinicPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.clinicPasswordLineEdit.setGeometry(720, 240, 250, 40)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.clinicPasswordLineEdit.setFont(font)
+                self.clinicPasswordLineEdit.setObjectName("docPasswordLineEdit")
+                self.clinicPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.clinicPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.clinicPasswordLineEdit.textChanged.connect(self.updateClinicPasswordHighlight)
+
         def removeHighlight(self):
                 sender = self.sender()  # Get the object that triggered the signal
                 sender.setStyleSheet("")
@@ -367,9 +381,27 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                         QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
                         return
                 
+                if not self.validateClinicPasswordComplexity():
+                        QMessageBox.critical(
+                        self.centralwidget, "Weak Password",
+                        "Password must contain at least one letter, one special character, and one number."
+                        )
+                        return
+                
                 if not self.validatePasswordMatch():
                         QMessageBox.critical(self.centralwidget, "Password Mismatch", "Passwords do not match.")
                         return
+                
+                address  = f'{self.clinicAddressLineEdit.text()}'
+                clinicName = self.clinicNameLineEdit.text()
+                clinicContact = self.clinicContactLineEdit.text()
+                clinicEmail = self.clinicEmailLineEdit.text()
+
+                if not clinicEmail.endswith("@gmail.com"):
+                        QMessageBox.critical(self.centralwidget, "Invalid Email", "Please enter a valid Gmail address.")
+                        return
+                
+                clinicPassword = self.clinicPasswordLineEdit.text()
 
                 documentPath = self.clinicDocumentLineEdit.text()
 
@@ -380,11 +412,11 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
                 files = {'file': ('clinicDoc.jpg', open(documentPath, 'rb'))}
                  
                 clinicData = {
-                "address": f'{self.clinicAddressLineEdit.text()}',
-                "clinicName": self.clinicNameLineEdit.text(),
-                "clinicContact": self.clinicContactLineEdit.text(),
-                "clinicEmail": self.clinicEmailLineEdit.text(),
-                "clinicPassword": self.clinicPasswordLineEdit.text()
+                        "address": address,
+                        "clinicName": clinicName,
+                        "clinicContact": clinicContact,
+                        "clinicEmail": clinicEmail,
+                        "clinicPassword": clinicPassword
                 }
 
                 #Marcus post to Database here
@@ -450,3 +482,38 @@ class ClinicRegisterWindow(QtWidgets.QMainWindow):
         def clinicRemoveDocument(self):
                 self.clinicDocumentLineEdit.clear()
                 self.clinicRemoveDocumentButton.setDisabled(True)
+
+        def validateClinicPasswordComplexity(self):
+                """
+                Validate password complexity: at least one letter, one special character, and one number.
+                """
+                password = self.clinicPasswordLineEdit.text()
+
+                # Use regular expressions to check password complexity
+                pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$')
+
+                return bool(pattern.match(password))
+        
+        def updateClinicPasswordHighlight(self):
+                password = self.clinicPasswordLineEdit.text()
+                lineEditPalette = QPalette()
+
+                # Check password complexity and set line color accordingly
+                if re.match(r'^[A-Za-z]*$', password) or re.match(r'^\d*$', password) or re.match(r'^[@$!%*?&]*$', password):
+                # Only letters or only numbers or only special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("red"))
+                elif (
+                        re.match(r'^[A-Za-z]+\d+$', password) or
+                        re.match(r'^\d+[A-Za-z]+$', password) or
+                        re.match(r'^[A-Za-z]+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+[A-Za-z]+$', password) or
+                        re.match(r'^\d+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+\d+$', password)
+                        ):
+                # Combination of two: letters and numbers, numbers and special characters, letters and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("yellow"))
+                else:
+                # Combination of all three: letters, numbers, and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("green"))
+
+                self.clinicPasswordLineEdit.setPalette(lineEditPalette)
