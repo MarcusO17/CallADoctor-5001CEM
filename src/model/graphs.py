@@ -10,6 +10,9 @@ class graphGen:
     def generateGraph():
         response = requests.get('http://127.0.0.1:5000/graph/users').json()
 
+        if len(response) == 0:
+            return None
+
         df = pd.DataFrame(response)
         df= df.sort_values(by="dates")
         df.index = df.index.astype(int)
