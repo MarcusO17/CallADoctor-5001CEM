@@ -146,6 +146,10 @@ class PatientDashboard(QWidget):
             self.prescriptionLayout.addWidget(emptyPrescription)
         else:
             for count, prescription in enumerate(twoPrescriptionList):
+                buttonRow = QHBoxLayout()
+                spacer = QWidget()
+                spacer.setFixedSize(60, 120)
+                buttonRow.addWidget(spacer)
                 self.prescriptionButton = QPushButton()
                 self.prescriptionButton.setObjectName("prescriptionButton")
                 self.prescriptionButton.setText(f"{prescription.getPrescriptionID()}")
@@ -169,6 +173,7 @@ class PatientDashboard(QWidget):
                 self.prescriptionButton.setIcon(self.prescriptionButtonIcon)
                 self.prescriptionButton.clicked.connect(
                     lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
+                buttonRow.addWidget(self.appointmentButton)
                 self.prescriptionLayout.addWidget(self.prescriptionButton)
 
         spacer = QWidget()
@@ -270,7 +275,7 @@ class PatientDashboard(QWidget):
             emptyAppointment.setText("No Appointment")
             emptyAppointment.setObjectName("emptyAppointment")
             emptyAppointment.setFixedSize(440,140)
-            emptyAppointment.setStyleSheet("""QWidget#emptyAppointment {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+            emptyAppointment.setStyleSheet("""QLabel#emptyAppointment {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
                                                                 stop: 0 rgba(25, 4, 130, 255), 
                                                                 stop: 1 rgba(119, 82, 254, 255)
                                                             );
@@ -278,9 +283,13 @@ class PatientDashboard(QWidget):
                                                             text-align: center;
                                                             color: white;
                                                         }""")
-            self.upcomingAppointmentLayout.addWidget(twoAppointmentList)
+            self.upcomingAppointmentLayout.addWidget(emptyAppointment)
         else:
             for count, appointment in enumerate(twoAppointmentList):
+                buttonRow = QHBoxLayout()
+                spacer = QWidget()
+                spacer.setFixedSize(60, 50)
+                buttonRow.addWidget(spacer)
                 self.appointmentButton = QPushButton()
                 self.appointmentButton.setObjectName("appointmentButton")
                 self.appointmentButton.setText(f"{appointment.getAppointmentID()} - {appointment.getStartTime()}")
@@ -304,6 +313,7 @@ class PatientDashboard(QWidget):
                 self.appointmentButton.setIcon(self.appointmentButtonIcon)
                 self.appointmentButton.clicked.connect(
                     lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.patient))
+                buttonRow.addWidget(self.appointmentButton)
                 self.upcomingAppointmentLayout.addWidget(self.appointmentButton)
 
         spacer = QWidget()

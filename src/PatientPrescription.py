@@ -96,6 +96,15 @@ class PatientPrescriptionWindow(QWidget):
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def generatePrescription(self):
+
+        for i in range(self.buttonContainer.layout().count()):
+            widget = self.buttonContainer.layout().itemAt(0).widget()
+            self.buttonContainer.layout().removeWidget(widget)
+            print("in the loop ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget")
+
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(
