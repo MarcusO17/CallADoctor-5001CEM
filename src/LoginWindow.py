@@ -31,23 +31,6 @@ class LoginWindow(QWidget):
     def initUI(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-        titleFont = QFont()
-        titleFont.setFamily("Poppins")
-        titleFont.setPointSize(40)
-
-        self.titleLabel = QLabel("Call-A-Doctor Application", self)
-        self.titleLabel.setStyleSheet("color: Black;")
-        self.titleLabel.setFont(titleFont)
-        self.titleLabel.setGeometry(250, 10, 600, 65)
-
-        subTitleFont = QFont()
-        subTitleFont.setFamily("Poppins")
-        subTitleFont.setPointSize(30)
-
-        self.subTitleLabel = QLabel("Can't go to the hospital? Call them at your doorstep!", self)
-        self.subTitleLabel.setStyleSheet("color: White;")
-        self.subTitleLabel.setFont(subTitleFont)
-        self.subTitleLabel.setGeometry(80, 650, 950, 65)
 
         gifViewer = QLabel(self)
 
