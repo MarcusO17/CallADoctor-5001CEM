@@ -30,7 +30,6 @@ class DoctorDashboard(QWidget):
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
         self.upcomingAppointmentButtons = QVBoxLayout()
-        self.appointmentList = []
 
         self.generateSchedule()
 
@@ -221,18 +220,17 @@ class DoctorDashboard(QWidget):
 
     def generateUpcomingAppointments(self):
 
+        while self.upcomingAppointmentButtons.count():
+            item = self.upcomingAppointmentButtons.takeAt(0)
+            widget = item.widget()
+            if widget:
+                self.upcomingAppointmentButtons.removeItem(item)
+                widget.deleteLater()
+
         self.upcomingAppointmentWidget = QWidget()
         self.upcomingAppointmentWidget.setStyleSheet("background-color: transparent;")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
         self.upcomingAppointmentLayout.setSpacing(0)
-
-        for i in range(self.upcomingAppointmentButtons.count()):
-            widget = self.upcomingAppointmentButtons.itemAt(0).widget()
-            self.upcomingAppointmentButtons.removeWidget(widget)
-            print("in the loop upcoming appointment ", i)
-            if widget is not None:
-                widget.deleteLater()
-                print("deleting 1 widget upcoming appointment")
 
         spacer = QWidget()
         spacer.setFixedWidth(40)

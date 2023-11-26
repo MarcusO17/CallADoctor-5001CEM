@@ -12,8 +12,7 @@ from .AccountPage import AccountPage
 from .DoctorAppointmentDetails import DoctorAppointmentDetails
 from .model import Appointment
 from .model.AppointmentRepo import AppointmentRepository
-from .PageManager import PageManager
-
+from .PageManager import PageManager, FrameLayoutManager
 
 
 class DoctorScheduleWindow(QWidget):
@@ -116,7 +115,13 @@ class DoctorScheduleWindow(QWidget):
 
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
         self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
-        self.pageManager.add(self.doctorAppointmentDetails)
+
+        self.frameLayoutManager = FrameLayoutManager()
+        self.frameLayout = self.frameLayoutManager.getFrameLayout()
+
+        self.frameLayout.addWidget(self.doctorAppointmentDetails)
+        self.frameLayoutManager.add(self.frameLayout.count() - 1)
+        self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def setSchedule(self):
 
