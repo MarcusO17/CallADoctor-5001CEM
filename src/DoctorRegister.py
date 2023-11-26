@@ -480,6 +480,8 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
                         return
                 
+                
+                
                 if not self.validateDoctorPasswordComplexity():
                         QMessageBox.critical(
                         self.centralwidget, "Weak Password",
@@ -504,6 +506,11 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 doctorPassword = self.docPasswordLineEdit.text()
                 doctorContact = self.docContactLineEdit.text()
                 doctorType = self.docSpecialtyLineEdit.text()
+
+                if not doctorEmail.endswith("@gmail.com"):
+                        QMessageBox.critical(self.centralwidget, "Invalid Email", "Please enter a valid Gmail address.")
+                        return
+
                 yearsOfExperience = self.docExpLineEdit.text()
                 doctorICNumber = self.docPassportLineEdit.text()
                 
