@@ -2,6 +2,7 @@ import os
 import requests
 import json
 import sys
+import re
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QBrush, QColor, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
@@ -465,6 +466,13 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                         QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
                         return
                 
+                if not self.validateDoctorPasswordComplexity():
+                        QMessageBox.critical(
+                        self.centralwidget, "Weak Password",
+                        "Password must contain at least one letter, one special character, and one number."
+                        )
+                        return
+                
                 if not self.docValidatePasswordMatch():
                         QMessageBox.critical(self.centralwidget, "Password Mismatch", "Passwords do not match.")
                         return
@@ -558,3 +566,14 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 else:
                         self.docReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
                         return True
+                
+        def validateDoctorPasswordComplexity(self):
+                """
+                Validate password complexity: at least one letter, one special character, and one number.
+                """
+                password = self.docPasswordLineEdit.text()
+
+                # Use regular expressions to check password complexity
+                pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$')
+
+                return bool(pattern.match(password))
