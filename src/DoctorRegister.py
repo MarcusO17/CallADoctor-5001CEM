@@ -4,7 +4,7 @@ import json
 import sys
 import re
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QBrush, QColor, QPixmap
+from PyQt5.QtGui import QFont, QBrush, QColor, QPixmap, QPalette
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QMessageBox, QFileDialog, QPushButton, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
@@ -15,6 +15,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
                 super().__init__()
                 self.setupUi(self)
+                self.setupPasswordLineEdit()
                 self.pageManager = PageManager()
 
 
@@ -295,6 +296,7 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 self.docPasswordLineEdit.setObjectName("docPasswordLineEdit")
                 self.docPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
                 self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.docPasswordLineEdit.textChanged.connect(self.updatePasswordHighlight)
                 self.docPasswordLineEdit.textChanged.connect(self.docValidatePasswordMatch)
 
                 self.docShowPasswordCheckBox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
@@ -413,6 +415,18 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setWindowTitle("Doctor Registration")
                 self.statusbar.setObjectName("statusbar")
                 MainWindow.setStatusBar(self.statusbar)
+
+        def setupPasswordLineEdit(self):
+                self.docPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.docPasswordLineEdit.setGeometry(720, 330, 250, 40)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.docPasswordLineEdit.setFont(font)
+                self.docPasswordLineEdit.setObjectName("docPasswordLineEdit")
+                self.docPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.docPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.docPasswordLineEdit.textChanged.connect(self.updatePasswordHighlight)
 
 
         def removeHighlight(self):
@@ -577,3 +591,27 @@ class DoctorRegisterWindow(QtWidgets.QMainWindow):
                 pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$')
 
                 return bool(pattern.match(password))
+        
+        def updatePasswordHighlight(self):
+                password = self.docPasswordLineEdit.text()
+                lineEditPalette = QPalette()
+
+                # Check password complexity and set line color accordingly
+                if re.match(r'^[A-Za-z]*$', password) or re.match(r'^\d*$', password) or re.match(r'^[@$!%*?&]*$', password):
+                # Only letters or only numbers or only special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("red"))
+                elif (
+                        re.match(r'^[A-Za-z]+\d+$', password) or
+                        re.match(r'^\d+[A-Za-z]+$', password) or
+                        re.match(r'^[A-Za-z]+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+[A-Za-z]+$', password) or
+                        re.match(r'^\d+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+\d+$', password)
+                        ):
+                # Combination of two: letters and numbers, numbers and special characters, letters and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("yellow"))
+                else:
+                # Combination of all three: letters, numbers, and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("green"))
+
+                self.docPasswordLineEdit.setPalette(lineEditPalette)
