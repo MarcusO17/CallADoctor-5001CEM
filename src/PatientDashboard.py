@@ -31,6 +31,8 @@ class PatientDashboard(QWidget):
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
+        self.upcomingAppointmentButtons = QVBoxLayout()
+        self.prescriptionButtons = QVBoxLayout()
 
         self.generateWelcomeText()
 
@@ -97,6 +99,15 @@ class PatientDashboard(QWidget):
         self.prescriptionWidget.setStyleSheet("background-color: transparent;")
         self.prescriptionLayout = QVBoxLayout(self.prescriptionWidget)
 
+        for i in range(self.prescriptionButtons.count()):
+            item = self.prescriptionButtons.itemAt(0)
+            self.prescriptionButtons.removeItem(item)
+            widget = item.widget()
+            print("in the loop prescription ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget prescription prescription")
+
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.prescriptionTitle = QLabel()
@@ -142,7 +153,7 @@ class PatientDashboard(QWidget):
                                                             text-align: center;
                                                             color: white;
                                                         }""")
-            self.prescriptionLayout.addWidget(emptyPrescription)
+            self.prescriptionButtons.addWidget(emptyPrescription)
         else:
             for count, prescription in enumerate(twoPrescriptionList):
                 buttonRow = QHBoxLayout()
@@ -173,11 +184,12 @@ class PatientDashboard(QWidget):
                 prescriptionButton.clicked.connect(
                     lambda checked, prescription=prescription: self.prescriptionButtonFunction(prescription, self.patient))
                 buttonRow.addWidget(prescriptionButton)
-                self.prescriptionLayout.addLayout(buttonRow)
+                self.prescriptionButtons.addLayout(buttonRow)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.prescriptionLayout.addWidget(spacer)
+        self.prescriptionButtons.addWidget(spacer)
+        self.prescriptionLayout.addLayout(self.prescriptionButtons)
 
     def prescriptionButtonFunction(self, prescription, patient):
         self.prescriptionDetails = PatientPrescriptionDetailsWindow(prescription, patient)
@@ -233,6 +245,15 @@ class PatientDashboard(QWidget):
         self.upcomingAppointmentWidget.setStyleSheet("background-color: transparent;")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
 
+        for i in range(self.upcomingAppointmentButtons.count()):
+            item = self.upcomingAppointmentButtons.itemAt(0)
+            self.upcomingAppointmentButtons.removeItem(item)
+            widget = item.widget()
+            print("in the loop upcoming appointment ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget upcoming appointment")
+
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.upcomingAppointmentTitle = QLabel()
@@ -278,7 +299,7 @@ class PatientDashboard(QWidget):
                                                             text-align: center;
                                                             color: white;
                                                         }""")
-            self.upcomingAppointmentLayout.addWidget(emptyAppointment)
+            self.upcomingAppointmentButtons.addWidget(emptyAppointment)
         else:
             for count, appointment in enumerate(twoAppointmentList):
                 buttonRow = QHBoxLayout()
@@ -313,11 +334,12 @@ class PatientDashboard(QWidget):
 
             spacer = QWidget()
             spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-            self.upcomingAppointmentLayout.addWidget(spacer)
+            self.upcomingAppointmentButtons.addWidget(spacer)
                 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.upcomingAppointmentLayout.addWidget(spacer)
+        self.upcomingAppointmentButtons.addWidget(spacer)
+        self.upcomingAppointmentLayout.addLayout(self.upcomingAppointmentButtons)
 
 
     def appointmentButtonFunction(self, appointment, patient):
