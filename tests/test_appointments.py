@@ -4,9 +4,7 @@ from unittest.mock import Mock, patch
 from src.model import Appointment, AppointmentRepo
 
 
-class TestClinic(unittest.TestCase):
-    """Class to test Clinic and Clinic Repo Models.
-    """
+class TestAppointment(unittest.TestCase):
 
     @patch('requests.get')
     def test_getAppointmentfromID_success(self, mockGet):
@@ -65,64 +63,6 @@ class TestClinic(unittest.TestCase):
         self.assertEqual(result.getAppointmentDate(),  "")
         self.assertEqual(result.getVisitReason(), "")
     
-    """@patch('requests.get')
-    def test_getAppointmentfromID_failure(self, mockGet):
-        # Create a mock response
-        mockAppointmentData = {}
-        mockResponse = Mock()
-        mockResponse.json.return_value = [mockAppointmentData]
-        mockGet.return_value = mockResponse
-
-
-        # Call the function with a appointment ID
-        result = Appointment.getAppointmentfromID("A0031239")
-
-        # Assert that the function returned the expected Appointment object
-        self.assertEqual(result.getAppointmentID(),"")
-        self.assertEqual(result.getDoctorID(), "")
-        self.assertEqual(result.getClinicID(), "")
-        self.assertEqual(result.getPatientID(), "")
-        self.assertEqual(result.getAppointmentStatus(),  "")
-        self.assertEqual(result.getStartTime(),  "")
-        #self.assertEqual(result.getEndTime(),  mockAppointmentData["endTime"])
-        self.assertEqual(result.getAppointmentDate(),  "")
-        self.assertEqual(result.getVisitReason(), "")
-    
-    @patch('requests.post')  # Mock the 'requests.post' method
-    def test_postAppointment_success(self, mockPost):
-        # Set up your mock response
-        mockResponse = Mock()
-        mockResponse.status_code = 201
-        mockResponse.text = "Successful POST"
-        mockPost.return_value = mockResponse
-
-
-
-        
-        appointment.postAppointment()
-
-        # Call the 'postAppointment' method
-        postStatus, success = appointment.postAppointment()
-
-        # Assertions
-        self.assertEqual(postStatus, "Successful POST")
-        self.assertTrue(success)
-
-    @patch('requests.post') 
-    def test_postAppointment_failure(self, mockPost):
-        # Set up your mock response
-        mockResponse = Mock()
-        mockResponse.status_code = 500
-        mockPost.return_value = mockResponse
-
-        # Instantiate your class or object that has the 'postAppointment' method
-        appointment = Appointment.postAppointment()
-
-        # Call the 'postAppointment' method
-        postStatus, success = appointment.postAppointment()
-
-        # Assertions
-        self.assertFalse(success)"""
     
     @patch('requests.get')
     def test_getAppointmentWeek_success(self, mockGet):
