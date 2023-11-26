@@ -1,7 +1,8 @@
 import os
 import sys
+import re
 from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtGui import QFont, QColor, QBrush, QPixmap
+from PyQt5.QtGui import QFont, QColor, QBrush, QPixmap, QPalette
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
@@ -12,6 +13,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
                 super().__init__()
                 self.setupUi(self)
+                self.setupPatientPasswordLineEdit()
                 self.pageManager = PageManager()
 
 
@@ -404,6 +406,18 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setStatusBar(self.statusbar)
                 MainWindow.setWindowTitle("Patient Register")
 
+        def setupPatientPasswordLineEdit(self):
+                self.patientPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.patientPasswordLineEdit.setGeometry(720, 330, 250, 40)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.patientPasswordLineEdit.setFont(font)
+                self.patientPasswordLineEdit.setObjectName("docPasswordLineEdit")
+                self.patientPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.patientPasswordLineEdit.textChanged.connect(self.updatePatientPasswordHighlight)
+
         def removeHighlight(self):
                 sender = self.sender()  # Get the object that triggered the signal
                 sender.setStyleSheet("")
@@ -459,20 +473,42 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                         QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
                         return
                 
+                if not self.validatePatientPasswordComplexity():
+                        QMessageBox.critical(
+                        self.centralwidget, "Weak Password",
+                        "Password must contain at least one letter, one special character, and one number."
+                        )
+                        return
+                
                 if not self.validatePatientPasswordMatch():
                         QMessageBox.critical(self.centralwidget, "Password Mismatch", "Passwords do not match.")
                         return
+                
+                patientName = f'{self.patientFirstNameLineEdit.text()} {self.patientLastNameLineEdit.text()}'
+                patientEmail = self.patientEmailLineEdit.text()
+
+                if not patientEmail.endswith("@gmail.com"):
+                        QMessageBox.critical(self.centralwidget, "Invalid Email", "Please enter a valid Gmail address.")
+                        return
+
+                patientContact = self.patientContactLineEdit.text()
+                address = self.patientResidenceLineEdit.text()
+                dateOfBirth = self.patientDOBDateEdit.date().toString(Qt.ISODate)
+                patientICNumber = self.patientPassportLineEdit.text()
+                patientPassword = self.patientPasswordLineEdit.text()
+                bloodType = self.patientBloodTypeLineEdit.text()
+                race = self.patientRaceLineEdit.text()
 
                 patientData = {
-                        "patientName": f'{self.patientFirstNameLineEdit.text()} {self.patientLastNameLineEdit.text()}',
-                        "patientEmail": self.patientEmailLineEdit.text(),
-                        "patientContact": self.patientContactLineEdit.text(),
-                        "address": self.patientResidenceLineEdit.text(),
-                        "dateOfBirth": self.patientDOBDateEdit.date().toString(Qt.ISODate),
-                        "patientICNumber": self.patientPassportLineEdit.text(),
-                        "patientPassword": self.patientPasswordLineEdit.text(),
-                        "bloodType": self.patientBloodTypeLineEdit.text(),
-                        "race": self.patientRaceLineEdit.text()
+                        "patientName": patientName,
+                        "patientEmail": patientEmail,
+                        "patientContact": patientContact,
+                        "address": address,
+                        "dateOfBirth": dateOfBirth,
+                        "patientICNumber": patientICNumber,
+                        "patientPassword": patientPassword,
+                        "bloodType": bloodType,
+                        "race": race
                 }
 
                 # marcus post to databasee here
@@ -519,3 +555,39 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                         # Passwords do not match, indicate an error, Color of the field will be red
                         self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
                         return True
+                
+
+        def validatePatientPasswordComplexity(self):
+                """
+                Validate password complexity: at least one letter, one special character, and one number.
+                """
+                password = self.patientPasswordLineEdit.text()
+
+                # Use regular expressions to check password complexity
+                pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$')
+
+                return bool(pattern.match(password))
+        
+        def updatePatientPasswordHighlight(self):
+                password = self.patientPasswordLineEdit.text()
+                lineEditPalette = QPalette()
+
+                # Check password complexity and set line color accordingly
+                if re.match(r'^[A-Za-z]*$', password) or re.match(r'^\d*$', password) or re.match(r'^[@$!%*?&]*$', password):
+                # Only letters or only numbers or only special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("red"))
+                elif (
+                        re.match(r'^[A-Za-z]+\d+$', password) or
+                        re.match(r'^\d+[A-Za-z]+$', password) or
+                        re.match(r'^[A-Za-z]+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+[A-Za-z]+$', password) or
+                        re.match(r'^\d+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+\d+$', password)
+                        ):
+                # Combination of two: letters and numbers, numbers and special characters, letters and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("yellow"))
+                else:
+                # Combination of all three: letters, numbers, and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("green"))
+
+                self.patientPasswordLineEdit.setPalette(lineEditPalette)
