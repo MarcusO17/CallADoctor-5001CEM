@@ -30,7 +30,6 @@ class DoctorDashboard(QWidget):
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
         self.upcomingAppointmentButtons = QVBoxLayout()
-        self.appointmentList = []
 
         self.generateSchedule()
 
@@ -220,6 +219,13 @@ class DoctorDashboard(QWidget):
         self.mainScheduleLayout.addWidget(self.scheduleWidget)
 
     def generateUpcomingAppointments(self):
+
+        while self.upcomingAppointmentButtons.count():
+            item = self.upcomingAppointmentButtons.takeAt(0)
+            widget = item.widget()
+            if widget:
+                self.upcomingAppointmentButtons.removeItem(item)
+                widget.deleteLater()
 
         self.upcomingAppointmentWidget = QWidget()
         self.upcomingAppointmentWidget.setStyleSheet("background-color: transparent;")
