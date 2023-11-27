@@ -1573,10 +1573,15 @@ def userAuthentication():
 
         try:
             sessionInfo = cursor.fetchone()
+            if sessionInfo is None:
+                return jsonify({'error':'Invalid Credentials'}),401
+            
             storedHashPass = sessionInfo['password'].encode('utf-8')
             if bcrypt.checkpw(password.encode('utf-8'),storedHashPass):
                 validInfo = {'ID': sessionInfo['ID'], 'role': sessionInfo['role']}
                 return jsonify(validInfo), 200
+            else:
+                return jsonify({'error':'Invalid Credentials'}),401
         except:
             sessionInfo = None;
 
