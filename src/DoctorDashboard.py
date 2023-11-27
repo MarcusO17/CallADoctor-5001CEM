@@ -227,8 +227,9 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentLayout.setSpacing(0)
 
         for i in range(self.upcomingAppointmentButtons.count()):
-            widget = self.upcomingAppointmentButtons.itemAt(0).widget()
-            self.upcomingAppointmentButtons.removeWidget(widget)
+            item = self.upcomingAppointmentButtons.itemAt(0)
+            self.upcomingAppointmentButtons.removeItem(item)
+            widget = item.widget()
             print("in the loop upcoming appointment ", i)
             if widget is not None:
                 widget.deleteLater()
