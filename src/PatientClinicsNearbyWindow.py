@@ -159,7 +159,6 @@ class PatientClinicsNearbyWindow(QWidget):
             clinicElementLayout.addWidget(clinicRowWidget)
 
             clinicDistanceRowWidget =QWidget()
-            clinicDistanceRowWidget.setFixedHeight(15)
             clinicDistanceRow = QHBoxLayout(clinicDistanceRowWidget)
 
             clinicDistance = QLabel()
@@ -170,8 +169,9 @@ class PatientClinicsNearbyWindow(QWidget):
             font.setPointSize(9)
             clinicDistance.setFont(font)
             spacer = QWidget()
-            spacer.setFixedWidth(30)
-            #clinicDistanceRow.addWidget(spacer)
+            spacer.setFixedHeight(0)
+            spacer.setFixedWidth(50)
+            clinicDistanceRow.addWidget(spacer)
             clinicDistanceRow.addWidget(clinicDistance)
 
             clinicElementLayout.addWidget(clinicDistanceRowWidget)
