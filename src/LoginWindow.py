@@ -31,23 +31,6 @@ class LoginWindow(QWidget):
     def initUI(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-        titleFont = QFont()
-        titleFont.setFamily("Poppins")
-        titleFont.setPointSize(40)
-
-        self.titleLabel = QLabel("Call-A-Doctor Application", self)
-        self.titleLabel.setStyleSheet("color: Black;")
-        self.titleLabel.setFont(titleFont)
-        self.titleLabel.setGeometry(250, 10, 600, 65)
-
-        subTitleFont = QFont()
-        subTitleFont.setFamily("Poppins")
-        subTitleFont.setPointSize(30)
-
-        self.subTitleLabel = QLabel("Can't go to the hospital? Call them at your doorstep!", self)
-        self.subTitleLabel.setStyleSheet("color: White;")
-        self.subTitleLabel.setFont(subTitleFont)
-        self.subTitleLabel.setGeometry(80, 650, 950, 65)
 
         gifViewer = QLabel(self)
 
@@ -165,6 +148,9 @@ class LoginWindow(QWidget):
         icon2Label.setPixmap(passwordIcon)
         icon2Label.setGeometry(QRect(60, 377, 40, 40))
 
+        self.emailInput.textChanged.connect(self.removeHighlight)
+        self.passwordInput.textChanged.connect(self.removeHighlight)
+
         self.loginButton = QPushButton("Login", self)
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.loginAuthorization)
@@ -202,14 +188,17 @@ class LoginWindow(QWidget):
             self.openDoctorRegisterWindow()
            
     def openClinicRegisterWindow(self):
+        self.resetFieldStyles()
         self.clinicRegister = ClinicRegisterWindow()
         self.pageManager.add(self.clinicRegister)
 
     def openPatientRegisterWindow(self):
+        self.resetFieldStyles()
         self.patientRegister = PatientRegisterWindow()
         self.pageManager.add(self.patientRegister)
 
     def openDoctorRegisterWindow(self):
+        self.resetFieldStyles()
         self.DoctorRegister = DoctorRegisterWindow()
         self.pageManager.add(self.DoctorRegister)
 
@@ -232,7 +221,33 @@ class LoginWindow(QWidget):
         self.adminHomepage = AdminHomepageWindow(sessionID)
         self.pageManager.add(self.adminHomepage)
 
+    def removeHighlight(self):
+        sender = self.sender()  # Get the object that triggered the signal
+        sender.setStyleSheet("")
+
+    def highlightEmptyFields(self):
+        emptyFields = []
+        
+        if self.emailInput.text().strip() == "":
+            emptyFields.append(self.emailInput)
+        if self.passwordInput.text().strip() == "":
+            emptyFields.append(self.passwordInput)
+        
+        for field in emptyFields:
+            field.setStyleSheet("border: 2px solid red;")
+
+        return not emptyFields
+
+    def resetFieldStyles(self):
+        self.emailInput.setStyleSheet("")
+        self.passwordInput.setStyleSheet("")
+
     def loginAuthorization(self):
+        self.resetFieldStyles()  # I am Resetting the styles before checking again
+        if not self.highlightEmptyFields():
+            QMessageBox.critical(self, "Invalid Login", "Please fill in all details")
+            return
+
         email = self.emailInput.text()
         password = self.passwordInput.text()
 

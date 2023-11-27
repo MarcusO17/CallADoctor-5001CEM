@@ -96,6 +96,15 @@ class PatientPrescriptionWindow(QWidget):
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def generatePrescription(self):
+
+        for i in range(self.buttonContainer.layout().count()):
+            widget = self.buttonContainer.layout().itemAt(0).widget()
+            self.buttonContainer.layout().removeWidget(widget)
+            print("in the loop ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget")
+
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         prescriptionList = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByPatient(
@@ -112,7 +121,9 @@ class PatientPrescriptionWindow(QWidget):
 
         for count, prescription in enumerate(prescriptionList):
             self.prescriptionButton = QPushButton()
-            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + prescription.getExpiryDate())
+            date = datetime.strptime(prescription.getExpiryDate(), '%a, %d %b %Y %H:%M:%S %Z')
+            formattedDate = date.strftime('%d/%m/%Y')
+            self.prescriptionButton.setText(prescription.getPrescriptionID() + " - " + formattedDate)
             self.prescriptionButton.setFont(buttonFont)
             self.prescriptionButton.setIconSize(QSize(80, 80))
             self.prescriptionButton.setFixedSize(QSize(750, 100))

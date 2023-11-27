@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from src.model import geoHelper
+import bcrypt
 import io
 import os
 import requests
@@ -11,6 +12,10 @@ import pandas as pd
 
 app = Flask(__name__)
 
+def hashPassword(password):
+    salt = bcrypt.gensalt()
+    hashedPassword = bcrypt.hashpw(password.encode('utf-8'),salt)
+    return hashedPassword
 
 def configure():
     """Loads Secrets
@@ -101,7 +106,7 @@ def patients():
             patientID = requests.get('http://127.0.0.1:5000/patients/idgen').text
             patientName = contentJSON['patientName']
             patientEmail = contentJSON['patientEmail']
-            patientPassword = contentJSON['patientPassword']
+            patientPassword = hashPassword(contentJSON['patientPassword'])
             patientICNumber = contentJSON['patientICNumber']
             address = contentJSON['address']
             dateOfBirth = contentJSON['dateOfBirth'] # YYYY-MM-DD
@@ -111,8 +116,6 @@ def patients():
                 lat,lon = geoHelper.geocode(address=address)
             except Exception as e:
                 lat,lon = None,None
-        
-
     
             insertQuery = """
                             INSERT INTO patients (patientID,patientName,address,patientEmail,patientPassword,
@@ -224,19 +227,19 @@ def clinics():
             if clinics is not None:
                 return jsonify(clinics),200
             
-
         if request.method == 'POST':
             contentJSON = request.get_json()
 
             clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
             clinicName = contentJSON['clinicName']
             clinicEmail = contentJSON['clinicEmail']
-            clinicPassword = contentJSON['clinicPassword']
+            clinicPassword = hashPassword(contentJSON['clinicPassword'])
             clinicContact = contentJSON['clinicContact']
             address = contentJSON['address']
-            governmentApproved = 'Pending'
+            governmentApproved = 0
             lat,lon = geoHelper.geocode(address=address)
     
+
             insertQuery = """
                             INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
                                                 clinicContact,governmentApproved,lat,lon)
@@ -244,11 +247,10 @@ def clinics():
                         """
             cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
                                                 clinicContact,governmentApproved,lat,lon))
-            print('Success')    
+            print('Success')  
+            conn.commit() #Commit Changes to db, like git commit
             
-        conn.commit() #Commit Changes to db, like git commit
-        
-        return f'Successful POST : {clinicID}',201
+            return f'Successful POST : {clinicID}',201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
@@ -377,8 +379,7 @@ def doctors():
         conn = dbConnect()
         if conn is None:
             return jsonify({'Error': 'Failed to connect to the database'}), 500
-        
-
+    
         cursor = conn.cursor()
         if request.method == 'GET':
             #Add Error Handling
@@ -405,7 +406,7 @@ def doctors():
 
             doctorID = requests.get('http://127.0.0.1:5000/doctors/idgen').text
             doctorName = contentJSON['doctorName']
-            doctorPassword = contentJSON['doctorPassword']
+            doctorPassword = hashPassword(contentJSON['doctorPassword'])
             doctorICNumber = contentJSON['doctorICNumber']
             doctorContact = contentJSON['doctorContact']
             doctorType = contentJSON['doctorType']
@@ -430,6 +431,7 @@ def doctors():
           
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
     
     finally:
         if conn is not None:
@@ -1445,7 +1447,7 @@ def allRequests():
                             VALUES (%s,%s,%s,%s,%s,%s,%s)
                         """
 
-            cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
+            cursor = cursor.execute(insertQuery,(reqsID,reqsType,clientID,approvalStatus,
                                                 dateSubmitted,requestReason,appointmentID)
                                                 )
             conn.commit() #Commit Changes to db, like git commit
@@ -1563,23 +1565,24 @@ def userAuthentication():
         cursor = conn.cursor()
     
         contentJSON = request.get_json()
-
+        
         email = contentJSON['email']
         password = contentJSON['password']
 
-        cursor.execute('SELECT ID,role from users where email = %s AND password = %s',(email,password))
+        cursor.execute('SELECT ID,role,password from users where email = %s',(email))
 
         try:
             sessionInfo = cursor.fetchone()
+            storedHashPass = sessionInfo['password'].encode('utf-8')
+            if bcrypt.checkpw(password.encode('utf-8'),storedHashPass):
+                validInfo = {'ID': sessionInfo['ID'], 'role': sessionInfo['role']}
+                return jsonify(validInfo), 200
         except:
             sessionInfo = None;
 
-        if sessionInfo != None:
-            return jsonify(sessionInfo), 200
-        else:
-            return {'ID': 'DENIED', 'role':'DENIED'}, 401
+
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+       return jsonify({'error': str(e)}), 500
     
     finally:
         if conn is not None:

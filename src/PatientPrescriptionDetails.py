@@ -52,7 +52,7 @@ class PatientPrescriptionDetailsWindow(QWidget):
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(850, 40, 70, 70))
+        self.backButton.setGeometry(QRect(800, 40, 70, 70))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
