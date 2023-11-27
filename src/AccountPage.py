@@ -266,6 +266,8 @@ class AccountPage(QWidget):
             self.flexTitle3.show()
             self.flexLabel3.setText(self.user.getPatientRace())
             self.flexLabel3.show()
+            self.statusTitle.hide()
+            self.statusLabel.hide()
             self.addressLabel.setText(self.user.getPatientAddress())
             self.addressLabel.show()
             self.addressTitle.show()
