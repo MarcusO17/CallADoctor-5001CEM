@@ -1961,7 +1961,7 @@ def userAuthentication():
     try:
         conn = dbConnect()
         if conn is None:
-             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
             
         cursor = conn.cursor()
     
@@ -1988,7 +1988,7 @@ def userAuthentication():
 
 
     except Exception as e:
-       return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e)}), 500
     
     finally:
         if conn is not None:
