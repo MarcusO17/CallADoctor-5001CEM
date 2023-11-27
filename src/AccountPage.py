@@ -282,6 +282,8 @@ class AccountPage(QWidget):
             self.addressLabel.show()
             self.statusLabel.setText(str(self.user.getClinicStatus()))
             self.statusLabel.show()
+            self.editButtonLabel.hide()
+            self.editButton.hide()
         elif mode == "Doctor":
             self.mode = "Doctor"
             self.nameLabel.setText(self.user.getDoctorName())
