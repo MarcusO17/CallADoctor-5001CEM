@@ -104,11 +104,13 @@ class Request:
             return completeStatus , False
         
 
-    def existingAppointments(self,appointmentID):
-        response = requests.patch(f'http://127.0.0.1:5000/requests/existing/{appointmentID}')
+    def existingAppointments(appointmentID):
+        response = requests.get(f'http://127.0.0.1:5000/requests/exists/{appointmentID}')
         completeStatus = response.text
 
         if response.status_code == 200:
+            print(True)
             return True
         else:
+            print(False)
             return False

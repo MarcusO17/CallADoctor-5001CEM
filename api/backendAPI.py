@@ -1468,7 +1468,7 @@ def requestsExists(appointmentID):
             
         cursor = conn.cursor()
         if request.method == 'GET':
-            cursor.execute("SELECT * FROM requests WHERE EXISTS (SELECT appointmentID from requests where appointmentID = %s)",appointmentID)
+            cursor.execute("SELECT * FROM requests WHERE appointmentID = %s",appointmentID)
             result = cursor.fetchone()
             print(result)
             if result is not None:
