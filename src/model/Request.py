@@ -62,13 +62,18 @@ class Request:
             print(f'Error : {e}')
             return []
 
+        if response.status_code == 500:
+            print(recordsList)
+            return requestList
+
         for records in recordsList:
-            tempRequest= Request("","","","","","","","")
+            tempRequest= Request("","","","","","","")
             
-            tempRequest.setRequestID(records['requestID'])
-            tempRequest.setRequestType(records['requestType'])
+            tempRequest.setRequestID(records['requestsID'])
+            tempRequest.setRequestType(records['requestsType'])
             tempRequest.setClientID(records['clientID'])
             tempRequest.setApprovalStatus(records['approvalStatus'])
+            tempRequest.setRequestReason(records['requestReason'])
             tempRequest.setDateSubmitted(records['dateSubmitted'])
             tempRequest.setAppointmentID(records['appointmentID'])
             
@@ -77,4 +82,24 @@ class Request:
         return requestList
         
 
+    def cancelRequest(self):
+        response = requests.patch(f'http://127.0.0.1:5000/requests/cancel/{self.getRequestID()}')
+        denyStatus = response.text
 
+        if response.status_code == 200:
+            return denyStatus , True
+        else:
+            return denyStatus , False
+        
+
+           
+    def approveRequest(self):
+        response = requests.patch(f'http://127.0.0.1:5000/requests/approve/{self.getRequestID()}')
+        requests.patch(f'http://127.0.0.1:5000/appointments/{self.getAppointmentID()}/deny')
+        completeStatus = response.text
+
+        if response.status_code == 200:
+            return completeStatus , True
+        else:
+            return completeStatus , False
+        

@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon, QImage
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QImage, QBrush, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 from .model import Clinic
 from .PageManager import PageManager
@@ -30,17 +30,14 @@ class AdminClinicApprovalWindow(QMainWindow):
         # this is the header (logo, title, my back button
         self.centralWidget = QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
+        self.setPalette(palette)
+        self.setStyleSheet(f"QWidget#centralWidget {{background: {gradient}}};")
 
         # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralWidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
-
         self.headerTitle = QLabel(self.centralWidget)
         font = QFont()
         font.setFamily("Arial")
@@ -49,30 +46,62 @@ class AdminClinicApprovalWindow(QMainWindow):
         font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText(self.clinic.getClinicName())
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(230, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralWidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
 
-        self.adminClinicApprovalPictureLabel = QLabel(self.centralWidget)
-        self.adminClinicApprovalPictureLabel.setGeometry(QRect(180, 220, 400, 200))
-        self.adminClinicApprovalPictureLabel.setFrameShape(QtWidgets.QFrame.Box)
-        self.adminClinicApprovalPicture = QPixmap.fromImage(QImage.fromData(self.clinic.getCertification()))
-        self.adminClinicApprovalPictureLabel.setPixmap(self.adminClinicApprovalPicture)
+                                                        }
+                                                        QPushButton#backButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
+
+        self.adminClinicApprovalContainer = QLabel(self.centralWidget)
+        self.adminClinicApprovalContainer.setFixedSize(1000,500)
+        self.adminClinicApprovalContainer.setFrameShape(QtWidgets.QFrame.Box)
+        self.adminClinicApprovalContainer.setObjectName("approvalDetailsContainer")
+        self.adminClinicApprovalContainer.setStyleSheet("""QLabel#approvalDetailsContainer {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        
+        self.adminClinicApprovalDescriptionTitle = QLabel(self.centralWidget)
+        self.adminClinicApprovalDescriptionTitle.setGeometry(QRect(180, 190, 150, 40))
+        self.adminClinicApprovalDescriptionTitle.setText("Clinic Description: ")
 
         self.adminClinicApprovalDescriptionLabel = QLabel(self.centralWidget)
-        self.adminClinicApprovalDescriptionLabel.setGeometry(QRect(700, 220, 375, 200))
+        self.adminClinicApprovalDescriptionLabel.setGeometry(QRect(180, 220, 400, 200))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
@@ -81,6 +110,33 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminClinicApprovalDescriptionLabel.setFont(font)
         self.adminClinicApprovalDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \n Clinic Name: {self.clinic.getClinicName()} \n Clinic Status: {self.clinic.getClinicStatus()}")
         self.adminClinicApprovalDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.adminClinicApprovalDescriptionLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicApprovalDescriptionLabel.setStyleSheet("""QLabel {
+                                                                border-radius: 10px;
+                                                                border: 1px solid black;
+                                                                background: white;
+                                                                }""")
+        
+        self.adminGetClinicCertificationTitle = QLabel(self.centralWidget)
+        self.adminGetClinicCertificationTitle.setGeometry(QRect(730, 190, 150, 40))
+        self.adminGetClinicCertificationTitle.setText("Clinic Certification: ")
+        
+        self.adminGetClinicCertificationLabel = QLabel(self.centralWidget)
+        self.adminGetClinicCertificationLabel.setGeometry(QRect(730, 220, 375, 200))
+        self.adminGetClinicCertificationLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.adminGetClinicCertificationIcon = QPixmap.fromImage(QImage.fromData(self.clinic.getCertification()))
+        self.adminGetClinicCertificationIcon = self.adminGetClinicCertificationIcon.scaled(375, 200)
+        self.adminGetClinicCertificationLabel.setPixmap(self.adminGetClinicCertificationIcon)
+        self.adminGetClinicCertificationLabel.setStyleSheet("""QLabel {
+                                                                border-radius: 10px;
+                                                                border: 1px solid black;
+                                                                background: white;
+                                                                }""")
+
+        
+        self.adminClinicApprovalAddressTitle = QLabel(self.centralWidget)
+        self.adminClinicApprovalAddressTitle.setGeometry(QRect(180, 420, 150, 40))
+        self.adminClinicApprovalAddressTitle.setText("Clinic Address: ")
 
         self.adminClinicApprovalAddressLabel = QLabel(self.centralWidget)
         self.adminClinicApprovalAddressLabel.setGeometry(QRect(180, 450, 350, 200))
@@ -92,9 +148,15 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminClinicApprovalAddressLabel.setFont(font)
         self.adminClinicApprovalAddressLabel.setText(self.clinic.getClinicAddress())
         self.adminClinicApprovalAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
+        self.adminClinicApprovalAddressLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicApprovalAddressLabel.setStyleSheet("""QLabel {
+                                                                border-radius: 10px;
+                                                                border: 1px solid black;
+                                                                background: white;
+                                                                }""")
 
         self.adminApproveClinicButton = QPushButton(self.centralWidget)
-        self.adminApproveClinicButton.setGeometry(QRect(790, 450, 280, 100))
+        self.adminApproveClinicButton.setGeometry(QRect(710, 450, 375, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -102,34 +164,59 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminApproveClinicButton.setLayoutDirection(Qt.LeftToRight)
         self.adminApproveClinicButton.setText("Approve Clinic")
         self.adminApproveClinicButton.clicked.connect(self.adminApproveClinicFunction)
+        self.adminApproveClinicButton.setStyleSheet("""QPushButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+                                                        text-align: center; 
+                                                        color:white;
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                          text-align: center; 
+                                                          color:white;
+                                                        }""")
         self.adminApproveClinicButton.raise_()
 
         self.adminApproveClinicLabel = QLabel(self.centralWidget)
-        self.adminApproveClinicLabel.setGeometry(QRect(810, 475, 50, 50))
-        self.adminApproveClinicLabel.setFrameShape(QtWidgets.QFrame.Box)
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
+        self.adminApproveClinicLabel.setGeometry(QRect(730, 475, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-good-quality-50.png")
         self.adminApproveClinicIcon = QPixmap(filepath)
         self.adminApproveClinicIcon = self.adminApproveClinicIcon.scaled(50, 50)
         self.adminApproveClinicLabel.setPixmap(self.adminApproveClinicIcon)
+        
 
         self.adminDisapproveClinicButton = QPushButton(self.centralWidget)
-        self.adminDisapproveClinicButton.setGeometry(QRect(790, 565, 280, 100))
+        self.adminDisapproveClinicButton.setGeometry(QRect(710, 565, 375, 100))
         self.adminDisapproveClinicButton.setFont(font)
-        self.adminDisapproveClinicButton.setLayoutDirection(Qt.RightToLeft)
-        self.adminDisapproveClinicButton.setText("Request Cancel")
+        self.adminDisapproveClinicButton.setLayoutDirection(Qt.LeftToRight)
+        self.adminDisapproveClinicButton.setText(" Disapprove Clinic")
         self.adminDisapproveClinicButton.clicked.connect(self.adminDisapproveClinicFunction)
+        self.adminDisapproveClinicButton.setStyleSheet("""QPushButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
+                                                        text-align: center; 
+                                                        color:white;
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                          text-align: center; 
+                                                          color:white;
+                                                        }""")
+        self.adminDisapproveClinicButton.raise_()
 
-        self.adminDisapproveClinicLabel = QLabel(self.centralWidget)
-        self.adminDisapproveClinicLabel.setGeometry(QRect(810, 590, 50, 50))
-        self.adminDisapproveClinicLabel.setFrameShape(QtWidgets.QFrame.Box)
-        self.adminDisapproveClinicIcon = QPixmap.fromImage(QImage.fromData(self.clinic.getCertification()))
-        self.adminDisapproveClinicIcon = self.adminDisapproveClinicIcon.scaled(50, 50)
-        self.adminDisapproveClinicLabel.setPixmap(self.adminDisapproveClinicIcon)
+        self.adminDisapproveClinicIconLabel = QLabel(self.centralWidget)
+        self.adminDisapproveClinicIconLabel.setGeometry(QRect(730, 590, 50, 50))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-dislike-or-disagree-thumbs-down-symbol-under-circle-24.png")
+        self.adminDisapproveClinicButtonIcon = QPixmap(filepath)
+        self.adminDisapproveClinicButtonIcon = self.adminDisapproveClinicButtonIcon.scaled(50, 50)
+        self.adminDisapproveClinicIconLabel.setPixmap(self.adminDisapproveClinicButtonIcon)
 
-
-        self.adminClinicApprovalContainer = QLabel(self.centralWidget)
-        self.adminClinicApprovalContainer.setFixedSize(1000,500)
-        self.adminClinicApprovalContainer.setFrameShape(QtWidgets.QFrame.Box)
 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
@@ -138,9 +225,6 @@ class AdminClinicApprovalWindow(QMainWindow):
         mainLayout.addWidget(topSpacer)
         mainLayout.addWidget(self.adminClinicApprovalContainer)
         mainLayout.setAlignment(Qt.AlignHCenter)
-
-        self.adminDisapproveClinicButton.raise_()
-        self.adminApproveClinicButton.raise_()
 
         self.centralWidget.setLayout(mainLayout)
         MainWindow.setCentralWidget(self.centralWidget)

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButt
 from PyQt5 import QtWidgets
 from .ClinicDetailedSchedule import ClinicDetailedSchedule
 from .PageManager import FrameLayoutManager
-from src.model import geoHelper
+from src.model import geoHelper, Clinic
 from .model.AppointmentRepo import AppointmentRepository
 import sys
 import io
@@ -18,15 +18,15 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from folium import Map, Marker
 
 
-class ClinicMap(QWidget):
-    def __init__(self, clinic):
+class DoctorMap(QWidget):
+    def __init__(self, doctor):
         super().__init__()
-        self.clinic = clinic
-        self.currLocation = (self.clinic.getClinicLat(),self.clinic.getClinicLon())
+        self.doctor = doctor
+        self.clinic = Clinic.getClinicfromID(self.doctor.getClinicID())
+        self.currLocation = (self.clinic.getClinicLat(), self.clinic.getClinicLon())
         self.setupUi()
 
     def setupUi(self):
-
         self.centralwidget = QWidget()
 
         self.generateMapWidget()
@@ -48,26 +48,28 @@ class ClinicMap(QWidget):
                                                                             color: white;
                                                                         }""")
         self.mapWidgetLayout = QVBoxLayout(self.mapWidget)
-        
 
-        map = geoHelper.showMap(self.currLocation) #Return Folium Map
+        if self.currLocation == ('',''):
+            #Center of world
+            map = geoHelper.showMap((32.7502,114.7655))
+        else:
+            map = geoHelper.showMap(self.currLocation)  # Return Folium Map
 
-        geoHelper.addMarker(map,self.currLocation,'We are here!','red','star') # Current Loc
-        map = self.generatePatientMarkers(map=map)
+            geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
+            map = self.generatePatientMarkers(map=map)
 
         data = io.BytesIO()
-        map.save(data,close_file=False)
-        
+        map.save(data, close_file=False)
+
         webView = QWebEngineView()
         webView.setHtml(data.getvalue().decode())
-    
+
         self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
         self.mapWidgetLayout.addWidget(webView)
 
-
-    def generatePatientMarkers(self,map):
-        patientsWeekly =  AppointmentRepository.getPatientLocations(self.clinic.getClinicID())
+    def generatePatientMarkers(self, map):
+        patientsWeekly = AppointmentRepository.getPatientLocations(self.clinic.getClinicID())
         for patients in patientsWeekly:
-            geoHelper.addMarker(map,(patients.getPatientLat(),patients.getPatientLon()),patients.getPatientAddress()
-                                ,'lightblue','home')
+            geoHelper.addMarker(map, (patients.getPatientLat(), patients.getPatientLon()), patients.getPatientAddress()
+                                , 'lightblue', 'home')
         return map

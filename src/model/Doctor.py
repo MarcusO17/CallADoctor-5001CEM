@@ -106,3 +106,12 @@ class Doctor:
                 patientList.append(tempPatient)
                 
         return patientList   
+    
+    def getCertification(self):
+        response =  requests.get(f'http://127.0.0.1:5000/doctors/image/download/{self.doctorID}')
+        if response.status_code == 200:
+            print('Image Recieved')
+            return response.content
+        else:
+            print(f'Error: {response.status_code}')
+            return None

@@ -28,7 +28,7 @@ createPatientTable = '''CREATE TABLE patients (
                      patientName TEXT NOT NULL,
                      patientEmail TEXT NOT NULL,
                      patientPassword TEXT NOT NULL,
-                     patientICNumber INTEGER UNIQUE,
+                     patientICNumber TEXT UNIQUE,
                      address TEXT NOT NULL,
                      lat FLOAT,
                      lon FLOAT,
@@ -42,12 +42,12 @@ createClinicTable = '''CREATE TABLE clinics (
                      clinicName TEXT NOT NULL,
                      clinicEmail  TEXT NOT NULL,
                      clinicPassword TEXT NOT NULL,
-                     clinicContact INTEGER NOT NULL,
+                     clinicContact TEXT NOT NULL,
                      verifiedDoc BLOB,
                      address TEXT NOT NULL,
                      lat FLOAT,
                      lon FLOAT,
-                     governmentApproved BOOLEAN NOT NULL
+                     governmentApproved TEXT NOT NULL
                      )
                     '''
 
@@ -56,14 +56,14 @@ createDoctorTable = '''CREATE TABLE doctors (
                      clinicID VARCHAR(64),
                      doctorEmail  TEXT NOT NULL,
                      doctorPassword TEXT NOT NULL,
-                     doctorContact INTEGER NOT NULL,
+                     doctorContact TEXT  NOT NULL,
                      doctorName TEXT NOT NULL,
                      doctorType TEXT NOT NULL,
-                     doctorICNumber INTEGER UNIQUE,
+                     doctorICNumber TEXT UNIQUE,
                      certifiedDoc BLOB,
-                     yearOfExperience INTEGER,
+                     yearOfExperience TEXT,
                      status TEXT NOT NULL,
-                     FOREIGN KEY (clinicID) REFERENCES clinics(clinicID)
+                     FOREIGN KEY (clinicID) REFERENCES clinics(clinicID) ON DELETE CASCADE
                      )'''
 
 
@@ -78,14 +78,14 @@ createAppointmentTable = '''CREATE TABLE appointments (
                      appointmentDate DATE NOT NULL,
                      status TEXT NOT NULL,
                      visitReasons TEXT,
-                     FOREIGN KEY (patientID) REFERENCES patients(patientID)
+                     FOREIGN KEY (patientID) REFERENCES patients(patientID) ON DELETE CASCADE
                      )'''
 
 createPrescriptionTable = '''CREATE TABLE prescriptions (
                      prescriptionID VARCHAR(64) PRIMARY KEY,
                      appointmentID VARCHAR(64) NOT NULL,
                      expiryDate DATE NOT NULL,
-                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID)
+                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID) ON DELETE CASCADE
                      )'''
 
 createPrescriptionDetailsTable = '''CREATE TABLE prescription_details (
@@ -95,8 +95,8 @@ createPrescriptionDetailsTable = '''CREATE TABLE prescription_details (
                      pillsPerDay INTEGER NOT NULL,
                      food TEXT,
                      dosage INT,
-                     FOREIGN KEY (prescriptionID) REFERENCES prescriptions(prescriptionID),
-                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID)
+                     FOREIGN KEY (prescriptionID) REFERENCES prescriptions(prescriptionID) ON DELETE CASCADE,
+                     FOREIGN KEY (appointmentID) REFERENCES appointments(appointmentID) ON DELETE CASCADE
                      )'''
 
 createAdminTable = '''CREATE TABLE admins (
@@ -112,8 +112,8 @@ createRequestsTable = '''CREATE TABLE requests (
                      approvalStatus TEXT NOT NULL,
                      dateSubmitted DATE NOT NULL,
                      requestReason TEXT NOT NULL,
-                     appointmentID TEXT NOT NULL
-                     FOREIGN KEY (appointmentID) references appointments(appointmentID)
+                     appointmentID VARCHAR(64) NOT NULL,
+                     FOREIGN KEY (appointmentID) references appointments(appointmentID) ON DELETE CASCADE,
                      CONSTRAINT chk_approvalStatus CHECK (approvalStatus IN ('Pending', 'Approved', 'Rejected'))
                      )       
                     '''

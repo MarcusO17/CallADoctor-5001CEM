@@ -1,7 +1,8 @@
 import os
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont
+import re
+from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtGui import QFont, QColor, QBrush, QPixmap, QPalette
 from PyQt5.QtWidgets import QMainWindow, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QWidget, QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
@@ -12,13 +13,24 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
         def __init__(self):
                 super().__init__()
                 self.setupUi(self)
+                self.setupPatientPasswordLineEdit()
                 self.pageManager = PageManager()
 
 
 
         def setupUi(self, MainWindow):
+                CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+
                 MainWindow.setObjectName("MainWindow")
-                MainWindow.resize(800, 600)
+                MainWindow.setFixedWidth(1080)
+                MainWindow.setFixedHeight(720)
+
+                self.setAutoFillBackground(True)
+                palette = self.palette()
+                gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+                palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
+                self.setPalette(palette)
+                self.setStyleSheet(f"QWidget#MainWindow {{background: {gradient}}};")
 
 
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -26,7 +38,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Main Title for Patient Register set as Label 
                 self.patientRegMainTitle = QtWidgets.QLabel(self.centralwidget)
-                self.patientRegMainTitle.setGeometry(20, 40, 541, 51)
+                self.patientRegMainTitle.setGeometry(35, 50, 541, 51)
                 self.patientRegMainTitle.setText("Registration for Call-A-Doctor!")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -39,7 +51,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Sub TItle for Patient Register set  as Label 2
                 self.patientRegSubTitle = QtWidgets.QLabel(self.centralwidget)
-                self.patientRegSubTitle.setGeometry(60, 90, 451, 41)
+                self.patientRegSubTitle.setGeometry(35, 100, 451, 41)
                 self.patientRegSubTitle.setText("Get yourself registered now!")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -52,7 +64,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # First Name Text - set as Label 3
                 self.patientFirstNameLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientFirstNameLabel.setGeometry(30, 150, 221, 21)
+                self.patientFirstNameLabel.setGeometry(90, 220, 250, 21)
                 self.patientFirstNameLabel.setText("First Name as per IC/Passport")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -63,7 +75,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Line Edit for Entering First Name 
                 self.patientFirstNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientFirstNameLineEdit.setGeometry(30, 170, 221, 31)
+                self.patientFirstNameLineEdit.setGeometry(90, 240, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -74,7 +86,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Last Name Text - set as Label 4
                 self.patientLastNameLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientLastNameLabel.setGeometry(30, 240, 221, 16)
+                self.patientLastNameLabel.setGeometry(90, 310, 250, 16)
                 self.patientLastNameLabel.setText("Last Name as per IC/Passport")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -85,7 +97,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Line Edit for Entering Last Name 
                 self.patientLastNameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientLastNameLineEdit.setGeometry(30, 260, 221, 31)
+                self.patientLastNameLineEdit.setGeometry(90, 330, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -97,7 +109,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Email Text - set as label 5
                 self.patientEmailLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientEmailLabel.setGeometry(30, 330, 221, 16)
+                self.patientEmailLabel.setGeometry(90, 400, 250, 16)
                 self.patientEmailLabel.setText("Email")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -108,7 +120,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 #Line Edit for Entering Email 
                 self.patientEmailLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientEmailLineEdit.setGeometry(30, 350, 221, 31)
+                self.patientEmailLineEdit.setGeometry(90, 420, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -120,7 +132,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Contact Numebr Text - set as label 6
                 self.patientContactLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientContactLabel.setGeometry(30, 420, 221, 16)
+                self.patientContactLabel.setGeometry(90, 490, 250, 16)
                 self.patientContactLabel.setText("Contact Number")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -131,7 +143,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Line Edit for Entering Contact Number
                 self.patientContactLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientContactLineEdit.setGeometry(30, 440, 221, 31)
+                self.patientContactLineEdit.setGeometry(90, 510, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -141,7 +153,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Current Residence Address Text - Set as Label 7
                 self.patientResidenceLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientResidenceLabel.setGeometry(280, 150, 221, 16)
+                self.patientResidenceLabel.setGeometry(410, 220, 250, 16)
                 self.patientResidenceLabel.setText("Current Residence Address")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -152,7 +164,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Line Edit for Entering Address
                 self.patientResidenceLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientResidenceLineEdit.setGeometry(280, 170, 221, 31)
+                self.patientResidenceLineEdit.setGeometry(410, 240, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -163,7 +175,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Date of Birth Text - Set as Label 8
                 self.patientDOBLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientDOBLabel.setGeometry(280, 240, 221, 16)
+                self.patientDOBLabel.setGeometry(410, 310, 250, 16)
                 self.patientDOBLabel.setText("Date Of Birth")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -175,7 +187,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # Date-Edit for Selecting the DOB (The Function allows user to 
                 # directly select their Date, can add validation for age restrictions) 
                 self.patientDOBDateEdit = QtWidgets.QDateEdit(self.centralwidget)
-                self.patientDOBDateEdit.setGeometry(280, 260, 221, 31)
+                self.patientDOBDateEdit.setGeometry(410, 330, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -185,7 +197,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # IC or Passport Numebr Text - Set as Label 9
                 self.patientPassportLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientPassportLabel.setGeometry(280, 330, 221, 16)
+                self.patientPassportLabel.setGeometry(410, 400, 250, 16)
                 self.patientPassportLabel.setText("IC/Passport Number")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -196,18 +208,18 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Line-Edit for Entering the IC or passport number
                 self.patientPassportLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientPassportLineEdit.setGeometry(280, 350, 221, 31)
+                self.patientPassportLineEdit.setGeometry(410, 420, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
                 self.patientPassportLineEdit.setFont(font)
                 self.patientPassportLineEdit.setObjectName("patientPassportLineEdit")
-                self.patientPassportLineEdit.setPlaceholderText("example - i123133xx")
+                self.patientPassportLineEdit.setPlaceholderText("example - i123533xx")
 
 
                 # Patient Race Text - Set as Label 
                 self.patientRaceLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientRaceLabel.setGeometry(280, 420, 221, 16)
+                self.patientRaceLabel.setGeometry(410, 490, 250, 16)
                 self.patientRaceLabel.setText("Race")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -218,7 +230,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Line-Edit for patient's Race
                 self.patientRaceLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientRaceLineEdit.setGeometry(280, 440, 221, 31)
+                self.patientRaceLineEdit.setGeometry(410, 510, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -229,7 +241,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Blood Type Text - Set as Label
                 self.patientBloodTypeLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientBloodTypeLabel.setGeometry(530, 150, 221, 16)
+                self.patientBloodTypeLabel.setGeometry(720, 220, 250, 16)
                 self.patientBloodTypeLabel.setText("Blood Type")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -240,7 +252,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Line Edit for entering Blood Type
                 self.patientBloodTypeLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientBloodTypeLineEdit.setGeometry(530, 170, 221, 31)
+                self.patientBloodTypeLineEdit.setGeometry(720, 240, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -251,7 +263,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
 
                 # Password Text - Set as Label 10
                 self.patientPasswordLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientPasswordLabel.setGeometry(530, 240, 221, 16)
+                self.patientPasswordLabel.setGeometry(720, 310, 250, 16)
                 self.patientPasswordLabel.setText("Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -265,7 +277,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # Minimum 8 characters, upper case and lower case letters, numbers
                 # and Special Characters) 
                 self.patientPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientPasswordLineEdit.setGeometry(530, 260, 221, 31)
+                self.patientPasswordLineEdit.setGeometry(720, 330, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -276,13 +288,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientPasswordLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
 
                 self.showPatientPasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientPasswordCheckbox.setGeometry(530, 290, 221, 31)
+                self.showPatientPasswordCheckbox.setGeometry(720, 360, 250, 40)
                 self.showPatientPasswordCheckbox.stateChanged.connect(self.togglePatientPasswordVisibility)
 
 
                 # Confirm Password Text - set as Label 11
                 self.patientReEnterPassLabel = QtWidgets.QLabel(self.centralwidget)
-                self.patientReEnterPassLabel.setGeometry(530, 330, 221, 16)
+                self.patientReEnterPassLabel.setGeometry(720, 400, 250, 16)
                 self.patientReEnterPassLabel.setText("Confirm Password")
                 font = QtGui.QFont()
                 font.setFamily("Arial")
@@ -295,7 +307,7 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # need validation to check if previously written password and
                 # re-entered password same or not, if not, error 404)
                 self.patientReEnterPassLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-                self.patientReEnterPassLineEdit.setGeometry(530, 350, 221, 31)
+                self.patientReEnterPassLineEdit.setGeometry(720, 420, 250, 40)
                 font = QtGui.QFont()
                 font.setFamily("Arial")
                 font.setPointSize(9)
@@ -306,13 +318,24 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientReEnterPassLineEdit.textChanged.connect(self.validatePatientPasswordMatch)
 
                 self.showPatientRePasswordCheckbox = QtWidgets.QCheckBox("Show Password", self.centralwidget)
-                self.showPatientRePasswordCheckbox.setGeometry(530, 380, 221, 31)
+                self.showPatientRePasswordCheckbox.setGeometry(720, 450, 250, 40)
                 self.showPatientRePasswordCheckbox.stateChanged.connect(self.togglePatientReEnterPasswordVisibility)
 
 
+                self.patientFirstNameLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientLastNameLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientEmailLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientContactLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientResidenceLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientPassportLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientRaceLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientBloodTypeLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientPasswordLineEdit.textChanged.connect(self.removeHighlight)
+                self.patientReEnterPassLineEdit.textChanged.connect(self.removeHighlight)
+
                 # Register PushButton for Registering Account - (Saves the Data)
                 self.patientRegPushButton = QtWidgets.QPushButton(self.centralwidget)
-                self.patientRegPushButton.setGeometry(530, 440, 221, 41)
+                self.patientRegPushButton.setGeometry(410, 580, 250, 41)
                 self.patientRegPushButton.setText("Register")
 
                 # DONT MIND THIS - This is just me editing the STYLE SHEET for
@@ -343,13 +366,13 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 # Push Button for "Going Back to Login page" - 
 
                 self.patientGoBackLoginButton = QtWidgets.QPushButton(self.centralwidget)
-                self.patientGoBackLoginButton.setGeometry(530, 490, 221, 41)
+                self.patientGoBackLoginButton.setGeometry(410, 640, 250, 41)
                 self.patientGoBackLoginButton.setText("Go Back To Login")
                 #stylesheeet editing vv
                 stylesheet6 = """
                 QPushButton {
                         background-color: rgba(255, 255, 255, 10);
-                        color: rgb(0, 67, 202);
+                        color: rgb(225, 225, 225);
                         text-decoration: underline;
                 }
 
@@ -365,11 +388,15 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 self.patientGoBackLoginButton.clicked.connect(self.goBackLogin)
 
                 # Icon for LOGO - Set as Label 12        
-                self.patientRegisterLogo = QtWidgets.QLabel(self.centralwidget)
-                self.patientRegisterLogo.setGeometry(650, 50, 91, 61)
-                self.patientRegisterLogo.setText("LOGO Here")
-                self.patientRegisterLogo.setFrameShape(QtWidgets.QFrame.Box)
+                self.patientRegisterLogo = QLabel(self.centralwidget)
+                self.patientRegisterLogo.setGeometry(700, 30, 400, 150)
                 self.patientRegisterLogo.setObjectName("PatientRegisterLogo")
+                filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo.png")
+
+                self.patientRegisterLogoIcon = QPixmap(filepath)
+                self.patientRegisterLogoIcon = self.patientRegisterLogoIcon.scaled(300, 300)
+                self.patientRegisterLogo.setPixmap(self.patientRegisterLogoIcon)
+                self.patientRegisterLogo.setStyleSheet("margin-left: 60px;")
 
                 # Code for All Labels, Buttons, Line-Edits end here ^^^^^^^
 
@@ -379,19 +406,109 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
                 MainWindow.setStatusBar(self.statusbar)
                 MainWindow.setWindowTitle("Patient Register")
 
+        def setupPatientPasswordLineEdit(self):
+                self.patientPasswordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+                self.patientPasswordLineEdit.setGeometry(720, 330, 250, 40)
+                font = QtGui.QFont()
+                font.setFamily("Arial")
+                font.setPointSize(9)
+                self.patientPasswordLineEdit.setFont(font)
+                self.patientPasswordLineEdit.setObjectName("docPasswordLineEdit")
+                self.patientPasswordLineEdit.setPlaceholderText("example - SoMeThiNg@123")
+                self.patientPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+                self.patientPasswordLineEdit.textChanged.connect(self.updatePatientPasswordHighlight)
+
+        def removeHighlight(self):
+                sender = self.sender()  # Get the object that triggered the signal
+                sender.setStyleSheet("")
+
+        def highlightEmptyFields(self):
+                emptyFields = []
+
+                if self.patientFirstNameLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientFirstNameLineEdit)
+                if self.patientLastNameLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientLastNameLineEdit)
+                if self.patientEmailLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientEmailLineEdit)
+                if self.patientContactLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientContactLineEdit)
+                if self.patientResidenceLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientResidenceLineEdit)
+                if self.patientPassportLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientPassportLineEdit)
+                if self.patientRaceLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientRaceLineEdit)
+                if self.patientBloodTypeLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientBloodTypeLineEdit)
+                if self.patientPasswordLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientPasswordLineEdit)
+                if self.patientReEnterPassLineEdit.text().strip() == "":
+                        emptyFields.append(self.patientReEnterPassLineEdit)
+                
+
+                for field in emptyFields:
+                        field.setStyleSheet("border: 2px solid red;")
+
+                return not emptyFields
+        
+        def resetFieldStyles(self):
+                self.patientFirstNameLineEdit.setStyleSheet("")
+                self.patientLastNameLineEdit.setStyleSheet("")
+                self.patientEmailLineEdit.setStyleSheet("")
+                self.patientContactLineEdit.setStyleSheet("")
+                self.patientResidenceLineEdit.setStyleSheet("")
+                self.patientPassportLineEdit.setStyleSheet("")
+                self.patientRaceLineEdit.setStyleSheet("")
+                self.patientBloodTypeLineEdit.setStyleSheet("")
+                self.patientPasswordLineEdit.setStyleSheet("")
+                self.patientReEnterPassLineEdit.setStyleSheet("")
+
         # Creating Code for User (Patient) to save their data
         def patientSaveData(self):
 
+                self.resetFieldStyles()
+
+                if not self.highlightEmptyFields():
+                        QMessageBox.critical(self.centralwidget, "Empty Fields", "Please enter all details.")
+                        return
+                
+                if not self.validatePatientPasswordComplexity():
+                        QMessageBox.critical(
+                        self.centralwidget, "Weak Password",
+                        "Password must contain at least one letter, one special character, and one number."
+                        )
+                        return
+                
+                if not self.validatePatientPasswordMatch():
+                        QMessageBox.critical(self.centralwidget, "Password Mismatch", "Passwords do not match.")
+                        return
+                
+                patientName = f'{self.patientFirstNameLineEdit.text()} {self.patientLastNameLineEdit.text()}'
+                patientEmail = self.patientEmailLineEdit.text()
+
+                if not patientEmail.endswith("@gmail.com"):
+                        QMessageBox.critical(self.centralwidget, "Invalid Email", "Please enter a valid Gmail address.")
+                        return
+
+                patientContact = self.patientContactLineEdit.text()
+                address = self.patientResidenceLineEdit.text()
+                dateOfBirth = self.patientDOBDateEdit.date().toString(Qt.ISODate)
+                patientICNumber = self.patientPassportLineEdit.text()
+                patientPassword = self.patientPasswordLineEdit.text()
+                bloodType = self.patientBloodTypeLineEdit.text()
+                race = self.patientRaceLineEdit.text()
+
                 patientData = {
-                        "patientName": f'{self.patientFirstNameLineEdit.text()} {self.patientLastNameLineEdit.text()}',
-                        "patientEmail": self.patientEmailLineEdit.text(),
-                        "patientContact": self.patientContactLineEdit.text(),
-                        "address": self.patientResidenceLineEdit.text(),
-                        "dateOfBirth": self.patientDOBDateEdit.date().toString(Qt.ISODate),
-                        "patientICNumber": self.patientPassportLineEdit.text(),
-                        "patientPassword": self.patientPasswordLineEdit.text(),
-                        "bloodType": self.patientBloodTypeLineEdit.text(),
-                        "race": self.patientRaceLineEdit.text()
+                        "patientName": patientName,
+                        "patientEmail": patientEmail,
+                        "patientContact": patientContact,
+                        "address": address,
+                        "dateOfBirth": dateOfBirth,
+                        "patientICNumber": patientICNumber,
+                        "patientPassword": patientPassword,
+                        "bloodType": bloodType,
+                        "race": race
                 }
 
                 # marcus post to databasee here
@@ -428,11 +545,49 @@ class PatientRegisterWindow(QtWidgets.QMainWindow):
         
         def validatePatientPasswordMatch(self):
                 password = self.patientPasswordLineEdit.text()
-                reenter_password = self.patientReEnterPassLineEdit.text()
+                reenterPassword = self.patientReEnterPassLineEdit.text()
 
-                if password == reenter_password:
+                if password != reenterPassword:
                         # Passwords match, Color of the field will be green
-                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+                        return False
                 else:
                         # Passwords do not match, indicate an error, Color of the field will be red
-                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid red;")
+                        self.patientReEnterPassLineEdit.setStyleSheet("border: 2px solid green;")
+                        return True
+                
+
+        def validatePatientPasswordComplexity(self):
+                """
+                Validate password complexity: at least one letter, one special character, and one number.
+                """
+                password = self.patientPasswordLineEdit.text()
+
+                # Use regular expressions to check password complexity
+                pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$')
+
+                return bool(pattern.match(password))
+        
+        def updatePatientPasswordHighlight(self):
+                password = self.patientPasswordLineEdit.text()
+                lineEditPalette = QPalette()
+
+                # Check password complexity and set line color accordingly
+                if re.match(r'^[A-Za-z]*$', password) or re.match(r'^\d*$', password) or re.match(r'^[@$!%*?&]*$', password):
+                # Only letters or only numbers or only special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("red"))
+                elif (
+                        re.match(r'^[A-Za-z]+\d+$', password) or
+                        re.match(r'^\d+[A-Za-z]+$', password) or
+                        re.match(r'^[A-Za-z]+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+[A-Za-z]+$', password) or
+                        re.match(r'^\d+[@$!%*?&]+$', password) or
+                        re.match(r'^[@$!%*?&]+\d+$', password)
+                        ):
+                # Combination of two: letters and numbers, numbers and special characters, letters and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("yellow"))
+                else:
+                # Combination of all three: letters, numbers, and special characters
+                        lineEditPalette.setColor(QPalette.Base, QColor("green"))
+
+                self.patientPasswordLineEdit.setPalette(lineEditPalette)

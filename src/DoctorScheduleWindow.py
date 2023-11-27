@@ -2,9 +2,10 @@ import os
 import sys
 from datetime import datetime
 
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QApplication, QGridLayout, QVBoxLayout, \
+    QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -29,53 +30,77 @@ class DoctorScheduleWindow(QWidget):
         WIDTH = 8
         self.centralwidget = QWidget()
 
-        self.homepageTitle = QLabel(self.centralwidget)
-        self.homepageTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
-        self.homepageTitle.setFont(font)
-        self.homepageTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.homepageTitle.setText("Doctor Schedule")
-        self.homepageTitle.setAlignment(Qt.AlignCenter)
-        self.homepageTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setFont(font)
+        self.headerTitle.setText("My Schedule")
+        self.headerTitle.setObjectName("headerTitle")
+        self.headerTitle.setGeometry(QRect(80, 40, 800, 70))
+        self.headerTitle.setAlignment(Qt.AlignCenter)
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                   background: #D0BFFF;
+                                                   border-radius: 10px;
+                                                   }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
+
+        scheduleContainer = QLabel(self.centralwidget)
+        scheduleContainer.setGeometry(QRect(5, 145, 915, 520))
+        scheduleContainer.setStyleSheet("""QLabel {
+                                                background: #D0BFFF;
+                                                border-radius: 10px;
+                                                }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=10, color=QColor("#120855")
+        )
+        scheduleContainer.setGraphicsEffect(effect)
 
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         # header of the grid
         timeStart = 8
         timeEnd = 9
-        timeSlotLabelXStart = 275
+        timeSlotLabelXStart = 125
         for i in range(WIDTH):
             timeSlotLabel = QLabel(self.centralwidget)
-            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart,150,100,60))
-            timeSlotLabel.setStyleSheet("border: 1px solid black;")
-            timeSlotLabel.setText(str(timeStart) + ":00 - " + str(timeEnd)+ ":00")
-            timeSlotLabelXStart = timeSlotLabelXStart + 100
+            timeSlotLabel.setGeometry(QRect(timeSlotLabelXStart, 185, 95, 55))
+            timeSlotLabel.setStyleSheet("border: 1px solid black; border-radius: 3px; background-color: white;")
+            timeSlotLabel.setAlignment(Qt.AlignCenter)
+            timeSlotLabel.setText(str(timeStart) + ":00 - " + str(timeEnd) + ":00")
+            timeSlotLabel.raise_()
+            timeSlotLabelXStart = timeSlotLabelXStart + 95
             timeStart = timeStart + 1
             timeEnd = timeStart + 1
 
-        dayCellYStart = 210
+        dayCellYStart = 240
         # side of the grid
-        daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         for i in range(HEIGHT):
             dayCell = QLabel(self.centralwidget)
-            dayCell.setGeometry(QRect(175, dayCellYStart, 100, 60))
-            dayCell.setStyleSheet("border: 1px solid black;")
+            dayCell.setGeometry(QRect(30, dayCellYStart, 95, 55))
+            dayCell.setStyleSheet(
+                "border: 1px solid black; border-radius: 3px; text-align: center; background-color: white")
+            dayCell.setAlignment(Qt.AlignCenter)
+            dayCell.raise_()
             dayCell.setText(daysOfTheWeek[i])
-            dayCellYStart = dayCellYStart + 60
+            dayCellYStart = dayCellYStart + 55
 
-        tempButtonYStart = 150
+        tempButtonYStart = 185
         for h in range(HEIGHT):
-            tempButtonXStart = 275
-            tempButtonYStart = tempButtonYStart + 60
+            tempButtonXStart = 125
+            tempButtonYStart = tempButtonYStart + 55
             for w in range(WIDTH):
                 timeSlotButton = QPushButton(self.centralwidget)
-                timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 100, 60))
-                timeSlotButton.setStyleSheet("border: 1px solid black;")
-                tempButtonXStart = tempButtonXStart + 100
+                timeSlotButton.setGeometry(QRect(tempButtonXStart, tempButtonYStart, 95, 55))
+                timeSlotButton.setStyleSheet(
+                    "border: 1px solid black; border-radius: 3px; text-align: center; background-color: white;")
+                timeSlotButton.raise_()
+                tempButtonXStart = tempButtonXStart + 95
                 self.timeSlotButtonList[h][w] = timeSlotButton
                 timeSlotButton.setEnabled(False)
 
@@ -116,13 +141,13 @@ class DoctorScheduleWindow(QWidget):
             #print(date)
             #dateTemp = dateTemp.split("-") #YYYY-MM-DD
 
-            row = date.weekday()+1
+            row = date.weekday()
             if endTime - startTime >= 1:
                 duration = endTime - startTime
                 col = startTime - 7
                 for i in range(duration):
                     self.timeSlotButtonList[row][col+(i-1)].setText("Appointment")
-                    self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("background-color: green;")
+                    self.timeSlotButtonList[row][col+(i-1)].setStyleSheet("border: 1px solid black; border-radius: 3px; text-align: center; background-color: green;")
                     self.timeSlotButtonList[row][col+(i-1)].setEnabled(True)
                     self.timeSlotButtonList[row][col+(i-1)].clicked.connect(lambda checked, appointment=appointment: self.gotoAppointment(appointment, self.doctor))
 

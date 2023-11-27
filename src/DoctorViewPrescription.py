@@ -1,9 +1,9 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea
+    QScrollArea, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 
 from .AccountPage import AccountPage
@@ -28,7 +28,7 @@ class DoctorViewPrescription(QWidget):
 
         # use appointmentID to get prescriptionID
         self.prescription = PrescriptionRepo.PrescriptionRepository.getPrescriptionListByAppointment(
-                            self.appointment.getAppointmentID())
+                            self.appointment.getAppointmentID())[0]
 
         self.setupUi()
 
@@ -40,64 +40,87 @@ class DoctorViewPrescription(QWidget):
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Montserrat")
+        font.setPointSize(16)
         self.headerTitle.setFont(font)
         self.headerTitle.setText(f"{self.patient.getPatientName()} - Prescription Details")
-        self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(100, 40, 800, 70))
+        self.headerTitle.setObjectName("headerTitle")
+        self.headerTitle.setGeometry(QRect(80, 40, 700, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
-        self.backButton.setFixedSize(70, 70)
-        self.backButton.setGeometry(QRect(900, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        self.backButton.setGeometry(QRect(800, 40, 70, 70))
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                stop: 1 rgba(59, 41, 168, 255));
+                                        border-radius: 10px; color: white;
+
+                                        }
+                                        QPushButton#backButton:hover
+                                        {
+                                          background-color: #7752FE;
+                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
 
         rowContainer = QWidget()
+        rowContainer.setObjectName("rowContainer")
+        rowContainer.setStyleSheet("""QWidget#rowContainer {
+                                        background: #D0BFFF;
+                                        border-radius: 10px;
+                                        margin-left: 50px;
+                                        }""")
         rowLayout = QVBoxLayout(rowContainer)
         rowContainer.setContentsMargins(20, 20, 20, 20)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setObjectName("scrollArea")
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         medicationNameLabel = QLabel(self.centralwidget)
-        medicationNameLabel.setGeometry(QRect(80, 120, 300, 50))
-        medicationNameLabel.setFrameShape(QtWidgets.QFrame.Box)
+        medicationNameLabel.setGeometry(QRect(40, 120, 300, 50))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(10)
-        font.setWeight(75)
         medicationNameLabel.setFont(font)
         medicationNameLabel.setText("Medication Name: ")
 
         dosageLabel = QLabel(self.centralwidget)
-        dosageLabel.setGeometry(QRect(420, 120, 150, 50))
-        dosageLabel.setFrameShape(QtWidgets.QFrame.Box)
+        dosageLabel.setGeometry(QRect(380, 120, 150, 50))
         dosageLabel.setFont(font)
         dosageLabel.setText("Dosage: ")
 
         pillsPerDayLabel = QLabel(self.centralwidget)
-        pillsPerDayLabel.setGeometry(QRect(610, 120, 150, 50))
-        pillsPerDayLabel.setFrameShape(QtWidgets.QFrame.Box)
+        pillsPerDayLabel.setGeometry(QRect(570, 120, 100, 50))
         pillsPerDayLabel.setFont(font)
         pillsPerDayLabel.setText("Pills Per Day: ")
 
         foodLabel = QLabel(self.centralwidget)
-        foodLabel.setGeometry(QRect(790, 120, 200, 50))
-        foodLabel.setFrameShape(QtWidgets.QFrame.Box)
+        foodLabel.setGeometry(QRect(710, 120, 200, 50))
         foodLabel.setFont(font)
         foodLabel.setText("Before/After Eating: ")
 
 
-        self.prescriptionDetailsList = [prescription.getPrescriptionDetails for prescription in self.prescription]
+        self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
 
         for count, prescriptionDetails in enumerate(self.prescriptionDetailsList):
             prescriptionMedicationName = QLabel()
@@ -106,28 +129,46 @@ class DoctorViewPrescription(QWidget):
             font = QFont()
             font.setFamily("Arial")
             font.setPointSize(16)
-            font.setBold(True)
-            font.setWeight(75)
             prescriptionMedicationName.setFont(font)
             prescriptionMedicationName.setText(prescriptionDetails.getMedicationName())
+            prescriptionMedicationName.setStyleSheet("""QLabel {
+                                                    border-radius: 10px;
+                                                    border: 1px solid black;
+                                                    background: white;
+                                                    }""")
 
             prescriptionDosage = QLabel()
-            prescriptionDosage.setFixedSize(150,50)
+            prescriptionDosage.setFixedSize(130,50)
             prescriptionDosage.setFrameShape(QtWidgets.QFrame.Box)
             prescriptionDosage.setFont(font)
-            prescriptionDosage.setText(prescriptionDetails.getDosage())
+            prescriptionDosage.setText(str(prescriptionDetails.getDosage()))
+            prescriptionDosage.setStyleSheet("""QLabel {
+                                                border-radius: 10px;
+                                                border: 1px solid black;
+                                                background: white;
+                                                }""")
 
             prescriptionPillsPerDay = QLabel()
-            prescriptionPillsPerDay.setFixedSize(150,50)
+            prescriptionPillsPerDay.setFixedSize(100,50)
             prescriptionPillsPerDay.setFrameShape(QtWidgets.QFrame.Box)
             prescriptionPillsPerDay.setFont(font)
             prescriptionPillsPerDay.setText(str(prescriptionDetails.getPillsPerDay()))
+            prescriptionPillsPerDay.setStyleSheet("""QLabel {
+                                                    border-radius: 10px;
+                                                    border: 1px solid black;
+                                                    background: white;
+                                                    }""")
 
             prescriptionFood = QLabel()
             prescriptionFood.setFixedSize(150,50)
             prescriptionFood.setFrameShape(QtWidgets.QFrame.Box)
             prescriptionFood.setFont(font)
             prescriptionFood.setText(prescriptionDetails.getFood())
+            prescriptionFood.setStyleSheet("""QLabel {
+                                            border-radius: 10px;
+                                            border: 1px solid black;
+                                            background: white;
+                                            }""")
 
             row = QHBoxLayout()
             row.addWidget(prescriptionMedicationName)
@@ -138,8 +179,17 @@ class DoctorViewPrescription(QWidget):
             rowContainer.layout().addLayout(row)
 
         boxScrollArea.setWidget(rowContainer)
-        boxScrollArea.setFixedSize(1000, 500)
-        boxScrollArea.setStyleSheet("margin-left: 100px; margin top: 20px")
+        boxScrollArea.setFixedSize(900, 500)
+        boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    margin-left: 30px;
+                                                    }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        boxScrollArea.setGraphicsEffect(effect)
+
         mainLayout = QVBoxLayout()
 
         mainLayout.addWidget(self.centralwidget)

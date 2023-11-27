@@ -28,10 +28,14 @@ class ClinicDashboard(QWidget):
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
+        self.doctorList = list()
+        self.unassignedAppointmentList = list()
+        self.requestReviewButtons = QVBoxLayout()
+        self.doctorWidgetsRow = QHBoxLayout()
 
         self.generateDoctorWidgets()
 
-        self.generateRequestReview()
+        self.generateRequestButtons()
 
         self.generateGraphWidget()
 
@@ -43,7 +47,7 @@ class ClinicDashboard(QWidget):
 
         self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
-        spacer.setFixedWidth(0)
+        spacer.setFixedWidth(180)
         self.userInfoLayout.addWidget(spacer)
         self.userInfoWidget = QLabel(f"{self.clinic.getClinicName()}")
         self.userInfoWidget.setObjectName("userInfoWidget")
@@ -84,10 +88,6 @@ class ClinicDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\6044355.jpg")
-        backgroundImage = QPixmap(filepath)
-        self.setStyleSheet(f"background-image: url({backgroundImage});")
-
     def generateDoctorWidgets(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -96,12 +96,21 @@ class ClinicDashboard(QWidget):
         self.doctorWidgets.setStyleSheet("background-color: transparent;")
         doctorWidgetsLayout = QVBoxLayout(self.doctorWidgets)
 
-        doctorWidgetsRow = QHBoxLayout()
+        print(self.doctorWidgetsRow.count())
+        for i in range(self.doctorWidgetsRow.count()):
+            widget = self.doctorWidgetsRow.takeAt(0).widget()
+            self.doctorWidgetsRow.removeWidget(widget)
+            print("in the loop doctor widget ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 doctor widget")
+
+        self.doctorList.clear()
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.doctorTitle = QLabel()
-        self.doctorTitle.setFixedWidth(170)
+        self.doctorTitle.setFixedWidth(140)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -126,49 +135,67 @@ class ClinicDashboard(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-doctor-64.png")
         doctorIcon = QIcon(filepath)
 
-        for count, doctor in enumerate(threeDoctorList):
-            doctorButton = QPushButton()
-            doctorButton.setFixedSize(QSize(100, 100))
-            doctorButton.setIconSize(QSize(45, 45))
-            doctorButton.setIcon(doctorIcon)
-            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
+        if len(threeDoctorList) == 0:
+            emptyDoctor = QLabel()
+            emptyDoctor.setFont(buttonFont)
+            emptyDoctor.setAlignment(Qt.AlignCenter)
+            emptyDoctor.setText("No Doctors")
+            emptyDoctor.setObjectName("emptyDoctor")
+            emptyDoctor.setFixedSize(450, 100)
+            emptyDoctor.setStyleSheet("""QLabel#emptyDoctor {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                            stop: 0 rgba(25, 4, 130, 255), 
+                                                                                            stop: 1 rgba(119, 82, 254, 255)
+                                                                                        );
+                                                                                        border-radius: 10px;
+                                                                                        text-align: center;
+                                                                                        color: white;
+                                                                                    }""")
+            self.doctorWidgetsRow.addWidget(emptyDoctor)
 
-            font = QFont()
-            font.setFamily("Montserrat")
-            font.setPointSize(12)
+        else:
+            for count, doctor in enumerate(threeDoctorList):
+                doctorButton = QPushButton()
+                doctorButton.setFixedSize(QSize(100, 100))
+                doctorButton.setIconSize(QSize(45, 45))
+                doctorButton.setIcon(doctorIcon)
+                doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
 
-            doctorLabel = QLabel()
-            doctorLabel.setFont(font)
-            doctorNameSliced = doctor.getDoctorName()[:8]
-            doctorLabel.setText(f"{doctorNameSliced}..")
-            doctorLabel.setStyleSheet("color: white;")
+                font = QFont()
+                font.setFamily("Montserrat")
+                font.setPointSize(12)
 
-            doctorWidget = QWidget()
-            effect = QGraphicsDropShadowEffect(
-                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
-            )
-            doctorWidget.setGraphicsEffect(effect)
-            doctorWidget.setFixedSize(125, 125)
-            doctorWidget.setObjectName("doctorButton")
-            doctorWidget.setStyleSheet("""QWidget#doctorButton {
-                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                stop: 0 rgba(10, 2, 85, 255), 
-                                                stop: 1 rgba(59, 41, 168, 255)
-                                            );
-                                            border-radius: 10px; padding-left: 5px; padding-bottom: 10px;
-                                        }
-                                        QWidget#doctorButton:hover
-                                            {
-                                              background-color: #7752FE;
-                                              text-align: left; 
-                                              padding-left: 20px;}""")
-            doctorLayout = QVBoxLayout(doctorWidget)
-            doctorLayout.addWidget(doctorButton)
-            doctorLayout.addWidget(doctorLabel)
+                doctorLabel = QLabel()
+                doctorLabel.setFont(font)
+                doctorNameSliced = doctor.getDoctorName()[:8]
+                doctorLabel.setText(f"{doctorNameSliced}..")
+                doctorLabel.setStyleSheet("color: white;")
 
-            doctorWidgetsRow.addWidget(doctorWidget)
+                doctorWidget = QWidget()
+                effect = QGraphicsDropShadowEffect(
+                    offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+                )
+                doctorWidget.setGraphicsEffect(effect)
+                doctorWidget.setFixedSize(125, 125)
+                doctorWidget.setObjectName("doctorButton")
+                doctorWidget.setStyleSheet("""QWidget#doctorButton {
+                                                background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                    stop: 1 rgba(59, 41, 168, 255)
+                                                );
+                                                border-radius: 10px; padding-left: 5px; padding-bottom: 10px;
+                                            }
+                                            QWidget#doctorButton:hover
+                                                {
+                                                  background-color: #7752FE;
+                                                  text-align: left; 
+                                                  padding-left: 20px;}""")
+                doctorLayout = QVBoxLayout(doctorWidget)
+                doctorLayout.addWidget(doctorButton)
+                doctorLayout.addWidget(doctorLabel)
 
-        doctorWidgetsLayout.addLayout(doctorWidgetsRow)
+                self.doctorWidgetsRow.addWidget(doctorWidget)
+
+            doctorWidgetsLayout.addLayout(self.doctorWidgetsRow)
 
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorSchedule = ClinicDetailedSchedule(doctor, clinic)
@@ -181,18 +208,29 @@ class ClinicDashboard(QWidget):
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
 
-    def generateRequestReview(self):
+    def generateRequestButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
         self.requestReviewWidget = QWidget()
         self.requestReviewWidget.setStyleSheet("background-color: transparent;")
         self.requestReviewLayout = QVBoxLayout(self.requestReviewWidget)
+        self.requestReviewLayout.setSpacing(0)
+
+        for i in range(self.requestReviewButtons.count()):
+            widget = self.requestReviewButtons.itemAt(0).widget()
+            self.requestReviewButtons.removeWidget(widget)
+            print("in the loop request review ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget request review")
+
+        self.unassignedAppointmentList.clear()
 
         spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        spacer.setFixedWidth(110)
         self.requestReviewTitle = QLabel()
-        self.requestReviewTitle.setFixedWidth(300)
+        self.requestReviewTitle.setFixedSize(270,50)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)
@@ -205,6 +243,8 @@ class ClinicDashboard(QWidget):
 
         self.requestReviewLayout.addLayout(headerRow)
         self.requestReviewLayout.setContentsMargins(20, 20, 20, 20)
+
+        self.unassignedAppointmentList.clear()
 
         #get 3 reviews here
         buttonFont = QFont()
@@ -222,12 +262,25 @@ class ClinicDashboard(QWidget):
         if len(threeAppointments) == 0:
             emptyReviews = QLabel()
             emptyReviews.setFont(buttonFont)
+            emptyReviews.setAlignment(Qt.AlignCenter)
             emptyReviews.setText("Empty Reviews")
-            emptyReviews.setStyleSheet("margin-left: 50px")
-            self.requestReviewLayout.addWidget(emptyReviews)
+            emptyReviews.setObjectName("emptyReviews")
+            emptyReviews.setFixedSize(440, 470)
+            emptyReviews.setStyleSheet("""QWidget#emptyReviews {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(25, 4, 130, 255), 
+                                                                            stop: 1 rgba(119, 82, 254, 255)
+                                                                        );
+                                                                        border-radius: 10px;
+                                                                        text-align: center;
+                                                                        color: white;
+                                                                    }""")
+
+            self.requestReviewButtons.addWidget(emptyReviews)
         else:
             for count, request in enumerate(threeAppointments):
-                buttonRow = QHBoxLayout()
+
+                buttonRowWidget = QWidget()
+                buttonRow = QHBoxLayout(buttonRowWidget)
                 spacer = QWidget()
                 spacer.setFixedWidth(0)
                 spacer.setFixedHeight(120)
@@ -258,16 +311,13 @@ class ClinicDashboard(QWidget):
                 self.requestButton.setGraphicsEffect(effect)
 
                 buttonRow.addWidget(self.requestButton)
-                self.requestReviewLayout.addLayout(buttonRow)
-
+                self.requestReviewButtons.addWidget(buttonRowWidget)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.requestReviewLayout.addWidget(spacer)
+        self.requestReviewButtons.addWidget(spacer)
 
-        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-document-60.png")
-        self.appointmentButtonIcon = QIcon(filepath)
+        self.requestReviewLayout.addLayout(self.requestReviewButtons)
 
     def requestButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click
@@ -288,7 +338,7 @@ class ClinicDashboard(QWidget):
         self.graphWidgetLayout = QVBoxLayout(self.graphWidget)
 
         self.widgetTitle = QLabel()
-        self.widgetTitle.setFixedWidth(250)
+        self.widgetTitle.setFixedWidth(225)
         font = QFont()
         font.setFamily("Montserrat")
         font.setPointSize(20)

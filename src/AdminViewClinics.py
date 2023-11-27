@@ -1,15 +1,13 @@
 import os
 import sys
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication, \
-    QScrollArea, QSizePolicy
+from PyQt5.QtCore import Qt, QRect, QMetaObject, QSize, QPoint
+from PyQt5.QtGui import QFont, QPixmap, QIcon, QColor, QBrush
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QScrollArea, QSizePolicy, QGraphicsDropShadowEffect
 from PyQt5 import QtWidgets
 from .AdminViewClinicDetails import AdminViewClinicDetailsWindow
 from .model.Clinic import Clinic
 from .model.ClinicRepo import ClinicRepository
 from .PageManager import PageManager
-
 
 
 class AdminViewClinicsWindow(QMainWindow):
@@ -30,72 +28,121 @@ class AdminViewClinicsWindow(QMainWindow):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        # header (probably reused in most files)
-        self.topLeftLogo = QLabel(self.centralwidget)
-        self.topLeftLogo.setFrameShape(QtWidgets.QFrame.Box)
-        self.topLeftLogo.setGeometry(QRect(20, 10, 60, 60))
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo-placeholder-image.png")
-        self.topLeftLogoIcon = QPixmap(filepath)
-        self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(60, 60)
-        self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
+        palette.setBrush(self.backgroundRole(), QBrush(QColor(0, 0, 0, 0)))
+        self.setPalette(palette)
+        self.setStyleSheet(f"QWidget#centralwidget {{background: {gradient}}};")
 
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Clinics Under CaD")
+        self.headerTitle.setObjectName("headerTitle")
         self.headerTitle.setFrameShape(QtWidgets.QFrame.Box)
-        self.headerTitle.setGeometry(QRect(200, 40, 800, 70))
+        self.headerTitle.setGeometry(QRect(225, 40, 800, 70))
         self.headerTitle.setAlignment(Qt.AlignCenter)
-        self.headerTitle.setStyleSheet("margin-left: 20px; margin-right: 20px")
-
+        self.headerTitle.setStyleSheet("""QLabel#headerTitle {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.headerTitle.setGraphicsEffect(effect)
 
         # Push Button 5 (Log Out)
         self.backButton = QPushButton(self.centralwidget)
         self.backButton.setFixedSize(70, 70)
         self.backButton.setGeometry(QRect(1150, 40, 70, 70))
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\backbutton.png")
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-back-64.png")
         self.backIcon = QIcon(filepath)
         self.backButton.setIconSize(QSize(70, 70))
         self.backButton.setIcon(self.backIcon)
+        self.backButton.setObjectName("backButton")
         self.backButton.clicked.connect(self.backButtonFunction)
+        self.backButton.setStyleSheet("""QPushButton#backButton {
+                                                        background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                stop: 0 rgba(10, 2, 85, 255), 
+                                                                                stop: 1 rgba(59, 41, 168, 255));
+                                                        border-radius: 10px; color: white;
 
-        buttonContainer = QWidget()
-        button_layout = QVBoxLayout(buttonContainer)
-        buttonContainer.setContentsMargins(20,20,20,20)
+                                                        }
+                                                        QPushButton#backButton:hover
+                                                        {
+                                                          background-color: #7752FE;
+                                                        }""")
+
+        effect = QGraphicsDropShadowEffect(
+            offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+        )
+        self.backButton.setGraphicsEffect(effect)
+
+        self.buttonContainer = QWidget()
+        self.buttonContainer.setObjectName("buttonContainer")
+        self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
+                                                            background: #D0BFFF;
+                                                            border-radius: 10px;
+                                                            }""")
+        buttonLayout = QVBoxLayout(self.buttonContainer)
+        buttonLayout.setSpacing(20)
+        self.buttonContainer.setContentsMargins(20, 20, 20, 20)
         boxScrollArea = QScrollArea()
+        boxScrollArea.setObjectName("scrollArea")
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        #Get Clinics
+        # Get Clinics
         clinicList = ClinicRepository.getClinicList()
 
         buttonFont = QFont()
-        buttonFont.setFamily("Arial")
+        buttonFont.setFamily("Montserrat")
         buttonFont.setPointSize(28)
         buttonFont.setBold(True)
         buttonFont.setWeight(75)
 
-        #Inserting  All the Clinics 
+        # Inserting All the Clinics
         for count, clinic in enumerate(clinicList):
             self.clinicButton = QPushButton()
             self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
-            self.clinicButton.setText(clinic.getClinicID() + " - " + clinic.getClinicName())
             self.clinicButton.setFont(buttonFont)
-            self.clinicButton.setFixedSize(QSize(900,150))
+            self.clinicButton.setFixedSize(QSize(900, 150))
             self.clinicButton.clicked.connect(lambda checked, clinic=clinic: self.clinicButtonFunction(clinic, self.adminID))
-            buttonContainer.layout().addWidget(self.clinicButton)
+            self.buttonContainer.layout().addWidget(self.clinicButton)
+            self.clinicButton.setStyleSheet("""QPushButton {
+                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                            stop: 0 rgba(10, 2, 85, 255), 
+                                                                            stop: 1 rgba(59, 41, 168, 255));
+                                                    border-radius: 10px; color: white;
+                                                    text-align: center; 
+                                                    padding-left: 20px;
+                                                    }
+                                                    QPushButton:hover
+                                                    {
+                                                      background-color: #7752FE;
+                                                      text-align: center; 
+                                                      padding-left: 20px;
+                                                    }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            self.clinicButton.setGraphicsEffect(effect)
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        buttonContainer.layout().addWidget(spacer)
+        self.buttonContainer.layout().addWidget(spacer)
 
-        boxScrollArea.setWidget(buttonContainer)
-        boxScrollArea.setFixedSize(1000,500)
+        boxScrollArea.setWidget(self.buttonContainer)
+        boxScrollArea.setFixedSize(1000, 500)
+        boxScrollArea.setStyleSheet("""QScrollArea#scrollArea {
+                                                    background: #D0BFFF;
+                                                    border-radius: 10px;
+                                                    }""")
+
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
         mainLayout = QVBoxLayout()
