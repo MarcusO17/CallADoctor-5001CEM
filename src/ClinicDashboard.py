@@ -96,14 +96,12 @@ class ClinicDashboard(QWidget):
         self.doctorWidgets.setStyleSheet("background-color: transparent;")
         doctorWidgetsLayout = QVBoxLayout(self.doctorWidgets)
 
-        print(self.doctorWidgetsRow.count())
-        for i in range(self.doctorWidgetsRow.count()):
-            widget = self.doctorWidgetsRow.takeAt(0).widget()
-            self.doctorWidgetsRow.removeWidget(widget)
-            print("in the loop doctor widget ", i)
-            if widget is not None:
+        while self.doctorWidgetsRow.count():
+            item = self.doctorWidgetsRow.takeAt(0)
+            widget = item.widget()
+            if widget:
+                self.doctorWidgetsRow.removeItem(item)
                 widget.deleteLater()
-                print("deleting 1 doctor widget")
 
         self.doctorList.clear()
 
@@ -136,6 +134,7 @@ class ClinicDashboard(QWidget):
         doctorIcon = QIcon(filepath)
 
         if len(threeDoctorList) == 0:
+            print("trigger no doctor label")
             emptyDoctor = QLabel()
             emptyDoctor.setFont(buttonFont)
             emptyDoctor.setAlignment(Qt.AlignCenter)
@@ -195,7 +194,7 @@ class ClinicDashboard(QWidget):
 
                 self.doctorWidgetsRow.addWidget(doctorWidget)
 
-            doctorWidgetsLayout.addLayout(self.doctorWidgetsRow)
+        doctorWidgetsLayout.addLayout(self.doctorWidgetsRow)
 
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorSchedule = ClinicDetailedSchedule(doctor, clinic)

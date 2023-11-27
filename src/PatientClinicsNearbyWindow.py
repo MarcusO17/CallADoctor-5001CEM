@@ -72,19 +72,22 @@ class PatientClinicsNearbyWindow(QWidget):
         clinicList = ClinicRepository.getClinicList()
         #Get Approved Clinics
         clinicList = [clinic for clinic in clinicList if clinic.getClinicStatus() == 'Approved']
+        currentLoc = (self.patient.getPatientLat(),self.patient.getPatientLon())
+        distanceToClinic = [round(geoHelper.getDistance(currentLoc,(clinic.getClinicLat(),clinic.getClinicLon())),3) for clinic in clinicList]
 
+        print('distance',distanceToClinic)
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")
         buttonFont.setPointSize(20)
 
         self.clinicButtonList = list()
 
-        #Insert All the Clinics 
+        #Insert All the Clinics
+        count = 0
         for count, clinic in enumerate(clinicList):
 
             clinicRowWidget = QWidget()
             clinicRow = QHBoxLayout(clinicRowWidget)
-
 
             updateMapButton = QPushButton()
             updateMapButton.setFixedSize(QSize(100, 100))
@@ -150,9 +153,35 @@ class PatientClinicsNearbyWindow(QWidget):
             clinicRow.addWidget(self.clinicButton)
             clinicRow.addWidget(updateMapButton)
 
-            self.clinicButtonList.append(clinicRow)
+            clinicElementWidget = QWidget()
+            clinicElementLayout = QVBoxLayout(clinicElementWidget)
+            clinicElementLayout.setSpacing(0)
+            clinicElementLayout.addWidget(clinicRowWidget)
 
-            self.buttonContainer.layout().addWidget(clinicRowWidget)
+            clinicDistanceRowWidget =QWidget()
+            clinicDistanceRow = QHBoxLayout(clinicDistanceRowWidget)
+
+            clinicDistance = QLabel()
+            clinicDistance.setText(f"Distance to Clinic: {distanceToClinic[count]} km")
+            clinicDistance.setFixedSize(180, 15)
+            font = QFont()
+            font.setFamily("Montserrat")
+            font.setPointSize(9)
+            clinicDistance.setFont(font)
+            spacer = QWidget()
+            spacer.setFixedHeight(0)
+            spacer.setFixedWidth(50)
+            clinicDistanceRow.addWidget(spacer)
+            clinicDistanceRow.addWidget(clinicDistance)
+
+            clinicElementLayout.addWidget(clinicDistanceRowWidget)
+
+            clinicElementRow = (clinicRow, clinicDistance)
+
+            self.clinicButtonList.append(clinicElementRow)
+
+            self.buttonContainer.layout().addWidget(clinicElementWidget)
+            count = count + 1
 
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -165,6 +194,7 @@ class PatientClinicsNearbyWindow(QWidget):
                                                     border-radius: 10px;
                                                     margin-left: 80px;
                                                     }""")
+        boxScrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         effect = QGraphicsDropShadowEffect(
             offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
         )
@@ -219,10 +249,11 @@ class PatientClinicsNearbyWindow(QWidget):
         searchedText = self.searchBar.text().strip().lower()
 
         for clinicRow in self.clinicButtonList:
-            button = clinicRow.itemAt(0).widget()
+            button = clinicRow[0].itemAt(0).widget()
             text = button.text().lower()
-            for i in range(clinicRow.count()):
-                clinicRow.itemAt(i).widget().setVisible(searchedText in text)
+            for i in range(clinicRow[0].count()):
+                clinicRow[0].itemAt(i).widget().setVisible(searchedText in text)
+                clinicRow[1].setVisible(searchedText in text)
 
     def generateMapWidget(self,clinicList):
         self.mapWidget = QWidget()
