@@ -232,6 +232,15 @@ class DoctorDashboard(QWidget):
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
         self.upcomingAppointmentLayout.setSpacing(0)
 
+        for i in range(self.upcomingAppointmentButtons.count()):
+            item = self.upcomingAppointmentButtons.itemAt(0)
+            self.upcomingAppointmentButtons.removeItem(item)
+            widget = item.widget()
+            print("in the loop upcoming appointment ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget upcoming appointment")
+
         spacer = QWidget()
         spacer.setFixedWidth(40)
         self.upcomingAppointmentTitle = QLabel()

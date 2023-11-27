@@ -1445,7 +1445,7 @@ def allRequests():
                             VALUES (%s,%s,%s,%s,%s,%s,%s)
                         """
 
-            cursor = cursor.execute(insertQuery,(requestsID,requestsType,clientID,approvalStatus,
+            cursor = cursor.execute(insertQuery,(reqsID,reqsType,clientID,approvalStatus,
                                                 dateSubmitted,requestReason,appointmentID)
                                                 )
             conn.commit() #Commit Changes to db, like git commit

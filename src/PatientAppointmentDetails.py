@@ -358,6 +358,7 @@ class PatientAppointmentDetailsWindow(QWidget):
             self.appointment.completeAppointment()
 
             self.frameLayoutManager.back()
+            self.frameLayout.widget(self.frameLayoutManager.top()).generateAppointmentButtons()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def setMode(self, mode):
