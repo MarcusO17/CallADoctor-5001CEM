@@ -300,6 +300,7 @@ class DoctorAppointmentDetails(QWidget):
         self.cancellationReasonLabel.setFixedSize(382, 280)
         self.cancellationReasonLabel.setStyleSheet("background-color: white; border-radius: 10px;")
         self.cancellationReasonLabel.setPlaceholderText("Enter your cancellation reason here")
+        self.cancellationReasonLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
         self.layout.addWidget(self.cancellationReasonLabel)
 
         confirmationButtonLayout = QHBoxLayout()
