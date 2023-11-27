@@ -264,6 +264,8 @@ class DoctorDashboard(QWidget):
         self.appointmentList.clear()
 
         self.appointmentList = AppointmentRepository.getDoctorDashboardAppointments(self.doctor.getDoctorID())
+        self.appointmentList = [appointments for appointments in self.appointmentList if
+                           appointments.getAppointmentStatus() != 'Completed']
 
         fourAppointments = self.appointmentList[:4]
 

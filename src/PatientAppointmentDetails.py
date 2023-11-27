@@ -264,8 +264,8 @@ class PatientAppointmentDetailsWindow(QWidget):
 
         self.cancelAppointmentButton.raise_()
         self.cancelAppointmentLabel.raise_()
-        self.viewPrescriptionLabel.raise_()
         self.viewPrescriptionButton.raise_()
+        self.viewPrescriptionLabel.raise_()
         self.completeAppointmentButton.raise_()
         self.completeAppointmentLabel.raise_()
         
