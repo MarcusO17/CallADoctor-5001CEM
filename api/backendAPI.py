@@ -226,31 +226,31 @@ def clinics():
             ]
             if clinics is not None:
                 return jsonify(clinics),200
-           
-    if request.method == 'POST':
-        contentJSON = request.get_json()
+            
+        if request.method == 'POST':
+            contentJSON = request.get_json()
 
-        clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
-        clinicName = contentJSON['clinicName']
-        clinicEmail = contentJSON['clinicEmail']
-        clinicPassword = hashPassword(contentJSON['clinicPassword'])
-        clinicContact = contentJSON['clinicContact']
-        address = contentJSON['address']
-        governmentApproved = 0
-        lat,lon = geoHelper.geocode(address=address)
-   
+            clinicID = requests.get('http://127.0.0.1:5000/clinics/idgen').text
+            clinicName = contentJSON['clinicName']
+            clinicEmail = contentJSON['clinicEmail']
+            clinicPassword = hashPassword(contentJSON['clinicPassword'])
+            clinicContact = contentJSON['clinicContact']
+            address = contentJSON['address']
+            governmentApproved = 0
+            lat,lon = geoHelper.geocode(address=address)
+    
 
-        insertQuery = """
-                        INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                      """
-        cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
-                                            clinicContact,governmentApproved,lat,lon))
-        print('Success')  
-        conn.commit() #Commit Changes to db, like git commit
-        
-        return f'Successful POST : {clinicID}',201
+            insertQuery = """
+                            INSERT INTO clinics (clinicID,clinicName,address,clinicEmail,clinicPassword,
+                                                clinicContact,governmentApproved,lat,lon)
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        """
+            cursor = cursor.execute(insertQuery,(clinicID,clinicName,address,clinicEmail,clinicPassword,
+                                                clinicContact,governmentApproved,lat,lon))
+            print('Success')  
+            conn.commit() #Commit Changes to db, like git commit
+            
+            return f'Successful POST : {clinicID}',201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
@@ -1565,6 +1565,9 @@ def userAuthentication():
         cursor = conn.cursor()
     
         contentJSON = request.get_json()
+        
+        email = contentJSON['email']
+        password = contentJSON['password']
 
         cursor.execute('SELECT ID,role,password from users where email = %s',(email))
 
