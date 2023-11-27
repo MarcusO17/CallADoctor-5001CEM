@@ -40,10 +40,8 @@ class AdminViewApprovalsWindow(QMainWindow):
         # header (probably reused in most files)
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Clinics waiting approval")
         self.headerTitle.setObjectName("headerTitle")
@@ -149,8 +147,6 @@ class AdminViewApprovalsWindow(QMainWindow):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         #Insert All the Clinics 
         for count, clinic in enumerate(self.clinicList):
