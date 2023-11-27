@@ -274,6 +274,7 @@ class PatientDashboard(QWidget):
         self.upcomingAppointmentLayout.setContentsMargins(20, 20, 20, 20)
 
         appointmentList = AppointmentRepo.AppointmentRepository.getPatientDashboardAppointments(self.patient.getPatientID())
+        appointmentList = [appointments for appointments in appointmentList if appointments.getAppointmentStatus() != 'Completed']
         twoAppointmentList = appointmentList[:1]
 
         buttonFont = QFont()
