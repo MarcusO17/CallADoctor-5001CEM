@@ -14,9 +14,9 @@ class DoctorRepository():
                   recordsList = response.json()
             except requests.RequestException as e:
                   print(f'Error : {e}')
-                  return Doctor("","","","","","","")
+                  return Doctor("","","","","","","","")
             for records in recordsList:
-                  tempDoctor = Doctor("","","","","","","")
+                  tempDoctor = Doctor("","","","","","","","")
 
                   tempDoctor.setClinicID(records['clinicID'])
                   tempDoctor.setDoctorID(records['doctorID'])

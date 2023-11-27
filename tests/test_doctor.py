@@ -153,7 +153,46 @@ class TestDoctor(unittest.TestCase):
         result = doctorObj.getCertification()
 
         self.assertIsNone(result)  
- 
+    
+    @patch('requests.get')
+    def test_getDoctorList_success(self, mock_get):
+   
+        mockDoctorData = [
+            {"clinicID": "C001", 
+             "doctorID": "D001", 
+             "doctorName": "Dr. John Doe", 
+             "status": "Active",
+             "doctorType": "General", 
+             "doctorContact": "123-456-7890", 
+             "doctorICNumber": "123456-7890",
+             "yearOfExperience": 5},
+        
+        ]
+
+    
+        mockResponse = Mock()
+        mockResponse.json.return_value = mockDoctorData
+        mock_get.return_value = mockResponse
+
+      
+        result = DoctorRepo.DoctorRepository.getDoctorList()
+
+        
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), len(mockDoctorData))
+
+
+        for doctor, mockDoctorData in zip(result, mockDoctorData):
+            self.assertIsInstance(doctor, Doctor)
+            self.assertEqual(doctor.getClinicID(), mockDoctorData['clinicID'])
+            self.assertEqual(doctor.getDoctorID(), mockDoctorData['doctorID'])
+            self.assertEqual(doctor.getDoctorName(), mockDoctorData['doctorName'])
+            self.assertEqual(doctor.getStatus(), mockDoctorData['status'])
+            self.assertEqual(doctor.getDoctorType(), mockDoctorData['doctorType'])
+            self.assertEqual(doctor.getDoctorContact(), mockDoctorData['doctorContact'])
+            self.assertEqual(doctor.getDoctorICNumber(), mockDoctorData['doctorICNumber'])
+            self.assertEqual(doctor.getYearsOfExperience(), mockDoctorData['yearOfExperience'])
+
 
 if __name__=="__main__":
     unittest.main()
