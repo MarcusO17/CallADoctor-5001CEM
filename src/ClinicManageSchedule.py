@@ -59,8 +59,6 @@ class ClinicManageSchedule(QWidget):
                                                     margin-left: 100px;
                                                     }""")
 
-        self.generateScheduleButtons()
-
         self.buttonContainer.setContentsMargins(20,20,20,20)
         buttonLayout = QVBoxLayout(self.buttonContainer)
         buttonLayout.setSpacing(20)
@@ -68,6 +66,8 @@ class ClinicManageSchedule(QWidget):
         boxScrollArea.setObjectName("scrollArea")
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
+
+        self.generateScheduleButtons()
 
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(900, 500)

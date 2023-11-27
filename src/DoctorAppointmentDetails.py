@@ -316,6 +316,8 @@ class DoctorAppointmentDetails(QWidget):
 
         self.requestCancellationDialog.close()
         self.frameLayoutManager.back()
+
+        self.cancelAppoitmentButtonUpdate()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
     def generatePrescription(self):
@@ -370,6 +372,12 @@ class DoctorAppointmentDetails(QWidget):
             self.requestCancelAppointmentButton.show()
 
         self.cancelAppointmentShow()
+        self.cancelAppoitmentButtonUpdate()
+
+    def cancelAppoitmentButtonUpdate(self):
+        if Request.existingAppointments(self.appointment.getAppointmentID()):
+            self.requestCancelAppointmentButton.hide()
+            self.requestCancelAppointmentLabel.hide()
 
     def cancelAppointmentShow(self):
         appointmentStartTime = self.appointment.getStartTime().split(":")

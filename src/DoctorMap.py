@@ -69,6 +69,7 @@ class DoctorMap(QWidget):
 
     def generatePatientMarkers(self, map):
         patientsWeekly = AppointmentRepository.getPatientLocations(self.clinic.getClinicID())
+        print(len(patientsWeekly))
         for patients in patientsWeekly:
             geoHelper.addMarker(map, (patients.getPatientLat(), patients.getPatientLon()), patients.getPatientAddress()
                                 , 'lightblue', 'home')
