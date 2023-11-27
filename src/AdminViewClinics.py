@@ -99,10 +99,8 @@ class AdminViewClinicsWindow(QMainWindow):
         clinicList = ClinicRepository.getClinicList()
 
         buttonFont = QFont()
-        buttonFont.setFamily("Montserrat")
+        buttonFont.setFamily("Arial")
         buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         # Inserting All the Clinics
         for count, clinic in enumerate(clinicList):
