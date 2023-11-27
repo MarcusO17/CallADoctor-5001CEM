@@ -1458,7 +1458,31 @@ def allRequests():
     finally:
         if conn is not None:
             conn.close()    
+
+@app.route('/requests/exists/<string:appointmentID>',methods=['GET'])
+def requestsExists(appointmentID):
+    try:
+        conn = dbConnect()
+        if conn is None:
+             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            
+        cursor = conn.cursor()
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM requests WHERE EXISTS (SELECT appointmentID from requests where appointmentID = %s)",appointmentID)
+            result = cursor.fetchone()
+            print(result)
+            if result is not None:
+                return 'Exists', 200
+            else:
+                return 'Null,Exists',404
+            
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
+    finally:
+        if conn is not None:
+            conn.close()    
 
 
 @app.route('/requests/<string:clinicID>',methods=['GET'])

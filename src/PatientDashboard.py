@@ -406,6 +406,7 @@ class PatientDashboard(QWidget):
         self.mainMapLayout.addWidget(self.mapWidget)
 
     def generateClinicMarkers(self,map,clinicList):
+        clinicList = [clinic for clinic in clinicList if clinic.getClinicStatus() == 'Approved']
         for clinics in clinicList:
             geoHelper.addMarker(map,(clinics.getClinicLat(),clinics.getClinicLon()),clinics.getClinicName()
                                 ,'lightblue','home')
