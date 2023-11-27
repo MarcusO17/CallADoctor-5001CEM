@@ -74,6 +74,7 @@ class PatientClinicsNearbyWindow(QWidget):
         clinicList = [clinic for clinic in clinicList if clinic.getClinicStatus() == 'Approved']
         currentLoc = (self.patient.getPatientLat(),self.patient.getPatientLon())
         distanceToClinic = [round(geoHelper.getDistance(currentLoc,(clinic.getClinicLat(),clinic.getClinicLon())),3) for clinic in clinicList]
+
         print('distance',distanceToClinic)
         buttonFont = QFont()
         buttonFont.setFamily("Montserrat")

@@ -236,7 +236,7 @@ def clinics():
             clinicPassword = hashPassword(contentJSON['clinicPassword'])
             clinicContact = contentJSON['clinicContact']
             address = contentJSON['address']
-            governmentApproved = 0
+            governmentApproved = "Pending"
             lat,lon = geoHelper.geocode(address=address)
     
 
