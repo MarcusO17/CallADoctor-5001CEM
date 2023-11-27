@@ -41,10 +41,8 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         # header (probably reused in most files)
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText(self.clinic.getClinicName())
         self.headerTitle.setObjectName("headerTitle")
@@ -107,12 +105,11 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
         self.adminClinicDetailsDescriptionLabel.setFont(font)
-        self.adminClinicDetailsDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \n Clinic Name: {self.clinic.getClinicName()} \n Clinic Status: {self.clinic.getClinicStatus()}")
+        self.adminClinicDetailsDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \nClinic Name: {self.clinic.getClinicName()} \nClinic Status: {self.clinic.getClinicStatus()}")
         self.adminClinicDetailsDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.adminClinicDetailsDescriptionLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicDetailsDescriptionLabel.setWordWrap(True)
         self.adminClinicDetailsDescriptionLabel.setStyleSheet("""QLabel {
                                                                 border-radius: 10px;
                                                                 border: 1px solid black;
@@ -128,12 +125,11 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
         self.adminClinicDetailsAddressLabel.setFont(font)
         self.adminClinicDetailsAddressLabel.setText(self.clinic.getClinicAddress())
         self.adminClinicDetailsAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.adminClinicDetailsAddressLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicDetailsAddressLabel.setWordWrap(True)
         self.adminClinicDetailsAddressLabel.setStyleSheet("""QLabel {
                                                                 border-radius: 10px;
                                                                 border: 1px solid black;
