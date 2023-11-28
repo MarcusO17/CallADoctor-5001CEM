@@ -85,12 +85,15 @@ class AdminViewApprovalsWindow(QMainWindow):
         )
         self.backButton.setGraphicsEffect(effect)
 
+        # Creating a Button Container, to hold all the buttons 
+
         self.buttonContainer = QWidget()
         self.buttonContainer.setObjectName("buttonContainer")
         self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
                                                             background: #D0BFFF;
                                                             border-radius: 10px;
                                                             }""")
+        # The layouts here are used to set the position of the buttons and the box Scroll area
         buttonLayout = QVBoxLayout(self.buttonContainer)
         buttonLayout.setSpacing(20)
         self.buttonContainer.setContentsMargins(20,20,20,20)
@@ -123,13 +126,19 @@ class AdminViewApprovalsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    # method to make the button work and take the user to the approval details. 
+
     def approvalClinicButtonFunction(self, clinic, adminID):
 
         self.AdminClinicApproval = AdminClinicApprovalWindow(clinic, adminID)
         self.pageManager.add(self.AdminClinicApproval)
 
+    # method for the back button to functino
+
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    # Method to generate the buttons inside the container. 
     
     def generateViewApprovalButtons(self):
 
