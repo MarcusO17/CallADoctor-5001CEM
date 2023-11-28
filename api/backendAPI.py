@@ -1494,7 +1494,7 @@ def requestsByClinic(clinicID):
             
         cursor = conn.cursor()
         if request.method == 'GET':
-            cursor.execute("SELECT * FROM requests where appointmentID in(SELECT appointmentID from clinics where clinicID = %s)",clinicID)
+            cursor.execute("SELECT * FROM requests where appointmentID in(SELECT appointmentID from appointments where clinicID = %s)",clinicID)
             requests = [
                 dict(
                     requestsID = row['requestsID'],
