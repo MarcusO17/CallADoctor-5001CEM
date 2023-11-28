@@ -99,10 +99,10 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.visitPurposeLabel.setGeometry(QRect(50, 190, 400, 200))
         self.visitPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
         font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
+        font.setFamily("Montserrat")
+        font.setPointSize(12)
         self.visitPurposeLabel.setFont(font)
-        self.visitPurposeLabel.setText((f"{self.appointment.getVisitReason()} \n"
+        self.visitPurposeLabel.setText((f"Appointment Purpose:{self.appointment.getVisitReason()} \n"
                                         f"Date: {self.appointment.getAppointmentDate()} \n"
                                         f"Start Time: {self.appointment.getStartTime()}"))
         self.visitPurposeLabel.setFrameShape(QtWidgets.QFrame.Box)
@@ -121,8 +121,8 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.doctorDetailsLabel = QLabel(self.centralwidget)
         self.doctorDetailsLabel.setGeometry(QRect(520, 190, 375, 200))
         font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
+        font.setFamily("Montserrat")
+        font.setPointSize(12)
         self.doctorDetailsLabel.setFont(font)
         self.doctorDetailsLabel.setText(f"Doctor Name: {self.doctor.getDoctorName()} \n"
                                         f"Doctor ID: {self.doctor.getDoctorID()} \n"
@@ -145,8 +145,8 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.clinicDetailsLabel = QLabel(self.centralwidget)
         self.clinicDetailsLabel.setGeometry(QRect(50, 430, 400, 200))
         font = QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
+        font.setFamily("Montserrat")
+        font.setPointSize(12)
         self.clinicDetailsLabel.setFont(font)
         self.clinicDetailsLabel.setText(f"Clinic Name: {self.clinic.getClinicName()} \n"
                                         f"Clinic ID: {self.clinic.getClinicID()} \n"
@@ -164,7 +164,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.cancelAppointmentButton = QPushButton(self.centralwidget)
         self.cancelAppointmentButton.setGeometry(QRect(520, 530, 325, 100))
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(10)
         self.cancelAppointmentButton.setFont(font)
         self.cancelAppointmentButton.setLayoutDirection(Qt.RightToLeft)
@@ -264,8 +264,8 @@ class PatientAppointmentDetailsWindow(QWidget):
 
         self.cancelAppointmentButton.raise_()
         self.cancelAppointmentLabel.raise_()
-        self.viewPrescriptionLabel.raise_()
         self.viewPrescriptionButton.raise_()
+        self.viewPrescriptionLabel.raise_()
         self.completeAppointmentButton.raise_()
         self.completeAppointmentLabel.raise_()
         
@@ -323,6 +323,8 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
 
+        self.cancelAppoitmentButtonUpdate()
+
         self.requestCancellationDialog.close()
         self.frameLayoutManager.back()
         self.frameLayout.widget(self.frameLayoutManager.top()).generateAppointmentButtons()
@@ -377,6 +379,14 @@ class PatientAppointmentDetailsWindow(QWidget):
         if len(self.prescription) == 0:
             self.viewPrescriptionButton.hide()
             self.viewPrescriptionLabel.hide()
+
+        self.cancelAppoitmentButtonUpdate()
+
+    def cancelAppoitmentButtonUpdate(self):
+        if Request.existingAppointments(self.appointment.getAppointmentID()):
+            self.cancelAppointmentButton.hide()
+            self.cancelAppointmentLabel.hide()
+
 
     def cancelAppointmentShow(self):
         appointmentStartTime = self.appointment.getStartTime().split(":")

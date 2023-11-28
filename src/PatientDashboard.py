@@ -286,6 +286,7 @@ class PatientDashboard(QWidget):
         self.appointmentButtonIcon = QIcon(filepath)
 
         if len(twoAppointmentList) == 0:
+            print("generate Label")
             emptyAppointment = QLabel()
             emptyAppointment.setFont(buttonFont)
             emptyAppointment.setAlignment(Qt.AlignCenter)
@@ -331,7 +332,7 @@ class PatientDashboard(QWidget):
                 appointmentButton.clicked.connect(
                     lambda checked, appointment=appointment: self.appointmentButtonFunction(appointment, self.patient))
                 buttonRow.addWidget(appointmentButton)
-                self.upcomingAppointmentLayout.addLayout(buttonRow)
+                self.upcomingAppointmentButtons.addLayout(buttonRow)
 
             spacer = QWidget()
             spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)

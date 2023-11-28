@@ -59,6 +59,7 @@ class PatientPrescriptionWindow(QWidget):
 
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        boxScrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
 
         self.generatePrescription()

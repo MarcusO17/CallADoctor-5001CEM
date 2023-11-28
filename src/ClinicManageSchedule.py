@@ -67,48 +67,7 @@ class ClinicManageSchedule(QWidget):
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         boxScrollArea.setWidgetResizable(True)
 
-        doctorList = DoctorRepository.getDoctorListClinic(self.clinic.getClinicID())
-
-        buttonFont = QFont()
-        buttonFont.setFamily("Montserrat")
-        buttonFont.setPointSize(20)
-
-        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-calendar-64.png")
-        scheduleIcon = QIcon(filepath)
-
-        for count, doctor in enumerate(doctorList):
-            doctorButton = QPushButton()
-            doctorButton.setText(f"    {doctor.getDoctorID()} - {doctor.getDoctorName()}")
-            doctorButton.setFont(buttonFont)
-            doctorButton.setIconSize(QSize(80, 80))
-            doctorButton.setFixedSize(QSize(700, 100))
-            doctorButton.setIcon(scheduleIcon)
-            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
-            doctorButton.setStyleSheet("""QPushButton {
-                                                    background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
-                                                                            stop: 0 rgba(10, 2, 85, 255), 
-                                                                            stop: 1 rgba(59, 41, 168, 255));
-                                                    border-radius: 10px; color: white;
-                                                    text-align: left; 
-                                                    padding-left: 20px;
-                                                    }
-                                                    QPushButton:hover
-                                                    {
-                                                      background-color: #7752FE;
-                                                      text-align: left; 
-                                                      padding-left: 20px;
-                                                    }""")
-
-            effect = QGraphicsDropShadowEffect(
-                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
-            )
-            doctorButton.setGraphicsEffect(effect)
-
-            self.buttonContainer.layout().addWidget(doctorButton)
-
-        spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.buttonContainer.layout().addWidget(spacer)
+        self.generateScheduleButtons()
 
         boxScrollArea.setWidget(self.buttonContainer)
         boxScrollArea.setFixedSize(900, 500)
@@ -145,3 +104,58 @@ class ClinicManageSchedule(QWidget):
                 button = item.widget()
                 text = button.text().lower()
                 button.setVisible(searchedText in text)
+
+    def generateScheduleButtons(self):
+
+        CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+
+        for i in range(self.buttonContainer.layout().count()):
+            widget = self.buttonContainer.layout().itemAt(0).widget()
+            self.buttonContainer.layout().removeWidget(widget)
+            print("in the loop ", i)
+            if widget is not None:
+                widget.deleteLater()
+                print("deleting 1 widget")
+
+        doctorList = DoctorRepository.getDoctorListClinic(self.clinic.getClinicID())
+
+        buttonFont = QFont()
+        buttonFont.setFamily("Montserrat")
+        buttonFont.setPointSize(20)
+
+        filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-calendar-64.png")
+        scheduleIcon = QIcon(filepath)
+
+        for count, doctor in enumerate(doctorList):
+            doctorButton = QPushButton()
+            doctorButton.setText(f"    {doctor.getDoctorID()} - {doctor.getDoctorName()}")
+            doctorButton.setFont(buttonFont)
+            doctorButton.setIconSize(QSize(80, 80))
+            doctorButton.setFixedSize(QSize(700, 100))
+            doctorButton.setIcon(scheduleIcon)
+            doctorButton.clicked.connect(lambda checked, doctor=doctor: self.doctorButtonFunction(doctor, self.clinic))
+            doctorButton.setStyleSheet("""QPushButton {
+                                                            background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                                                    stop: 0 rgba(10, 2, 85, 255), 
+                                                                                    stop: 1 rgba(59, 41, 168, 255));
+                                                            border-radius: 10px; color: white;
+                                                            text-align: left; 
+                                                            padding-left: 20px;
+                                                            }
+                                                            QPushButton:hover
+                                                            {
+                                                              background-color: #7752FE;
+                                                              text-align: left; 
+                                                              padding-left: 20px;
+                                                            }""")
+
+            effect = QGraphicsDropShadowEffect(
+                offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
+            )
+            doctorButton.setGraphicsEffect(effect)
+
+            self.buttonContainer.layout().addWidget(doctorButton)
+
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.buttonContainer.layout().addWidget(spacer)
