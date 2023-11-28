@@ -25,9 +25,13 @@ class AdminHomepageWindow(QMainWindow):
 
         self.setupUi(self)
 
+    # Method to go to the specific page (Going to View Clinics Page)
+
     def goToViewClinics(self):
         self.viewClinics = AdminViewClinicsWindow(self.adminID)
         self.pageManager.add(self.viewClinics)
+
+    # Method to go to the specific page (Going to View Approvals Page)
 
     def goToViewApprovals(self):
         self.viewApprovals = AdminViewApprovalsWindow(self.adminID)
@@ -35,6 +39,10 @@ class AdminHomepageWindow(QMainWindow):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Homepage (Admin)")
+
+        # Creating a stylesheet for the buttons to use, this stylesheet
+        # makes the button have a specific color at first, and then 
+        # when the cursor hovers on it, it changes the color
 
         stylesheet = """
                             QPushButton
@@ -57,6 +65,8 @@ class AdminHomepageWindow(QMainWindow):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
+        # Creating the Gradiant effect for the background
+
         self.setAutoFillBackground(True)
         palette = self.palette()
         gradient = "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(208, 191, 255, 255), stop:1 rgba(113, 58, 190, 255));"
@@ -64,13 +74,13 @@ class AdminHomepageWindow(QMainWindow):
         self.setPalette(palette)
         self.setStyleSheet(f"QWidget#centralwidget {{background: {gradient}}};")
 
+        # QPushButton to go to the View Clinic Page. 
+
         self.viewClinicsButton = QPushButton(self.centralwidget)
         self.viewClinicsButton.setGeometry(QRect(150, 200, 400, 100))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
-        font.setBold(False)
-        font.setWeight(50)
         self.viewClinicsButton.setFont(font)
         self.viewClinicsButton.setText("View Clinics")
         self.viewClinicsButton.clicked.connect(self.goToViewClinics)
@@ -80,6 +90,8 @@ class AdminHomepageWindow(QMainWindow):
         )
         self.viewClinicsButton.setGraphicsEffect(effect)
 
+        # QLabel used for displaying the icon on top of the button
+
         self.viewClinicsLabel = QLabel(self.centralwidget)
         self.viewClinicsLabel.setGeometry(QRect(170, 225, 50, 50))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-clinic-50.png")
@@ -87,6 +99,7 @@ class AdminHomepageWindow(QMainWindow):
         self.viewClinicsIcon = self.viewClinicsIcon.scaled(50, 50)
         self.viewClinicsLabel.setPixmap(self.viewClinicsIcon)
 
+        # QPushButton for Going to the View Approvals Page
 
         self.viewApprovalsButton = QPushButton(self.centralwidget)
         self.viewApprovalsButton.setGeometry(QRect(700, 200, 400, 100))
@@ -102,6 +115,8 @@ class AdminHomepageWindow(QMainWindow):
         )
         self.viewApprovalsButton.setGraphicsEffect(effect)
 
+        # QLabel to display the icon on top of the button
+
         self.viewApprovalsLabel = QLabel(self.centralwidget)
         self.viewApprovalsLabel.setGeometry(QRect(720, 225, 50, 50))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-view-32.png")
@@ -110,12 +125,15 @@ class AdminHomepageWindow(QMainWindow):
         self.viewApprovalsLabel.setPixmap(self.viewApprovalsIcon)
 
 
+        # Used for Displaying the Application's Logo 
         self.topLeftLogo = QLabel(self.centralwidget)
         self.topLeftLogo.setGeometry(QRect(5, 0, 200, 200))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\logo.png")
         self.topLeftLogoIcon = QPixmap(filepath)
         self.topLeftLogoIcon = self.topLeftLogoIcon.scaled(200, 200)
         self.topLeftLogo.setPixmap(self.topLeftLogoIcon)
+
+        # QLabel to show the title of the page
 
         self.homepageTitle = QLabel(self.centralwidget)
         self.homepageTitle.setGeometry(QRect(200, 40, 800, 70))
@@ -137,13 +155,16 @@ class AdminHomepageWindow(QMainWindow):
                                                 border-radius: 10px;
                                             }""")
 
+        # QPushButton with a function to Logout
         self.logoutButton = QPushButton(self.centralwidget)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-logout-64.png")
         self.logoutIcon = QIcon(filepath)
         self.logoutButton.setGeometry(QRect(1050, 40, 200, 70))
         self.logoutButton.setIconSize(QSize(50, 50))
-        font.setPointSize(20)
-        self.logoutButton.setFont(font)
+        logoutFont = QFont()
+        logoutFont.setFamily("Arial")
+        logoutFont.setPointSize(20)
+        self.logoutButton.setFont(logoutFont)
         self.logoutButton.setText("Log Out")
         self.logoutButton.setStyleSheet(stylesheet)
         self.logoutButton.setIcon(self.logoutIcon)
@@ -158,6 +179,7 @@ class AdminHomepageWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    # Methodd for logging out 
     def logout(self):
 
         logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation", "Are you sure you want to logout",

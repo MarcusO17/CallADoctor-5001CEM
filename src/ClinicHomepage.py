@@ -50,6 +50,8 @@ class ClinicHomepage(QMainWindow):
         self.frameLayout.setCurrentIndex(2)
 
     def goToRequestReview(self):
+        self.clinicRequestReview.generateCancellationButtons()
+        self.clinicRequestReview.generateRequestButtons()
         self.setButtonHighlight(self.requestReviewButton)
         self.frameLayoutManager.backToBasePage(3)
         self.frameLayout.setCurrentIndex(3)

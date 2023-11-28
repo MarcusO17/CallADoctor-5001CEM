@@ -81,6 +81,9 @@ class AdminViewClinicsWindow(QMainWindow):
         )
         self.backButton.setGraphicsEffect(effect)
 
+        # Button Conatiner made with the help of QWidget
+        # This container  contains all the buttons in them.
+
         self.buttonContainer = QWidget()
         self.buttonContainer.setObjectName("buttonContainer")
         self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
@@ -90,6 +93,7 @@ class AdminViewClinicsWindow(QMainWindow):
         buttonLayout = QVBoxLayout(self.buttonContainer)
         buttonLayout.setSpacing(20)
         self.buttonContainer.setContentsMargins(20, 20, 20, 20)
+        # Making a box Scroll area for using the Scroll if in case there are multiple buttons. 
         boxScrollArea = QScrollArea()
         boxScrollArea.setObjectName("scrollArea")
         boxScrollArea.setWidgetResizable(True)
@@ -99,10 +103,8 @@ class AdminViewClinicsWindow(QMainWindow):
         clinicList = ClinicRepository.getClinicList()
 
         buttonFont = QFont()
-        buttonFont.setFamily("Montserrat")
+        buttonFont.setFamily("Arial")
         buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         # Inserting All the Clinics
         for count, clinic in enumerate(clinicList):
@@ -156,10 +158,14 @@ class AdminViewClinicsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    # Method to access the Clinic Details from the View Clinic PAge. 
+
     def clinicButtonFunction(self, clinic, adminID):
 
         self.adminClinicDetails = AdminViewClinicDetailsWindow(clinic, adminID)
         self.pageManager.add(self.adminClinicDetails)
+
+    # Method for Going back
 
     def backButtonFunction(self):
         self.pageManager.goBack()

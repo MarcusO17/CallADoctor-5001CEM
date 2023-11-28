@@ -266,34 +266,80 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancellationDialog = QDialog(self)
 
         self.requestCancellationDialog.move(350, 200)
-        self.requestCancellationDialog.setStyleSheet("background-color: #BCCAE0; border-radius: 10px;")
+        self.requestCancellationDialog.setStyleSheet("""QDialog {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
+                                                stop: 0 rgba(25, 4, 130, 255), 
+                                                stop: 1 rgba(119, 82, 254, 255)
+                                            );
+                                            border-radius: 10px;
+                                            }""")
         self.requestCancellationDialog.setFixedSize(400, 400)
 
         self.requestCancellationDialog.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)
         self.requestCancellationDialog.setWindowFlag(Qt.FramelessWindowHint)
         self.requestCancellationDialog.setWindowTitle("Request Cancellation")
 
+        font = QFont()
+        font.setFamily("Montserrat")
+        font.setPointSize(10)
+
         self.layout = QVBoxLayout()
+        self.layout.setSpacing(0)
+
+        titleFont = QFont()
+        titleFont.setFamily("Montserrat")
+        titleFont.setPointSize(10)
+
+        self.cancelAppointmentTitle = QLabel()
+        self.cancelAppointmentTitle.setText("State reason of cancellation:")
+        self.cancelAppointmentTitle.setFont(titleFont)
+        self.cancelAppointmentTitle.setStyleSheet("QLabel {color: white}")
+        self.cancelAppointmentTitle.setFixedSize(200, 30)
+        self.layout.addWidget(self.cancelAppointmentTitle)
 
         self.cancellationReasonLabel = QLineEdit()
-        self.cancellationReasonLabel.setFixedSize(300, 300)
+        self.cancellationReasonLabel.setFixedSize(382, 280)
         self.cancellationReasonLabel.setStyleSheet("background-color: white; border-radius: 10px;")
         self.cancellationReasonLabel.setPlaceholderText("Enter your cancellation reason here")
+        self.cancellationReasonLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
         self.layout.addWidget(self.cancellationReasonLabel)
 
         confirmationButtonLayout = QHBoxLayout()
 
         cancelButton = QPushButton()
         cancelButton.setText("Cancel")
+        cancelButton.setFont(font)
+        cancelButton.setFixedSize(150,50)
         cancelButton.clicked.connect(lambda checked: self.requestCancellationDialog.close())
-        cancelButton.setStyleSheet("background-color: white; border-radius: 10px;")
+        cancelButton.setStyleSheet("""QPushButton {
+                                                        background: white;
+                                                        border-radius: 10px;
+                                                        text-align: center; 
+
+                                                        }
+                                                        QPushButton:hover
+                                                        {
+                                                          background-color: #E8E8E8;
+                                                          text-align: center; 
+                                                        }""")
         confirmationButtonLayout.addWidget(cancelButton)
 
         confirmationButton = QPushButton()
         confirmationButton.setText("Confirm")
+        confirmationButton.setFont(font)
+        confirmationButton.setFixedSize(150,50)
         confirmationButton.clicked.connect(
             lambda checked: self.completeButtonConfirmationFunction(self.cancellationReasonLabel.text()))
-        confirmationButton.setStyleSheet("background-color: white; border-radius: 10px;")
+        confirmationButton.setStyleSheet("""QPushButton {
+                                                            background: white;
+                                                            border-radius: 10px;
+                                                            text-align: center; 
+
+                                                            }
+                                                            QPushButton:hover
+                                                            {
+                                                            background-color: #E8E8E8;
+                                                            text-align: center; 
+                                                            }""")
         confirmationButtonLayout.addWidget(confirmationButton)
 
         self.layout.addLayout(confirmationButtonLayout)

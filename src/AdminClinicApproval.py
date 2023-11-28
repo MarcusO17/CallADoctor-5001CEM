@@ -40,10 +40,8 @@ class AdminClinicApprovalWindow(QMainWindow):
         # header (probably reused in most files)
         self.headerTitle = QLabel(self.centralWidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText(self.clinic.getClinicName())
         self.headerTitle.setObjectName("headerTitle")
@@ -87,6 +85,9 @@ class AdminClinicApprovalWindow(QMainWindow):
         )
         self.backButton.setGraphicsEffect(effect)
 
+        # Making a container for the Clinic Details, this will also inlcude
+        # the Approval & Disapproval Button 
+
         self.adminClinicApprovalContainer = QLabel(self.centralWidget)
         self.adminClinicApprovalContainer.setFixedSize(1000,500)
         self.adminClinicApprovalContainer.setFrameShape(QtWidgets.QFrame.Box)
@@ -96,30 +97,35 @@ class AdminClinicApprovalWindow(QMainWindow):
                                                             border-radius: 10px;
                                                             }""")
         
+        # Created to display the Description title
+        
         self.adminClinicApprovalDescriptionTitle = QLabel(self.centralWidget)
         self.adminClinicApprovalDescriptionTitle.setGeometry(QRect(180, 190, 150, 40))
         self.adminClinicApprovalDescriptionTitle.setText("Clinic Description: ")
 
+        # Below QLabel is created to display the description of the clniic - ID, Name, and the Stutus
         self.adminClinicApprovalDescriptionLabel = QLabel(self.centralWidget)
         self.adminClinicApprovalDescriptionLabel.setGeometry(QRect(180, 220, 400, 200))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
         self.adminClinicApprovalDescriptionLabel.setFont(font)
-        self.adminClinicApprovalDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \n Clinic Name: {self.clinic.getClinicName()} \n Clinic Status: {self.clinic.getClinicStatus()}")
+        self.adminClinicApprovalDescriptionLabel.setText(f"Clinic ID: {self.clinic.getClinicID()} \nClinic Name: {self.clinic.getClinicName()} \nClinic Status: {self.clinic.getClinicStatus()}")
         self.adminClinicApprovalDescriptionLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.adminClinicApprovalDescriptionLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicApprovalDescriptionLabel.setWordWrap(True)
         self.adminClinicApprovalDescriptionLabel.setStyleSheet("""QLabel {
                                                                 border-radius: 10px;
                                                                 border: 1px solid black;
                                                                 background: white;
                                                                 }""")
         
+        # Creatied to display the Certificaction Title
         self.adminGetClinicCertificationTitle = QLabel(self.centralWidget)
         self.adminGetClinicCertificationTitle.setGeometry(QRect(730, 190, 150, 40))
         self.adminGetClinicCertificationTitle.setText("Clinic Certification: ")
+
+        # Qlabel to display the Certificate or the attachment to be displayed. 
         
         self.adminGetClinicCertificationLabel = QLabel(self.centralWidget)
         self.adminGetClinicCertificationLabel.setGeometry(QRect(730, 220, 375, 200))
@@ -133,28 +139,31 @@ class AdminClinicApprovalWindow(QMainWindow):
                                                                 background: white;
                                                                 }""")
 
-        
+        # Created to Display the Address title
         self.adminClinicApprovalAddressTitle = QLabel(self.centralWidget)
         self.adminClinicApprovalAddressTitle.setGeometry(QRect(180, 420, 150, 40))
         self.adminClinicApprovalAddressTitle.setText("Clinic Address: ")
 
+
+        # QLabel to display the Clinic's Address
         self.adminClinicApprovalAddressLabel = QLabel(self.centralWidget)
         self.adminClinicApprovalAddressLabel.setGeometry(QRect(180, 450, 350, 200))
         font = QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
         self.adminClinicApprovalAddressLabel.setFont(font)
         self.adminClinicApprovalAddressLabel.setText(self.clinic.getClinicAddress())
         self.adminClinicApprovalAddressLabel.setFrameShape(QtWidgets.QFrame.Box)
         self.adminClinicApprovalAddressLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.adminClinicApprovalAddressLabel.setWordWrap(True)
         self.adminClinicApprovalAddressLabel.setStyleSheet("""QLabel {
                                                                 border-radius: 10px;
                                                                 border: 1px solid black;
                                                                 background: white;
                                                                 }""")
 
+        # QPushButton for Approving the Clinic, connecting it to a method 
+        # which approves the Clinic. 
         self.adminApproveClinicButton = QPushButton(self.centralWidget)
         self.adminApproveClinicButton.setGeometry(QRect(710, 450, 375, 100))
         font = QFont()
@@ -180,6 +189,8 @@ class AdminClinicApprovalWindow(QMainWindow):
                                                         }""")
         self.adminApproveClinicButton.raise_()
 
+
+        # Code for showing the icon on the button
         self.adminApproveClinicLabel = QLabel(self.centralWidget)
         self.adminApproveClinicLabel.setGeometry(QRect(730, 475, 50, 50))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-good-quality-50.png")
@@ -187,7 +198,8 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminApproveClinicIcon = self.adminApproveClinicIcon.scaled(50, 50)
         self.adminApproveClinicLabel.setPixmap(self.adminApproveClinicIcon)
         
-
+        # QPushButton for Disapproving the Clinic. Connected to a method 
+        # which disapproves the clinic
         self.adminDisapproveClinicButton = QPushButton(self.centralWidget)
         self.adminDisapproveClinicButton.setGeometry(QRect(710, 565, 375, 100))
         self.adminDisapproveClinicButton.setFont(font)
@@ -210,6 +222,9 @@ class AdminClinicApprovalWindow(QMainWindow):
                                                         }""")
         self.adminDisapproveClinicButton.raise_()
 
+
+        # Qlabel used for showing the icon on the button 
+
         self.adminDisapproveClinicIconLabel = QLabel(self.centralWidget)
         self.adminDisapproveClinicIconLabel.setGeometry(QRect(730, 590, 50, 50))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-dislike-or-disagree-thumbs-down-symbol-under-circle-24.png")
@@ -217,7 +232,7 @@ class AdminClinicApprovalWindow(QMainWindow):
         self.adminDisapproveClinicButtonIcon = self.adminDisapproveClinicButtonIcon.scaled(50, 50)
         self.adminDisapproveClinicIconLabel.setPixmap(self.adminDisapproveClinicButtonIcon)
 
-
+        # Spacers are used to move the position of things in the layout 
         topSpacer = QWidget()
         topSpacer.setFixedHeight(150)
 
@@ -231,6 +246,9 @@ class AdminClinicApprovalWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+
+    # Method to Approve the Clinic, displays message box for confirmation
+
     def adminApproveClinicFunction(self):
         adminApproveClinicDialogBox = QMessageBox.question(self.centralWidget, "Approval Confirmation", 
                                                           "Are you sure you want to Approve this Clinic?",
@@ -240,6 +258,8 @@ class AdminClinicApprovalWindow(QMainWindow):
             print(self.clinic.getClinicStatus())
             self.pageManager.getPreviousPage().generateViewApprovalButtons()
             self.pageManager.goBack()
+
+    # Method to Disapprove the clinic, displays message box for Confirmation. 
 
     def adminDisapproveClinicFunction(self):
         adminDisapproveClinicDialogBox = QMessageBox.question(self.centralWidget, "Disapproval Confirmation",

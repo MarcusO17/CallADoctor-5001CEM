@@ -40,10 +40,8 @@ class AdminViewApprovalsWindow(QMainWindow):
         # header (probably reused in most files)
         self.headerTitle = QLabel(self.centralwidget)
         font = QFont()
-        font.setFamily("Arial")
+        font.setFamily("Montserrat")
         font.setPointSize(28)
-        font.setBold(True)
-        font.setWeight(75)
         self.headerTitle.setFont(font)
         self.headerTitle.setText("Clinics waiting approval")
         self.headerTitle.setObjectName("headerTitle")
@@ -87,12 +85,15 @@ class AdminViewApprovalsWindow(QMainWindow):
         )
         self.backButton.setGraphicsEffect(effect)
 
+        # Creating a Button Container, to hold all the buttons 
+
         self.buttonContainer = QWidget()
         self.buttonContainer.setObjectName("buttonContainer")
         self.buttonContainer.setStyleSheet("""QWidget#buttonContainer {
                                                             background: #D0BFFF;
                                                             border-radius: 10px;
                                                             }""")
+        # The layouts here are used to set the position of the buttons and the box Scroll area
         buttonLayout = QVBoxLayout(self.buttonContainer)
         buttonLayout.setSpacing(20)
         self.buttonContainer.setContentsMargins(20,20,20,20)
@@ -125,13 +126,19 @@ class AdminViewApprovalsWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    # method to make the button work and take the user to the approval details. 
+
     def approvalClinicButtonFunction(self, clinic, adminID):
 
         self.AdminClinicApproval = AdminClinicApprovalWindow(clinic, adminID)
         self.pageManager.add(self.AdminClinicApproval)
 
+    # method for the back button to functino
+
     def backButtonFunction(self):
         self.pageManager.goBack()
+
+    # Method to generate the buttons inside the container. 
     
     def generateViewApprovalButtons(self):
 
@@ -149,8 +156,6 @@ class AdminViewApprovalsWindow(QMainWindow):
         buttonFont = QFont()
         buttonFont.setFamily("Arial")
         buttonFont.setPointSize(28)
-        buttonFont.setBold(True)
-        buttonFont.setWeight(75)
 
         #Insert All the Clinics 
         for count, clinic in enumerate(self.clinicList):
