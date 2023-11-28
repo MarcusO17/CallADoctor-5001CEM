@@ -96,6 +96,7 @@ class DoctorViewPrescription(QWidget):
         boxScrollArea.setWidgetResizable(True)
         boxScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
+        # labels for what the fields are
         medicationNameLabel = QLabel(self.centralwidget)
         medicationNameLabel.setGeometry(QRect(40, 120, 300, 50))
         font = QFont()
@@ -119,9 +120,10 @@ class DoctorViewPrescription(QWidget):
         foodLabel.setFont(font)
         foodLabel.setText("Before/After Eating: ")
 
-
+        # getting a list of prescription details from the prescription
         self.prescriptionDetailsList = self.prescription.getPrescriptionDetails()
 
+        # iterating list and generating prescription details
         for count, prescriptionDetails in enumerate(self.prescriptionDetailsList):
             prescriptionMedicationName = QLabel()
             prescriptionMedicationName.setFixedSize(300,50)
@@ -197,6 +199,7 @@ class DoctorViewPrescription(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method is triggered when the back button is clicked
     def backButtonFunction(self):
         self.frameLayoutManager.back()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())

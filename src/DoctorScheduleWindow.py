@@ -47,6 +47,7 @@ class DoctorScheduleWindow(QWidget):
         )
         self.headerTitle.setGraphicsEffect(effect)
 
+        # Qlabel background
         scheduleContainer = QLabel(self.centralwidget)
         scheduleContainer.setGeometry(QRect(5, 145, 915, 520))
         scheduleContainer.setStyleSheet("""QLabel {
@@ -59,6 +60,7 @@ class DoctorScheduleWindow(QWidget):
         )
         scheduleContainer.setGraphicsEffect(effect)
 
+        # creating 2d list of placeholder buttons
         self.timeSlotButtonList = [[QPushButton() for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
         # header of the grid
@@ -111,6 +113,8 @@ class DoctorScheduleWindow(QWidget):
         mainLayout.addWidget(self.centralwidget)
 
         self.setLayout(mainLayout)
+
+    # this method is triggered when any of the appointment button is clicked
     def gotoAppointment(self, appointment, doctor):
 
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
@@ -123,6 +127,7 @@ class DoctorScheduleWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this methods sets the schedule according to the appointment they have this current week
     def setSchedule(self):
 
         self.appointmentList.clear()

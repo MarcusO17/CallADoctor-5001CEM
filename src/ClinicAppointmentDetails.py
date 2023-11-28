@@ -207,6 +207,7 @@ class ClinicAppointmentDetails(QWidget):
 
         # Cancel Appointment With Doctor
 
+    # this method is triggered when the cancel appointment button is clicked
     def cancelAppointmentFunction(self):
         cancelAppointmentDialogBox = QMessageBox.question(self, "Cancel Confirmation",
                                                           "Are you sure you want to cancel Appointment?",
@@ -223,6 +224,7 @@ class ClinicAppointmentDetails(QWidget):
             except Exception as e:
                 print(e)
 
+    # this method is triggered when the back button is clicked
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()

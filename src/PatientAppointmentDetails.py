@@ -271,7 +271,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         
         self.setLayout(mainLayout)
 
-    
+    # this method is triggered when request cancellation button is clicked
     def cancelAppointmentFunction(self):
         self.requestCancellationDialog = QDialog(self)
 
@@ -355,6 +355,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.requestCancellationDialog.setLayout(self.layout)
         self.requestCancellationDialog.exec_()
 
+    # this methodi s triggered when the confirmation button in the QDialog is clicked
     def completeButtonConfirmationFunction(self, reason):
         requestJSON = {
             'requestsType' : 'Cancellation',
@@ -376,6 +377,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.frameLayout.widget(self.frameLayoutManager.top()).generateAppointmentButtons()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when the back button is clicked
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
@@ -383,6 +385,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.frameLayoutManager.back()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this methodis triggered when the view prescription button is clicked
     def viewPrescription(self):
         
         self.patientPrescriptionDetails = PatientPrescriptionDetailsWindow(self.prescription,self.patient)
@@ -394,6 +397,7 @@ class PatientAppointmentDetailsWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when the complete appointment button is clicked
     def completeAppointment(self):
         cancelAppointmentDialogBox = QMessageBox.question(self, "Complete Confirmation",
                                                           "Are you sure you want to complete Appointment?",
@@ -409,6 +413,7 @@ class PatientAppointmentDetailsWindow(QWidget):
             self.frameLayout.widget(self.frameLayoutManager.top()).generateAppointmentButtons()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered to set the mode this page is going to be in
     def setMode(self, mode):
         if mode == "Completed":
             self.viewPrescriptionButton.show()
@@ -428,12 +433,13 @@ class PatientAppointmentDetailsWindow(QWidget):
 
         self.cancelAppoitmentButtonUpdate()
 
+    # this method checks for existing request in this appointment and hides the request cancellation appointment accordingly
     def cancelAppoitmentButtonUpdate(self):
         if Request.existingAppointments(self.appointment.getAppointmentID()):
             self.cancelAppointmentButton.hide()
             self.cancelAppointmentLabel.hide()
 
-
+    # this method will hide request cancellation button if the appointment is near 2 hours
     def cancelAppointmentShow(self):
         appointmentStartTime = self.appointment.getStartTime().split(":")
 

@@ -130,6 +130,7 @@ class DoctorPatientRecordWindow(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method is triggered when any of the patient button is clicked
     def patientButtonFunction(self, patient, doctor):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
@@ -139,6 +140,7 @@ class DoctorPatientRecordWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when any text in the search bar is entered
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
 

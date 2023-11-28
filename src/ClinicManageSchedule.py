@@ -85,6 +85,7 @@ class ClinicManageSchedule(QWidget):
         mainLayout.addWidget(boxScrollArea)
 
         self.setLayout(mainLayout)
+    # this method is triggered when the doctor buttons are clicked
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorSchedule = ClinicDetailedSchedule(doctor, clinic)
 
@@ -95,6 +96,7 @@ class ClinicManageSchedule(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is for search bar
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
 
@@ -104,7 +106,8 @@ class ClinicManageSchedule(QWidget):
                 button = item.widget()
                 text = button.text().lower()
                 button.setVisible(searchedText in text)
-
+    # this method is used to generate doctor scheuld buttons
+    # this method can be recalled to regenerate the  buttons again
     def generateScheduleButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

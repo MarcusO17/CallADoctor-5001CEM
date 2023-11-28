@@ -133,6 +133,8 @@ class ClinicDetailedSchedule(QWidget):
         mainLayout.addWidget(self.centralwidget)
 
         self.setLayout(mainLayout)
+
+    # this method is triggered when any of the appointment button is clicked
     def gotoAppointment(self, appointment, doctor, clinic):
 
         self.clinicAppointmentDetails = ClinicAppointmentDetails(appointment, doctor, clinic)
@@ -144,6 +146,7 @@ class ClinicDetailedSchedule(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this methods sets the schedule according to the appointment they have this current week
     def setSchedule(self):
 
         for row in self.timeSlotButtonList:

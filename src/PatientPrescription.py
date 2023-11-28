@@ -85,6 +85,7 @@ class PatientPrescriptionWindow(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method is triggered when the prescription button is clicked
     def prescriptionButtonFunction(self, prescription, patient):
         # update the clinic details page here according to button click
         self.prescriptionDetailsWindow = PatientPrescriptionDetailsWindow(prescription, patient)
@@ -96,6 +97,8 @@ class PatientPrescriptionWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered to generate prescription buttons
+    # this method can be recalled to regenerate the prescription buttons
     def generatePrescription(self):
 
         for i in range(self.buttonContainer.layout().count()):

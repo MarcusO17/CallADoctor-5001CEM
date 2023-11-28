@@ -196,7 +196,8 @@ class PatientSendRequest(QWidget):
             self.frameLayoutManager.back()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-
+    # this method is triggered everything the date label is updated
+    # this method will make the dropdown box have the correct time slots
     def updateTimeslot(self):
         # rounding current time + adding 3 hours to current time
         nextDay = False
@@ -256,6 +257,7 @@ class PatientSendRequest(QWidget):
         self.preferredTimeComboBox.clear()
         self.preferredTimeComboBox.addItems(self.timeList)
 
+    # this method is triggered when the back button is clicked
     def backButtonFunction(self):
 
         backDialogBox = QMessageBox.question(self.centralwidget, "Discard Confirmation",

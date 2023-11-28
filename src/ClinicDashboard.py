@@ -19,12 +19,13 @@ from .model.graphs import graphGen
 class ClinicDashboard(QWidget):
     def __init__(self, clinic):
         super().__init__()
+        # getting all the information I need here
         self.clinic = clinic
         self.setupUi()
 
     def setupUi(self):
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-
+        # main layouts in the program
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
@@ -44,7 +45,7 @@ class ClinicDashboard(QWidget):
         spacer.setFixedHeight(25)
         self.leftLayout.addWidget(spacer)
         self.leftLayout.addWidget(self.graphWidget, 7)
-
+        # this widget is for displaying the doctor name located on the top right
         self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
         spacer.setFixedWidth(180)
@@ -88,6 +89,8 @@ class ClinicDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
+    # this method generate the doctor widgets in the dashboard
+    # this method can be called again to as a refresh function
     def generateDoctorWidgets(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -196,6 +199,7 @@ class ClinicDashboard(QWidget):
 
         doctorWidgetsLayout.addLayout(self.doctorWidgetsRow)
 
+    # this method is triggered when the doctor buttons are clicked
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorSchedule = ClinicDetailedSchedule(doctor, clinic)
 
@@ -206,7 +210,8 @@ class ClinicDashboard(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-
+    # this method generate the request widgets in the dashboard
+    # this method can be called again to as a refresh function
     def generateRequestButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -318,6 +323,7 @@ class ClinicDashboard(QWidget):
 
         self.requestReviewLayout.addLayout(self.requestReviewButtons)
 
+    # this method is triggered when the request button is clicked
     def requestButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click
         self.clinicRequestDetails = ClinicRequestDetails(request, clinic)
@@ -329,6 +335,7 @@ class ClinicDashboard(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method generates a graph widget
     def generateGraphWidget(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

@@ -112,6 +112,7 @@ class ClinicDoctorList(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method is triggered when any of the generated doctor button is clicked
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorDetails = ClinicDoctorDetails(doctor, clinic)
         self.doctorDetails.setMode("Remove")
@@ -123,6 +124,7 @@ class ClinicDoctorList(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when the add doctor button is clicked
     def addDoctorFunction(self):
         self.addDoctorPage = ClinicAddDoctor(self.clinic)
 
@@ -133,6 +135,8 @@ class ClinicDoctorList(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered to generate doctor buttons
+    # this method can be recalled to regenerate the doctor buttons
     def generateDoctorButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -192,6 +196,7 @@ class ClinicDoctorList(QWidget):
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.buttonContainer.layout().addWidget(spacer)
 
+    # this method is for search bar
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
 

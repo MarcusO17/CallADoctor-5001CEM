@@ -164,7 +164,7 @@ class PatientClinicDetailsWindow(QWidget):
 
         self.setLayout(mainLayout)
 
-
+    # this method is triggered when the send request button is clicked
     def sendRequestFunction(self):
         self.patientSendRequest = PatientSendRequest(self.clinic, self.patient)
 
@@ -175,6 +175,7 @@ class PatientClinicDetailsWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when the back button is triggered
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()

@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QStackedWidget
 
-
+# pagemanaager class is used in old version of the program
+# still currently used in admin and registration
 class PageManager():
     _instance = None
     def __new__(cls):
@@ -29,6 +30,7 @@ class PageManager():
     def size(self):
         return len(self.stack)
 
+# this class is used to manage the frame layout in the main pages of each view
 class FrameLayoutManager():
     _instance = None
     def __new__(cls):
