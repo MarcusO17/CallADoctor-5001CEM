@@ -13,6 +13,14 @@ import pandas as pd
 app = Flask(__name__)
 
 def hashPassword(password):
+    """Hashes Password with bcrypt
+
+    Args:
+        password (str): The password to be hashed
+
+    Returns:
+        bytes: The hashed password
+    """
     salt = bcrypt.gensalt()
     hashedPassword = bcrypt.hashpw(password.encode('utf-8'),salt)
     return hashedPassword
@@ -22,7 +30,9 @@ def configure():
     """
     load_dotenv()
 
-def dbConnect():    
+def dbConnect():
+    """uses pymysql to connect to web-hosted DB with credentials
+    """ 
     conn = None 
     try:
         conn = pymysql.connect(
@@ -39,10 +49,20 @@ def dbConnect():
 
 @app.route('/')
 def index():
+    """Index
+
+    Returns:
+        str : Index Message
+    """
     return 'Welcome to Call a Doctor!'
 
 @app.route('/users',methods=['GET'])
 def users():
+    """Endpoint to get all user credentials (for login).
+
+    Returns:
+        JSON: JSON response containing user credentials.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -71,8 +91,17 @@ def users():
         if conn is not None:
             conn.close()
           
-@app.route('/patients',methods=['GET','POST','DELETE'])
+@app.route('/patients',methods=['GET','POST'])
 def patients():
+    """
+    GET Method:
+        Retrieves information for all patients from the database.
+    POST Method:
+        Registers a new patient in database based on JSON data.
+    Returns:
+        JSON response for GET and POST requests.
+        Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -134,8 +163,15 @@ def patients():
         if conn is not None:
             conn.close()
    
-@app.route('/patients/<string:id>',methods=['GET','DELETE'])
+@app.route('/patients/<string:id>',methods=['GET'])
 def patientID(id):
+    """
+        GET Method:
+            Retrieves information for a specific patient.
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -170,6 +206,12 @@ def patientID(id):
           
 @app.route('/patient/geocode/address',methods=['PATCH'])
 def reGeocode():
+    """
+        PATCH Method:
+            Regeocodes patient's address and updates existing entry.
+        Returns:
+            Success Message
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -202,6 +244,15 @@ def reGeocode():
         
 @app.route('/clinics',methods=['GET','POST'])  
 def clinics():
+    """
+    GET Method:
+        Retrieves information for all clinics from the database.
+    POST Method:
+        Registers a new clinic in database based on JSON data.
+    Returns:
+        JSON response for GET and POST requests.
+        Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -259,8 +310,16 @@ def clinics():
             conn.close()
     
 
-@app.route('/clinics/<string:id>',methods=['GET','DELETE'])
+@app.route('/clinics/<string:id>',methods=['GET'])
 def clinicID(id):
+    """
+    GET Method:
+        Retrieves information for a specific clinic based on id.
+
+    Returns:
+        JSON response for GET requests.
+        Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -293,6 +352,14 @@ def clinicID(id):
 
 @app.route('/clinics/unapproved',methods=['GET'])  
 def clinicsUnapproved():
+    """
+     GET Method:
+        Retrieves information for all unapproved clinics from the database.
+
+    Returns:
+        JSON response for GET requests.
+        Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -327,6 +394,12 @@ def clinicsUnapproved():
 
 @app.route('/clinics/approve/<string:clinicID>',methods=['PATCH'])
 def clinicApprove(clinicID):
+    """
+        PATCH Method:
+            Approves the target clinic and updates existing entry.
+        Returns:
+            Success Message
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -351,6 +424,12 @@ def clinicApprove(clinicID):
 
 @app.route('/clinics/cancel/<string:clinicID>',methods=['DELETE'])
 def clinicCancel(clinicID):
+    """
+        DELETE Method:
+           Deletes the target clinic from database.
+        Returns:
+            Success Message
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -375,6 +454,15 @@ def clinicCancel(clinicID):
       
 @app.route('/doctors', methods=['GET','POST'])
 def doctors():
+    """
+        GET Method:
+            Retrieves information for all doctors from the database.
+        POST Method:
+            Registers a new doctor in database based on JSON data.
+        Returns:
+            JSON response for GET and POST requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -442,6 +530,14 @@ def doctors():
 
 @app.route('/doctors/clinics/<string:clinicID>', methods=['GET'])
 def doctorsClinic(clinicID):
+    """
+        GET Method:
+            Retrieves information for all doctors from a specific clinic in the database.
+
+        Returns:
+            JSON response for GET request.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -513,6 +609,14 @@ def doctorsID(doctorID):
 
 @app.route('/doctors/unassigned', methods=['GET'])
 def doctorsUnassigned():
+    """
+        GET Method:
+            Retrieves information for all unassigned doctors in the database.
+
+        Returns:
+            JSON response for GET request.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -549,6 +653,14 @@ def doctorsUnassigned():
         
 @app.route('/doctors/<string:clinicID>/assign/<string:doctorID>',methods=['PATCH'])
 def doctorClinicAssign(clinicID,doctorID):
+    """
+        PATCH Method:
+            Assigns doctor to clinic and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -574,6 +686,14 @@ def doctorClinicAssign(clinicID,doctorID):
 
 @app.route('/doctors/unassign/<string:doctorID>',methods=['PATCH'])
 def doctorClinicUnAssign(doctorID):
+    """
+        PATCH Method:
+            Unassigns doctor to clinic and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -599,6 +719,14 @@ def doctorClinicUnAssign(doctorID):
 
 @app.route('/doctors/pastpatients/<string:doctorID>',methods=['GET'])
 def doctorPastPatients(doctorID):
+    """
+        GET Method:
+           Gets Doctor's Previous Patients in the database
+
+        Returns:
+            JSON response for GET request.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -636,8 +764,17 @@ def doctorPastPatients(doctorID):
         
 
 
-@app.route('/appointments', methods=['GET','POST','DELETE'])
+@app.route('/appointments', methods=['GET','POST'])
 def appointments():
+    """
+        GET Method:
+            Retrieves information for all appointments from the database.
+        POST Method:
+            Registers a new appointment in database based on JSON data.
+        Returns:
+            JSON response for GET and POST requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -694,8 +831,17 @@ def appointments():
             conn.close()  
         
 
-@app.route('/appointments/<string:id>',methods=['GET','DELETE'])
+@app.route('/appointments/<string:id>',methods=['GET'])
 def appointmentID(id):
+    """
+        GET Method:
+            Retrieves information for all appointments from the database.
+        POST Method:
+            Registers a new appointment in database based on JSON data.
+        Returns:
+            JSON response for GET and POST requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -738,6 +884,14 @@ def appointmentID(id):
 
 @app.route('/appointments/past/<string:patientID>',methods=['GET'])
 def appointmentPatientID(patientID):
+    """
+        GET Method:
+            Retrieves information for all past appointments from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -770,6 +924,14 @@ def appointmentPatientID(patientID):
 
 @app.route('/appointments/toDate',methods=['GET'])
 def appointmentToDate():
+    """
+        GET Method:
+            Retrieves information for all appointments so far from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     todayDate =datetime.today().date()
     try:
         conn = dbConnect()
@@ -806,6 +968,14 @@ def appointmentToDate():
 
 @app.route('/appointments/<string:aid>/assign/<string:did>',methods=['PATCH'])
 def appointmentDoctorAssign(aid,did):
+    """
+        PATCH Method:
+            Assigns doctor to appointment by the clinic and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -833,6 +1003,14 @@ def appointmentDoctorAssign(aid,did):
 
 @app.route('/appointments/<string:aid>/deny',methods=['PATCH'])
 def appointmentDeny(aid):
+    """
+        PATCH Method:
+            Cancels the appointment and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -857,6 +1035,14 @@ def appointmentDeny(aid):
 
 @app.route('/appointments/<string:aid>/approve',methods=['PATCH'])
 def appointmentApprove(aid):
+    """
+        PATCH Method:
+            Approves appointment and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -881,6 +1067,14 @@ def appointmentApprove(aid):
 
 @app.route('/appointments/<string:aid>/complete',methods=['PATCH'])
 def appointmentComplete(aid):
+    """
+        PATCH Method:
+            Completes appointment and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -905,6 +1099,16 @@ def appointmentComplete(aid):
 
 @app.route('/appointments/week',methods=['GET'])
 def appointmentsWeek():
+    """
+        GET Method:
+            Retrieves information for all appointments in the current week
+            (Monday to Sunday) from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
+   
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
     dateEnd = dateToday + timedelta(days=6)
     print(dateToday)
@@ -944,6 +1148,15 @@ def appointmentsWeek():
 
 @app.route('/appointments/upcoming/doctor/<string:doctorID>',methods=['GET'])
 def appointmentsDoctorUpcoming(doctorID):
+    """
+        GET Method:
+            Retrieves information for all upcoming appointments for
+            a specific doctor from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
     try:
         conn = dbConnect()
@@ -980,6 +1193,15 @@ def appointmentsDoctorUpcoming(doctorID):
 
 @app.route('/appointments/upcoming/patient/<string:patientID>',methods=['GET'])
 def appointmentsPatientUpcoming(patientID):
+    """
+        GET Method:
+            Retrieves information for all upcoming appointments for
+            a specific patient from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
     try:
         conn = dbConnect()
@@ -1016,6 +1238,15 @@ def appointmentsPatientUpcoming(patientID):
 
 @app.route('/appointments/<string:clinicID>/pending',methods=['GET'])
 def appointmentsPending(clinicID):
+    """
+        GET Method:
+            Retrieves information for all pending appointments for
+            a specific clinic from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1049,6 +1280,15 @@ def appointmentsPending(clinicID):
 
 @app.route('/appointments/week/<string:doctorID>',methods=['GET'])
 def appointmentsWeekID(doctorID):
+    """
+        GET Method:
+            Retrieves information for all weekly appointments for
+            a specific doctor from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     dateToday = datetime.now().date() - timedelta(days= datetime.now().date().weekday())
     dateEnd = dateToday + timedelta(days=6)
     try:
@@ -1085,6 +1325,15 @@ def appointmentsWeekID(doctorID):
 
 @app.route('/appointments/today/<string:clinicID>',methods=['GET'])
 def appointmentsClinicWeek(clinicID):
+    """
+        GET Method:
+            Retrieves information for all today's appointments for
+            a specific clinic from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     dateToday = datetime.now().date()
     print(dateToday)
     try:
@@ -1122,6 +1371,15 @@ def appointmentsClinicWeek(clinicID):
             
 @app.route('/appointments/doctor/<string:doctorID>',methods=['GET'])
 def appointmentsByDoctor(doctorID):
+    """
+        GET Method:
+            Retrieves information for all appointments for
+            a specific doctor from the database.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1155,6 +1413,15 @@ def appointmentsByDoctor(doctorID):
         
 @app.route('/appointments/<string:id>/find/<string:clinicID>',methods=['GET'])
 def appointmentsFind(id,clinicID):
+    """
+        GET Method:
+            Retrieves the  clinic's doctors which are not busy for the designated
+            appointment.
+      
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1189,8 +1456,17 @@ def appointmentsFind(id,clinicID):
         if conn is not None:
             conn.close()
 
-@app.route('/prescriptions', methods=['GET','POST','DELETE'])
+@app.route('/prescriptions', methods=['GET','POST'])
 def prescriptions():
+    """
+        GET Method:
+            Retrieves information for all prescriptions from the database.
+        POST Method:
+            Registers a new prescription  in database based on JSON data.
+        Returns:
+            JSON response for GET and POST requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1238,8 +1514,17 @@ def prescriptions():
 
 
 
-@app.route('/prescriptions/<string:id>',methods=['GET','DELETE'])
+@app.route('/prescriptions/<string:id>',methods=['GET'])
 def prescriptionID(id):
+    """
+        GET Method:
+            Retrieves information for a specific prescription
+             from the database.
+    
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1275,9 +1560,17 @@ def prescriptionID(id):
             conn.close()
 
     
-@app.route('/prescriptions/appointments/<string:id>',methods=['GET','DELETE'])
+@app.route('/prescriptions/appointments/<string:id>',methods=['GET'])
 def prescriptionAppointmentID(id):
-
+    """
+        GET Method:
+            Retrieves information for a specific prescription
+            from the database.
+    
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1303,8 +1596,17 @@ def prescriptionAppointmentID(id):
         if conn is not None:
             conn.close()
         
-@app.route('/prescriptions/patients/<string:id>',methods=['GET','DELETE'])
+@app.route('/prescriptions/patients/<string:id>',methods=['GET'])
 def prescriptionPatientID(id):
+    """
+        GET Method:
+            Retrieves information for all prescriptions belonging
+            to a patient from the database.
+    
+        Returns:
+            JSON response for GET requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1334,6 +1636,19 @@ def prescriptionPatientID(id):
     
 @app.route('/prescriptionDetails/<string:id>',methods=['GET','DELETE'])
 def prescriptionDetailsID(id):
+    """
+        GET Method:
+            Retrieves information for all prescriptionDetails belonging
+            to a certain prescription from the database.
+
+        DELETE Method:
+            Deletes a prescriptionDetail within the DB
+
+        Returns:
+            JSON response for GET requests.
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1371,6 +1686,14 @@ def prescriptionDetailsID(id):
     
 @app.route('/prescriptionDetails', methods=['POST'])
 def prescriptionDetails():
+    """
+        POST Method:
+            Inserts prescriptionDetails into the database.
+
+        Returns:
+            Success
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1405,6 +1728,16 @@ def prescriptionDetails():
     
 @app.route('/requests',methods=['GET','POST'])
 def allRequests():
+    """
+        GET Method:
+            Retrieves information for all requests from the database.
+        POST Method:
+            Registers a new request in database based on JSON data.
+
+        Returns:
+            JSON response for GET and POST requests.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1461,6 +1794,14 @@ def allRequests():
 
 @app.route('/requests/exists/<string:appointmentID>',methods=['GET'])
 def requestsExists(appointmentID):
+    """
+        GET Method:
+            Check if there was a requests assigned to a appointment
+
+        Returns:
+            True or False.
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1469,6 +1810,7 @@ def requestsExists(appointmentID):
         cursor = conn.cursor()
         if request.method == 'GET':
             cursor.execute("SELECT * FROM requests WHERE appointmentID = %s",appointmentID)
+
             result = cursor.fetchone()
             print(result)
             if result is not None:
@@ -1487,6 +1829,14 @@ def requestsExists(appointmentID):
 
 @app.route('/requests/<string:clinicID>',methods=['GET'])
 def requestsByClinic(clinicID):
+    """
+        GET Method:
+            Retrieves all requests a specific clinic.
+
+        Returns:
+            GET JSON
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1518,6 +1868,14 @@ def requestsByClinic(clinicID):
     
 @app.route('/requests/cancel/<string:requestsID>',methods=['PATCH'])
 def requestsCancel(requestsID):
+    """
+        PATCH Method:
+           Cancels the request and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1543,6 +1901,14 @@ def requestsCancel(requestsID):
 
 @app.route('/requests/approve/<string:requestsID>',methods=['PATCH'])
 def requestsApprove(requestsID):
+    """
+        PATCH Method:
+           Approves the request and updates existing entry.
+
+        Returns:
+            Success Message
+            Error response in case of exceptions.
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1568,6 +1934,13 @@ def requestsApprove(requestsID):
 
 @app.route('/graph/users', methods=['GET'])
 def generateGraph():
+    """
+        GET Method:
+           Processes appointments to date into a dataframe
+
+        Returns:
+            JSON of the unique dates
+    """
     appointments = requests.get(f"http://127.0.0.1:5000/appointments/toDate").json()
     df = pd.DataFrame(columns=['dates', 'count'])
     dateFormat = "%a, %d %b %Y %H:%M:%S %Z"
@@ -1581,10 +1954,15 @@ def generateGraph():
 
 @app.route('/users/auth')
 def userAuthentication():
+    """
+    Authenticates the user by comparing the hashed password and checks for valid email.
+    Returns:
+        JSON : SessionInfo
+    """
     try:
         conn = dbConnect()
         if conn is None:
-             return jsonify({'Error': 'Failed to connect to the database'}), 500
+            return jsonify({'Error': 'Failed to connect to the database'}), 500
             
         cursor = conn.cursor()
     
@@ -1611,7 +1989,7 @@ def userAuthentication():
 
 
     except Exception as e:
-       return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e)}), 500
     
     finally:
         if conn is not None:
@@ -1619,6 +1997,11 @@ def userAuthentication():
 
 @app.route('/doctors/idgen')
 def getLastDoctorID():
+    """Generates a new Doctor ID based on the previous row
+
+    Returns:
+        str : DoctorID
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1652,6 +2035,11 @@ def getLastDoctorID():
 
 @app.route('/patients/idgen')
 def getLastPatientID():
+    """Generates a new Patient ID based on the previous row
+
+    Returns:
+        str : ID
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1684,6 +2072,11 @@ def getLastPatientID():
 
 @app.route('/clinics/idgen')
 def getLastClinicID():
+    """Generates a new Clinic ID based on the previous row
+
+    Returns:
+        str : ID
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1715,6 +2108,11 @@ def getLastClinicID():
    
 @app.route('/appointments/idgen')
 def getLastAppointmentsID():
+    """Generates a new Appointments ID based on the previous row
+
+    Returns:
+        str : ID
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1748,6 +2146,11 @@ def getLastAppointmentsID():
 
 @app.route('/prescriptions/idgen')
 def getLastPrescriptionID():
+    """Generates a new Prescription ID based on the previous row
+
+    Returns:
+        str : ID
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1779,6 +2182,11 @@ def getLastPrescriptionID():
 
 @app.route('/requests/idgen')
 def getLastRequestsID():
+    """Generates a new Requests ID based on the previous row
+
+    Returns:
+        str : ID
+    """
     try:
         conn = dbConnect()
         if conn is None:
@@ -1811,6 +2219,11 @@ def getLastRequestsID():
 
 @app.route('/clinics/image/upload/<string:id>', methods=['POST'])
 def uploadClinicImage(id):
+    """Uploads Clinic Image
+
+    Returns:
+        Success JSON
+    """
     conn = dbConnect()  
     cursor = conn.cursor()
    
@@ -1827,6 +2240,11 @@ def uploadClinicImage(id):
 
 @app.route('/clinics/image/download/<string:id>', methods=['GET'])
 def downloadClinicImage(id):
+    """Download Clinic Image
+
+    Returns:
+        bytes : imgData
+    """
     conn = dbConnect()  
     cursor = conn.cursor()
    
@@ -1845,6 +2263,11 @@ def downloadClinicImage(id):
 
 @app.route('/doctors/image/upload/<string:id>', methods=['POST'])
 def uploadDoctorsImage(id):
+    """Uploads Doctor Image
+
+    Returns:
+        Success JSON
+    """
     conn = dbConnect()  
     cursor = conn.cursor()
    
@@ -1861,6 +2284,11 @@ def uploadDoctorsImage(id):
 
 @app.route('/doctors/image/download/<string:id>', methods=['GET'])
 def downloadDoctorsImage(id):
+    """Download Doctor Image
+
+    Returns:
+        bytes : imgData
+    """
     conn = dbConnect()  
     cursor = conn.cursor()
    
