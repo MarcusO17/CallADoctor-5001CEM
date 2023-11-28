@@ -86,6 +86,8 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         )
         self.backButton.setGraphicsEffect(effect)
 
+        # A Container was made with the help of Qlabel, which would contain all the details of the clinic
+        # This container also contains the buttons. 
         
         self.adminClinicDetailsContainer = QLabel(self.centralwidget)
         self.adminClinicDetailsContainer.setFixedSize(1000,500)
@@ -95,10 +97,14 @@ class AdminViewClinicDetailsWindow(QMainWindow):
                                                             background: #D0BFFF;
                                                             border-radius: 10px;
                                                             }""")
+        
+        # Qlabel used for the description Title
 
         self.adminClinicDetailsDescriptionTitle = QLabel(self.centralwidget)
         self.adminClinicDetailsDescriptionTitle.setGeometry(QRect(180, 190, 150, 40))
         self.adminClinicDetailsDescriptionTitle.setText("Clinic Description: ")
+
+        # Qlabel used for Displaying the clinic description - Clinic ID, Name and Status. 
 
         self.adminClinicDetailsDescriptionLabel = QLabel(self.centralwidget)
         self.adminClinicDetailsDescriptionLabel.setGeometry(QRect(180, 220, 400, 200))
@@ -116,9 +122,13 @@ class AdminViewClinicDetailsWindow(QMainWindow):
                                                                 background: white;
                                                                 }""")
         
+        # Qlabel used for the Clinic Addresss Title 
+        
         self.adminClinicDetailsAddressTitle = QLabel(self.centralwidget)
         self.adminClinicDetailsAddressTitle.setGeometry(QRect(180, 420, 150, 40))
         self.adminClinicDetailsAddressTitle.setText("Clinic Address: ")
+
+        #Qlabel used to dispaly the address of the clinic
 
         self.adminClinicDetailsAddressLabel = QLabel(self.centralwidget)
         self.adminClinicDetailsAddressLabel.setGeometry(QRect(180, 450, 350, 200))
@@ -135,6 +145,9 @@ class AdminViewClinicDetailsWindow(QMainWindow):
                                                                 border: 1px solid black;
                                                                 background: white;
                                                                 }""")
+        
+        # QPush Button used as the button to Remove Clinics.
+        # Connected to a method of Removing Clinic
 
         self.adminRemoveClinicButton = QPushButton(self.centralwidget)
         self.adminRemoveClinicButton.setGeometry(QRect(710, 545, 375, 100))
@@ -161,6 +174,8 @@ class AdminViewClinicDetailsWindow(QMainWindow):
                                                         }""")
         self.adminRemoveClinicButton.raise_()
 
+        # QLabel used for displaying ICON for the Remove Button
+
         self.adminRemoveClinicLabel = QLabel(self.centralwidget)
         self.adminRemoveClinicLabel.setGeometry(QRect(730, 570, 50, 50))
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-remove-64.png")
@@ -180,6 +195,8 @@ class AdminViewClinicDetailsWindow(QMainWindow):
         MainWindow.setCentralWidget(self.centralwidget)
 
         QMetaObject.connectSlotsByName(MainWindow)
+
+    # Method that removes the Clinics from the system
 
     def adminRemoveClinicFunction(self):
         adminClinicRemoveDialogBox = QMessageBox.question(self.centralwidget, "Removal Confirmation", 
