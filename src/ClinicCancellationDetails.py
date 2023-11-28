@@ -212,6 +212,7 @@ class ClinicCancellationDetails(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method is triggered when the back button is triggered
     def backButtonFunction(self):
         backConfirmationDialogBox = QMessageBox.question(self.centralwidget, "Back Confirmation",
                                                          "Are you sure you want to back from this request, you may continue later.",
@@ -223,6 +224,7 @@ class ClinicCancellationDetails(QWidget):
             self.frameLayoutManager.back()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when accepting the request
     def acceptRequestFunction(self):
         acceptRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Confirmation",
                                                       "Are you sure you want to approve this request",
@@ -236,6 +238,7 @@ class ClinicCancellationDetails(QWidget):
             self.frameLayout.widget(self.frameLayoutManager.top()).generateCancellationButtons()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when rejecting the request
     def cancelRequestFunction(self):
         cancelRequestDialogBox = QMessageBox.question(self.centralwidget, "Request Cancel Confirmation",
                                                       "Are you sure you want to deny this request",

@@ -86,6 +86,7 @@ class DoctorMyAppointmentWindow(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method is triggered when any of the appointment button is clicked
     def appointmentButtonFunction(self, appointment, doctor):
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
         self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
@@ -97,6 +98,8 @@ class DoctorMyAppointmentWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered to generate appointment buttons
+    # this method can be recalled to regenerate the appointment buttons
     def generateMyAppointmentButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

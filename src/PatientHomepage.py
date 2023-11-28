@@ -14,9 +14,7 @@ from .PageManager import PageManager, FrameLayoutManager
 from .PatientPrescription import PatientPrescriptionWindow
 from .PatientMyAppointment import PatientMyAppointmentWindow
 
-
-
-
+# this is the widget holder for the patient views
 class PatientHomepage(QMainWindow):
     def __init__(self, patientID):
         super().__init__()
@@ -32,29 +30,34 @@ class PatientHomepage(QMainWindow):
 
         self.setupUi(self)
 
+    # triggered when dashboard button in sidebar is pressed, set framelayout to the correct index
     def goToDashboard(self):
         self.setButtonHighlight(self.dashboardButton)
         self.patientDashboard.generateUpcomingAppointments()
         self.patientDashboard.generatePrescription()
         self.frameLayoutManager.backToBasePage(0)
         self.frameLayout.setCurrentIndex(0)
+    # triggered when clinics nearby button in sidebar is pressed, set framelayout to the correct index
     def goToClinicsNearby(self):
         self.setButtonHighlight(self.clinicNearbyButton)
         self.frameLayoutManager.backToBasePage(1)
         self.frameLayout.setCurrentIndex(1)
 
+    # triggered when my prescription button in sidebar is pressed, set framelayout to the correct index
     def gotoMyPrescription(self):
         self.setButtonHighlight(self.myPrescriptionButton)
         self.patientPrescription.generatePrescription()
         self.frameLayoutManager.backToBasePage(3)
         self.frameLayout.setCurrentIndex(3)
 
+    # triggered when my appointment button in sidebar is pressed, set framelayout to the correct index
     def gotoPatientMyAppointment(self):
         self.setButtonHighlight(self.myAppointmentButton)
         self.patientMyAppointment.generateAppointmentButtons()
         self.frameLayoutManager.backToBasePage(2)
         self.frameLayout.setCurrentIndex(2)
 
+    # triggered when account button in sidebar is pressed, set framelayout to the correct index
     def goToAccountPage(self):
         self.setButtonHighlight(self.myAccountButton)
         self.frameLayoutManager.backToBasePage(4)
@@ -87,6 +90,7 @@ class PatientHomepage(QMainWindow):
         self.centralwidget = QWidget(MainWindow)
 
         self.mainLayout = QHBoxLayout()
+        # sidebar widget
         self.sideLayoutWidget = QWidget()
         self.sideLayoutWidget.setObjectName("sideBar")
         self.sideLayoutWidget.setStyleSheet("""QWidget#sideBar {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -102,6 +106,7 @@ class PatientHomepage(QMainWindow):
         font.setFamily("Montserrat")
         font.setPointSize(15)
 
+        # Label, Button for sidebar
         self.dashboardButton = QPushButton()
         self.dashboardButton.setFixedSize(280, 70)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-house-64 (1).png")
@@ -209,8 +214,8 @@ class PatientHomepage(QMainWindow):
             offset=QPoint(3, 3), blurRadius=17, color=QColor("#120855")
         )
         self.logoutButton.setGraphicsEffect(effect)
-        
 
+        # setting highlight when clicked
         self.highlightButtonList = list()
         self.highlightButtonList.append(self.myAccountButton)
         self.highlightButtonList.append(self.myAppointmentButton)
@@ -218,7 +223,7 @@ class PatientHomepage(QMainWindow):
         self.highlightButtonList.append(self.dashboardButton)
         self.highlightButtonList.append(self.clinicNearbyButton)
 
-
+        # setting buttons to layout
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
         spacer1.setFixedHeight(50)
@@ -265,6 +270,7 @@ class PatientHomepage(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+    # logout function
     def logout(self):
         logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation",
                                                "Are you sure you want to logout",
@@ -273,6 +279,7 @@ class PatientHomepage(QMainWindow):
             self.pageManager.goBack()
             self.frameLayoutManager.back()
 
+    # method to highlight the button the user is currently in
     def setButtonHighlight(self, button):
         for buttonTemp in self.highlightButtonList:
             if buttonTemp == button:

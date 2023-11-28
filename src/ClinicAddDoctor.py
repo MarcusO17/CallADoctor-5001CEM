@@ -119,7 +119,7 @@ class ClinicAddDoctor(QWidget):
 
         self.setLayout(mainLayout)
 
-
+    # this method is triggered when any of the doctor buttons generated is clicked
     def doctorButtonFunction(self, doctor, clinic):
         self.doctorDetails = ClinicDoctorDetails(doctor, clinic)
         self.doctorDetails.setMode("Add")
@@ -131,6 +131,7 @@ class ClinicAddDoctor(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when the back button is clicked
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
@@ -139,6 +140,7 @@ class ClinicAddDoctor(QWidget):
         self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is for search bar
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
 
@@ -149,6 +151,8 @@ class ClinicAddDoctor(QWidget):
                 text = button.text().lower()
                 button.setVisible(searchedText in text)
 
+    # this method generate the doctor buttons
+    # this method can be called again to as a refresh function
     def generateDoctorButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

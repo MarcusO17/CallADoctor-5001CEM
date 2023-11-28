@@ -143,6 +143,7 @@ class DoctorGeneratePrescription(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method triggers when back button is clicked
     def backButtonFunction(self):
         backConfirmationDialog = QMessageBox.question(self.centralwidget, "Back Confirmation",
                                                "Do you want to discard this prescription",
@@ -151,6 +152,7 @@ class DoctorGeneratePrescription(QWidget):
             self.frameLayoutManager.back()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # method is triggered when the complete prescription button is clicked
     def completePrescription(self):
         self.expiryDateDialog = QDialog(self)
 
@@ -240,7 +242,7 @@ class DoctorGeneratePrescription(QWidget):
         self.layout.addLayout(confirmationButtonLayout)
         self.expiryDateDialog.setLayout(self.layout)
         self.expiryDateDialog.exec_()
-
+    # method is triggered when the QDialog is confirmation button is clicked
     def completeButtonConfirmationFunction(self, date):
         # marcus you do your thing here
         prescription = Prescription(None,self.appointment.getAppointmentID(),None)
@@ -268,6 +270,7 @@ class DoctorGeneratePrescription(QWidget):
         self.frameLayout.widget(self.frameLayoutManager.top()).completePrescription()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # method is triggered when adding a new row button is triggered
     def addNewRow(self):
 
         row = QWidget()
@@ -327,6 +330,7 @@ class DoctorGeneratePrescription(QWidget):
 
         self.rowContainer.layout().addWidget(row)
 
+    # this method is for deleting a row
     def removeRow(self, row):
         self.rowContainer.layout().removeWidget(row)
 

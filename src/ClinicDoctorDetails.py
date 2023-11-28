@@ -293,7 +293,7 @@ class ClinicDoctorDetails(QWidget):
         mainLayout.addWidget(self.centralwidget)
 
         self.setLayout(mainLayout)
-
+    # this method is triggered when the schedule button is clicked
     def goToSchedule(self):
         self.doctorSchedule = ClinicDetailedSchedule(self.doctor, self.clinic)
 
@@ -303,7 +303,7 @@ class ClinicDoctorDetails(QWidget):
         self.frameLayout.addWidget(self.doctorSchedule)
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
-
+    # this method is used to remove doctor from the clinic's doctor list
     def removeDoctor(self):
         removeDoctorDialogBox = QMessageBox.question(self, "Remove Confirmation",
                                                           "Are you sure you want to remove this doctor from the doctor list?",
@@ -319,7 +319,7 @@ class ClinicDoctorDetails(QWidget):
             self.frameLayoutManager.back()
             self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
-
+     # this method is used to add the doctor to the clinic's doctor list
     def addDoctor(self):
         addDoctorDialogBox = QMessageBox.question(self, "Add Confirmation",
                                                           "Are you sure you want to Add this doctor to the doctor list?",
@@ -337,6 +337,7 @@ class ClinicDoctorDetails(QWidget):
             self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
             self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when the back button is clicked
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
@@ -345,6 +346,7 @@ class ClinicDoctorDetails(QWidget):
         self.frameLayout.widget(self.frameLayoutManager.top()).generateDoctorButtons()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered to set the mode this page is going to be in
     def setMode(self, state):
         if state == "Remove":
             self.removeDoctorButton.show()

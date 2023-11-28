@@ -213,6 +213,7 @@ class PatientClinicsNearbyWindow(QWidget):
 
         self.setLayout(mainLayout)
 
+    # this method recenters the map to the clinic location
     def updateMapButton(self,clinic,clinicList): 
         map = geoHelper.recenterMap((clinic.getClinicLat(), clinic.getClinicLon()))  # Return Folium Map
         geoHelper.addMarker(map, self.currLocation, 'We are here!', 'red', 'star')  # Current Loc
@@ -232,7 +233,7 @@ class PatientClinicsNearbyWindow(QWidget):
         webView.setHtml(data.getvalue().decode())
         self.mapWidgetLayout.addWidget(webView)
     
-
+    # this method is triggered when the clinic button is clicked
     def clinicButtonFunction(self, clinic, patient):
         # update the clinic details page here according to button click
         self.clinicDetailsWindow = PatientClinicDetailsWindow(clinic, patient)
@@ -244,7 +245,7 @@ class PatientClinicsNearbyWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-
+    # this method is for the search bar
     def filterButtons(self):
         searchedText = self.searchBar.text().strip().lower()
 
@@ -255,6 +256,7 @@ class PatientClinicsNearbyWindow(QWidget):
                 clinicRow[0].itemAt(i).widget().setVisible(searchedText in text)
                 clinicRow[1].setVisible(searchedText in text)
 
+    # this method generates the map widget in this page
     def generateMapWidget(self,clinicList):
         self.mapWidget = QWidget()
         self.mapWidget.setObjectName("mapWidget")
@@ -277,7 +279,7 @@ class PatientClinicsNearbyWindow(QWidget):
         self.mapWidgetLayout.setContentsMargins(20, 20, 20, 20)
         self.mapWidgetLayout.addWidget(webView)
     
-    
+    # this method generates the clinic markers
     def generateClinicMarkers(self,map,clinicList):
         for clinics in clinicList:
             geoHelper.addMarker(map,(clinics.getClinicLat(),clinics.getClinicLon()),clinics.getClinicName()

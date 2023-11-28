@@ -154,6 +154,7 @@ class DoctorPatientHistoryWindow(QWidget):
         mainLayout.addWidget(spacer)
         self.setLayout(mainLayout)
 
+    # this method is triggered when any of the appointment button is clicked
     def appointmentButtonFunction(self, appointment, doctor):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
@@ -165,6 +166,7 @@ class DoctorPatientHistoryWindow(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered when the back button is clicked
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()

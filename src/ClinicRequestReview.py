@@ -27,6 +27,7 @@ class ClinicRequestReview(QWidget):
 
         # this is the header (logo, title, my back button
         self.centralwidget = QWidget()
+        # stacked widget containing 2 QScrollArea
         self.stackedWidget = QStackedWidget(self.centralwidget)
         self.stackedWidget.setStyleSheet(f"QStackedWidget {{background-color: transparent;}}")
         effect = QGraphicsDropShadowEffect(
@@ -179,6 +180,7 @@ class ClinicRequestReview(QWidget):
 
         self.stackedWidget.setCurrentIndex(0)
 
+    # this method is for changing the stacked widget to display the correct QScrollArea
     def appointmentCancellationFunction(self):
         if self.state == "Request Cancellation":
             pass
@@ -187,7 +189,7 @@ class ClinicRequestReview(QWidget):
             print(self.state)
             self.stackedWidget.setCurrentIndex(1)
             self.setButtonHighlight(self.appointmentCancellationButton)
-
+    # this method is for changing the stacked widget to display the correct QScrollArea
     def requestReviewFunction(self):
         if self.state == "Request Review":
             pass
@@ -197,6 +199,7 @@ class ClinicRequestReview(QWidget):
             self.stackedWidget.setCurrentIndex(0)
             self.setButtonHighlight(self.requestReviewButton)
 
+    # this method is triggered when any of the request button is clicked
     def requestButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click
         self.clinicRequestDetails = ClinicRequestDetails(request, clinic)
@@ -208,6 +211,8 @@ class ClinicRequestReview(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered to generate request buttons
+    # this method can be recalled to regenerate the request buttons
     def generateRequestButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -266,6 +271,7 @@ class ClinicRequestReview(QWidget):
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.buttonContainer.layout().addWidget(spacer)
 
+    # this method is triggered when any of the cancellation request button is clicked
     def cancellationButtonFunction(self, request, clinic):
         # update the clinic details page here according to button click
         self.clinicCancellationDetails = ClinicCancellationDetails(request, clinic)
@@ -277,6 +283,8 @@ class ClinicRequestReview(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is triggered to generate cancellation request buttons
+    # this method can be recalled to regenerate the cancellation request buttons
     def generateCancellationButtons(self):
 
         CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -334,7 +342,7 @@ class ClinicRequestReview(QWidget):
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.appointmentCancellationButtonContainer.layout().addWidget(spacer)
 
-
+    # method to highlight the button the user is currently in
     def setButtonHighlight(self, button):
         for buttonTemp in self.highlightButtonList:
             if buttonTemp == button:

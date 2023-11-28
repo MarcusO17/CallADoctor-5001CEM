@@ -14,20 +14,25 @@ from .model import Doctor
 from .DoctorMyAppointment import DoctorMyAppointmentWindow
 from .DoctorPatientRecord import DoctorPatientRecordWindow
 
+# this is the widget holder for the doctor views
 class DoctorHomepage(QMainWindow):
     def __init__(self, sessionID):
         super().__init__()
+        # setting up frame lauout manager
         self.pageManager = PageManager()
         self.frameLayoutManager = FrameLayoutManager()
         self.doctor = Doctor.getDoctorfromID(sessionID)
         self.frameLayoutManager.add(0)
         self.frameLayoutManager.setBasePages(6)
+        # setting window title and window size
         self.setWindowTitle("Homepage")
         self.setFixedWidth(1280)
         self.setFixedHeight(720)
         self.setStyleSheet(f"QMainWindow {{background-color: white;}}")
+        # implement UI
         self.setupUi(self)
 
+    # triggered when dashboard button in sidebar is pressed, set framelayout to the correct index
     def goToDashboard(self):
         self.setButtonHighlight(self.dashboardButton)
         self.doctorDashboard.setSchedule()
@@ -35,27 +40,32 @@ class DoctorHomepage(QMainWindow):
         self.frameLayoutManager.backToBasePage(0)
         self.frameLayout.setCurrentIndex(0)
 
+    # triggered when schedule button in sidebar is pressed, set framelayout to the correct index
     def gotoSchedule(self):
         self.setButtonHighlight(self.scheduleButton)
         self.doctorScheduleWindow.setSchedule()
         self.frameLayoutManager.backToBasePage(1)
         self.frameLayout.setCurrentIndex(1)
 
+    # triggered when Patient Record button in sidebar is pressed, set framelayout to the correct index
     def gotoPatientRecord(self):
         self.setButtonHighlight(self.patientRecordButton)
         self.frameLayoutManager.backToBasePage(2)
         self.frameLayout.setCurrentIndex(2)
 
+    # triggered when My Appointment button in sidebar is pressed, set framelayout to the correct index
     def gotoMyAppointment(self):
         self.setButtonHighlight(self.myAppointmentButton)
         self.frameLayoutManager.backToBasePage(3)
         self.frameLayout.setCurrentIndex(3)
 
+    # triggered when Map button in sidebar is pressed, set framelayout to the correct index
     def goToMapPage(self):
         self.setButtonHighlight(self.mapButton)
         self.frameLayoutManager.backToBasePage(4)
         self.frameLayout.setCurrentIndex(4)
 
+    # triggered when Account button in sidebar is pressed, set framelayout to the correct index
     def goToAccountPage(self):
         self.setButtonHighlight(self.myAccountButton)
         self.frameLayoutManager.backToBasePage(5)
@@ -86,8 +96,9 @@ class DoctorHomepage(QMainWindow):
                             """
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-
+        # main layouts in the program
         self.mainLayout = QHBoxLayout()
+        # sidebar widget
         self.sideLayoutWidget = QWidget()
         self.sideLayoutWidget.setObjectName("sideBar")
         self.sideLayoutWidget.setStyleSheet("""QWidget#sideBar {background: qlineargradient(spread: pad, x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -103,7 +114,7 @@ class DoctorHomepage(QMainWindow):
         font.setFamily("Montserrat")
         font.setPointSize(15)
 
-        # Label, Icon and Button for Schedule
+        # Label, Button for sidebar
         self.scheduleButton = QPushButton()
         self.scheduleButton.setFixedSize(280, 70)
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-calendar-64.png")
@@ -219,6 +230,7 @@ class DoctorHomepage(QMainWindow):
         )
         self.logoutButton.setGraphicsEffect(effect)
 
+        # setting highlight when clicked
         self.highlightButtonList = list()
         self.highlightButtonList.append(self.myAccountButton)
         self.highlightButtonList.append(self.myAppointmentButton)
@@ -227,6 +239,7 @@ class DoctorHomepage(QMainWindow):
         self.highlightButtonList.append(self.patientRecordButton)
         self.highlightButtonList.append(self.mapButton)
 
+        #setting buttons to layout
         self.sideLayout.addWidget(self.topLeftLogo)
         spacer1 = QWidget()
         spacer1.setFixedHeight(50)
@@ -276,6 +289,7 @@ class DoctorHomepage(QMainWindow):
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    # logout function
     def logout(self):
 
         logoutDialogBox = QMessageBox.question(self.centralwidget, "Logout Confirmation", "Are you sure you want to logout",
@@ -283,6 +297,7 @@ class DoctorHomepage(QMainWindow):
         if logoutDialogBox == QMessageBox.Yes:
             self.pageManager.goBack()
             self.frameLayoutManager.back()
+    # method to highlight the button the user is currently in
     def setButtonHighlight(self, button):
         for buttonTemp in self.highlightButtonList:
             if buttonTemp == button:

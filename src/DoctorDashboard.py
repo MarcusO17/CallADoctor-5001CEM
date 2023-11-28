@@ -18,6 +18,7 @@ from .PageManager import PageManager, FrameLayoutManager
 class DoctorDashboard(QWidget):
     def __init__(self, doctor):
         super().__init__()
+        # getting all the information I need here
         self.doctor = doctor
         self.clinic = Clinic.getClinicfromID(self.doctor.getClinicID())
         self.currLocation = (self.clinic.getClinicLat(), self.clinic.getClinicLon())
@@ -25,7 +26,7 @@ class DoctorDashboard(QWidget):
         self.setupUi()
 
     def setupUi(self):
-
+        # main layouts in the program
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
@@ -41,9 +42,11 @@ class DoctorDashboard(QWidget):
 
         self.generateMapWidget()
 
+        # setting the widgets into the dashboard layout
         self.leftLayout.addWidget(self.mainScheduleWidget, 3)
         self.leftLayout.addWidget(self.mainMapWidget, 7)
 
+        # this widget is for displaying the doctor name located on the top right
         self.userInfoLayout = QHBoxLayout()
         spacer = QWidget()
         spacer.setFixedWidth(230)
@@ -86,6 +89,7 @@ class DoctorDashboard(QWidget):
 
         self.setLayout(self.mainLayout)
 
+    # this method sets the schedule in the dashboard
     def setSchedule(self):
 
         self.appointmentList.clear()
@@ -116,6 +120,7 @@ class DoctorDashboard(QWidget):
                     self.timeSlotButtonList[row][col + (i - 1)].setStyleSheet("background-color: green;")
                     self.timeSlotButtonList[row][col + (i - 1)].setEnabled(True)
 
+    # this method generate the schedule in the dashboard
     def generateSchedule(self):
 
         HEIGHT = 7
@@ -218,19 +223,18 @@ class DoctorDashboard(QWidget):
 
         self.mainScheduleLayout.addWidget(self.scheduleWidget)
 
+    # this method generate the upcoming appointment widgets in the dashboard
+    # this method can be called again to as a refresh function
     def generateUpcomingAppointments(self):
 
-        while self.upcomingAppointmentButtons.count():
-            item = self.upcomingAppointmentButtons.takeAt(0)
-            widget = item.widget()
-            if widget:
-                self.upcomingAppointmentButtons.removeItem(item)
-                widget.deleteLater()
+        # main widget in the upcoming appointment widget
 
         self.upcomingAppointmentWidget = QWidget()
         self.upcomingAppointmentWidget.setStyleSheet("background-color: transparent;")
         self.upcomingAppointmentLayout = QVBoxLayout(self.upcomingAppointmentWidget)
         self.upcomingAppointmentLayout.setSpacing(0)
+
+        # delete all widgets in the layout first
 
         for i in range(self.upcomingAppointmentButtons.count()):
             item = self.upcomingAppointmentButtons.itemAt(0)
@@ -262,6 +266,7 @@ class DoctorDashboard(QWidget):
         #get 4 upcoming appointment here
 
         self.appointmentList.clear()
+        # getting appointments so i can generate them in a loop
 
         self.appointmentList = AppointmentRepository.getDoctorDashboardAppointments(self.doctor.getDoctorID())
         self.appointmentList = [appointments for appointments in self.appointmentList if
@@ -277,6 +282,7 @@ class DoctorDashboard(QWidget):
         filepath = os.path.join(CURRENT_DIRECTORY, "resources\\icons8-appointment-50.png")
         appointmentButtonIcon = QIcon(filepath)
 
+        # if there is no appointment make a no appointment label
         if len(fourAppointments) == 0:
             emptyAppointment = QLabel()
             emptyAppointment.setFont(buttonFont)
@@ -293,6 +299,7 @@ class DoctorDashboard(QWidget):
                                                             color: white;
                                                         }""")
             self.upcomingAppointmentButtons.addWidget(emptyAppointment)
+            # generate the buttons
         else:
             for count, appointment in enumerate(fourAppointments):
                 buttonRow = QHBoxLayout()
@@ -322,11 +329,13 @@ class DoctorDashboard(QWidget):
                 buttonRow.addWidget(self.appointmentButton)
                 self.upcomingAppointmentButtons.addLayout(buttonRow)
 
+        # spacer to take up as much space as possible, pushing the buttons up
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.upcomingAppointmentButtons.addWidget(spacer)
         self.upcomingAppointmentLayout.addLayout(self.upcomingAppointmentButtons)
 
+    # appointment button function
     def appointmentButtonFunction(self, appointment, doctor):
         self.doctorAppointmentDetails = DoctorAppointmentDetails(appointment, doctor)
         self.doctorAppointmentDetails.setMode(appointment.getAppointmentStatus())
@@ -338,6 +347,7 @@ class DoctorDashboard(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count()-1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # method for generating map widget
     def generateMapWidget(self):
 
         self.mainMapWidget = QWidget()
@@ -365,6 +375,7 @@ class DoctorDashboard(QWidget):
         self.widgetTitle.setFont(font)
         self.widgetTitle.setText("Map")
 
+        # title of the widget
         headerRow = QHBoxLayout()
         spacer = QWidget()
         spacer.setFixedSize(500,1)
@@ -395,6 +406,7 @@ class DoctorDashboard(QWidget):
         self.mapWidgetLayout.addWidget(webView)
         self.mainMapLayout.addWidget(self.mapWidget)
 
+    # plot the patient markers in the clinic, will only plot the patient for the day, not week
     def generatePatientMarkers(self,map):
         patientsWeekly =  AppointmentRepository.getPatientLocations(self.clinic.getClinicID())
         for patients in patientsWeekly:
@@ -403,7 +415,6 @@ class DoctorDashboard(QWidget):
         return map
 
     def patientButtonFunction(self, patient, doctor):
-        # update the clinic details page here according to button click
 
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()

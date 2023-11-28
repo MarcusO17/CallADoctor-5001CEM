@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt, QSize
 from .model import Doctor
 from .model.DoctorRepo import DoctorRepository
 
-
+# this is a dialog triggered for when assigning doctor to an appointment
 class AssignDoctorDialog(QDialog):
     def __init__(self, parent=None):
         super(AssignDoctorDialog, self).__init__(parent)

@@ -78,6 +78,7 @@ class DoctorAppointmentDetails(QWidget):
         )
         self.backButton.setGraphicsEffect(effect)
 
+        # background QLabel
         detailsContainer = QLabel(self.centralwidget)
         detailsContainer.setGeometry(QRect(20, 150, 900, 500))
         detailsContainer.setStyleSheet("""QLabel {
@@ -89,6 +90,7 @@ class DoctorAppointmentDetails(QWidget):
         )
         detailsContainer.setGraphicsEffect(effect)
 
+        # adding all the information
         self.appointmentPurposeTitle = QLabel(self.centralwidget)
         self.appointmentPurposeTitle.setGeometry(QRect(50, 160, 150, 40))
         self.appointmentPurposeTitle.setText("Appointment Purpose: ")
@@ -262,6 +264,7 @@ class DoctorAppointmentDetails(QWidget):
 
         # Cancel Appointment With Doctor
 
+    # method is triggered when request cancellation button is clicked
     def requestCancelAppointmentFunction(self):
         self.requestCancellationDialog = QDialog(self)
 
@@ -346,6 +349,7 @@ class DoctorAppointmentDetails(QWidget):
         self.requestCancellationDialog.setLayout(self.layout)
         self.requestCancellationDialog.exec_()
 
+    # method is triggered when the QDialog is confirmation button is clicked
     def completeButtonConfirmationFunction(self, reason):
         requestJSON = {
             'requestsType' : 'Cancellation',
@@ -365,6 +369,7 @@ class DoctorAppointmentDetails(QWidget):
 
         self.cancelAppoitmentButtonUpdate()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+    # this method triggers when generate prescription button is clicked
 
     def generatePrescription(self):
         self.frameLayoutManager = FrameLayoutManager()
@@ -375,6 +380,8 @@ class DoctorAppointmentDetails(QWidget):
         self.frameLayout.addWidget(self.doctorGeneratePrescription)
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
+
+    # this method triggers when view prescription button is clicked
     def viewPrescription(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
@@ -384,6 +391,7 @@ class DoctorAppointmentDetails(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count() - 1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method triggers when back button is clicked
     def backButtonFunction(self):
         self.frameLayoutManager = FrameLayoutManager()
         self.frameLayout = self.frameLayoutManager.getFrameLayout()
@@ -391,12 +399,15 @@ class DoctorAppointmentDetails(QWidget):
         self.frameLayoutManager.back()
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method triggers when you want when you want to hide generate prescription button after
+    # generating a prescrpition
     def completePrescription(self):
         self.generatePrescriptionButton.hide()
         self.generatePrescriptionLabel.hide()
         self.viewPrescriptionLabel.show()
         self.viewPrescriptionButton.show()
 
+    # this method is called to set the state the appointment details is going to be
     def setMode(self, mode):
         if mode == "Completed":
             self.viewPrescriptionLabel.show()
@@ -420,11 +431,14 @@ class DoctorAppointmentDetails(QWidget):
         self.cancelAppointmentShow()
         self.cancelAppoitmentButtonUpdate()
 
+    # this method checks if the there is already a request in this appointment
+    # if yes it will hide request cancellation button
     def cancelAppoitmentButtonUpdate(self):
         if Request.existingAppointments(self.appointment.getAppointmentID()):
             self.requestCancelAppointmentButton.hide()
             self.requestCancelAppointmentLabel.hide()
 
+    # this method will hide request cancellation button if the appointment is near 2 hours
     def cancelAppointmentShow(self):
         appointmentStartTime = self.appointment.getStartTime().split(":")
 

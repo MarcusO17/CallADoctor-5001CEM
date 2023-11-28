@@ -21,13 +21,14 @@ from .PageManager import PageManager, FrameLayoutManager
 class PatientDashboard(QWidget):
     def __init__(self, patient):
         super().__init__()
+        # getting all the information I need here
         self.patient = patient
         self.currLocation = (self.patient.getPatientLat(), self.patient.getPatientLon())
 
         self.setupUi()
 
     def setupUi(self):
-
+        # main layouts in the program
         self.mainLayout = QHBoxLayout()
         self.rightLayout = QVBoxLayout()
         self.leftLayout = QVBoxLayout()
@@ -191,6 +192,7 @@ class PatientDashboard(QWidget):
         self.prescriptionButtons.addWidget(spacer)
         self.prescriptionLayout.addLayout(self.prescriptionButtons)
 
+    # this method is triggered when the prescirption button is clicked
     def prescriptionButtonFunction(self, prescription, patient):
         self.prescriptionDetails = PatientPrescriptionDetailsWindow(prescription, patient)
 
@@ -201,7 +203,7 @@ class PatientDashboard(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count()-1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
-
+    # this method generates the welcome text widget in the dashboard
     def generateWelcomeText(self):
 
         self.welcomeTextWidget = QWidget()
@@ -238,6 +240,7 @@ class PatientDashboard(QWidget):
         # Center the content vertically and horizontally
         self.welcomeTextLayout.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
+    # this method generates the upcoming appointment widget
     def generateUpcomingAppointments(self):
 
         self.upcomingAppointmentWidget = QWidget()
@@ -343,7 +346,7 @@ class PatientDashboard(QWidget):
         self.upcomingAppointmentButtons.addWidget(spacer)
         self.upcomingAppointmentLayout.addLayout(self.upcomingAppointmentButtons)
 
-
+    # this method is triggered when the appointment button is clicked
     def appointmentButtonFunction(self, appointment, patient):
         self.patientAppointmentDetails = PatientAppointmentDetailsWindow(appointment, patient)
         self.patientAppointmentDetails.setMode(appointment.getAppointmentStatus())
@@ -355,6 +358,7 @@ class PatientDashboard(QWidget):
         self.frameLayoutManager.add(self.frameLayout.count()-1)
         self.frameLayout.setCurrentIndex(self.frameLayoutManager.top())
 
+    # this method is for generating the map widget
     def generateMapWidget(self, clinicList):
 
         self.mainMapWidget = QWidget()
@@ -406,6 +410,7 @@ class PatientDashboard(QWidget):
         self.mapWidgetLayout.addWidget(webView)
         self.mainMapLayout.addWidget(self.mapWidget)
 
+    # this will plot the clinic markers in the generated map
     def generateClinicMarkers(self,map,clinicList):
         clinicList = [clinic for clinic in clinicList if clinic.getClinicStatus() == 'Approved']
         for clinics in clinicList:
@@ -413,6 +418,7 @@ class PatientDashboard(QWidget):
                                 ,'lightblue','home')
         return map
 
+    # this method is triggered when the patient button is clicked
     def patientButtonFunction(self, patient, doctor):
         # update the clinic details page here according to button click
 
